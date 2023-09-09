@@ -1,10 +1,10 @@
-package com.realman.becore.repository.database.customer;
+package com.realman.becore.repository.database.receptionist;
 
 import java.io.Serializable;
 import java.util.List;
 
 import com.realman.becore.repository.database.account.AccountEntity;
-import com.realman.becore.repository.database.rating.RatingEntity;
+import com.realman.becore.repository.database.schedule.ReceptScheduleEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,15 +21,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "customer")
-public class CustomerEntity implements Serializable {
+@Table(name = "receptionist")
+public class ReceptionistEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Integer serviceCount = 0;
-    private Long profitProvided = 0L;
-    @OneToOne(mappedBy = "customerProperty")
+    private Long Id;
+    @OneToOne(mappedBy = "receptionistProperty")
     private AccountEntity account;
-    @OneToMany(mappedBy = "customer")
-    private List<RatingEntity> ratings;
+    @OneToMany(mappedBy = "receptionist")
+    private List<ReceptScheduleEntity> receptScheduleEntities;
 }

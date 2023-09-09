@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum EGender {
-    NAM(0),
-    NU(1);
+public enum EShift {
+    SANG(0),
+    TOI(1);
 
     private Integer value;
 }

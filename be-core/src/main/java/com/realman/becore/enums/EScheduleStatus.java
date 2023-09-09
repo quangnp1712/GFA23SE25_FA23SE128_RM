@@ -5,9 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum EGender {
-    NAM(0),
-    NU(1);
+public enum EScheduleStatus {
+    PRESENT(0),
+    ABSENT(1),
+    LATE(2),
+    EXCHANGE(3);
 
     private Integer value;
 }

@@ -3,6 +3,7 @@ package com.realman.becore.repository.database.branch_manager;
 import java.io.Serializable;
 
 import com.realman.becore.repository.database.account.AccountEntity;
+import com.realman.becore.repository.database.branch.BranchEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,4 +26,6 @@ public class BranchManagerEntity implements Serializable {
     private Long id;
     @OneToOne(mappedBy = "branchManagerProperty")
     private AccountEntity account;
+    @OneToOne(mappedBy = "branchManager")
+    private BranchEntity branch;
 }

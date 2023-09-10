@@ -1,7 +1,8 @@
-package com.realman.becore.repository.database.schedule;
+package com.realman.becore.repository.database.recept_schedule;
 
 import com.realman.becore.enums.EScheduleStatus;
 import com.realman.becore.repository.database.receptionist.ReceptionistEntity;
+import com.realman.becore.repository.database.schedule.ScheduleEntity;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

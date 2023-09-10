@@ -44,8 +44,9 @@ public class AccountEntity implements Serializable {
     @NotNull(message = "Nhập password")
     @Length(min = 10, message = "Password ít nhất 10 ký tự")
     private String password;
-    @PhoneConstrain
+    @PhoneConstrain(message = "Số điện thoại không hợp lệ")
     private String phone;
+    private Integer passExpTime = 15;
     @NotNull(message = "Nhập địa chỉ")
     @Column(columnDefinition = "NVARCHAR(500)")
     private String address;

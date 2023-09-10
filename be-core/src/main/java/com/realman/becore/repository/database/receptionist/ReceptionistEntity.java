@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.realman.becore.repository.database.account.AccountEntity;
-import com.realman.becore.repository.database.schedule.ReceptScheduleEntity;
+import com.realman.becore.repository.database.recept_schedule.ReceptScheduleEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.realman.becore.repository.database.schedule;
+package com.realman.becore.repository.database.recept_schedule;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StaffScheduleId implements Serializable {
-    private Long staffId;
+public class ReceptScheduleId implements Serializable {
+    private Long receptId;
     private Long scheduleId;
 }

@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.realman.becore.enums.EStaffProfession;
 import com.realman.becore.repository.database.account.AccountEntity;
+import com.realman.becore.repository.database.booking_staff.BookingStaffEntity;
 import com.realman.becore.repository.database.rating.RatingEntity;
-import com.realman.becore.repository.database.schedule.StaffScheduleEntity;
+import com.realman.becore.repository.database.staff_schedule.StaffScheduleEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,4 +38,6 @@ public class StaffEntity implements Serializable {
     private List<RatingEntity> ratings;
     @OneToMany(mappedBy = "staff")
     private List<StaffScheduleEntity> staffScheduleEntities;
+    @OneToMany(mappedBy = "staff")
+    private List<BookingStaffEntity> bookingStaffEntities;
 }

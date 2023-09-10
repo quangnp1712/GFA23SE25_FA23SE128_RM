@@ -1,6 +1,7 @@
-package com.realman.becore.repository.database.schedule;
+package com.realman.becore.repository.database.staff_schedule;
 
 import com.realman.becore.enums.EScheduleStatus;
+import com.realman.becore.repository.database.schedule.ScheduleEntity;
 import com.realman.becore.repository.database.staff.StaffEntity;
 
 import jakarta.persistence.EmbeddedId;

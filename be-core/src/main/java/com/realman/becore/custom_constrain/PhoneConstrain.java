@@ -14,9 +14,9 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = PhoneValidator.class)
 @Target(ElementType.FIELD)
 public @interface PhoneConstrain {
-    String messag() default "Số điện thoại không hợp lệ";
+    String message() default "Số điện thoại không hợp lệ";
 
-    Class<?>[] group() default {};
+    Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 }

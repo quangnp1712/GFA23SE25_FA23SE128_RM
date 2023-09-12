@@ -3,8 +3,8 @@ package com.realman.becore.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,11 +35,12 @@ public class SecurityConfiguration {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http)
-            throws Exception {
-        http.getSharedObject(AuthenticationManagerBuilder.class).;
-        return http.getSharedObject(AuthenticationConfiguration.class).authenticationManagerBuilder(null, null)
-                .userDetailsService(customUserDetailService).passwordEncoder(appPasswordEncoder.passwordEncoder());
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailService);
+        daoAuthenticationProvider.setPasswordEncoder(appPasswordEncoder.passwordEncoder());
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(daoAuthenticationProvider).build();
     }
 
     @Bean
@@ -50,7 +51,9 @@ public class SecurityConfiguration {
                 .userDetailsService(customUserDetailService)
 
                 .authorizeHttpRequests(t -> t.requestMatchers("/api/auth/**").authenticated())
-                .authorizeHttpRequests(t -> t.requestMatchers("/api/**").permitAll())
+                .authorizeHttpRequests(t -> t.requestMatchers("/swagger-ui.html/**", "/webjars/springfox-swagger-ui/**",
+                        "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui.html",
+                        "/swagger-ui.html/**", "/api/**").permitAll())
                 .getObject();
     }
 }

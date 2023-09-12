@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.realman.becore.custom_constrain.PhoneConstrain;
+import com.realman.becore.custom_constrain.phone.PhoneConstrain;
+import com.realman.becore.custom_constrain.username.UsernameConstrain;
 import com.realman.becore.enums.EGender;
 import com.realman.becore.enums.ERole;
 import com.realman.becore.repository.database.branch_manager.BranchManagerEntity;
@@ -34,6 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "account")
+@UsernameConstrain
 public class AccountEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +46,7 @@ public class AccountEntity implements Serializable {
     @NotNull(message = "Nhập password")
     @Length(min = 10, message = "Password ít nhất 10 ký tự")
     private String password;
-    @PhoneConstrain(message = "Số điện thoại không hợp lệ")
+    @PhoneConstrain
     private String phone;
     private Integer passExpTime = 15;
     @NotNull(message = "Nhập địa chỉ")

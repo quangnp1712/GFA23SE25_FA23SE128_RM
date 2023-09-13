@@ -31,14 +31,12 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
       <div>
       <div class="tw-pl-[36%] tw-pt-[10%]">
         <div
-          class="tw-bg-gray-200 tw-w-[30%] tw-h-[400px] tw-absolute tw-rounded-lg tw-opacity-90"
+          class="tw-bg-gray-200 tw-w-[30%] tw-h-[450px] tw-absolute tw-rounded-lg tw-opacity-90"
         >
           <div class="tw-text-center tw-mt-7">
             <img
               nz-image
-              width="100px"
-              height="100px"
-              nzSrc="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0-KahDh8XGzH-AoNcXIQao0qwCsXoxbIswA&usqp=CAU"
+              nzSrc="/./assets/icon/icon.png"
               alt=""
             />
             <h1>ĐĂNG NHẬP</h1>
@@ -83,7 +81,7 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
       .background {
         height: 100%;
         width: 100%;
-        background-image: url(https://img.freepik.com/premium-photo/stylish-professional-barber-scissors-hair-cutting-shears-black-background-hairdresser-salon_609048-2672.jpg?w=2000);
+        background-image: linear-gradient(0,rgba(169, 169, 169, 0.5), rgba(169, 169, 169,0.5)), url(/./assets/icon/background.png);
         background-size: cover;
       }
     `,

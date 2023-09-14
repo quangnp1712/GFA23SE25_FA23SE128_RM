@@ -11,6 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.realman.becore.security.jwt.JwtConfiguration;
 import com.realman.becore.security.user_detail_service.CustomUserDetailService;
+import com.realman.becore.util.AppUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,12 +34,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String username = jwtConfiguration.getJwtFromRequestHeader(request);
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null,
-                userDetails.getAuthorities());
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(token);
-        SecurityContextHolder.setContext(context);
+        if (AppUtil.stringHasLength(username)) {
+            UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null,
+                    userDetails.getAuthorities());
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(token);
+            SecurityContextHolder.setContext(context);
+        }
 
         filterChain.doFilter(request, response);
     }

@@ -28,7 +28,7 @@ public class CustomerEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer serviceCount = 0;
+    private Long serviceCount = 0L;
     private Long profitProvided = 0L;
     @OneToOne(mappedBy = "customerProperty")
     private AccountEntity account;

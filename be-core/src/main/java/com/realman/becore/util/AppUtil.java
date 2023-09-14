@@ -1,7 +1,9 @@
 package com.realman.becore.util;
 
+import java.util.Objects;
+
 public class AppUtil {
     public static Boolean stringHasLength(String content) {
-        return content != null && content.length() > 0;
+        return Objects.nonNull(content) && content.length() > 0;
     }
 }

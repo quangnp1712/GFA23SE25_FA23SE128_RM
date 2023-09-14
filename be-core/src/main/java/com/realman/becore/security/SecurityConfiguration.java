@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.realman.becore.security.filter.JwtAuthenticationFilter;
 import com.realman.becore.security.password_encoder.AppPasswordEncoder;
 import com.realman.becore.security.user_detail_service.CustomUserDetailService;
@@ -45,15 +45,17 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.cors(null).csrf(t -> t.disable())
+        return http.cors(t -> t.disable()).csrf(t -> t.disable())
                 .sessionManagement(t -> t.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .userDetailsService(customUserDetailService)
+                .authorizeHttpRequests(
+                        t -> t.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/index.html"),
+                                AntPathRequestMatcher.antMatcher("/swagger-ui/*"),
+                                AntPathRequestMatcher.antMatcher("/v3/api-docs/*"),
+                                AntPathRequestMatcher.antMatcher("/v3/api-docs")).permitAll())
 
-                .authorizeHttpRequests(t -> t.requestMatchers("/api/auth/**").authenticated())
-                .authorizeHttpRequests(t -> t.requestMatchers("/swagger-ui.html/**", "/webjars/springfox-swagger-ui/**",
-                        "/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/swagger-ui.html",
-                        "/swagger-ui.html/**", "/api/**").permitAll())
-                .getObject();
+                .authorizeHttpRequests(t -> t.anyRequest().authenticated())
+
+                .build();
     }
 }

@@ -50,7 +50,7 @@ public class JwtConfiguration {
             }
         }
 
-        throw new InvalidJwtException();
+        return null;
     }
 
     public void validateJwtToken(String jwt) {

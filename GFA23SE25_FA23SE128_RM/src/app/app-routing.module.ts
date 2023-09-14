@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignInComponent } from './login/feature/sign-in/sign-in.component';
+import { SignInComponent } from './login/feature/sign-in.component';
+import LOGIN_ROUTES from './login/login.routes';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: 'login', component: SignInComponent}
+  {path: '', loadChildren: () => LOGIN_ROUTES}
 ];
 
 @NgModule({

@@ -9,10 +9,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { SignInApi } from '../../data-access/model/sign-in-api.model';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
+import { SignInApi } from '../data-access/model/sign-in-api.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -24,28 +25,17 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
     FormsModule,
     ReactiveFormsModule,
     NzInputModule,
-    NzButtonModule
+    NzButtonModule,
+    RouterLink
   ],
   template: `
-    <div class="background">
-      <div>
-      <div class="tw-pl-[36%] tw-pt-[10%]">
-        <div
-          class="tw-bg-gray-200 tw-w-[30%] tw-h-[450px] tw-absolute tw-rounded-lg tw-opacity-90"
-        >
-          <div class="tw-text-center tw-mt-7">
-            <img
-              nz-image
-              nzSrc="/./assets/icon/icon.png"
-              alt=""
-            />
-            <h1>ĐĂNG NHẬP</h1>
+          <div class="tw-text-center tw-mt-3">
             <span class="tw-text-2xl">Nhập số điện thoại</span>
           </div>
           <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="phoneErrorTpl"  class="tw-text-center">
-                <input class="tw-w-[85%] tw-mt-7 tw-rounded-full" [formControl]="validateForm.controls.phone" nz-input placeholder="Nhấp Số điện thoại của bạn"/>
+                <input class="tw-w-[85%] tw-mt-7 tw-rounded-full" [formControl]="validateForm.controls.phone" nz-input placeholder="Nhấp số điện thoại của bạn"/>
               </nz-form-control>
               <ng-template #phoneErrorTpl let-control>
               <ng-container *ngIf="control.hasError('trimRequired')">
@@ -66,26 +56,15 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
                   nz-button
                   nzType="primary"
                   [disabled]="!validateForm.valid"
+                  [routerLink]="['/otp']"
                 >
                   Tiếp Tục
                 </button>
               </nz-form-control>
             </nz-form-item>
           </form>
-        </div>
-      </div>
-    </div>
   `,
-  styles: [
-    `
-      .background {
-        height: 100%;
-        width: 100%;
-        background-image: linear-gradient(0,rgba(169, 169, 169, 0.5), rgba(169, 169, 169,0.5)), url(/./assets/icon/background.png);
-        background-size: cover;
-      }
-    `,
-  ],
+  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent implements OnInit {

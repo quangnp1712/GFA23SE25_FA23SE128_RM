@@ -52,7 +52,8 @@ public class SecurityConfiguration {
                         t -> t.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/index.html"),
                                 AntPathRequestMatcher.antMatcher("/swagger-ui/*"),
                                 AntPathRequestMatcher.antMatcher("/v3/api-docs/*"),
-                                AntPathRequestMatcher.antMatcher("/v3/api-docs")).permitAll())
+                                AntPathRequestMatcher.antMatcher("/v3/api-docs"),
+                                AntPathRequestMatcher.antMatcher("/v1/account")).permitAll())
 
                 .authorizeHttpRequests(t -> t.anyRequest().authenticated())
 

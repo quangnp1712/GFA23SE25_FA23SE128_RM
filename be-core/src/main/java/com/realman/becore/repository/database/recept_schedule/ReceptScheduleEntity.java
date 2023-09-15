@@ -1,13 +1,10 @@
 package com.realman.becore.repository.database.recept_schedule;
 
 import com.realman.becore.enums.EScheduleStatus;
-import com.realman.becore.repository.database.receptionist.ReceptionistEntity;
-import com.realman.becore.repository.database.schedule.ScheduleEntity;
-
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,16 +16,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "recept_schedule")
 public class ReceptScheduleEntity {
-    @EmbeddedId
-    private ReceptScheduleId receptScheduleId = new ReceptScheduleId();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long receptScheduleId;
+    private Long receptionistId;
 
-    @MapsId("receptId")
-    @ManyToOne
-    private ReceptionistEntity receptionist;
-
-    @MapsId("scheduleId")
-    @ManyToOne
-    private ScheduleEntity schedule;
+    private Long staffId;
 
     private EScheduleStatus status;
 }

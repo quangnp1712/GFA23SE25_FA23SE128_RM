@@ -22,11 +22,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountUseCaseService.findAccountByUsername(username);
-        if (account != null) {
-            return User.builder().username(username).password(account.password())
-                    .authorities(account.role().getAuthorities()).build();
-        }
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+        return User.builder().username(username).password(account.password())
+                .authorities(account.role().getAuthorities()).build();
     }
-
 }

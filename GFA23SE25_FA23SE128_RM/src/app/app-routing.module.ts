@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignInComponent } from './login/feature/sign-in.component';
 import LOGIN_ROUTES from './login/login.routes';
+import HOME_PAGE_ROUTES from './home-page/home-page.routes';
 
 const routes: Routes = [
-  {path: '', loadChildren: () => LOGIN_ROUTES}
+  {path: '', loadChildren: () => LOGIN_ROUTES},
+  {path: 'homepage', loadChildren: () => HOME_PAGE_ROUTES}
 ];
 
 @NgModule({

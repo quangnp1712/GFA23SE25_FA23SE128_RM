@@ -71,6 +71,7 @@ import { RouterLink, RouterModule } from '@angular/router';
             nz-button
             nzType="primary"
             [disabled]="!validateForm.valid"
+            [routerLink]="'/homepage'"
           >
             Đăng Nhập
           </button>

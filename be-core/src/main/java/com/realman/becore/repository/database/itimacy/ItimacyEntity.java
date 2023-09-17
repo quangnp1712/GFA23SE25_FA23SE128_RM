@@ -21,6 +21,6 @@ public class ItimacyEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itimacyId;
     private Long customerId;
-    private Long itimacyLevel;
+    private Long itimacyLevelId;
     private Long currentPoint;
 }

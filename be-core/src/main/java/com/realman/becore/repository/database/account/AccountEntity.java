@@ -2,6 +2,8 @@ package com.realman.becore.repository.database.account;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.realman.becore.custom_constrain.address.AddressConstrain;
 import com.realman.becore.custom_constrain.phone.PhoneConstrain;
 import com.realman.becore.custom_constrain.username.UsernameConstrain;
 import com.realman.becore.enums.EGender;
@@ -14,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,7 @@ public class AccountEntity implements Serializable {
     @PhoneConstrain
     private String phone;
     private Integer passExpTime = 15;
-    @NotNull(message = "Nhập địa chỉ")
+    @AddressConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String address;
     @Temporal(TemporalType.TIMESTAMP)

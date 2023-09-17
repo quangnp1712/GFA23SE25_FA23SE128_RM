@@ -1,10 +1,11 @@
 package com.realman.becore.dto.account;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
+
 import com.realman.becore.repository.database.account.AccountEntity;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AccountMapper {
     Account toDto(AccountEntity accountEntity);
 

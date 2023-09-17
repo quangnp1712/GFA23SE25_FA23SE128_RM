@@ -2,7 +2,6 @@ package com.realman.becore.service.account;
 
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
-
 import com.realman.becore.dto.account.Account;
 
 import lombok.NonNull;
@@ -25,6 +24,6 @@ public class AccountUseCaseService {
     }
 
     public void createCustomerAccount(Account account) {
-        accountCommandService.createAccountCustomer(account);
+        accountCommandService.save(account);
     }
 }

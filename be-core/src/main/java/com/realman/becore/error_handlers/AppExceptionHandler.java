@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.realman.becore.enums.EErrorDes;
 import com.realman.becore.enums.ESysError;
 import com.realman.becore.error_handlers.exceptions.InvalidJwtException;
+import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.error_handlers.response_message.ResponseMessage;
 
@@ -36,7 +37,7 @@ public class AppExceptionHandler {
     @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(InvalidJwtException.class)
     ResponseMessage validationJwtToken(InvalidJwtException exc) {
-        return new ResponseMessage(ESysError.RM_API.name(), EErrorDes.AUTH_FAILT.name(), exc.getLocalizedMessage(),
+        return new ResponseMessage(ESysError.RM_API.name(), EErrorDes.AUTH_FAILT.name(), exc.getMessage(),
                 LocalDateTime.now());
     }
 
@@ -44,6 +45,13 @@ public class AppExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseMessage resourceNotFound(ResourceNotFoundException exc) {
         return new ResponseMessage(ESysError.RM_API.name(), EErrorDes.RESOURCE_NOT_FOUND.name(), exc.getMessage(),
+                LocalDateTime.now());
+    }
+
+    @ResponseStatus(code = HttpStatus.IM_USED)
+    @ExceptionHandler(ResourceDuplicateException.class)
+    ResponseMessage resourceDuplicated(ResourceDuplicateException exc) {
+        return new ResponseMessage(ESysError.RM_API.name(), EErrorDes.RESOURCE_DUPLICATED.name(), exc.getMessage(),
                 LocalDateTime.now());
     }
 }

@@ -1,4 +1,4 @@
-package com.realman.becore.custom_constrain;
+package com.realman.becore.custom_constrain.address;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,11 +10,11 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 @Documented
+@Constraint(validatedBy = AddressValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PhoneValidator.class)
 @Target(ElementType.FIELD)
-public @interface PhoneConstrain {
-    String message() default "Số điện thoại không hợp lệ";
+public @interface AddressConstrain {
+    String message() default "Địa chỉ không hợp lệ";
 
     Class<?>[] groups() default {};
 

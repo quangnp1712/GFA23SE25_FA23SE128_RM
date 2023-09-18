@@ -1,12 +1,9 @@
 package com.realman.becore.repository.database.booking_staff;
 
-import com.realman.becore.repository.database.booking.BookingEntity;
-import com.realman.becore.repository.database.staff.StaffEntity;
-
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,12 +15,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "booking_staff")
 public class BookingStaffEntity {
-    @EmbeddedId
-    private BookingStaffId bookingStaffId = new BookingStaffId();
-    @MapsId("bookingId")
-    @ManyToOne
-    private BookingEntity booking;
-    @MapsId("staffId")
-    @ManyToOne
-    private StaffEntity staff;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bookingStaffId;
+    private Long bookingId;
+    private Long staffId;
 }

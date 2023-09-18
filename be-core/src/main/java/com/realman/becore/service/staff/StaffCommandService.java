@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.dto.staff.StaffMapper;
 import com.realman.becore.enums.EErrorMessage;
+import com.realman.becore.enums.EProfessional;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.staff.StaffEntity;
 import com.realman.becore.repository.database.staff.StaffRepository;
@@ -22,8 +23,8 @@ public class StaffCommandService {
     private final StaffMapper staffMapper;
 
     @Transactional
-    public Long save(Staff staff) {
-        StaffEntity entity = staffRepository.save(staffMapper.toEntity(staff));
+    public Long save(Staff staff, EProfessional professional) {
+        StaffEntity entity = staffRepository.save(staffMapper.toEntity(staff, professional));
         return entity.getStaffId();
     }
 

@@ -2,6 +2,8 @@ package com.realman.becore.service.account;
 
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
+
+import com.realman.becore.controller.account.models.ERoleRequest;
 import com.realman.becore.dto.account.Account;
 
 import lombok.NonNull;
@@ -23,7 +25,7 @@ public class AccountUseCaseService {
         return accountQueryService.findAccountByUsername(username);
     }
 
-    public void createCustomerAccount(Account account) {
-        accountCommandService.save(account);
+    public void save(Account account, ERoleRequest roleRequest) {
+        accountCommandService.save(account, roleRequest);
     }
 }

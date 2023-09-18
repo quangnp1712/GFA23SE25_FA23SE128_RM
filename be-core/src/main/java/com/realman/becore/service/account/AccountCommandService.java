@@ -3,6 +3,7 @@ package com.realman.becore.service.account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.realman.becore.controller.account.models.ERoleRequest;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch_manager.BranchManagerMapper;
@@ -10,6 +11,8 @@ import com.realman.becore.dto.customer.CustomerMapper;
 import com.realman.becore.dto.receptionist.ReceptionistMapper;
 import com.realman.becore.dto.shop_owner.ShopOwnerMapper;
 import com.realman.becore.dto.staff.StaffMapper;
+import com.realman.becore.enums.EProfessional;
+import com.realman.becore.enums.ERole;
 import com.realman.becore.repository.database.account.AccountEntity;
 import com.realman.becore.repository.database.account.AccountRepository;
 import com.realman.becore.repository.database.branch_manager.BranchManagerEntity;
@@ -57,41 +60,53 @@ public class AccountCommandService {
     private final ReceptionistMapper receptionistMapper;
 
     @Transactional
-    public void save(Account account) {
+    public void save(Account account, ERoleRequest roleRequest) {
         accountQueryService.verifyAccount(account);
-        AccountEntity entity = accountMapper.toEntity(account);
-        switch (account.role()) {
+
+        switch (roleRequest) {
             case CUSTOMER:
+
                 Long customerId = customerUserCaseService.save(customerMapper.toDto(new CustomerEntity()));
-                entity.setCustomerId(customerId);
-                AccountEntity customerAccount = accountRepository.save(entity);
-                customerUserCaseService.updateAccountId(customerId, customerAccount.getAccountId());
+                AccountEntity customerAccountEntity = accountMapper.toCustomerEntity(account, ERole.CUSTOMER,
+                        customerId);
+                customerAccountEntity.setCustomerId(customerId);
+                AccountEntity customerAccountSavedEntity = accountRepository.save(customerAccountEntity);
+                customerUserCaseService.updateAccountId(customerId, customerAccountSavedEntity.getAccountId());
                 break;
             case STAFF_MESSEUR:
+                Long staffMesId = staffUsercaseService.save(staffMapper.toDto(new StaffEntity()),
+                        EProfessional.MASSEUR);
+                AccountEntity staffMesAccountEntity = accountMapper.toStaffEntity(account, ERole.STAFF, staffMesId);
+                AccountEntity staffMesAccountSavedEntity = accountRepository.save(staffMesAccountEntity);
+                staffUsercaseService.updateAccountId(staffMesId, staffMesAccountSavedEntity.getAccountId());
+                break;
             case STAFF_STYLIST:
-                Long staffId = staffUsercaseService.save(staffMapper.toDto(new StaffEntity()));
-                entity.setStaffId(staffId);
-                AccountEntity staffAccount = accountRepository.save(entity);
-                staffUsercaseService.updateAccountId(staffId, staffAccount.getAccountId());
+                Long staffStylId = staffUsercaseService.save(staffMapper.toDto(new StaffEntity()),
+                        EProfessional.STYLIST);
+                AccountEntity staffStylAccountEntity = accountMapper.toStaffEntity(account, ERole.STAFF, staffStylId);
+                AccountEntity staffStylAccountSavedEntity = accountRepository.save(staffStylAccountEntity);
+                staffUsercaseService.updateAccountId(staffStylId, staffStylAccountSavedEntity.getAccountId());
                 break;
             case BRANCH_MANAGER:
                 Long managerId = branchManagerUserCaseService
                         .save(branchManagerMapper.toDto(new BranchManagerEntity()));
-                entity.setBranchManagerId(managerId);
-                AccountEntity managerAccount = accountRepository.save(entity);
-                branchManagerUserCaseService.updateAccountId(managerId, managerAccount.getAccountId());
+                AccountEntity managerAccountEntity = accountMapper.toManagerEntity(account, ERole.BRANCH_MANAGER,
+                        managerId);
+                AccountEntity managerAccountSavedEntity = accountRepository.save(managerAccountEntity);
+                branchManagerUserCaseService.updateAccountId(managerId, managerAccountSavedEntity.getAccountId());
                 break;
             case SHOP_OWNER:
                 Long shopOwnerId = shopOwnerUserCaseService.save(shopOwnerMapper.toDto(new ShopOwnerEntity()));
-                entity.setShopOwnerId(shopOwnerId);
-                AccountEntity shopOwnerAccount = accountRepository.save(entity);
-                shopOwnerUserCaseService.updateAccountId(shopOwnerId, shopOwnerAccount.getAccountId());
+                AccountEntity shopOwnerAccountEntity = accountMapper.toShopOwnerEntity(account, ERole.SHOP_OWNER,
+                        shopOwnerId);
+                AccountEntity shopOwnerAccountSavedEntity = accountRepository.save(shopOwnerAccountEntity);
+                shopOwnerUserCaseService.updateAccountId(shopOwnerId, shopOwnerAccountSavedEntity.getAccountId());
                 break;
             case RECEPTIONIST:
                 Long receptId = receptionistUseCaseService.save(receptionistMapper.toDto(new ReceptionistEntity()));
-                entity.setReceptionistId(receptId);
-                AccountEntity receptAccount = accountRepository.save(entity);
-                receptionistUseCaseService.updateAccountId(receptId, receptAccount.getAccountId());
+                AccountEntity receptAccountEntity = accountMapper.toReceptEntity(account, ERole.RECEPTIONIST, receptId);
+                AccountEntity receptAccountSavedEntity = accountRepository.save(receptAccountEntity);
+                receptionistUseCaseService.updateAccountId(receptId, receptAccountSavedEntity.getAccountId());
                 break;
         }
     }

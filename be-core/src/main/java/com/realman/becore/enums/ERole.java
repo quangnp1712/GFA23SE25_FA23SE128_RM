@@ -12,9 +12,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ERole {
-        STAFF_STYLIST(Set.of(EPermission.STAFF_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
-                        EPermission.SCHEDULE_VIEW.getPermission(), EPermission.SCHEDULE_UPDATE.getPermission())),
-        STAFF_MESSEUR(Set.of(EPermission.STAFF_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
+        STAFF(Set.of(EPermission.STAFF_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
                         EPermission.SCHEDULE_VIEW.getPermission(), EPermission.SCHEDULE_UPDATE.getPermission())),
         RECEPTIONIST(Set.of(EPermission.STAFF_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
                         EPermission.BOOKING_ADD.getPermission(),

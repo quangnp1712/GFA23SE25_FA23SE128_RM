@@ -1,7 +1,9 @@
 package com.realman.becore.repository.database.staff;
 
 import java.io.Serializable;
-import com.realman.becore.enums.EStaffProfession;
+
+import com.realman.becore.enums.EProfessional;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +24,6 @@ public class StaffEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long staffId;
     private Long accountId;
-    private EStaffProfession profession;
+    private EProfessional professional;
     private Double averageRating = 0.0;
 }

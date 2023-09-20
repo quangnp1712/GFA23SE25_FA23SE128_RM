@@ -3,7 +3,7 @@ package com.realman.becore.service.account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.realman.becore.controller.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.ERoleRequest;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch_manager.BranchManagerMapper;

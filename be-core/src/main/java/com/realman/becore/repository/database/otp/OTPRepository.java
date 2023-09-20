@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OTPRepository extends JpaRepository<OTPEntity, Long> {
-    Optional<OTPEntity> findByPassCode(String passCode);
+    Optional<OTPEntity> findByAccountId(Long accountId);
 }

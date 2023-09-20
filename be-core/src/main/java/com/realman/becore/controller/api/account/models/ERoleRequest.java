@@ -1,4 +1,4 @@
-package com.realman.becore.controller.account.models;
+package com.realman.becore.controller.api.account.models;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

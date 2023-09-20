@@ -1,5 +1,26 @@
 package com.realman.becore.service.otp;
 
-public class OTPUserCaseService {
+import org.springframework.stereotype.Service;
 
+import com.realman.becore.controller.api.otp.models.AccountPhone;
+import com.realman.becore.dto.otp.OTP;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class OTPUserCaseService {
+    @NonNull
+    private final OTPCommandService otpCommandService;
+    @NonNull
+    private final OTPQueryService otpQueryService;
+
+    public void save(AccountPhone accountPhone) {
+        otpCommandService.save(accountPhone);
+    }
+
+    public OTP findByAccountId(Long accountId) {
+        return otpQueryService.findByAccountId(accountId);
+    }
 }

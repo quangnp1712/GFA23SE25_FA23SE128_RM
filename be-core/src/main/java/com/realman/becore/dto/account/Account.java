@@ -6,9 +6,8 @@ import com.realman.becore.enums.EGender;
 import com.realman.becore.enums.ERole;
 
 public record Account(
-                Long id,
+                Long accountId,
                 String username,
-                String password,
                 String phone,
                 String address,
                 LocalDateTime dob,

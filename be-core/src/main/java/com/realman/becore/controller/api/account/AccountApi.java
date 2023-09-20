@@ -1,4 +1,4 @@
-package com.realman.becore.controller.account;
+package com.realman.becore.controller.api.account;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realman.becore.controller.account.models.AccountRequest;
-import com.realman.becore.controller.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.AccountRequest;
+import com.realman.becore.controller.api.account.models.ERoleRequest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 

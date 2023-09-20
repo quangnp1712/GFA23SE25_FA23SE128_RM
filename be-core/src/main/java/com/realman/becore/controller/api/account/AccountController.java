@@ -1,10 +1,10 @@
-package com.realman.becore.controller.account;
+package com.realman.becore.controller.api.account;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realman.becore.controller.account.models.AccountModelMapper;
-import com.realman.becore.controller.account.models.AccountRequest;
-import com.realman.becore.controller.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.AccountModelMapper;
+import com.realman.becore.controller.api.account.models.AccountRequest;
+import com.realman.becore.controller.api.account.models.ERoleRequest;
 import com.realman.becore.service.account.AccountUseCaseService;
 
 import lombok.NonNull;
@@ -20,6 +20,6 @@ public class AccountController implements AccountApi {
 
     @Override
     public void createCustomerAccount(AccountRequest accountRequest, ERoleRequest roleRequest) {
-        accountUseCaseService.save(accountModelMapper.toDto(accountRequest), roleRequest);
+        accountUseCaseService.save(accountModelMapper.toDto(accountRequest.toAccountRequest()), roleRequest);
     }
 }

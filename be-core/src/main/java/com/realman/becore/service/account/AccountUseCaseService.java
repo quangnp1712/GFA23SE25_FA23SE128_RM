@@ -25,6 +25,10 @@ public class AccountUseCaseService {
         return accountQueryService.findAccountByUsername(username);
     }
 
+    public Account findAccountByPhone(String phone) {
+        return accountQueryService.findAccountByPhone(phone);
+    }
+
     public void save(Account account, ERoleRequest roleRequest) {
         accountCommandService.save(account, roleRequest);
     }

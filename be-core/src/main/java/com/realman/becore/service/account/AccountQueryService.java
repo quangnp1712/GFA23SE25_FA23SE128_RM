@@ -28,6 +28,12 @@ public class AccountQueryService {
         return accountMapper.toDto(entity);
     }
 
+    public Account findAccountByPhone(String phone) {
+        AccountEntity entity = accountRepository.findByPhone(phone)
+                .orElseThrow(() -> new ResourceNotFoundException(EErrorMessage.ACCOUNT_NOT_FOUND.name()));
+        return accountMapper.toDto(entity);
+    }
+
     public void verifyAccount(Account account) {
         if (accountRepository.findByUsername(account.username()).isPresent()) {
             throw new ResourceDuplicateException(EErrorMessage.USERNAME_DUPLICATED.name());

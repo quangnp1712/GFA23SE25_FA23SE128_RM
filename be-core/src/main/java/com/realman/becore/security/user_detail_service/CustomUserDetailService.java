@@ -20,9 +20,9 @@ public class CustomUserDetailService implements UserDetailsService {
     private final AccountUseCaseService accountUseCaseService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountUseCaseService.findAccountByUsername(username);
-        return User.builder().username(username).password(account.password())
+    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        Account account = accountUseCaseService.findAccountByPhone(phone);
+        return User.builder().username(account.username()).password(account.password())
                 .authorities(account.role().getAuthorities()).build();
     }
 }

@@ -37,10 +37,8 @@ public class AccountEntity implements Serializable {
     @UsernameConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String username;
-    private String password;
     @PhoneConstrain
     private String phone;
-    private Integer passExpTime = 15;
     @AddressConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String address;

@@ -1,6 +1,7 @@
 package com.realman.becore.service.account;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
+import com.realman.becore.dto.account_otp.AccountOtp;
 import com.realman.becore.enums.EErrorMessage;
 import com.realman.becore.error_handlers.exceptions.AuthFailException;
 import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;
@@ -56,17 +58,18 @@ public class AccountQueryService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        Object query = accountRepository.findAccountAndOtpByPhone(loginRequest.phone())
-                .orElseThrow(() -> new AuthFailException(EErrorMessage.ACCOUNT_NOT_VALID.name()));
+        List<Object[]> query = accountRepository.findAccountAndOtpByPhone(loginRequest.phone());
 
-        AccountEntity accountEntity = ((AccountEntity) query);
-        OTPEntity otpEntity = (OTPEntity) query;
-        if (!passwordEncoder.matches(loginRequest.passCode(), otpEntity.getPassCode())) {
+        AccountEntity accountEntity = (AccountEntity) query.get(0)[0];
+        OTPEntity otpEntity = (OTPEntity) query.get(0)[1];
+        if (!passwordEncoder.matches(loginRequest.passCode(),
+                otpEntity.getPassCode())) {
             throw new AuthFailException(EErrorMessage.ACCOUNT_NOT_VALID.name());
         }
         String jwtToken = jwtConfiguration.generateJwt(accountEntity.getUsername());
         LocalDateTime expiredTime = jwtConfiguration.expireTime();
         return LoginResponse.builder()
+                .username(accountEntity.getUsername())
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)
                 .role(accountEntity.getRole())

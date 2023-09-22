@@ -34,6 +34,7 @@ public class AccountEntity implements Serializable {
     private Long shopOwnerId;
     private Long branchManagerId;
     private Long receptionistId;
+    private Long otpId;
     @UsernameConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String username;

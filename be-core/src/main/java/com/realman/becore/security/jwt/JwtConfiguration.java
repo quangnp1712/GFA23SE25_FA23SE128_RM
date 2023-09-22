@@ -1,6 +1,8 @@
 package com.realman.becore.security.jwt;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +30,10 @@ public class JwtConfiguration {
         Instant expiredTime = Instant.now().plusSeconds(jwtExpiredTime);
         return Jwts.builder().setIssuedAt(new Date()).setExpiration(Date.from(expiredTime)).setSubject(username)
                 .signWith(Keys.hmacShaKeyFor(jwtSecretKey.getBytes())).compact();
+    }
+
+    public LocalDateTime expireTime() {
+        return LocalDateTime.ofInstant(Instant.now().plusSeconds(jwtExpiredTime), ZoneId.systemDefault());
     }
 
     private Claims getClaimsFromJwt(String jwt) {

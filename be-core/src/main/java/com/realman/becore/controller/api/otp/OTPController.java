@@ -16,7 +16,7 @@ public class OTPController implements OTPAPI {
 
     @Override
     public void save(AccountPhone phone) {
-        otpUserCaseService.save(phone.toAccountPhone());
+        otpUserCaseService.save(phone);
 
     }
 

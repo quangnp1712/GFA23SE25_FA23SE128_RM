@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.realman.becore.controller.api.account.models.AccountRequest;
 import com.realman.becore.controller.api.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.LoginRequest;
+import com.realman.becore.controller.api.account.models.LoginResponse;
+import com.realman.becore.util.ValueResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -17,4 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface AccountApi {
     @PostMapping("/{roleRequest}")
     void createCustomerAccount(@RequestBody AccountRequest accountRequest, @PathVariable ERoleRequest roleRequest);
+
+    @PostMapping("/login")
+    ValueResponse<LoginResponse> login(@RequestBody LoginRequest loginRequest);
 }

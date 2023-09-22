@@ -18,7 +18,7 @@ public record AccountRequest(
     public AccountRequest toAccountRequest() {
         return AccountRequest.builder()
                 .username(username)
-                .phone(phone.replace(String.valueOf(phone.charAt(0)), "+84"))
+                .phone(phone)
                 .address(address)
                 .gender(gender)
                 .dob(dob)

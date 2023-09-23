@@ -21,6 +21,7 @@ public class OTPEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long otpId;
     private Long accountId;
+    private String phoneAttemp;
     private String passCode;
     private Integer expTime = 15;
     private Boolean isAvailable = true;

@@ -13,21 +13,21 @@ public interface AccountMapper {
 
     @Mapping(source = "role", target = "role")
     @Mapping(source = "customerId", target = "customerId")
-    AccountEntity toCustomerEntity(Account account, ERole role, Long customerId);
+    AccountEntity toCustomerEntity(Account account, ERole role, Long customerId, Long otpId);
 
     @Mapping(source = "role", target = "role")
     @Mapping(source = "staffId", target = "staffId")
-    AccountEntity toStaffEntity(Account account, ERole role, Long staffId);
+    AccountEntity toStaffEntity(Account account, ERole role, Long staffId, Long otpId);
 
     @Mapping(source = "role", target = "role")
     @Mapping(source = "receptId", target = "receptionistId")
-    AccountEntity toReceptEntity(Account account, ERole role, Long receptId);
+    AccountEntity toReceptEntity(Account account, ERole role, Long receptId, Long otpId);
 
     @Mapping(source = "role", target = "role")
     @Mapping(source = "managerId", target = "branchManagerId")
-    AccountEntity toManagerEntity(Account account, ERole role, Long managerId);
+    AccountEntity toManagerEntity(Account account, ERole role, Long managerId, Long otpId);
 
     @Mapping(source = "role", target = "role")
     @Mapping(source = "shopOwnerId", target = "shopOwnerId")
-    AccountEntity toShopOwnerEntity(Account account, ERole role, Long shopOwnerId);
+    AccountEntity toShopOwnerEntity(Account account, ERole role, Long shopOwnerId, Long otpId);
 }

@@ -34,13 +34,12 @@ public class AccountEntity implements Serializable {
     private Long shopOwnerId;
     private Long branchManagerId;
     private Long receptionistId;
+    private Long otpId;
     @UsernameConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String username;
-    private String password;
     @PhoneConstrain
     private String phone;
-    private Integer passExpTime = 15;
     @AddressConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String address;

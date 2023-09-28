@@ -1,5 +1,7 @@
 package com.realman.becore.dto.receptionist;
 
-public record Receptionist() {
+public record Receptionist(
+        Long receptionistId,
+        Long accountId) {
 
 }

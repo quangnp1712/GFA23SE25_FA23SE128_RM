@@ -25,7 +25,7 @@ public class BranchManagerCommandService {
     @Transactional
     public Long save(BranchManager branchManager) {
         BranchManagerEntity entity = branchManagerRepository
-                .save(branchManagerMapper.toEntity(new BranchManager()));
+                .save(branchManagerMapper.toEntity(BranchManager.builder().build()));
         return entity.getBranchManagerId();
     }
 

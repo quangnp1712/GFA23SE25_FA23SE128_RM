@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.realman.becore.controller.api.account.models.AccountRequest;
-import com.realman.becore.controller.api.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.AccountRole;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -17,6 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface AccountApi {
     @PostMapping("/{roleRequest}")
     void createCustomerAccount(@RequestBody AccountRequest accountRequest,
-            @RequestParam(required = true, value = "otpId") Long otpId, @PathVariable ERoleRequest roleRequest);
+            @RequestParam(required = true, value = "otpId") Long otpId, @PathVariable AccountRole roleRequest);
 
 }

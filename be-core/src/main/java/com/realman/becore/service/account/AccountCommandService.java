@@ -2,7 +2,7 @@ package com.realman.becore.service.account;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.realman.becore.controller.api.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.AccountRole;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch_manager.BranchManagerMapper;
@@ -11,7 +11,6 @@ import com.realman.becore.dto.receptionist.ReceptionistMapper;
 import com.realman.becore.dto.shop_owner.ShopOwnerMapper;
 import com.realman.becore.dto.staff.StaffMapper;
 import com.realman.becore.enums.EErrorMessage;
-import com.realman.becore.enums.EProfessional;
 import com.realman.becore.enums.ERole;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.account.AccountEntity;
@@ -65,10 +64,10 @@ public class AccountCommandService {
         @NonNull
         private final ReceptionistMapper receptionistMapper;
 
-        public void save(Account account, Long otpId, ERoleRequest roleRequest) {
+        public void save(Account account, Long otpId, AccountRole accountRole) {
                 accountQueryService.verifyAccount(account);
 
-                switch (roleRequest) {
+                switch (accountRole.role()) {
                         case CUSTOMER:
                                 Long customerId = customerUserCaseService
                                                 .save(customerMapper.toDto(new CustomerEntity()));
@@ -81,20 +80,10 @@ public class AccountCommandService {
                                 customerUserCaseService.updateAccountId(customerId,
                                                 customerAccountSavedEntity.getAccountId());
                                 break;
-                        case STAFF_MESSEUR:
-                                Long staffMesId = staffUsercaseService.save(staffMapper.toDto(new StaffEntity()),
-                                                EProfessional.MASSEUR);
-                                AccountEntity staffMesAccountEntity = accountMapper.toStaffEntity(account, ERole.STAFF,
-                                                staffMesId,
-                                                otpId);
-                                AccountEntity staffMesAccountSavedEntity = accountRepository
-                                                .save(staffMesAccountEntity);
-                                staffUsercaseService.updateAccountId(staffMesId,
-                                                staffMesAccountSavedEntity.getAccountId());
-                                break;
-                        case STAFF_STYLIST:
+
+                        case STAFF:
                                 Long staffStylId = staffUsercaseService.save(staffMapper.toDto(new StaffEntity()),
-                                                EProfessional.STYLIST);
+                                                accountRole.professional());
                                 AccountEntity staffStylAccountEntity = accountMapper.toStaffEntity(account, ERole.STAFF,
                                                 staffStylId,
                                                 otpId);

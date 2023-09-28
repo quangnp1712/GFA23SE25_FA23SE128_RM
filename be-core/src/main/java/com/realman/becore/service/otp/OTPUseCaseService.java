@@ -32,7 +32,8 @@ public class OTPUseCaseService {
         return otpQueryService.findByPhoneAttemp(phone);
     }
 
+    @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
-        return otpQueryService.login(loginRequest);
+        return otpCommandService.login(loginRequest);
     }
 }

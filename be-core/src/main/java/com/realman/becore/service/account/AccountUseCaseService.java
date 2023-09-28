@@ -2,7 +2,7 @@ package com.realman.becore.service.account;
 
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.account.models.ERoleRequest;
+import com.realman.becore.controller.api.account.models.AccountRole;
 import com.realman.becore.dto.account.Account;
 
 import jakarta.transaction.Transactional;
@@ -19,7 +19,7 @@ public class AccountUseCaseService {
     private final AccountCommandService accountCommandService;
 
     @Transactional
-    public void save(Account account, Long otpId, ERoleRequest roleRequest) {
+    public void save(Account account, Long otpId, AccountRole roleRequest) {
         accountCommandService.save(account, otpId, roleRequest);
     }
 

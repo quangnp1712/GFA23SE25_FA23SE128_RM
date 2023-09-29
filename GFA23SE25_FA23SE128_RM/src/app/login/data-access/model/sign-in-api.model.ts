@@ -2,10 +2,10 @@ import { FormControl } from "@angular/forms";
 
 export namespace SignInApi {
   export interface Request {
-    phone: string;
+    value: string;
   }
 
   export type RequestFormGroup = {
-    phone: FormControl<string>;
+    value: FormControl<string>;
   }
 }

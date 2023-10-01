@@ -16,6 +16,9 @@ import { OtpApi } from '../data-access/model/otp-api.model';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { OtpApiService } from '../data-access/api/otp.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { takeWhile, tap, timer } from 'rxjs';
+import { SignInApiService } from '../data-access/api/sign-in.service';
+import { SignInApi } from '../data-access/model/sign-in-api.model';
 
 @Component({
   selector: 'app-sign-in',
@@ -36,15 +39,18 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     <div class="tw-text-center tw-mt-3">
       <span class="tw-text-2xl">Nhập OTP</span>
     </div>
-    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form nz-form [formGroup]="validateForm">
       <nz-form-item>
         <nz-form-control [nzErrorTip]="phoneErrorTpl" class="tw-text-center">
           <input
-            class="tw-w-[85%] tw-mt-7 tw-rounded-full"
+            class="tw-w-[72%] tw-mt-7 tw-rounded-full"
             [formControl]="validateForm.controls.passCode"
             nz-input
             placeholder="Nhập OTP"
           />
+          <button nz-button class="tw-ml-2" nzType="primary" (click)="sendOtp()">
+            Gửi lại
+          </button>
         </nz-form-control>
         <ng-template #phoneErrorTpl let-control>
           <ng-container *ngIf="control.hasError('trimRequired')">
@@ -72,6 +78,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
             class="tw-w-[85%] tw-rounded-full tw-bg-gradient-to-r tw-from-gray-600 tw-to-gray-300"
             nz-button
             nzType="primary"
+            (click)="submitForm()"
             [disabled]="!validateForm.valid"
           >
             Đăng Nhập
@@ -91,10 +98,14 @@ export class OtpComponent implements OnInit {
     private _fb: NonNullableFormBuilder,
     private _otpSvc: OtpApiService,
     private _router: Router,
-    private _nzMessageService: NzMessageService
+    private _nzMessageService: NzMessageService,
+    private _siSvc: SignInApiService
   ) {}
+
+  count = 60;
   validateForm!: FormGroup<OtpApi.RequestFormGroup>;
   model!: OtpApi.Request;
+  modelOtp!: SignInApi.Request;
 
   submitForm(): void {
     this.validateForm.controls.phone.setValue(localStorage.getItem('phone')!);
@@ -102,7 +113,7 @@ export class OtpComponent implements OnInit {
     this._otpSvc.getOtp(this.model).subscribe(
       (data) => {
         this._nzMessageService.success('Đăng nhập thành công.');
-        this._router.navigate(['/homepage'])
+        this._router.navigate(['/homepage']);
       },
       (error) => {
         this._nzMessageService.error('Otp không đúng.');
@@ -119,5 +130,36 @@ export class OtpComponent implements OnInit {
       ]),
       phone: this._fb.control(''),
     });
+    this.countdown();
+  }
+
+  countdown() {
+    let counter = 60;
+    timer(1000, 1000) //Initial delay 1 seconds and interval countdown also 1 second
+      .pipe(
+        takeWhile(() => counter > 0),
+        tap(() => {
+          counter--;
+          this.count--;
+        })
+      )
+      .subscribe();
+  }
+
+  sendOtp() {
+    this.modelOtp = {value : localStorage.getItem('phone')!}
+    if(this.count === 0){
+      this.count = 60;
+      this.countdown();
+      this._siSvc
+      .getOtp(this.modelOtp)
+      .subscribe(
+        (data) => {
+          this._nzMessageService.success('Đã gửi.');
+        },
+        (error) => {}
+      );
+    }
+    else this._nzMessageService.error('Vui lòng đợi '+ this.count+'s gửi lại.');
   }
 }

@@ -7,12 +7,16 @@ const HOME_PAGE_ROUTES: Route[] = [{
   children: [
     {
       path: '',
-      redirectTo: 'profile',
+      redirectTo: 'overview',
       pathMatch: 'full',
     },
     {
       path: 'profile',
       loadComponent: () => import('./feature/profile.component').then(m => m.ProfileComponent),
+    },
+    {
+      path: 'overview',
+      loadComponent: () => import('./feature/overview.component').then(m => m.OverviewComponent),
     },
   ],
 },]

@@ -20,21 +20,41 @@ public interface AccountMapper {
     @Mapping(source = "customerId", target = "customerId")
     AccountEntity toCustomerEntity(Account account, ERole role, Long customerId, Long otpId);
 
+    @Mapping(source = "customerId", target = "customerId")
+    @Mapping(source = "role", target = "role")
+    AccountEntity updateCustomerEntity(Account account, ERole role, Long customerId);
+
     @Mapping(source = "role", target = "role")
     @Mapping(source = "staffId", target = "staffId")
     AccountEntity toStaffEntity(Account account, ERole role, Long staffId, Long otpId);
+
+    @Mapping(source = "staffId", target = "staffId")
+    @Mapping(source = "role", target = "role")
+    AccountEntity updateStaffEntity(Account account, ERole role, Long staffId);
 
     @Mapping(source = "role", target = "role")
     @Mapping(source = "receptId", target = "receptionistId")
     AccountEntity toReceptEntity(Account account, ERole role, Long receptId, Long otpId);
 
+    @Mapping(source = "receptionistId", target = "receptionistId")
+    @Mapping(source = "role", target = "role")
+    AccountEntity updateReceptEntity(Account account, ERole role, Long receptionistId);
+
     @Mapping(source = "role", target = "role")
     @Mapping(source = "managerId", target = "branchManagerId")
     AccountEntity toManagerEntity(Account account, ERole role, Long managerId, Long otpId);
 
+    @Mapping(source = "branchManagerId", target = "branchManagerId")
+    @Mapping(source = "role", target = "role")
+    AccountEntity updateManagerEntity(Account account, ERole role, Long branchManagerId);
+
     @Mapping(source = "role", target = "role")
     @Mapping(source = "shopOwnerId", target = "shopOwnerId")
     AccountEntity toShopOwnerEntity(Account account, ERole role, Long shopOwnerId, Long otpId);
+
+    @Mapping(source = "shopOwnerId", target = "shopOwnerId")
+    @Mapping(source = "role", target = "role")
+    AccountEntity updateShopOwnerEntity(Account account, ERole role, Long shopOwnerId);
 
     Account toCustomerDto(AccountEntity entity, Customer customer);
 

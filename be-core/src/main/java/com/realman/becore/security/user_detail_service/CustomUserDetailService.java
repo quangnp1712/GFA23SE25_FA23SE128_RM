@@ -25,7 +25,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        Account account = accountUseCaseService.findAccountByPhone(phone);
+        Account account = accountUseCaseService.findByPhone(phone);
         OTP otp = otpUserCaseService.findByAccountId(account.accountId());
         return User.builder().username(account.username()).password(otp.passCode())
                 .authorities(account.role().getAuthorities()).build();

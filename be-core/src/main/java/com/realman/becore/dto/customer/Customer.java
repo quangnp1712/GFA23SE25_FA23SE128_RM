@@ -1,8 +1,8 @@
 package com.realman.becore.dto.customer;
 
 public record Customer(
-        Long id,
-        Long serviceCount,
-        Long profitProvided) {
+                Long customerId,
+                Long serviceCount,
+                Long profitProvided) {
 
 }

@@ -53,7 +53,7 @@ public class SecurityConfiguration {
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/v1/*", corsConfiguration);
+        source.registerCorsConfiguration("/v1/**", corsConfiguration);
         return source;
     }
 

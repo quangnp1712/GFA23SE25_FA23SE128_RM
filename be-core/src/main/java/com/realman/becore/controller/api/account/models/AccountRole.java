@@ -5,8 +5,10 @@ import com.realman.becore.enums.ERole;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Builder;
 
+@Builder
 public record AccountRole(
-        @Enumerated(EnumType.STRING) ERole role,
-        @Enumerated(EnumType.STRING) EProfessional professional) {
+                @Enumerated(EnumType.STRING) ERole role,
+                @Enumerated(EnumType.STRING) EProfessional professional) {
 }

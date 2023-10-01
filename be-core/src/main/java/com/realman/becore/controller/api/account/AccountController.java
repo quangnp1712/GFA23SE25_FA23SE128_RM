@@ -2,23 +2,45 @@ package com.realman.becore.controller.api.account;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realman.becore.controller.api.account.models.AccountId;
 import com.realman.becore.controller.api.account.models.AccountModelMapper;
 import com.realman.becore.controller.api.account.models.AccountRequest;
+import com.realman.becore.controller.api.account.models.AccountResponse;
 import com.realman.becore.controller.api.account.models.AccountRole;
+import com.realman.becore.controller.api.otp.models.OTPId;
+import com.realman.becore.enums.EProfessional;
+import com.realman.becore.enums.ERole;
 import com.realman.becore.service.account.AccountUseCaseService;
+import com.realman.becore.util.response.ValueResponse;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class AccountController implements AccountApi {
+public class AccountController implements AccountAPI {
     @NonNull
     final AccountUseCaseService accountUseCaseService;
     @NonNull
     final AccountModelMapper accountModelMapper;
 
     @Override
-    public void createCustomerAccount(AccountRequest accountRequest, Long otpId, AccountRole roleRequest) {
-        accountUseCaseService.save(accountModelMapper.toDto(accountRequest.toAccountRequest()), otpId, roleRequest);
+    public void save(AccountRequest accountRequest, Long otpId, ERole role,
+            EProfessional professional) {
+        AccountRole accountRole = AccountRole.builder().role(role).professional(professional).build();
+        accountUseCaseService.save(accountModelMapper.toDto(accountRequest.toAccountRequest()), new OTPId(otpId),
+                accountRole);
+    }
+
+    @Override
+    public ValueResponse<AccountResponse> findById(Long accountId) {
+        AccountResponse accountResponse = accountModelMapper
+                .toModel(accountUseCaseService.findById(new AccountId(accountId)));
+        return new ValueResponse<>(accountResponse);
+    }
+
+    @Override
+    public void update(Long accountId, AccountRequest accountRequest) {
+        accountUseCaseService.update(new AccountId(accountId), accountModelMapper.toDto(accountRequest));
     }
 }

@@ -8,7 +8,7 @@ import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.controller.api.otp.models.OTPModelMapper;
 import com.realman.becore.controller.api.otp.models.OTPResponse;
 import com.realman.becore.service.otp.OTPUseCaseService;
-import com.realman.becore.util.ValueResponse;
+import com.realman.becore.util.response.ValueResponse;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +29,8 @@ public class OTPController implements OTPAPI {
     }
 
     @Override
-    public LoginResponse login(LoginRequest loginRequest) {
-        return otpUserCaseService.login(loginRequest);
+    public ValueResponse<LoginResponse> login(LoginRequest loginRequest) {
+        return new ValueResponse<>(otpUserCaseService.login(loginRequest));
     }
 
 }

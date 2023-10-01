@@ -1,6 +1,7 @@
 package com.realman.becore.controller.api.otp.models;
 
 public record OTPResponse(
-        Long otpId) {
+                Long otpId,
+                String phoneAttemp) {
 
 }

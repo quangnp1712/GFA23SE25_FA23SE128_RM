@@ -18,13 +18,8 @@ public class StaffUsecaseService {
     private final StaffQueryService staffQueryService;
 
     @Transactional
-    public Long save(Staff staff, EProfessional professional) {
-        return staffCommandService.save(staff, professional);
-    }
-
-    @Transactional
-    public void updateAccountId(Long staffId, Long accountId) {
-        staffCommandService.updateAccountId(staffId, accountId);
+    public void save(Staff staff, EProfessional professional) {
+        staffCommandService.save(staff, professional);
     }
 
     public Staff findByAccount(Long accountId) {

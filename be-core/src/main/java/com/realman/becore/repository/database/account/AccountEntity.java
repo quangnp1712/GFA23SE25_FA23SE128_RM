@@ -29,12 +29,6 @@ public class AccountEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
-    private Long staffId;
-    private Long customerId;
-    private Long shopOwnerId;
-    private Long branchManagerId;
-    private Long receptionistId;
-    private Long otpId;
     @UsernameConstrain
     @Column(columnDefinition = "NVARCHAR(500)")
     private String username;

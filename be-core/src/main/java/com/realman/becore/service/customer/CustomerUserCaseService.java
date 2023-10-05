@@ -17,13 +17,8 @@ public class CustomerUserCaseService {
     private final CustomerQueryService customerQueryService;
 
     @Transactional
-    public Long save(Customer customer) {
-        return customerCommandService.save(customer);
-    }
-
-    @Transactional
-    public void updateAccountId(Long customerId, Long accountId) {
-        customerCommandService.updateAccountId(customerId, accountId);
+    public void save(Customer customer) {
+        customerCommandService.save(customer);
     }
 
     public Customer findByAccountId(Long accountId) {

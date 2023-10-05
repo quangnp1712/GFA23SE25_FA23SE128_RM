@@ -7,7 +7,7 @@ import com.realman.becore.controller.api.account.models.AccountModelMapper;
 import com.realman.becore.controller.api.account.models.AccountRequest;
 import com.realman.becore.controller.api.account.models.AccountResponse;
 import com.realman.becore.controller.api.account.models.AccountRole;
-import com.realman.becore.controller.api.otp.models.OTPId;
+import com.realman.becore.dto.otp.OTP;
 import com.realman.becore.enums.EProfessional;
 import com.realman.becore.enums.ERole;
 import com.realman.becore.service.account.AccountUseCaseService;
@@ -25,11 +25,10 @@ public class AccountController implements AccountAPI {
     final AccountModelMapper accountModelMapper;
 
     @Override
-    public void save(AccountRequest accountRequest, Long otpId, ERole role,
+    public void save(AccountRequest accountRequest, ERole role,
             EProfessional professional) {
         AccountRole accountRole = AccountRole.builder().role(role).professional(professional).build();
-        accountUseCaseService.save(accountModelMapper.toDto(accountRequest.toAccountRequest()), new OTPId(otpId),
-                accountRole);
+        accountUseCaseService.save(accountModelMapper.toDto(accountRequest), accountRole);
     }
 
     @Override
@@ -42,5 +41,15 @@ public class AccountController implements AccountAPI {
     @Override
     public void update(Long accountId, AccountRequest accountRequest) {
         accountUseCaseService.update(new AccountId(accountId), accountModelMapper.toDto(accountRequest));
+    }
+
+    @Override
+    public void save(AccountRequest accountRequest, Long otpId, String passCode) {
+        OTP otp = OTP.builder()
+                .otpId(otpId)
+                .passCode(passCode)
+                .build();
+
+        accountUseCaseService.save(accountModelMapper.toDto(accountRequest), otp);
     }
 }

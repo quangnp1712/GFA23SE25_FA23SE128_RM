@@ -4,8 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record BranchManager(
-                Long branchManagerId,
-                Long branchId,
-                Long accountId) {
+        Long branchManagerId,
+        Long branchId,
+        Long accountId) {
 
 }

@@ -1,4 +1,4 @@
-package com.realman.becore.service.itimacy;
+package com.realman.becore.service.itimacy.level;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,12 +8,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ItimacyUsercaseService {
+public class ItimacyLevelUsecaseService {
+
     @NonNull
-    private final ItimacyCommandService itimacyCommandService;
+    private final ItimacyLevelCommandService itimacyLevelCommandService;
 
     @Transactional
-    public void save(Long customerId) {
-        itimacyCommandService.save(customerId);
+    public void saveAll() {
+        itimacyLevelCommandService.saveAll();
     }
 }

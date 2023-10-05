@@ -17,13 +17,8 @@ public class ShopOwnerUseCaseService {
     private final ShopOwnerQueryService shopOwnerQueryService;
 
     @Transactional
-    public Long save(ShopOwner shopOwner) {
-        return shopOwnerCommandService.save(shopOwner);
-    }
-
-    @Transactional
-    public void updateAccountId(Long shopOwnerId, Long accountId) {
-        shopOwnerCommandService.updateAccountId(shopOwnerId, accountId);
+    public void save(ShopOwner shopOwner) {
+        shopOwnerCommandService.save(shopOwner);
     }
 
     public ShopOwner findByAccountId(Long accountID) {

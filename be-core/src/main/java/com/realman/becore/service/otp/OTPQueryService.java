@@ -28,8 +28,9 @@ public class OTPQueryService {
                 .orElseThrow(() -> new ResourceNotFoundException(EErrorMessage.ACCOUNT_NOT_FOUND.name())));
     }
 
-    public OTP findById(Long otpId) {
+    public OTP validPassCode(Long otpId, String passCode) {
         return otpMapper.toDto(otpRepository.findById(otpId)
                 .orElseThrow(() -> new ResourceNotFoundException(EErrorMessage.ACCOUNT_NOT_FOUND.name())));
     }
+
 }

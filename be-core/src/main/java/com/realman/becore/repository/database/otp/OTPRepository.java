@@ -1,6 +1,5 @@
 package com.realman.becore.repository.database.otp;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,8 +13,8 @@ public interface OTPRepository extends JpaRepository<OTPEntity, Long> {
     Optional<OTPEntity> findByPhoneAttemp(String phone);
 
     @Query("""
-                SELECT a, o FROM AccountEntity a INNER JOIN OTPEntity o ON a.otpId = o.otpId
+                SELECT o FROM AccountEntity a INNER JOIN OTPEntity o ON a.phone = o.phoneAttemp
                 WHERE a.phone = :phone
             """)
-    List<Object[]> findAccountAndOtpByPhone(String phone);
+    Optional<OTPEntity> findByPhone(String phone);
 }

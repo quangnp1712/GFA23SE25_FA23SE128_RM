@@ -17,13 +17,8 @@ public class BranchManagerUseCaseService {
     private final BranchManagerQueryService branchManagerQueryService;
 
     @Transactional
-    public Long save(BranchManager branchManager) {
-        return branchManagerCommandService.save(branchManager);
-    }
-
-    @Transactional
-    public void updateAccountId(Long managerId, Long accountId) {
-        branchManagerCommandService.updateAccountId(managerId, accountId);
+    public void save(BranchManager branchManager) {
+        branchManagerCommandService.save(branchManager);
     }
 
     public BranchManager findByAccountId(Long accountId) {

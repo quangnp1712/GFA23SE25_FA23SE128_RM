@@ -1,5 +1,7 @@
 package com.realman.becore.service.account;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.realman.becore.controller.api.account.models.AccountId;
@@ -50,10 +52,11 @@ public class AccountQueryService {
         }
 
         public Account findByPhone(String phone) {
-                AccountEntity entity = accountRepository.findByPhone(phone)
-                                .orElseThrow(() -> new ResourceNotFoundException(
-                                                EErrorMessage.ACCOUNT_NOT_FOUND.name()));
-                return accountMapper.toDto(entity);
+                Optional<AccountEntity> accountEntity = accountRepository.findByPhone(phone);
+                if (accountEntity.isEmpty()) {
+                        return null;
+                }
+                return accountMapper.toDto(accountEntity.get());
         }
 
         public void verifyAccount(Account account) {

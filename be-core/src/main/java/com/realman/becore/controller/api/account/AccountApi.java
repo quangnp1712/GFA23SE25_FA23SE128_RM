@@ -19,11 +19,15 @@ import jakarta.validation.Valid;
 @Tag(name = "Account")
 @RequestMapping("/v1/account")
 public interface AccountAPI {
-    @PostMapping("/{roleRequest}")
-    void save(@RequestBody AccountRequest accountRequest,
-            @RequestParam(required = false, value = "otpId") Long otpId,
+    @PostMapping("/shop/{roleRequest}")
+    void save(@RequestBody @Valid AccountRequest accountRequest,
             @RequestParam(required = true, value = "role", defaultValue = "") ERole role,
-            @RequestParam(required = false, value = "professional") EProfessional professional);
+            @RequestParam(required = false, value = "professional", defaultValue = "") EProfessional professional);
+
+    @PostMapping("/customer")
+    void save(@RequestBody @Valid AccountRequest accountRequest,
+            @RequestParam(required = true, value = "otpId") Long otpId,
+            @RequestParam(required = true, value = "passCode") String passCode);
 
     @GetMapping
     ValueResponse<AccountResponse> findById(Long accountId);

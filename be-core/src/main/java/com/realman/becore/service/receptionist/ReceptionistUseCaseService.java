@@ -16,13 +16,8 @@ public class ReceptionistUseCaseService {
     private final ReceptionistQueryService receptionistQueryService;
 
     @Transactional
-    public Long save(Receptionist receptionist) {
-        return receptionistCommandService.save(receptionist);
-    }
-
-    @Transactional
-    public void updateAccountId(Long receptId, Long accountId) {
-        receptionistCommandService.updateAccountId(receptId, accountId);
+    public void save(Receptionist receptionist) {
+        receptionistCommandService.save(receptionist);
     }
 
     public Receptionist findByAccountId(Long accountId) {

@@ -12,7 +12,8 @@ import com.realman.becore.enums.ERole;
 
 public record Account(
                 Long accountId,
-                String username,
+                String firstName,
+                String lastName,
                 String phone,
                 String address,
                 LocalDateTime dob,

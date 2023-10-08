@@ -28,7 +28,7 @@ public class AccountController implements AccountAPI {
     public void save(AccountRequest accountRequest, ERole role,
             EProfessional professional) {
         AccountRole accountRole = AccountRole.builder().role(role).professional(professional).build();
-        accountUseCaseService.save(accountModelMapper.toDto(accountRequest), accountRole);
+        accountUseCaseService.save(accountModelMapper.toDto(accountRequest.format()), accountRole);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class AccountController implements AccountAPI {
                 .passCode(passCode)
                 .build();
 
-        accountUseCaseService.save(accountModelMapper.toDto(accountRequest), otp);
+        accountUseCaseService.save(accountModelMapper.toDto(accountRequest.format()), otp);
     }
 }

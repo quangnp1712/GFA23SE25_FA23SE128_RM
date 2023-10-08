@@ -69,7 +69,7 @@ public class OTPCommandService {
 
         if (otpEntity.isEmpty()) {
             return LoginResponse.builder()
-                    .username(null)
+                    .phone(null)
                     .jwtToken(null)
                     .expTime(null)
                     .role(null)
@@ -82,10 +82,10 @@ public class OTPCommandService {
             throw new AuthFailException(EErrorMessage.ACCOUNT_NOT_VALID.name());
         }
         otpRepository.delete(otpEntity.get());
-        String jwtToken = jwtConfiguration.generateJwt(account.username());
+        String jwtToken = jwtConfiguration.generateJwt(account.phone());
         LocalDateTime expiredTime = jwtConfiguration.expireTime();
         return LoginResponse.builder()
-                .username(account.username())
+                .phone(account.phone())
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)
                 .role(account.role())

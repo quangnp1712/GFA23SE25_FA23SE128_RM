@@ -26,9 +26,9 @@ public class JwtConfiguration {
     @Value("${JwtExpiredTime}")
     private Long jwtExpiredTime;
 
-    public String generateJwt(String username) {
+    public String generateJwt(String phone) {
         Instant expiredTime = Instant.now().plusSeconds(jwtExpiredTime);
-        return Jwts.builder().setIssuedAt(new Date()).setExpiration(Date.from(expiredTime)).setSubject(username)
+        return Jwts.builder().setIssuedAt(new Date()).setExpiration(Date.from(expiredTime)).setSubject(phone)
                 .signWith(Keys.hmacShaKeyFor(jwtSecretKey.getBytes())).compact();
     }
 

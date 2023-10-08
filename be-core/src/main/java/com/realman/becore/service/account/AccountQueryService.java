@@ -44,13 +44,6 @@ public class AccountQueryService {
         @NonNull
         private final ShopOwnerUseCaseService shopOwnerUserCaseService;
 
-        public Account findByUsername(String username) {
-                AccountEntity entity = accountRepository.findByUsername(username)
-                                .orElseThrow(() -> new ResourceNotFoundException(
-                                                EErrorMessage.ACCOUNT_NOT_FOUND.name()));
-                return accountMapper.toDto(entity);
-        }
-
         public Account findByPhone(String phone) {
                 Optional<AccountEntity> accountEntity = accountRepository.findByPhone(phone);
                 if (accountEntity.isEmpty()) {
@@ -60,10 +53,6 @@ public class AccountQueryService {
         }
 
         public void verifyAccount(Account account) {
-                if (accountRepository.findByUsername(account.username()).isPresent()) {
-                        throw new ResourceDuplicateException(EErrorMessage.USERNAME_DUPLICATED.name());
-                }
-
                 if (accountRepository.findByPhone(account.phone()).isPresent()) {
                         throw new ResourceDuplicateException(EErrorMessage.PHONE_DUPLICATED.name());
                 }

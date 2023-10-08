@@ -13,7 +13,7 @@ import jakarta.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PhoneValidator.class)
 @Target({ ElementType.FIELD, ElementType.TYPE })
-public @interface PhoneConstrain {
+public @interface PhoneConstraint {
     String message() default "Số điện thoại không hợp lệ";
 
     Class<?>[] groups() default {};

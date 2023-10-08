@@ -47,10 +47,6 @@ public class AccountUseCaseService {
         accountCommandService.update(accountId, account);
     }
 
-    public Account findByUsername(String username) {
-        return accountQueryService.findByUsername(username);
-    }
-
     public Account findByPhone(String phone) {
         return accountQueryService.findByPhone(phone);
     }

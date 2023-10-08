@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -20,6 +21,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     NzIconModule,
     NzButtonModule,
     NzTableModule,
+    RouterLink
   ],
   template: `
     <nz-breadcrumb>
@@ -39,7 +41,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
         </ng-template>
       </div>
       <div nz-col nzSpan="2" class="tw-text-center">
-        <button nz-button>Tạo tài khoản</button>
+        <button nz-button [routerLink]="['/account-management', 'create-account']">Tạo tài khoản</button>
       </div>
       <div nz-col nzSpan="24" class="tw-mt-5">
         <nz-table #basicTable class="tw-mr-4">

@@ -33,12 +33,14 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
         class="tw-bg-gray-300"
       >
         <div class="logo">
-          <img
-            nz-image
-            nzSrc="../assets/icon/icon.png"
-            heigth="50px"
-            width="114px"
-          />
+          <div *ngIf="!isCollapsed">
+            <img
+              nz-image
+              [nzSrc]=" isCollapsed ? '../assets/icon/logo.png' : '../assets/icon/icon.png'"
+              heigth="50px"
+              width="114px"
+            />
+          </div>
         </div>
         <ul nz-menu nzTheme="dark" nzMode="inline">
           <li
@@ -51,9 +53,20 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
           </li>
           <li nz-submenu nzTitle="Quản lý tài khoản" nzIcon="team">
             <ul>
-              <li nz-menu-item nzMatchRouter
-            [routerLink]="['/account-management', 'account-list']">Danh sách tài khoản</li>
-              <li nz-menu-item>Tạo tài khoản</li>
+              <li
+                nz-menu-item
+                nzMatchRouter
+                [routerLink]="['/account-management', 'account-list']"
+              >
+                Danh sách tài khoản
+              </li>
+              <li
+                nz-menu-item
+                [routerLink]="['/account-management', 'create-account']"
+                nzMatchRouter
+              >
+                Tạo tài khoản
+              </li>
             </ul>
           </li>
           <li nz-submenu nzTitle="Quản lý doanh thu" nzIcon="money-collect">
@@ -84,7 +97,11 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
               ></nz-avatar>
               <nz-dropdown-menu #avatarMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li nz-menu-item nzMatchRouter [routerLink]="['/homepage', 'profile']">
+                  <li
+                    nz-menu-item
+                    nzMatchRouter
+                    [routerLink]="['/homepage', 'profile']"
+                  >
                     <span nz-icon nzType="user" nzTheme="outline"></span>
                     <span class="tw-inline-block tw-ml-2">Hồ sơ</span>
                   </li>
@@ -149,9 +166,9 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomepageLayoutComponent {
-  constructor(private _router: Router){}
+  constructor(private _router: Router) {}
   isCollapsed = false;
-  logout(){
-    this._router.navigate(['/login'])
+  logout() {
+    this._router.navigate(['/login']);
   }
 }

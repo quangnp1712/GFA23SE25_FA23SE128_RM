@@ -1,20 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:realmen_customer_application/screens/login/login-otp-screen.dart';
+import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 
-class LoginPhoneScreen extends StatefulWidget {
-  const LoginPhoneScreen({super.key});
-  static const String LoginPhoneScreenRoute = "/login-phone-screen";
+class LoginOTPScreen extends StatefulWidget {
+  const LoginOTPScreen({super.key});
+  static const String LoginOTPScreenRoute = "/login-otp-screen";
 
   @override
-  State<LoginPhoneScreen> createState() => _LoginPhoneScreenState();
+  State<LoginOTPScreen> createState() => _LoginOTPScreenState();
 }
 
-class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
+class _LoginOTPScreenState extends State<LoginOTPScreen> {
   @override
   Widget build(BuildContext context) {
+    final defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      textStyle: TextStyle(
+          fontSize: 20, color: Colors.black, fontWeight: FontWeight.w600),
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xffC4C4C4)),
+        borderRadius: BorderRadius.circular(20),
+      ),
+    );
+
+    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+      border: Border.all(color: Color(0xff777777)),
+      borderRadius: BorderRadius.circular(8),
+    );
+
+    final submittedPinTheme = defaultPinTheme.copyWith(
+      decoration: defaultPinTheme.decoration?.copyWith(
+        color: Color.fromRGBO(239, 240, 241, 1),
+      ),
+    );
     return Scaffold(
       body: Stack(
         children: [
@@ -75,7 +97,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                               ),
                               Container(
                                 child: Text(
-                                  "Nhập số điện thoại",
+                                  "Nhập OTP",
                                   style: GoogleFonts.quicksand(
                                     fontSize: 27,
                                     fontWeight: FontWeight.w400,
@@ -86,44 +108,15 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Container(
-                                width: 70.w,
-                                // height: 40,
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(10),
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  cursorColor: Colors.black,
-                                  cursorWidth: 1,
-                                  style: const TextStyle(
-                                      height: 1.17,
-                                      fontSize: 20,
-                                      color: Colors.black),
-                                  decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xffC4C4C4)),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xffC4C4C4)),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    contentPadding: const EdgeInsets.only(
-                                        // top: 10,
-                                        // bottom: 20,
-                                        left: 15,
-                                        right: 15),
-                                    hintText: "Nhập số điện thoại của bạn",
-                                    hintStyle: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0xffC4C4C4)),
-                                  ),
-                                ),
+                              Pinput(
+                                defaultPinTheme: defaultPinTheme,
+                                focusedPinTheme: focusedPinTheme,
+                                submittedPinTheme: submittedPinTheme,
+                                length: 5,
+                                pinputAutovalidateMode:
+                                    PinputAutovalidateMode.onSubmit,
+                                showCursor: true,
+                                onCompleted: (pin) => print(pin),
                               ),
                               SizedBox(
                                 height: 2.5.h,
@@ -147,7 +140,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.pushNamed(context,
-                                        LoginOTPScreen.LoginOTPScreenRoute);
+                                        RegisterScreen.RegisterScreenRoute);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -157,7 +150,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                                     shadowColor: Colors.transparent,
                                   ),
                                   child: const Text(
-                                    "TIẾP THEO",
+                                    "ĐĂNG NHẬP",
                                     style: TextStyle(
                                         fontSize: 24,
                                         color: Color(0xffC4C4C4),

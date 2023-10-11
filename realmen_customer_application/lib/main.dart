@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
@@ -5,8 +6,9 @@ import 'package:realmen_customer_application/screens/login/register_screen.dart'
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPhoneScreen extends StatefulWidget {
   const LoginPhoneScreen({super.key});
@@ -13,6 +16,26 @@ class LoginPhoneScreen extends StatefulWidget {
 }
 
 class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
+  TextEditingController phoneController = TextEditingController();
+  Future<void> submitPhone() async {
+    // Model
+    String phone = phoneController.text.toString();
+    Map<String, dynamic> body = {"value": phone};
+
+    // API
+    final client = http.Client();
+    const url = 'http://192.168.2.223:8080/v1/otp';
+    var uri = Uri.parse(url);
+
+    final response = await client.post(uri, body: json.encode(body), headers: {
+      "Access-Control-Allow-Origin": "*",
+      'Content-Type': 'application/json',
+      'Accept': '*/*'
+    });
+
+    // print(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +113,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                                 width: 70.w,
                                 // height: 40,
                                 child: TextField(
+                                  controller: phoneController,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(10),
@@ -145,10 +169,12 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                                   borderRadius: BorderRadius.circular(24),
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context,
-                                        LoginOTPScreen.LoginOTPScreenRoute);
-                                  },
+                                  onPressed: submitPhone
+                                  // () {
+                                  //   Navigator.pushNamed(context,
+                                  //       LoginOTPScreen.LoginOTPScreenRoute);
+                                  // }
+                                  ,
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24),

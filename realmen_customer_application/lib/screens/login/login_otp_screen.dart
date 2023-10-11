@@ -4,6 +4,7 @@ import 'package:realmen_customer_application/screens/login/register_screen.dart'
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:http/http.dart' as http;
 
 class LoginOTPScreen extends StatefulWidget {
   const LoginOTPScreen({super.key});

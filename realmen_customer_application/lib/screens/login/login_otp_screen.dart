@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:realmen_customer_application/models/login_otp_model.dart';
+import 'package:realmen_customer_application/screens/home/main_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
+import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
@@ -15,6 +19,7 @@ class LoginOTPScreen extends StatefulWidget {
 }
 
 class _LoginOTPScreenState extends State<LoginOTPScreen> {
+  // UI
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
@@ -118,6 +123,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                     PinputAutovalidateMode.onSubmit,
                                 showCursor: true,
                                 onCompleted: (pin) => print(pin),
+                                controller: otpController,
                               ),
                               SizedBox(
                                 height: 2.5.h,
@@ -139,10 +145,12 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                   borderRadius: BorderRadius.circular(24),
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context,
-                                        RegisterScreen.RegisterScreenRoute);
-                                  },
+                                  onPressed: submitOtp
+                                  // () {
+                                  // Navigator.pushNamed(context,
+                                  //     RegisterScreen.RegisterScreenRoute);
+                                  // }
+                                  ,
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24),
@@ -172,5 +180,31 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
         ],
       ),
     );
+  }
+
+  // Logic
+  TextEditingController otpController = TextEditingController();
+
+  void submitOtp() async {
+    String phone = await SharedPreferencesService.getPhone();
+    String otp = otpController.text.toString();
+    LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
+    AuthenticateService authenticateService = AuthenticateService();
+    try {
+      var result = await authenticateService.loginOtp(loginOtpModel);
+      if (result != null) {
+        if (result == "FALSE") {
+          Navigator.pushNamed(context, RegisterScreen.RegisterScreenRoute);
+        } else if (result == "TRUE") {
+          Navigator.pushNamed(context, MainScreen.MainScreenRoute);
+        } else {
+          print(result);
+        }
+      } else {
+        print("Error");
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

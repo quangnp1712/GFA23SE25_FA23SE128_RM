@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:realmen_customer_application/models/login_phone_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
+import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -16,26 +18,7 @@ class LoginPhoneScreen extends StatefulWidget {
 }
 
 class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
-  TextEditingController phoneController = TextEditingController();
-  Future<void> submitPhone() async {
-    // Model
-    String phone = phoneController.text.toString();
-    Map<String, dynamic> body = {"value": phone};
-
-    // API
-    final client = http.Client();
-    const url = 'http://192.168.2.223:8080/v1/otp';
-    var uri = Uri.parse(url);
-
-    final response = await client.post(uri, body: json.encode(body), headers: {
-      "Access-Control-Allow-Origin": "*",
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    });
-
-    // print(response.body);
-  }
-
+  // UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +26,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
         children: [
           Positioned(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/bg.png'),
                   fit: BoxFit.cover,
@@ -109,7 +92,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 70.w,
                                 // height: 40,
                                 child: TextField(
@@ -204,5 +187,24 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
         ],
       ),
     );
+  }
+
+  // Logic
+  TextEditingController phoneController = TextEditingController();
+
+  void submitPhone() async {
+    String phone = phoneController.text.toString();
+    LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+    AuthenticateService authenticateService = AuthenticateService();
+    try {
+      var result = await authenticateService.loginPhone(loginPhoneModel);
+      if (result != null) {
+        Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+      } else {
+        print("Error");
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

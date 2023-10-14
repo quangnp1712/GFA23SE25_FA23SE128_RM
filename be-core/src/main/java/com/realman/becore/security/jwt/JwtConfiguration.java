@@ -47,6 +47,7 @@ public class JwtConfiguration {
 
     public String getJwtFromRequestHeader(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
+        
         if (AppUtil.stringHasLength(authorization)) {
             if (authorization.startsWith("Bearer ")) {
                 String jwt = authorization.substring(7);

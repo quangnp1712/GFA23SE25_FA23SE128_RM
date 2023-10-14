@@ -145,36 +145,8 @@ public class AccountCommandService {
                 AccountEntity accountEntity = accountRepository.findById(accountId.value())
                                 .orElseThrow(() -> new ResourceNotFoundException(
                                                 EErrorMessage.ACCOUNT_NOT_FOUND.name()));
-                accountRepository.delete(accountEntity);
-                switch (accountEntity.getRole()) {
-                        case CUSTOMER:
-                                accountRepository.save(accountMapper
-                                                .updateCustomerEntity(account, accountEntity.getRole()));
-
-                                break;
-                        case STAFF:
-                                accountRepository.save(
-                                                accountMapper.updateStaffEntity(account, accountEntity.getRole()));
-
-                                break;
-                        case RECEPTIONIST:
-                                accountRepository.save(accountMapper
-                                                .updateReceptEntity(account, accountEntity.getRole()));
-
-                                break;
-                        case BRANCH_MANAGER:
-                                accountRepository.save(accountMapper
-                                                .updateCustomerEntity(account, accountEntity.getRole()));
-
-                                break;
-                        case SHOP_OWNER:
-                                accountRepository.save(accountMapper
-                                                .updateShopOwnerEntity(account, accountEntity.getRole()));
-
-                                break;
-                        default:
-                                break;
-                }
+                accountMapper.updateEntity(accountEntity, account);
+                accountRepository.save(accountEntity);
         }
 
 }

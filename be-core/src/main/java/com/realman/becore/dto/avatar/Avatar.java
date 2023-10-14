@@ -6,6 +6,7 @@ import lombok.Builder;
 public record Avatar(
         Long avatarId,
         Long accountId,
+        Boolean isThumbnail,
         String url) {
 
 }

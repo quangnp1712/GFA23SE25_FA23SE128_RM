@@ -13,6 +13,7 @@ import com.realman.becore.enums.ERole;
 import com.realman.becore.service.account.AccountUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
 
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +26,7 @@ public class AccountController implements AccountAPI {
     final AccountModelMapper accountModelMapper;
 
     @Override
-    public void save(AccountRequest accountRequest, ERole role,
+    public void save(@Valid AccountRequest accountRequest, ERole role,
             EProfessional professional) {
         AccountRole accountRole = AccountRole.builder().role(role).professional(professional).build();
         accountUseCaseService.save(accountModelMapper.toDto(accountRequest.format()), accountRole);
@@ -39,12 +40,12 @@ public class AccountController implements AccountAPI {
     }
 
     @Override
-    public void update(Long accountId, AccountRequest accountRequest) {
+    public void update(Long accountId,@Valid AccountRequest accountRequest) {
         accountUseCaseService.update(new AccountId(accountId), accountModelMapper.toDto(accountRequest));
     }
 
     @Override
-    public void save(AccountRequest accountRequest, Long otpId, String passCode) {
+    public void save(@Valid AccountRequest accountRequest, Long otpId, String passCode) {
         OTP otp = OTP.builder()
                 .otpId(otpId)
                 .passCode(passCode)

@@ -5,10 +5,10 @@ import java.util.Objects;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class LastNameValidator implements ConstraintValidator<LastNameConstraint, String> {
+public class LastNameValidator implements ConstraintValidator<LastName, String> {
 
     @Override
-    public void initialize(LastNameConstraint constraintAnnotation) {
+    public void initialize(LastName constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 

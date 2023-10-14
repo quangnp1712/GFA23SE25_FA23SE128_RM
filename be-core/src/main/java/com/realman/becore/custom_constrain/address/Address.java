@@ -1,4 +1,4 @@
-package com.realman.becore.custom_constrain.username;
+package com.realman.becore.custom_constrain.address;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,11 +10,11 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = LastNameValidator.class)
+@Constraint(validatedBy = AddressValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface LastNameConstraint {
-    String message() default "Tên không hợp lệ";
+public @interface Address {
+    String message() default "Địa chỉ không hợp lệ";
 
     Class<?>[] groups() default {};
 

@@ -24,4 +24,5 @@ public class AvatarEntity extends Auditable {
     private Long avatarId;
     private Long accountId;
     private String url;
+    private Boolean isThumbnail;
 }

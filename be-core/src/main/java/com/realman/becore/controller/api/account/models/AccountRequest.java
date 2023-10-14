@@ -3,19 +3,22 @@ package com.realman.becore.controller.api.account.models;
 import java.time.LocalDateTime;
 import java.util.StringTokenizer;
 
+import com.realman.becore.custom_constrain.address.Address;
+import com.realman.becore.custom_constrain.phone.Phone;
+import com.realman.becore.custom_constrain.username.FirstName;
+import com.realman.becore.custom_constrain.username.LastName;
 import com.realman.becore.enums.EGender;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
 public record AccountRequest(
-                @NotNull String firstName,
-                @NotNull String lastName,
-                @NotNull String phone,
-                String address,
+                @FirstName String firstName,
+                @LastName String lastName,
+                @Phone String phone,
+                @Address String address,
                 @Enumerated(EnumType.STRING) EGender gender,
                 LocalDateTime dob) {
 

@@ -1,4 +1,4 @@
-package com.realman.becore.custom_constrain.username;
+package com.realman.becore.custom_constrain.text;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,11 +10,11 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = FirstNameValidator.class)
+@Constraint(validatedBy = NormalTextValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FirstNameConstraint {
-    String message() default "Họ không hợp lệ";
+public @interface NormalText {
+    String message() default "Dữ liệu không hợp lệ";
 
     Class<?>[] groups() default {};
 

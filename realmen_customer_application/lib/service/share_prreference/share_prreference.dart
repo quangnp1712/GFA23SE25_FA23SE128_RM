@@ -23,4 +23,17 @@ class SharedPreferencesService {
     String result = resultList[1];
     return result;
   }
+
+  static Future<void> savePassCode(String passCode) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setString("passCode", passCode);
+  }
+
+  static Future<String> getPassCode() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    String result = sharedPreferences.getString("passCode")!;
+    return result;
+  }
 }

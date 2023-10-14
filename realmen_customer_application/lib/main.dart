@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
         ),
         initialRoute: SplashScreen.SplashScreenRoute,
-        // initialRoute: LoginOTPScreen.LoginOTPScreenRoute,
+        // initialRoute: RegisterScreen.RegisterScreenRoute,
         routes: {
           LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
               const LoginPhoneScreen(),

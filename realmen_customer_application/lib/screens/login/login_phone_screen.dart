@@ -198,10 +198,10 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginPhone(loginPhoneModel);
-      if (result != null) {
+      if (result == 200) {
         Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
       } else {
-        print("Error");
+        print("Error: $result");
       }
     } catch (e) {
       print(e);

@@ -2,7 +2,9 @@ package com.realman.becore.repository.database.booking;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import com.realman.becore.enums.EBookingStatus;
+
+import com.realman.becore.dto.enums.EBookingStatus;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

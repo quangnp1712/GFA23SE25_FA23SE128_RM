@@ -1,6 +1,6 @@
 package com.realman.becore.dto.staff;
 
-import com.realman.becore.enums.EProfessional;
+import com.realman.becore.dto.enums.EProfessional;
 
 import lombok.Builder;
 

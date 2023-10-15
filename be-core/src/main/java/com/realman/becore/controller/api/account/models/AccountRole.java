@@ -1,7 +1,7 @@
 package com.realman.becore.controller.api.account.models;
 
-import com.realman.becore.enums.EProfessional;
-import com.realman.becore.enums.ERole;
+import com.realman.becore.dto.enums.EProfessional;
+import com.realman.becore.dto.enums.ERole;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

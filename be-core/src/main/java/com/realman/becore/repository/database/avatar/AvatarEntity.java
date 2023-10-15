@@ -22,7 +22,7 @@ public class AvatarEntity extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long avatarId;
-    private Long accountId;
+    private Long staffId;
+    private Long branchId;
     private String url;
-    private Boolean isThumbnail;
 }

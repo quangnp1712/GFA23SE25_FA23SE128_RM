@@ -1,5 +1,7 @@
 package com.realman.becore.controller.api.avatar;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,11 +21,11 @@ import jakarta.validation.constraints.Min;
 public interface AvatarsAPI {
 
     @PostMapping
-    void save(@RequestBody @Valid AvatarRequest avatar, Long accountId);
+    void save(@RequestBody @Valid List<AvatarRequest> avatarList, Long staffId);
 
     @GetMapping
     PageImplResponse<AvatarResponse> findAll(
-            @RequestParam(required = true, value = "accountId") Long accountId,
+            @RequestParam(required = true, value = "staffId") Long staffId,
             @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter,
             @RequestParam(required = false, value = "currentPage", defaultValue = "1") @Min(1) Integer current,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);

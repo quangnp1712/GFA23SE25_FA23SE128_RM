@@ -1,11 +1,13 @@
 package com.realman.becore.service.avatar;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.realman.becore.controller.api.account.models.AccountId;
 import com.realman.becore.controller.api.avatar.models.AvatarId;
+import com.realman.becore.controller.api.avatar.models.StaffId;
 import com.realman.becore.dto.avatar.Avatar;
 import com.realman.becore.util.response.PageRequestCustom;
 
@@ -22,8 +24,8 @@ public class AvatarUseCaseService {
     private final AvatarQueryService avatarQueryService;
 
     @Transactional
-    public void save(Avatar avatar, Long accountId) {
-        avatarCommandService.save(avatar, accountId);
+    public void save(List<Avatar> avatarList, StaffId staffId) {
+        avatarCommandService.save(avatarList, staffId);
     }
 
     @Transactional
@@ -36,8 +38,8 @@ public class AvatarUseCaseService {
         avatarCommandService.delete(avatarId);
     }
 
-    public Page<Avatar> findAll(AccountId accountId, PageRequestCustom pageRequestCustom) {
-        return avatarQueryService.findAll(accountId, pageRequestCustom);
+    public Page<Avatar> findAll(StaffId staffId, PageRequestCustom pageRequestCustom) {
+        return avatarQueryService.findAll(staffId, pageRequestCustom);
     }
 
     public Avatar findById(AvatarId avatarId) {

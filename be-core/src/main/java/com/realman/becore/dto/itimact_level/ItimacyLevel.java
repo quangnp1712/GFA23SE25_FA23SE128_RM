@@ -1,6 +1,6 @@
 package com.realman.becore.dto.itimact_level;
 
-import com.realman.becore.enums.EItimacyLevel;
+import com.realman.becore.dto.enums.EItimacyLevel;
 
 public record ItimacyLevel(
         Long itimacyId,

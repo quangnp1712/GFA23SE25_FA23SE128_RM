@@ -2,7 +2,8 @@ package com.realman.becore.repository.database.service;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.realman.becore.enums.EServiceStatus;
+import com.realman.becore.dto.enums.EServiceStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,7 @@
 package com.realman.becore.repository.database.itimacty_level;
 
-import com.realman.becore.enums.EItimacyLevel;
+import com.realman.becore.dto.enums.EItimacyLevel;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class ItimacyLevelEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itimactyLevelId;
+    private Long itimacyLevelId;
     private Long requirePoint;
     private EItimacyLevel itimacyLevel;
     private Double percentDiscount;

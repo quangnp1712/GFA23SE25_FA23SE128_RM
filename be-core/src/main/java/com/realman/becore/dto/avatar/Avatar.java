@@ -5,7 +5,8 @@ import lombok.Builder;
 @Builder
 public record Avatar(
         Long avatarId,
-        Long accountId,
+        Long staffId,
+        Long brachId,
         Boolean isThumbnail,
         String url) {
 

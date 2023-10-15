@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import com.realman.becore.enums.EProfessional;
+import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.repository.database.staff.StaffEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)

@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+
+import com.realman.becore.dto.enums.EItimacyLevel;
 import com.realman.becore.dto.itimact_level.ItimacyLevelMapper;
-import com.realman.becore.enums.EItimacyLevel;
 import com.realman.becore.repository.database.itimacty_level.ItimacyLevelEntity;
 import com.realman.becore.repository.database.itimacty_level.ItimacyLevelRepository;
 

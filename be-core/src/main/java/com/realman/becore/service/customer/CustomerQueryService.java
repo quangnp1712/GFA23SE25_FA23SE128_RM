@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.realman.becore.dto.customer.Customer;
 import com.realman.becore.dto.customer.CustomerMapper;
-import com.realman.becore.enums.EErrorMessage;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.customer.CustomerEntity;
 import com.realman.becore.repository.database.customer.CustomerRepositoty;
@@ -24,8 +23,7 @@ public class CustomerQueryService {
     public Customer findByAccountId(Long accountId) {
 
         CustomerEntity customerEntity = customerRepositoty.findByAccountId(accountId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        EErrorMessage.CUSOMTER_NOT_FOUND.name()));
+                .orElseThrow(ResourceNotFoundException::new);
         return customerMapper.toDto(customerEntity);
     }
 }

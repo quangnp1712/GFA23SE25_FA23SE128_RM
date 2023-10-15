@@ -3,8 +3,10 @@ package com.realman.becore.repository.database.account;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.realman.becore.enums.EGender;
-import com.realman.becore.enums.ERole;
+import com.realman.becore.dto.enums.EAccountStatus;
+import com.realman.becore.dto.enums.EGender;
+import com.realman.becore.dto.enums.ERole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,8 @@ public class AccountEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
+    private Long branchId;
+    private String thumbnailUrl;
     @Column(columnDefinition = "NVARCHAR(500)")
     private String firstName;
     @Column(columnDefinition = "NVARCHAR(500)")
@@ -36,5 +40,6 @@ public class AccountEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime dob;
     private EGender gender;
+    private EAccountStatus status;
     private ERole role;
 }

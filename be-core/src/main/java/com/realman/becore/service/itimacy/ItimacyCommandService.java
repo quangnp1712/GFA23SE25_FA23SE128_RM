@@ -2,8 +2,8 @@ package com.realman.becore.service.itimacy;
 
 import org.springframework.stereotype.Service;
 
+import com.realman.becore.dto.enums.EItimacyLevel;
 import com.realman.becore.dto.itimacy.ItimacyMapper;
-import com.realman.becore.enums.EItimacyLevel;
 import com.realman.becore.repository.database.itimacty_level.ItimacyLevelEntity;
 import com.realman.becore.repository.database.itimacy.ItimacyEntity;
 import com.realman.becore.repository.database.itimacy.ItimacyRepository;
@@ -28,7 +28,7 @@ public class ItimacyCommandService {
         ItimacyEntity itimacyEntity = ItimacyEntity.builder()
                 .currentPoint(0L)
                 .customerId(customerId)
-                .itimacyLevelId(itimacyLevelEntity.getItimactyLevelId())
+                .itimacyLevelId(itimacyLevelEntity.getItimacyLevelId())
                 .build();
         itimacyRepository.save(itimacyEntity);
     }

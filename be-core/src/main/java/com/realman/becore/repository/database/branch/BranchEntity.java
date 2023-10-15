@@ -1,6 +1,7 @@
 package com.realman.becore.repository.database.branch;
 
-import com.realman.becore.enums.EBranchStatus;
+import com.realman.becore.dto.enums.EBranchStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class BranchEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long branchId;
     private Long shopOwnerId;
-    private Long branchManagerId;
+    private String branchName;
     @Column(columnDefinition = "NVARCHAR(500)")
     @NotNull(message = "Nhập địa chỉ chi nhánh")
     private String address;

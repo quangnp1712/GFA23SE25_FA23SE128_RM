@@ -20,16 +20,16 @@ public class OTPUseCaseService {
     private final OTPQueryService otpQueryService;
 
     @Transactional
-    public OTP save(AccountPhone accountPhone) {
-        return otpCommandService.save(accountPhone);
+    public void save(AccountPhone accountPhone) {
+         otpCommandService.save(accountPhone);
+    }
+
+    public Boolean accountRegister(AccountPhone accountPhone) {
+        return otpCommandService.accountRegister(accountPhone);
     }
 
     public OTP findByAccountId(Long accountId) {
         return otpQueryService.findByAccountId(accountId);
-    }
-
-    public OTP findByPhoneAttemp(String phone) {
-        return otpQueryService.findByPhoneAttemp(phone);
     }
 
     @Transactional

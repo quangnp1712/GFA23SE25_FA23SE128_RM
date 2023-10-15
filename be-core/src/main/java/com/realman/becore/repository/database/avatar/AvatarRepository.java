@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface AvatarRepository extends JpaRepository<AvatarEntity, Long> {
     
     @Query("""
-            SELECT a FROM AvatarEntity a WHERE a.accountId = :accountId
+            SELECT a FROM AvatarEntity a WHERE a.staffId = :staffId
             """)
-    Page<AvatarEntity> findAll(Long accountId, Pageable pageable);
+    Page<AvatarEntity> findAll(Long staffId, Pageable pageable);
 }

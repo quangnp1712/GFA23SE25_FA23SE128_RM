@@ -1,11 +1,9 @@
 package com.realman.becore.error_handlers.exceptions;
 
+import com.realman.becore.dto.enums.EErrorMessage;
+
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {
-        super("Resource_Not_Found");
-    }
-
-    public ResourceNotFoundException(String message) {
-        super(message);
+        super(EErrorMessage.RESOURCE_NOT_FOUND.name());
     }
 }

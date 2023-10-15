@@ -1,6 +1,7 @@
 package com.realman.becore.repository.database.staff_schedule;
 
-import com.realman.becore.enums.EScheduleStatus;
+import com.realman.becore.dto.enums.EScheduleStatus;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

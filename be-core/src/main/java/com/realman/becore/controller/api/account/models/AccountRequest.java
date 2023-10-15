@@ -3,11 +3,11 @@ package com.realman.becore.controller.api.account.models;
 import java.time.LocalDateTime;
 import java.util.StringTokenizer;
 
-import com.realman.becore.custom_constrain.address.Address;
 import com.realman.becore.custom_constrain.phone.Phone;
+import com.realman.becore.custom_constrain.text.NormalText;
 import com.realman.becore.custom_constrain.username.FirstName;
 import com.realman.becore.custom_constrain.username.LastName;
-import com.realman.becore.enums.EGender;
+import com.realman.becore.dto.enums.EGender;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,28 +15,29 @@ import lombok.Builder;
 
 @Builder
 public record AccountRequest(
+                @NormalText String thumbnailUrl,
                 @FirstName String firstName,
                 @LastName String lastName,
                 @Phone String phone,
-                @Address String address,
+                @NormalText String address,
                 @Enumerated(EnumType.STRING) EGender gender,
                 LocalDateTime dob) {
 
         public AccountRequest format() {
-                AccountRequestBuilder accountRequestBuilder = AccountRequest.builder();
                 StringBuilder firstNameBuilder = new StringBuilder();
                 StringTokenizer firstNameTokenizer = new StringTokenizer(firstName, " ");
                 while (firstNameTokenizer.hasMoreTokens()) {
                         firstNameBuilder.append(formatName(firstNameTokenizer.nextToken())).append(" ");
                 }
-                accountRequestBuilder.firstName(firstNameBuilder.toString().strip());
-                accountRequestBuilder.lastName(formatName(lastName));
-                accountRequestBuilder.phone(phone);
-                accountRequestBuilder.address(address);
-                accountRequestBuilder.gender(gender);
-                accountRequestBuilder.dob(dob);
+                AccountRequest account = AccountRequest.builder()
+                .firstName(firstNameBuilder.toString().strip())
+                .lastName(formatName(lastName))
+                .phone(phone)
+                .address(address)
+                .gender(gender).dob(dob)
+                .build();
 
-                return accountRequestBuilder.build();
+                return account;
         }
 
         private String formatName(String name) {

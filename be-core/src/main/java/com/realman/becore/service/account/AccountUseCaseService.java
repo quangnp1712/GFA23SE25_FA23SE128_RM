@@ -4,9 +4,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.controller.api.account.models.AccountId;
-import com.realman.becore.controller.api.account.models.AccountRole;
+import com.realman.becore.controller.api.branch.models.BranchId;
+import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
-import com.realman.becore.dto.otp.OTP;
+import com.realman.becore.dto.enums.EProfessional;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,38 +21,43 @@ public class AccountUseCaseService {
     @NonNull
     private final AccountCommandService accountCommandService;
 
-    /**
-     * create account for customer
-     * 
-     * @param account
-     * @param otp
-     */
     @Transactional
-    public void save(Account account, OTP otp) {
-        accountCommandService.save(account, otp);
-    }
-
-    /**
-     * create account for staff, receptionist, branch manager, shop owner
-     * 
-     * @param account
-     * @param roleRequest
-     */
-    @Transactional
-    public void save(Account account, AccountRole roleRequest) {
-        accountCommandService.save(account, roleRequest);
+    public void saveStaff(Account account, BranchId branchId, EProfessional professional) {
+        accountCommandService.saveStaff(account, branchId, professional);
     }
 
     @Transactional
-    public void update(AccountId accountId, Account account) {
-        accountCommandService.update(accountId, account);
+    public void saveCustomer(Account account) {
+        accountCommandService.saveCustomer(account);
     }
 
-    public Account findByPhone(String phone) {
-        return accountQueryService.findByPhone(phone);
+    @Transactional
+    public void save(Account account) {
+        accountCommandService.save(account);
+    }
+
+    @Transactional
+    public void save(Account account, BranchId branchId) {
+        accountCommandService.save(account, branchId);
+    }
+
+    public Account findStaffAccount(AccountId accountId) {
+        return accountQueryService.findStaffAccount(accountId);
+    }
+
+    public Account findCustomerAccount(AccountId accountId) {
+        return accountQueryService.findCustomerAccount(accountId);
+    }
+
+    public Account findManagerAccount(AccountId accountId) {
+        return accountQueryService.findManagerAccount(accountId);
     }
 
     public Account findById(AccountId accountId) {
         return accountQueryService.findById(accountId);
+    }
+
+    public Account findByPhone(AccountPhone accountPhone) {
+        return accountQueryService.findByPhone(accountPhone.value());
     }
 }

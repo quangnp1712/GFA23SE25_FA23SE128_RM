@@ -2,7 +2,7 @@ package com.realman.becore.repository.database.staff;
 
 import java.io.Serializable;
 
-import com.realman.becore.enums.EProfessional;
+import com.realman.becore.dto.enums.EProfessional;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

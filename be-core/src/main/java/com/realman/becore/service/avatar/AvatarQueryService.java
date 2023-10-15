@@ -3,8 +3,8 @@ package com.realman.becore.service.avatar;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.account.models.AccountId;
 import com.realman.becore.controller.api.avatar.models.AvatarId;
+import com.realman.becore.controller.api.avatar.models.StaffId;
 import com.realman.becore.dto.avatar.Avatar;
 import com.realman.becore.dto.avatar.AvatarMapper;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
@@ -24,9 +24,9 @@ public class AvatarQueryService {
     @NonNull
     private final AvatarMapper avatarMapper;
 
-    public Page<Avatar> findAll(AccountId accountId, PageRequestCustom pageRequestCustom) {
+    public Page<Avatar> findAll(StaffId staffId, PageRequestCustom pageRequestCustom) {
         Page<AvatarEntity> entities = avatarRepository
-                .findAll(accountId.value(), pageRequestCustom.pageRequest());
+                .findAll(staffId.value(), pageRequestCustom.pageRequest());
         return entities.map(entity -> avatarMapper.toDto(entity));
     }
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.otp.OTP;
 import com.realman.becore.service.account.AccountUseCaseService;
@@ -25,7 +26,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        Account account = accountUseCaseService.findByPhone(phone);
+        Account account = accountUseCaseService
+            .findByPhone(new AccountPhone(phone));
         OTP otp = otpUserCaseService.findByAccountId(account.accountId());
         return User.builder().username(account.phone()).password(otp.passCode())
                 .authorities(account.role().getAuthorities()).build();

@@ -1,19 +1,20 @@
 package com.realman.becore.controller.api.avatar;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realman.becore.controller.api.account.models.AccountId;
 import com.realman.becore.controller.api.avatar.models.AvatarModelMapper;
 import com.realman.becore.controller.api.avatar.models.AvatarRequest;
 import com.realman.becore.controller.api.avatar.models.AvatarResponse;
+import com.realman.becore.controller.api.avatar.models.StaffId;
 import com.realman.becore.dto.avatar.Avatar;
 import com.realman.becore.service.avatar.AvatarUseCaseService;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.PageRequestCustom;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -28,15 +29,16 @@ public class AvatarsController implements AvatarsAPI {
     private final AvatarModelMapper avatarModelMapper;
 
     @Override
-    public void save(AvatarRequest avatar, Long accountId) {
-        Avatar dto = avatarModelMapper.toDto(avatar);
-        avatarUseCaseService.save(dto, accountId);
+    public void save(List<AvatarRequest> avatarList, Long staffId) {
+        List<Avatar> dtoList = avatarList.stream()
+                .map(avatarModelMapper::toDto).toList();
+        avatarUseCaseService.save(dtoList, new StaffId(staffId));
     }
 
     @Override
-    public PageImplResponse<AvatarResponse> findAll(Long accountId, String sorter, Integer current, Integer pageSize) {
+    public PageImplResponse<AvatarResponse> findAll(Long staffId, String sorter, Integer current, Integer pageSize) {
         PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, Sort.by(sorter));
-        Page<Avatar> avatars = avatarUseCaseService.findAll(new AccountId(accountId), pageRequestCustom);
+        Page<Avatar> avatars = avatarUseCaseService.findAll(new StaffId(staffId), pageRequestCustom);
         Page<AvatarResponse> responses = avatars.map(a -> avatarModelMapper.toModel(a));
         return new PageImplResponse<>(responses.getContent(), responses.getTotalPages(), responses.getSize(),
                 pageRequestCustom.current());

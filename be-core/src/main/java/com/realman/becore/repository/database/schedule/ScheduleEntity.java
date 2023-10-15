@@ -2,7 +2,9 @@ package com.realman.becore.repository.database.schedule;
 
 import java.io.Serializable;
 import java.util.Date;
-import com.realman.becore.enums.EShift;
+
+import com.realman.becore.dto.enums.EShift;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.realman.becore.enums.EErrorDes;
-import com.realman.becore.enums.ESysError;
+import com.realman.becore.dto.enums.EErrorDes;
+import com.realman.becore.dto.enums.ESysError;
 import com.realman.becore.error_handlers.exceptions.AuthFailException;
 import com.realman.becore.error_handlers.exceptions.InvalidJwtException;
 import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;

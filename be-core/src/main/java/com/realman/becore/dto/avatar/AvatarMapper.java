@@ -9,11 +9,11 @@ import com.realman.becore.repository.database.avatar.AvatarEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AvatarMapper {
-    @Mapping(source = "accountId", target = "accountId")
-    AvatarEntity toEntity(Avatar dto, Long accountId);
-
-    @Mapping(target = "entity.avatarId", ignore = true)
-    void updateEntity(@MappingTarget AvatarEntity entity, Avatar avatar);
+    @Mapping(source = "staffId", target = "staffId")
+    AvatarEntity toEntity(Avatar dto, Long staffId);
 
     Avatar toDto(AvatarEntity entity);
+
+    @Mapping(target = "entity.avatarId", ignore = true)
+    void updateEntity(@MappingTarget AvatarEntity entity, Avatar dto);
 }

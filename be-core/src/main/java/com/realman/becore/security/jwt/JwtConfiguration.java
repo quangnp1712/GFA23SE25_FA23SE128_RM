@@ -64,7 +64,7 @@ public class JwtConfiguration {
         try {
             Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(jwtSecretKey.getBytes())).build().parse(jwt);
         } catch (MalformedJwtException | SignatureException | ExpiredJwtException | IllegalArgumentException exc) {
-            throw new InvalidJwtException(exc.getMessage());
+            throw new InvalidJwtException();
         }
     }
 }

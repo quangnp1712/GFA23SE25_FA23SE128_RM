@@ -2,7 +2,7 @@ package com.realman.becore.controller.api.account.models;
 
 import java.time.LocalDateTime;
 
-import com.realman.becore.enums.ERole;
+import com.realman.becore.dto.enums.ERole;
 
 import lombok.Builder;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/login_otp_model.dart';
-import 'package:realmen_customer_application/screens/home/main_screen.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
@@ -193,9 +193,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     try {
       var result = await authenticateService.loginOtp(loginOtpModel);
       if (result != null) {
-        if (result == "FALSE") {
-          Navigator.pushNamed(context, RegisterScreen.RegisterScreenRoute);
-        } else if (result == "TRUE") {
+        if (result.loginOtpResponseModel.jwtToken != null) {
           Navigator.pushNamed(context, MainScreen.MainScreenRoute);
         } else {
           print(result);

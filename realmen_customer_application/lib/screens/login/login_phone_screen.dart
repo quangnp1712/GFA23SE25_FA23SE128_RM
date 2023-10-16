@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/login_phone_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
+import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -198,7 +199,9 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginPhone(loginPhoneModel);
-      if (result == 200) {
+      if (result == "false") {
+        Navigator.pushNamed(context, RegisterScreen.RegisterScreenRoute);
+      } else if (result == "true") {
         Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
       } else {
         print("Error: $result");

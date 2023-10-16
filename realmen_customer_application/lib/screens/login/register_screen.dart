@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
-import 'package:realmen_customer_application/screens/home/main_screen.dart';
+import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -363,7 +364,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String address = addressController.text.toString();
     String dob = dobSubmit!.toIso8601String();
     String gender = genderController.toString();
+    String thumbnailUrl = "";
     RegisterCustomerModel registerCustomerModel = RegisterCustomerModel(
+        thumbnailUrl: thumbnailUrl,
         firstName: firstName,
         lastName: lastName,
         address: address,
@@ -374,7 +377,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       var result =
           await authenticateService.registerCustomer(registerCustomerModel);
       if (result == 200) {
-        Navigator.pushNamed(context, MainScreen.MainScreenRoute);
+        Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
       } else {
         print("Error: $result");
       }

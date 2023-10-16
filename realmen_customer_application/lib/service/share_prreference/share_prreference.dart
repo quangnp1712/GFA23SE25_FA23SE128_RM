@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:realmen_customer_application/models/login_otp_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
@@ -16,13 +17,13 @@ class SharedPreferencesService {
     return resultMap;
   }
 
-  static Future<String> getPhone() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    List<String> resultList = sharedPreferences.getStringList("otpIdPhone")!;
-    String result = resultList[1];
-    return result;
-  }
+  // static Future<String> getPhone() async {
+  //   final SharedPreferences sharedPreferences =
+  //       await SharedPreferences.getInstance();
+  //   List<String> resultList = sharedPreferences.getStringList("otpIdPhone")!;
+  //   String result = resultList[1];
+  //   return result;
+  // }
 
   static Future<void> savePassCode(String passCode) async {
     final SharedPreferences sharedPreferences =
@@ -35,5 +36,43 @@ class SharedPreferencesService {
         await SharedPreferences.getInstance();
     String result = sharedPreferences.getString("passCode")!;
     return result;
+  }
+
+  static Future<void> savePhone(String phone) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setString("phone", phone);
+  }
+
+  static Future<String> getPhone() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    String result = sharedPreferences.getString("phone")!;
+    return result;
+  }
+
+  static Future<void> saveAccountInfo(
+      LoginOtpResponseModel loginOtpResponseModel) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setStringList("accountInfo", [
+      loginOtpResponseModel.phone!,
+      loginOtpResponseModel.jwtToken!,
+      loginOtpResponseModel.role!,
+      loginOtpResponseModel.isPhoneRegistered!.toString()
+    ]);
+  }
+
+  static Future<Map<String, String>> getAccountInfo() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    List<String> result = sharedPreferences.getStringList("accountInfo")!;
+    Map<String, String> resultMap = {
+      "phone": result[0],
+      "jwtToken": result[1],
+      "role": result[2],
+      "isPhoneRegistered": result[3]
+    };
+    return resultMap;
   }
 }

@@ -1,9 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:realmen_customer_application/screens/home/main_screen.dart';
+import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
+import 'package:realmen_customer_application/screens/home/home_screen.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
+import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
+import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
+import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -28,7 +33,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
         ),
         initialRoute: SplashScreen.SplashScreenRoute,
-        // initialRoute: RegisterScreen.RegisterScreenRoute,
+        // initialRoute: MainScreen.MainScreenRoute,
         routes: {
           LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
               const LoginPhoneScreen(),
@@ -38,6 +43,13 @@ class MyApp extends StatelessWidget {
           RegisterScreen.RegisterScreenRoute: (context) =>
               const RegisterScreen(),
           MainScreen.MainScreenRoute: (context) => const MainScreen(),
+          HomeScreen.LoginPhoneScreenRoute: (context) => const HomeScreen(),
+          ServicePriceListScreen.ServicePriceListScreenRoute: (context) =>
+              const ServicePriceListScreen(),
+          MembershipScreen.MembershipScreenRoute: (context) =>
+              const MembershipScreen(),
+          BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
+          ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
         },
       );
     });

@@ -2,6 +2,7 @@ class RegisterCustomerModel {
   RegisterCustomerModel(
       {this.otpId,
       this.passCode,
+      this.thumbnailUrl,
       this.firstName,
       this.lastName,
       this.phone,
@@ -11,6 +12,7 @@ class RegisterCustomerModel {
 
   int? otpId;
   String? passCode;
+  String? thumbnailUrl;
   String? firstName;
   String? lastName;
   String? phone;
@@ -29,6 +31,7 @@ class RegisterCustomerModel {
   //     );
 
   Map<String, dynamic> toJson() => {
+        "thumbnailUrl": thumbnailUrl,
         "firstName": firstName,
         "lastName": lastName,
         "phone": phone,

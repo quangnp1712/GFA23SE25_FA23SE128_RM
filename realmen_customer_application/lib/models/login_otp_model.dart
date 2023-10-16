@@ -34,5 +34,8 @@ class LoginOtpResponseModel {
 
   factory LoginOtpResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginOtpResponseModel(
-          phone: json["phone"], isPhoneRegistered: json["isPhoneRegistered"]);
+          phone: json["phone"],
+          jwtToken: json["jwtToken"],
+          role: json["role"],
+          isPhoneRegistered: json["isPhoneRegistered"]);
 }

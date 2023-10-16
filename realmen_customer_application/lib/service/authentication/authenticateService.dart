@@ -9,6 +9,7 @@ import 'package:realmen_customer_application/models/login_otp_model.dart';
 import 'package:realmen_customer_application/models/login_phone_model.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAuthenticateService {
   Future<dynamic> loginPhone(LoginPhoneModel loginPhoneModel);
@@ -32,12 +33,14 @@ class AuthenticateService extends IAuthenticateService {
               body: json.encode(loginPhoneModel.toJson()))
           .timeout(Duration(seconds: connectionTimeOut));
       if (response.statusCode == 200) {
-        final loginPhoneModel =
+        final _loginPhoneModel =
             LoginPhoneModel.fromJson(json.decode(response.body));
-        await SharedPreferencesService.saveOtpIdPhone(
-            loginPhoneModel.loginPhoneResponse!.otpId!.toString(),
-            loginPhoneModel.loginPhoneResponse!.phoneAttemp!);
-        return 200;
+        await SharedPreferencesService.savePhone(
+            // loginPhoneModel.loginPhoneResponse!.otpId!.toString(),
+            // loginPhoneModel.loginPhoneResponse!.phoneAttemp!,
+            loginPhoneModel.value!);
+
+        return _loginPhoneModel.value;
       } else if (response.statusCode == 401) {
         final exceptionModel =
             ServerExceptionModel.fromJson(json.decode(response.body));
@@ -69,15 +72,12 @@ class AuthenticateService extends IAuthenticateService {
       if (response.statusCode == 200) {
         final _loginOtpModel =
             LoginOtpModel.fromJson(json.decode(response.body));
-        if (_loginOtpModel.loginOtpResponseModel!.isPhoneRegistered! == false) {
-          await SharedPreferencesService.savePassCode(loginOtpModel.passCode!);
-          return "FALSE";
-        } else if (_loginOtpModel.loginOtpResponseModel!.isPhoneRegistered! ==
-            true) {
-          await SharedPreferencesService.savePassCode(loginOtpModel.passCode!);
-          return "TRUE";
+        if (_loginOtpModel.loginOtpResponseModel!.jwtToken != null) {
+          await SharedPreferencesService.saveAccountInfo(
+              _loginOtpModel.loginOtpResponseModel!);
+          return _loginOtpModel;
         } else {
-          return "ERROR";
+          return "ERROR: $_loginOtpModel";
         }
       } else if (response.statusCode == 401) {
         final exceptionModel =
@@ -88,17 +88,21 @@ class AuthenticateService extends IAuthenticateService {
       return e;
     } on SocketException catch (e) {
       return e;
+    } catch (e) {
+      return e;
     }
   }
 
   @override
   Future registerCustomer(RegisterCustomerModel registerCustomerModel) async {
-    final otpIdPhone = await SharedPreferencesService.getOtpPhone();
-    final int otpId = int.parse(otpIdPhone["otpId"].toString());
-    final String phone = otpIdPhone["phone"].toString();
-    final String passCode = await SharedPreferencesService.getPassCode();
+    // final otpIdPhone = await SharedPreferencesService.getOtpPhone();
+    // final int otpId = int.parse(otpIdPhone["otpId"].toString());
+    // final String phone = otpIdPhone["phone"].toString();
+    String phone = await SharedPreferencesService.getPhone();
+    // final String passCode = await SharedPreferencesService.getPassCode();
     registerCustomerModel.phone = phone;
-    Uri uri = Uri.parse("$registerUrl?otpId=$otpId&passCode=$passCode");
+    // Uri uri = Uri.parse("$registerUrl?otpId=$otpId&passCode=$passCode");
+    Uri uri = Uri.parse(registerUrl);
     final client = http.Client();
     try {
       final response = await client

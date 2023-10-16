@@ -42,7 +42,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
             />
           </div>
         </div>
-        <ul nz-menu nzTheme="dark" nzMode="inline"  class="tw-bg-gray-300">
+        <ul nz-menu nzTheme="dark" nzMode="inline">
           <li
             nz-menu-item
             nzMatchRouter

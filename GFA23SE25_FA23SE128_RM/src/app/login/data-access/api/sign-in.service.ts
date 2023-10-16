@@ -20,7 +20,7 @@ export class SignInApiService {
   private REST_API_SERVER = 'http://localhost:8080';
 
   public getOtp(model: SignInApi.Request) {
-    const url =`${this.REST_API_SERVER}/v1/otp`;
+    const url =`${this.REST_API_SERVER}/v1/otp/web`;
     return this._http
     .post<any>(url,model ,this.httpOptions)
     .pipe(catchError(this.handleError));

@@ -1,29 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { SignInApi } from '../model/sign-in-api.model';
-import { OtpApi } from '../model/otp-api.model';
+import { AccountApi } from '../model/account-api.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OtpApiService {
+export class AccountApiService {
   constructor(private _http: HttpClient) {}
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      //'Authorization': 'my-auth-token'
+      'Authorization': 'Bearer '+ localStorage.getItem('token$')
 
     })
   };
 
   private REST_API_SERVER = 'http://localhost:8080';
 
-  public getOtp(model: OtpApi.Request) {
-    const url =`${this.REST_API_SERVER}/v1/otp/login`;
+  public createAccount(model: AccountApi.Request) {
+    const url =`${this.REST_API_SERVER}/v1/auth/account/staff?professional=${model.professional}&branchId=${model.branch}`;
     return this._http
-    .post<OtpApi.Reponse>(url,model ,this.httpOptions)
-    .pipe(catchError(this.handleError))
+    .post<any>(url,model ,this.httpOptions)
+    .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

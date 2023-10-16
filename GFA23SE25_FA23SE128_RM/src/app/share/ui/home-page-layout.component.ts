@@ -42,7 +42,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
             />
           </div>
         </div>
-        <ul nz-menu nzTheme="dark" nzMode="inline">
+        <ul nz-menu nzTheme="dark" nzMode="inline"  class="tw-bg-gray-300">
           <li
             nz-menu-item
             nzMatchRouter
@@ -66,6 +66,42 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nzMatchRouter
               >
                 Tạo tài khoản
+              </li>
+            </ul>
+          </li>
+          <li nz-submenu nzTitle="Quản lý chi nhánh" nzIcon="team">
+            <ul>
+              <li
+                nz-menu-item
+                nzMatchRouter
+                [routerLink]="['/branch-management', 'branch-list']"
+              >
+                Danh sách chi nhánh
+              </li>
+              <li
+                nz-menu-item
+                [routerLink]="['/branch-management', 'create-branch']"
+                nzMatchRouter
+              >
+                Tạo chi nhánh
+              </li>
+            </ul>
+          </li>
+          <li nz-submenu nzTitle="Quản lý dịch vụ" nzIcon="team">
+            <ul>
+              <li
+                nz-menu-item
+                nzMatchRouter
+                [routerLink]="['/service-management', 'service-list']"
+              >
+                Danh sách dịch vụ
+              </li>
+              <li
+                nz-menu-item
+                [routerLink]="['/service-management', 'create-service']"
+                nzMatchRouter
+              >
+                Tạo dịch vụ
               </li>
             </ul>
           </li>

@@ -10,4 +10,13 @@ export namespace OtpApi {
     phone: FormControl<string>;
     passCode: FormControl<string>;
   };
+
+  export interface Reponse {
+    value: {
+      expTime: string;
+      isPhoneRegistered: boolean;
+      jwtToken: string;
+      phone: string;
+      role: string;}
+  }
 }

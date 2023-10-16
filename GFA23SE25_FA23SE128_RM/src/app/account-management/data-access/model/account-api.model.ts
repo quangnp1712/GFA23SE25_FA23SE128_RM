@@ -2,15 +2,25 @@ import { FormControl } from "@angular/forms";
 
 export namespace AccountApi {
   export interface Request {
-
+    firstName: string;
+    lastName: string;
+    phone: string;
+    address: string;
+    gender: string;
+    dob: string;
+    branch: string;
+    professional: string;
+    thumbnailUrl: string;
   }
   export type RequestFormGroup = {
-    username: FormControl<string>;
+    firstName: FormControl<string>;
+    lastName: FormControl<string>;
     phone: FormControl<string>;
     address: FormControl<string>;
     gender: FormControl<string>;
     dob: FormControl<string>;
-    role: FormControl<string>;
+    branch: FormControl<string>;
     professional: FormControl<string>;
+    thumbnailUrl: FormControl<string>;
   };
 }

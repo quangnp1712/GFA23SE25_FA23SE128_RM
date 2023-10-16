@@ -4,6 +4,8 @@ import LOGIN_ROUTES from './login/login.routes';
 import HOME_PAGE_ROUTES from './home-page/home-page.routes';
 import ACCOUNT_MANAGEMENT_ROUTES from './account-management/account-management.routes';
 import { HomepageLayoutComponent } from './share/ui/home-page-layout.component';
+import BRANCH_MANAGEMENT_ROUTES from './branch-management/branch-management.routes';
+import SERVICE_MANAGEMENT_ROUTES from './service-management/service-management.routes';
 
 const routes: Routes = [
   {path: '', loadChildren: () => LOGIN_ROUTES},
@@ -15,6 +17,14 @@ const routes: Routes = [
     {
       path: "account-management",
       loadChildren: () => ACCOUNT_MANAGEMENT_ROUTES
+    },
+    {
+      path: "branch-management",
+      loadChildren: () => BRANCH_MANAGEMENT_ROUTES
+    },
+    {
+      path: "service-management",
+      loadChildren: () => SERVICE_MANAGEMENT_ROUTES
     }
   ]},
 ];

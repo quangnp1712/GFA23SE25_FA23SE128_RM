@@ -20,6 +20,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { usernameRegex } from 'src/app/share/form-validator/username.const';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
+import { AccountApiService } from '../data-access/api/account.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-account',
@@ -39,6 +41,7 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
     NzSelectModule,
     NzDatePickerModule,
   ],
+  providers: [NzMessageService],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý tài khoản</nz-breadcrumb-item>
@@ -48,32 +51,37 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
     <div>
       <form nz-form [formGroup]="form">
         <div nz-row class="tw-ml-[12%]">
-          <!-- username -->
+          <!-- first name -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
-              >Tên tài khoản</nz-form-label
+              >Họ và tên đệm</nz-form-label
             >
-            <nz-form-control [nzErrorTip]="usernameErrorTpl">
+            <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
               <input
                 class="tw-rounded-md tw-w-[70%]"
-                [formControl]="form.controls.username"
+                [formControl]="form.controls.firstName"
                 nz-input
                 placeholder="Nhập tên tài khoản"
               />
             </nz-form-control>
-            <ng-template #usernameErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('trimRequired')">
-            Vui lòng nhập tên tài khoản
-          </ng-container>
-          <ng-container
-            *ngIf="
-              control.hasError('pattern') && !control.hasError('trimRequired')
-            "
-          >
-            Tên tài khoản phải chứa ít nhất 6 kí tự, 1 chữ cái viết hoa và 1 số
-          </ng-container>
-        </ng-template>
           </nz-form-item>
+
+          <!-- last name -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Tên</nz-form-label
+            >
+            <nz-form-control nzErrorTip="Vui lòng nhập tên">
+              <input
+                class="tw-rounded-md tw-w-[70%]"
+                [formControl]="form.controls.lastName"
+                nz-input
+                placeholder="Nhập tên tài khoản"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- dia chi -->
 
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Địa chỉ</nz-form-label>
@@ -103,7 +111,7 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
             </nz-form-control>
             <ng-template #phoneErrorTpl let-control>
               <ng-container *ngIf="control.hasError('trimRequired')">
-                Vui Lòng Nhập Sđt
+                Vui lòng nhập sđt
               </ng-container>
               <ng-container
                 *ngIf="
@@ -111,18 +119,19 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
                   !control.hasError('trimRequired')
                 "
               >
-                Sđt gồm 10 số
+                Sđt gồm 10 số hoặc hơn
               </ng-container>
               <ng-container
                 *ngIf="
                   control.hasError('maxlength') &&
-                  !control.hasError('trimRequired')
+                  !control.hasError('minlength')
                 "
               >
-                Sđt gồm 10 số
+                Sđt ít hơn 12 số
               </ng-container>
             </ng-template>
           </nz-form-item>
+          <!-- gioi tinh -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Giới tính</nz-form-label>
             <nz-form-control nzErrorTip="Chọn giới tính">
@@ -131,11 +140,12 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
                 nzPlaceHolder="Chọn giới tính"
                 [formControl]="form.controls.gender"
               >
-                <nz-option nzValue="Nam" nzLabel="Nam"></nz-option>
-                <nz-option nzValue="Nữ" nzLabel="Nữ"></nz-option>
+                <nz-option nzValue="NAM" nzLabel="Nam"></nz-option>
+                <nz-option nzValue="NU" nzLabel="Nữ"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
+          <!-- ngay sinh -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Ngày sinh</nz-form-label>
             <nz-form-control nzErrorTip="Chọn ngày sinh">
@@ -147,13 +157,14 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
           </nz-form-item>
         </div>
         <nz-divider></nz-divider>
+
         <div nz-row class="tw-ml-[12%]">
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Chi nhánh</nz-form-label>
             <nz-form-control>
-              <nz-select class="tw-w-[70%]">
-                <nz-option nzValue="Nam" nzLabel="1"></nz-option>
-                <nz-option nzValue="Nữ" nzLabel="2"></nz-option>
+              <nz-select class="tw-w-[70%]" [formControl]='form.controls.branch'>
+                <nz-option nzValue="1" nzLabel="1"></nz-option>
+                <nz-option nzValue="2" nzLabel="2"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -163,26 +174,7 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
               <input class="tw-rounded-md tw-w-[70%]" nz-input placeholder="" />
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Chức vụ</nz-form-label>
-            <nz-form-control>
-              <nz-select class="tw-w-[70%]" [formControl]="form.controls.role">
-                <nz-option nzValue="STAFF" nzLabel="Staff"></nz-option>
-                <nz-option
-                  nzValue="RECEPTIONIST"
-                  nzLabel="Receptionist"
-                ></nz-option>
-                <nz-option
-                  nzValue="BRANCH_MANAGER"
-                  nzLabel="Branch manager"
-                ></nz-option>
-                <nz-option
-                  nzValue="SHOP_OWNER"
-                  nzLabel="Shop owner"
-                ></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
+          <!-- ca -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Ca làm việc</nz-form-label
@@ -197,11 +189,28 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
               </nz-select>
             </nz-form-control>
           </nz-form-item>
+          <!-- chuc vu -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Chức vụ</nz-form-label>
+            <nz-form-control>
+              <nz-select class="tw-w-[70%]" [formControl]="form.controls.professional">
+                <nz-option nzValue="STYLIST" nzLabel="Stylist"></nz-option>
+                <nz-option
+                  nzValue="MASSEUR"
+                  nzLabel="Masseur"
+                ></nz-option>
+                <nz-option
+                  nzValue="RECEPTIONIST"
+                  nzLabel="Receptionist"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary">Làm mới</button>
-        <button nz-button nzType="primary" class="tw-ml-4">
+        <button nz-button nzDanger nzType="primary" (click)="form.reset()">Làm mới</button>
+        <button nz-button nzType="primary" class="tw-ml-4" (click)="createAccount()" [disabled]="form.invalid">
           Tạo tài khoản
         </button>
       </div>
@@ -211,26 +220,41 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent implements OnInit {
-  constructor(private _fb: NonNullableFormBuilder) {}
+  constructor(private _fb: NonNullableFormBuilder, private _accountSvc: AccountApiService,
+    private _nzMessageService: NzMessageService,) {}
 
   form!: FormGroup<AccountApi.RequestFormGroup>;
+  model!: AccountApi.Request;
 
   ngOnInit(): void {
     this.form = this._fb.group<AccountApi.RequestFormGroup>({
-      username: this._fb.control('', [
-        Validators.pattern(usernameRegex),
-        trimRequired,
-      ]),
+      firstName: this._fb.control('', trimRequired),
+      lastName: this._fb.control('', [trimRequired]),
       address: this._fb.control('', trimRequired),
       dob: this._fb.control('', Validators.required),
       gender: this._fb.control('', Validators.required),
       phone: this._fb.control('', [
         trimRequired,
-        Validators.max(12),
-        Validators.min(10),
+        Validators.minLength(10),
+        Validators.maxLength(12),
       ]),
       professional: this._fb.control(''),
-      role: this._fb.control(''),
+      branch: this._fb.control(''),
+      thumbnailUrl: this._fb.control('123')
     });
   }
+
+  createAccount() {
+    console.log(this.form.getRawValue());
+    this.model = this.form.getRawValue();
+    this._accountSvc.createAccount(this.model).subscribe(
+      (data) => {
+        this._nzMessageService.success('Đăng kí thành công.');
+      },
+      (error) => {
+        this._nzMessageService.error('Đăng kí thất bại.');
+      }
+    );
+  }
+
 }

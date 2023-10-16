@@ -19,23 +19,25 @@ class LoginOtpModel {
 }
 
 class LoginOtpResponseModel {
-  LoginOtpResponseModel(
-      {this.phone,
-      this.jwtToken,
-      this.role,
-      this.expTime,
-      this.isPhoneRegistered});
+  LoginOtpResponseModel({
+    this.accountId,
+    this.phone,
+    this.jwtToken,
+    this.role,
+    this.expTime,
+  });
 
+  int? accountId;
   String? phone;
   String? jwtToken;
   String? role;
   String? expTime;
-  bool? isPhoneRegistered;
 
   factory LoginOtpResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginOtpResponseModel(
-          phone: json["phone"],
-          jwtToken: json["jwtToken"],
-          role: json["role"],
-          isPhoneRegistered: json["isPhoneRegistered"]);
+        accountId: json["accountId"],
+        phone: json["phone"],
+        jwtToken: json["jwtToken"],
+        role: json["role"],
+      );
 }

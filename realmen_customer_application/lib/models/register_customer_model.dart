@@ -1,16 +1,15 @@
 class RegisterCustomerModel {
   RegisterCustomerModel(
-      {this.otpId,
-      this.passCode,
+      {this.passCode,
       this.thumbnailUrl,
       this.firstName,
       this.lastName,
       this.phone,
       this.address,
       this.gender,
+      this.status,
       this.dob});
 
-  int? otpId;
   String? passCode;
   String? thumbnailUrl;
   String? firstName;
@@ -18,6 +17,7 @@ class RegisterCustomerModel {
   String? phone;
   String? address;
   String? gender;
+  String? status;
   String? dob;
 
   // factory RegisterCustomerModel.fromJson(Map<String, dynamic> json) =>
@@ -37,6 +37,7 @@ class RegisterCustomerModel {
         "phone": phone,
         "address": address,
         "gender": gender,
+        "status": status,
         "dob": dob
       };
 }

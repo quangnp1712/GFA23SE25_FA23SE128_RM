@@ -59,7 +59,7 @@ class SharedPreferencesService {
       loginOtpResponseModel.phone!,
       loginOtpResponseModel.jwtToken!,
       loginOtpResponseModel.role!,
-      loginOtpResponseModel.isPhoneRegistered!.toString()
+      loginOtpResponseModel.accountId!.toString()
     ]);
   }
 
@@ -71,7 +71,7 @@ class SharedPreferencesService {
       "phone": result[0],
       "jwtToken": result[1],
       "role": result[2],
-      "isPhoneRegistered": result[3]
+      "accountId": result[3]
     };
     return resultMap;
   }

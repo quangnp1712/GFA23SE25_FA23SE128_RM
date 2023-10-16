@@ -360,17 +360,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void submitRegister() async {
     String firstName = firstNameController.text.toString();
-    String lastName = lastNameController.text.toString();
+    String lastName = lastNameController.text.trim().toString();
     String address = addressController.text.toString();
     String dob = dobSubmit!.toIso8601String();
     String gender = genderController.toString();
     String thumbnailUrl = "";
+    String status = "ACTIVATED";
     RegisterCustomerModel registerCustomerModel = RegisterCustomerModel(
         thumbnailUrl: thumbnailUrl,
         firstName: firstName,
         lastName: lastName,
         address: address,
         gender: gender,
+        status: status,
         dob: dob);
     AuthenticateService authenticateService = AuthenticateService();
     try {

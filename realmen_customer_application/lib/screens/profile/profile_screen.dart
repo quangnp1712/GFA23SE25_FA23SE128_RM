@@ -1,6 +1,9 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -12,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  //UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,24 +109,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 width: 1.0),
                                           ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Align(
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Icon(
-                                                    CommunityMaterialIcons
-                                                        .crown)),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  "RealMen Member",
+                                                  CommunityMaterialIcons.crown,
+                                                  color: Colors.black,
+                                                  size: 24,
                                                 ),
                                               ),
-                                            )
-                                          ],
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "RealMen Member",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -135,24 +154,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 width: 1.0),
                                           ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Align(
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Icon(
-                                                    CommunityMaterialIcons
-                                                        .account_circle)),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  "Chỉnh sửa thông tin cơ bản",
+                                                  CommunityMaterialIcons
+                                                      .account_circle,
+                                                  color: Colors.black,
+                                                  size: 24,
                                                 ),
                                               ),
-                                            )
-                                          ],
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Chỉnh sửa thông tin cơ bản",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -165,24 +200,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 width: 1.0),
                                           ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Align(
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Icon(
-                                                    CommunityMaterialIcons
-                                                        .history)),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  "Lịch sử cắt tóc",
+                                                  CommunityMaterialIcons
+                                                      .history,
+                                                  color: Colors.black,
+                                                  size: 24,
                                                 ),
                                               ),
-                                            )
-                                          ],
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Lịch sử cắt tóc",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -195,24 +246,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 width: 1.0),
                                           ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Align(
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Icon(
-                                                    CommunityMaterialIcons
-                                                        .storefront)),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  "Hệ thống chi nhánh",
+                                                  CommunityMaterialIcons
+                                                      .storefront,
+                                                  color: Colors.black,
+                                                  size: 24,
                                                 ),
                                               ),
-                                            )
-                                          ],
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Hệ thống chi nhánh",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -225,30 +292,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 width: 1.0),
                                           ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            const Align(
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.only(left: 0),
+                                          ),
+                                          onPressed: _logout,
+                                          child: Row(
+                                            children: [
+                                              const Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Icon(
                                                   CommunityMaterialIcons.logout,
                                                   color: Color(0xffFF0000),
-                                                )),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Đăng xuất',
-                                                  style: TextStyle(
-                                                      // fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Color(0xffFF0000)),
+                                                  size: 24,
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    'Đăng xuất',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            Color(0xffFF0000)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -268,5 +345,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  // Logic
+  Future<void> _logout() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    Navigator.pushNamed(context, LoginPhoneScreen.LoginPhoneScreenRoute);
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -34,9 +36,22 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   _nativeToLogin() async {
+    AuthenticateService authenticateService = AuthenticateService();
     await Future.delayed(const Duration(milliseconds: 2000), () {});
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const LoginPhoneScreen()));
+    try {
+      var result = await authenticateService.isLogin();
+      if (result == "false") {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginPhoneScreen()));
+      } else if (result == "true") {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const MainScreen()));
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -46,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen>
         children: [
           Positioned(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
                     'assets/images/bg-splash.png',
@@ -65,10 +80,10 @@ class _SplashScreenState extends State<SplashScreen>
                 width: 300,
                 height: 144,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 160,
               ),
-              SpinKitSpinningLines(
+              const SpinKitSpinningLines(
                 color: Colors.black,
                 size: 60.0,
               )

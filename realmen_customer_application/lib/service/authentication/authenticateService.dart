@@ -15,6 +15,7 @@ abstract class IAuthenticateService {
   Future<dynamic> loginPhone(LoginPhoneModel loginPhoneModel);
   Future<dynamic> loginOtp(LoginOtpModel loginOtpModel);
   Future<dynamic> registerCustomer(RegisterCustomerModel registerCustomerModel);
+  Future<dynamic> isLogin();
 }
 
 class AuthenticateService extends IAuthenticateService {
@@ -129,6 +130,22 @@ class AuthenticateService extends IAuthenticateService {
       return e;
     } catch (e) {
       return e;
+    }
+  }
+
+  @override
+  Future isLogin() async {
+    try {
+      final SAccountInfo = await SharedPreferencesService.getAccountInfo()!;
+      String? jwtToken;
+      if (SAccountInfo != null) {
+        jwtToken = SAccountInfo["jwtToken"].toString();
+        return "true";
+      } else {
+        return "false";
+      }
+    } catch (e) {
+      return "false";
     }
   }
 }

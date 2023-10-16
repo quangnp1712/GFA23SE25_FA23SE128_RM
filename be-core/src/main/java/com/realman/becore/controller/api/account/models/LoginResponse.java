@@ -8,10 +8,10 @@ import lombok.Builder;
 
 @Builder
 public record LoginResponse(
+        Long accountId,
         String phone,
         String jwtToken,
         ERole role,
-        LocalDateTime expTime,
-        Boolean isPhoneRegistered) {
+        LocalDateTime expTime) {
 
 }

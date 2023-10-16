@@ -20,7 +20,7 @@ public class OTPQueryService {
 
     public OTP findByAccountId(Long accountId) {
         OTPEntity entity = otpRepository.findByAccountId(accountId)
-                .orElse(OTPEntity.builder().passCode("99999").build());
+                .orElse(OTPEntity.builder().passCode("12345").build());
         return otpMapper.toDto(entity);
     }
 

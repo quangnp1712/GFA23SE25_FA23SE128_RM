@@ -15,7 +15,7 @@ public class FirstNameValidator implements ConstraintValidator<FirstName, String
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return Objects.nonNull(value) && !value.isEmpty() && value.matches("[\\D\\s]+");
+        return Objects.nonNull(value) && !value.isEmpty() && value.matches("[^0-9]+");
     }
 
 }

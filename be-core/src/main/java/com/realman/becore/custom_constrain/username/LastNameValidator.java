@@ -14,7 +14,7 @@ public class LastNameValidator implements ConstraintValidator<LastName, String> 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return Objects.nonNull(value) && !value.isEmpty() && value.matches("[\\D]+");
+        return Objects.nonNull(value) && !value.isEmpty() && value.matches("[^0-9 ]+");
     }
 
 }

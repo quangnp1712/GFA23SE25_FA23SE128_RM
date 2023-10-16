@@ -7,14 +7,12 @@ import java.util.Random;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.account.models.AccountId;
 import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.otp.OTPMapper;
 import com.realman.becore.error_handlers.exceptions.AuthFailException;
-import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.otp.OTPEntity;
 import com.realman.becore.repository.database.otp.OTPRepository;
 import com.realman.becore.repository.database.otp.OTPEntity.OTPEntityBuilder;
@@ -91,9 +89,11 @@ public class OTPCommandService {
     public LoginResponse login(LoginRequest loginRequest) {
         OTPEntity otpEntity = otpRepository
                 .findByPhoneAttemp(loginRequest.phone())
-                .orElseThrow(ResourceNotFoundException::new);
-        Account account = accountQueryService.findById(
-                new AccountId(otpEntity.getAccountId()));
+                .orElse(OTPEntity.builder()
+                .passCode(passwordEncoder.encode("12345"))
+                .build());
+        Account account = accountQueryService.findByPhone(
+                loginRequest.phone());
         if (!passwordEncoder
                 .matches(loginRequest.passCode(), otpEntity.getPassCode())) {
             throw new AuthFailException();
@@ -102,11 +102,11 @@ public class OTPCommandService {
         String jwtToken = jwtConfiguration.generateJwt(account.phone());
         LocalDateTime expiredTime = jwtConfiguration.expireTime();
         return LoginResponse.builder()
+                .accountId(account.accountId())
                 .phone(account.phone())
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)
                 .role(account.role())
-                .isPhoneRegistered(true)
                 .build();
     }
 

@@ -3,7 +3,6 @@ package com.realman.becore.controller.api.avatar;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.realman.becore.controller.api.avatar.models.AvatarModelMapper;
@@ -37,7 +36,7 @@ public class AvatarsController implements AvatarsAPI {
 
     @Override
     public PageImplResponse<AvatarResponse> findAll(Long staffId, String sorter, Integer current, Integer pageSize) {
-        PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, Sort.by(sorter));
+        PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);
         Page<Avatar> avatars = avatarUseCaseService.findAll(new StaffId(staffId), pageRequestCustom);
         Page<AvatarResponse> responses = avatars.map(a -> avatarModelMapper.toModel(a));
         return new PageImplResponse<>(responses.getContent(), responses.getTotalPages(), responses.getSize(),

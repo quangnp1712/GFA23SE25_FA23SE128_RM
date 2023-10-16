@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @Tag(name = "Account", description = "manage account by owner API")
-@PreAuthorize("hasRole('ROLE_OWNER')")
+@PreAuthorize("hasRole('ROLE_SHOP_OWNER')")
 @RequestMapping("/v1/auth/account")
 public interface AccountsAuthAPI {
     @PostMapping("/staff")

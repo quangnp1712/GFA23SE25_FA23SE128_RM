@@ -7,8 +7,7 @@ public record Branch(
     String address,
     EBranchStatus status,
     Integer currentStaffs,
-    Integer totalStaffs,
-    Long profit
+    Integer totalStaffs
 ) {
     
 }

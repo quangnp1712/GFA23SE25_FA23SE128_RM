@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -379,10 +380,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       var result =
           await authenticateService.registerCustomer(registerCustomerModel);
       if (result == 200) {
+        _successMessage("Nhập thông tin thành công");
         Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
       } else {
-        print("Error: $result");
+        _errorMessage("Tên chỉ 1 từ");
       }
+    } catch (e) {
+      _errorMessage(e.toString());
+    }
+  }
+
+  void _successMessage(String? message) {
+    try {
+      ShowSnackBar.SuccessSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
     } catch (e) {
       print(e);
     }

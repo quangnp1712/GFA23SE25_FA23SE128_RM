@@ -2,6 +2,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -352,6 +353,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     await sharedPreferences.clear();
+    _errorMessage("Đăng xuất");
     Navigator.pushNamed(context, LoginPhoneScreen.LoginPhoneScreenRoute);
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
   }
 }

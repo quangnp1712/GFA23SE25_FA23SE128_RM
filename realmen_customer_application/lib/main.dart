@@ -34,8 +34,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.grey,
         ),
-        // initialRoute: SplashScreen.SplashScreenRoute,
-        initialRoute: MessageTestScreen.MessageTestScreenRoute,
+        initialRoute: SplashScreen.SplashScreenRoute,
+        // initialRoute: MessageTestScreen.MessageTestScreenRoute,
         routes: {
           LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
               const LoginPhoneScreen(),

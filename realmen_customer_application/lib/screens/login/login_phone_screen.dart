@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/login_phone_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -204,8 +205,16 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
       } else if (result == "true") {
         Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
       } else {
-        print("Error: $result");
+        _errorMessage(result.toString());
       }
+    } catch (e) {
+      _errorMessage(e.toString());
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
     } catch (e) {
       print(e);
     }

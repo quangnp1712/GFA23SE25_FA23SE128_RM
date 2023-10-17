@@ -81,9 +81,13 @@ class AuthenticateService extends IAuthenticateService {
           return "ERROR: $_loginOtpModel";
         }
       } else if (response.statusCode == 401) {
-        final exceptionModel =
-            ServerExceptionModel.fromJson(json.decode(response.body));
-        return exceptionModel;
+        try {
+          final exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(response.body));
+          return exceptionModel;
+        } catch (e) {
+          return e;
+        }
       }
     } on TimeoutException catch (e) {
       return e;

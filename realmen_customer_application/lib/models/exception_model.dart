@@ -1,10 +1,10 @@
 class ServerExceptionModel {
-  ServerExceptionModel({this.message, this.statusCode});
+  ServerExceptionModel({this.message, this.description});
 
   String? message;
-  int? statusCode;
+  String? description;
 
   factory ServerExceptionModel.fromJson(Map<String, dynamic> json) =>
       ServerExceptionModel(
-          message: json["message"], statusCode: json["statusCode"]);
+          message: json["message"], description: json["description"]);
 }

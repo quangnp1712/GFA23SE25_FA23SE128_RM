@@ -7,6 +7,8 @@ import 'package:realmen_customer_application/screens/login/login_otp_screen.dart
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
+import 'package:realmen_customer_application/screens/message/message_test_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
@@ -32,8 +34,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.grey,
         ),
-        initialRoute: SplashScreen.SplashScreenRoute,
-        // initialRoute: MainScreen.MainScreenRoute,
+        // initialRoute: SplashScreen.SplashScreenRoute,
+        initialRoute: MessageTestScreen.MessageTestScreenRoute,
         routes: {
           LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
               const LoginPhoneScreen(),
@@ -50,6 +52,8 @@ class MyApp extends StatelessWidget {
               const MembershipScreen(),
           BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
           ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
+          MessageTestScreen.MessageTestScreenRoute: (context) =>
+              const MessageTestScreen(),
         },
       );
     });

@@ -1,11 +1,11 @@
-package com.realman.becore.dto.branch;
+package com.realman.becore.controller.api.branch.models;
 
 import java.time.LocalTime;
 import java.util.List;
 
 import com.realman.becore.dto.enums.EBranchStatus;
 
-public record Branch(
+public record BranchResponse(
     Long branchId,
     Long shopOwnerId,
     String branchName,

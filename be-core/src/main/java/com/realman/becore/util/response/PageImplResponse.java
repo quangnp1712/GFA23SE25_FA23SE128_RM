@@ -4,7 +4,7 @@ import java.util.List;
 
 public record PageImplResponse<T>(
     List<T> content,
-    Integer total,
+    Long total,
     Integer pageSize,
     Integer current
 ) {

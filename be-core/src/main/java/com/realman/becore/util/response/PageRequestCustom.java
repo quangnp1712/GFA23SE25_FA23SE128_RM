@@ -13,7 +13,7 @@ public record PageRequestCustom(PageRequest pageRequest) {
     }
 
     public static PageRequestCustom of(Integer pageSize, Integer current, String sorter) {
-        PageRequest pageRequest = PageRequest.of(current, pageSize, Sort.by(sorter));
+        PageRequest pageRequest = PageRequest.of((current - 1), pageSize, Sort.by(sorter));
         return PageRequestCustom.builder().pageRequest(pageRequest).build();
     }
 

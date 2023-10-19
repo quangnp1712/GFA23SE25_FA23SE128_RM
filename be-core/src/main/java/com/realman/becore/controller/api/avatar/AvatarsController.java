@@ -39,7 +39,7 @@ public class AvatarsController implements AvatarsAPI {
         PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);
         Page<Avatar> avatars = avatarUseCaseService.findAll(new StaffId(staffId), pageRequestCustom);
         Page<AvatarResponse> responses = avatars.map(a -> avatarModelMapper.toModel(a));
-        return new PageImplResponse<>(responses.getContent(), responses.getTotalPages(), responses.getSize(),
+        return new PageImplResponse<>(responses.getContent(), responses.getTotalElements(), responses.getSize(),
                 pageRequestCustom.current());
     }
 

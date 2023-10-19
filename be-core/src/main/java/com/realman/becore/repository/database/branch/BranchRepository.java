@@ -1,6 +1,6 @@
 package com.realman.becore.repository.database.branch;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -18,10 +18,11 @@ public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
             WHERE ((:from IS NULL OR :to IS NULL)
             OR (b.open BETWEEN :from AND :to OR b.close BETWEEN :from AND :to) 
             OR (:from BETWEEN b.open AND b.close OR :to BETWEEN b.open AND b.close))
-            AND (:#{#searches.isEmpty()} = FALSE) OR b.branchName LIKE %:searches% OR b.address LIKE %:searches%
+            AND (:#{#searches.isEmpty()} = TRUE) OR b.branchName IN (:searches) OR b.address IN (:searches)
                 """)
-    Page<BranchEntity> findAll(LocalDateTime from,
-            LocalDateTime to,
+    Page<BranchEntity> findAll(
+            LocalTime from,
+            LocalTime to,
             List<String> searches,
             Pageable pageable);
 }

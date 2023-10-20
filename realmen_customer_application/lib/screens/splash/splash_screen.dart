@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -71,24 +68,20 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ),
-          Container(
-            // padding: EdgeInsets.only(top: 22.h),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Image.asset(
-                "assets/images/logo.png",
-                width: 300,
-                height: 144,
-              ),
-              const SizedBox(
-                height: 160,
-              ),
-              const SpinKitSpinningLines(
-                color: Colors.black,
-                size: 60.0,
-              )
-            ]),
-          ),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Image.asset(
+              "assets/images/logo.png",
+              width: 300,
+              height: 144,
+            ),
+            const SizedBox(
+              height: 160,
+            ),
+            const SpinKitSpinningLines(
+              color: Colors.black,
+              size: 60.0,
+            )
+          ]),
         ],
       ),
     );

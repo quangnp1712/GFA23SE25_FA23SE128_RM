@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -39,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 top: 15,
                 bottom: 27,
                 child: Container(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: const EdgeInsets.only(top: 30),
                   width: 90.w,
                   height: 90.h,
                   // height: MediaQuery.of(context).size.height,
@@ -94,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Container(
                               width: 82.w,
                               margin: const EdgeInsets.only(top: 24),
-                              padding: EdgeInsets.only(top: 13),
+                              padding: const EdgeInsets.only(top: 13),
                               height: 400,
                               child: Row(
                                 children: [
@@ -113,7 +112,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         child: TextButton(
                                           onPressed: () {},
                                           style: TextButton.styleFrom(
-                                            padding: EdgeInsets.only(left: 0),
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
                                           ),
                                           child: Row(
                                             children: [
@@ -158,7 +158,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         child: TextButton(
                                           onPressed: () {},
                                           style: TextButton.styleFrom(
-                                            padding: EdgeInsets.only(left: 0),
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
                                           ),
                                           child: Row(
                                             children: [
@@ -204,7 +205,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         child: TextButton(
                                           onPressed: () {},
                                           style: TextButton.styleFrom(
-                                            padding: EdgeInsets.only(left: 0),
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
                                           ),
                                           child: Row(
                                             children: [
@@ -250,7 +252,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         child: TextButton(
                                           onPressed: () {},
                                           style: TextButton.styleFrom(
-                                            padding: EdgeInsets.only(left: 0),
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
                                           ),
                                           child: Row(
                                             children: [
@@ -295,7 +298,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         child: TextButton(
                                           style: TextButton.styleFrom(
-                                            padding: EdgeInsets.only(left: 0),
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
                                           ),
                                           onPressed: _logout,
                                           child: Row(

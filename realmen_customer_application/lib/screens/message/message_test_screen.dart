@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:sizer/sizer.dart';
 
 class MessageTestScreen extends StatefulWidget {
   const MessageTestScreen({super.key});
@@ -27,13 +26,13 @@ class _MessageTestScreenState extends State<MessageTestScreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () => {_successMessage("Thanh công")},
-                      child: Text("Click to show Success message"),
+                      child: const Text("Click to show Success message"),
                     ),
                   ),
                   Center(
                     child: ElevatedButton(
                       onPressed: () => {_errorMessage("Error")},
-                      child: Text("Click to show Error message"),
+                      child: const Text("Click to show Error message"),
                     ),
                   ),
                 ],

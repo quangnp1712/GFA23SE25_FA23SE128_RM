@@ -9,7 +9,6 @@ import 'package:realmen_customer_application/models/login_otp_model.dart';
 import 'package:realmen_customer_application/models/login_phone_model.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAuthenticateService {
   Future<dynamic> loginPhone(LoginPhoneModel loginPhoneModel);

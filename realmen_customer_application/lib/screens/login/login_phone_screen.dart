@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/login_phone_model.dart';
@@ -9,7 +7,6 @@ import 'package:realmen_customer_application/screens/message/success_screen.dart
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 
 class LoginPhoneScreen extends StatefulWidget {
   const LoginPhoneScreen({super.key});
@@ -68,27 +65,23 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                               SizedBox(
                                 height: 5.h,
                               ),
-                              Container(
-                                child: Text(
-                                  "ĐĂNG NHẬP",
-                                  style: GoogleFonts.quicksand(
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xff444444),
-                                  ),
+                              Text(
+                                "ĐĂNG NHẬP",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xff444444),
                                 ),
                               ),
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Container(
-                                child: Text(
-                                  "Nhập số điện thoại",
-                                  style: GoogleFonts.quicksand(
-                                    fontSize: 27,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xff444444),
-                                  ),
+                              Text(
+                                "Nhập số điện thoại",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 27,
+                                  fontWeight: FontWeight.w400,
+                                  color: const Color(0xff444444),
                                 ),
                               ),
                               SizedBox(

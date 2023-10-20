@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
-import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:community_material_icon/community_material_icon.dart';
 import 'dart:core';
 
 class RegisterScreen extends StatefulWidget {
@@ -65,35 +62,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             SizedBox(
                               height: 5.h,
                             ),
-                            Container(
-                              child: Text(
-                                "ĐĂNG NHẬP",
-                                style: GoogleFonts.quicksand(
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xff444444),
-                                ),
+                            Text(
+                              "ĐĂNG NHẬP",
+                              style: GoogleFonts.quicksand(
+                                fontSize: 35,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xff444444),
                               ),
                             ),
                             SizedBox(
                               height: 2.h,
                             ),
-                            Container(
-                              // margin: EdgeInsets.only(top: 31, bottom: 22),
-                              child: Text(
-                                "Nhập thông tin",
-                                style: GoogleFonts.quicksand(
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.w400,
-                                  color: const Color(0xff444444),
-                                ),
+                            Text(
+                              "Nhập thông tin",
+                              style: GoogleFonts.quicksand(
+                                fontSize: 27,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xff444444),
                               ),
                             ),
                             // Họ và tên
                             SizedBox(
                               height: 2.h,
                             ),
-                            Container(
+                            SizedBox(
                               width: 70.w,
                               // height: 40,
                               child: TextField(
@@ -133,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               height: 2.h,
                             ),
 
-                            Container(
+                            SizedBox(
                               width: 70.w,
                               // height: 40,
                               child: TextField(
@@ -173,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               height: 2.h,
                             ),
 
-                            Container(
+                            SizedBox(
                               width: 70.w,
                               // height: 40,
                               child: TextField(
@@ -213,7 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               height: 2.h,
                             ),
 
-                            Container(
+                            SizedBox(
                               width: 70.w,
                               // height: 40,
                               child: TextField(
@@ -261,14 +253,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // padding: EdgeInsets.symmetric(horizontal: 15),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(24),
-                                border: Border.all(color: Color(0xffC4C4C4)),
+                                border:
+                                    Border.all(color: const Color(0xffC4C4C4)),
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                     isExpanded: true,
                                     iconSize: 20,
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 15),
+                                    padding: const EdgeInsets.only(
+                                        left: 15, right: 15),
                                     value: genderController,
                                     items: genders
                                         .map((item) => DropdownMenuItem<String>(

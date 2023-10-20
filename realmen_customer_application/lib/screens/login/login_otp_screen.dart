@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:realmen_customer_application/models/login_otp_model.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
-import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:http/http.dart' as http;
 
 class LoginOTPScreen extends StatefulWidget {
   const LoginOTPScreen({super.key});
@@ -26,22 +23,22 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
           fontSize: 20, color: Colors.black, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xffC4C4C4)),
+        border: Border.all(color: const Color(0xffC4C4C4)),
         borderRadius: BorderRadius.circular(20),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Color(0xff777777)),
+      border: Border.all(color: const Color(0xff777777)),
       borderRadius: BorderRadius.circular(8),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: Color.fromRGBO(239, 240, 241, 1),
+        color: const Color.fromRGBO(239, 240, 241, 1),
       ),
     );
     return Scaffold(
@@ -49,7 +46,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
         children: [
           Positioned(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/bg.png'),
                   fit: BoxFit.cover,
@@ -89,27 +86,23 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                               SizedBox(
                                 height: 5.h,
                               ),
-                              Container(
-                                child: Text(
-                                  "ĐĂNG NHẬP",
-                                  style: GoogleFonts.quicksand(
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xff444444),
-                                  ),
+                              Text(
+                                "ĐĂNG NHẬP",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xff444444),
                                 ),
                               ),
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Container(
-                                child: Text(
-                                  "Nhập OTP",
-                                  style: GoogleFonts.quicksand(
-                                    fontSize: 27,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xff444444),
-                                  ),
+                              Text(
+                                "Nhập OTP",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 27,
+                                  fontWeight: FontWeight.w400,
+                                  color: const Color(0xff444444),
                                 ),
                               ),
                               SizedBox(

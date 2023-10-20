@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
 import 'package:realmen_customer_application/screens/home/home_screen.dart';
@@ -8,7 +7,6 @@ import 'package:realmen_customer_application/screens/login/login_phone_screen.da
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 import 'package:realmen_customer_application/screens/message/message_test_screen.dart';
-import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/screens/other/navbar_screen.dart';
 import 'package:realmen_customer_application/screens/other/popular_screen.dart';
 import 'package:realmen_customer_application/screens/profile/profile_screen.dart';

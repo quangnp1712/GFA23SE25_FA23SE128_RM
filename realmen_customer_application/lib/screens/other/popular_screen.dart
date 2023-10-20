@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class PopularScreen extends StatefulWidget {
   const PopularScreen({super.key});
@@ -15,7 +14,7 @@ class _PopularScreenState extends State<PopularScreen> {
         child: GridView.count(
       crossAxisCount: 2,
       scrollDirection: Axis.vertical,
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       crossAxisSpacing: 2,
       childAspectRatio: 2 / 2.2,
       children: [
@@ -27,7 +26,7 @@ class _PopularScreenState extends State<PopularScreen> {
                 fit: BoxFit.cover,
                 height: 200,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               const Center(child: Text("Nhac Tre"))
@@ -42,7 +41,7 @@ class _PopularScreenState extends State<PopularScreen> {
                 fit: BoxFit.cover,
                 height: 200,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               const Center(child: Text("ZingChart"))
@@ -57,7 +56,7 @@ class _PopularScreenState extends State<PopularScreen> {
                 fit: BoxFit.cover,
                 height: 200,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               const Center(child: Text("Nhac Tre"))
@@ -72,7 +71,7 @@ class _PopularScreenState extends State<PopularScreen> {
                 fit: BoxFit.cover,
                 height: 200,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               const Center(child: Text("ZingChart"))

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:realmen_customer_application/screens/home/home_screen.dart';
 import 'package:realmen_customer_application/screens/other/navbar.dart';
 import 'package:realmen_customer_application/screens/other/tabbar.dart';
 import 'package:realmen_customer_application/screens/other/tabbar_view.dart';
-import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
 
 class NavBarScreen extends StatefulWidget {
   const NavBarScreen({super.key});
@@ -32,16 +30,16 @@ class _NavBarScreenState extends State<NavBarScreen> {
           actions: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
             ),
           ],
           bottom: const BottomTapBar(),
         ),
-        body: BodyTabBarView(),
+        body: const BodyTabBarView(),
       ),
     );
   }

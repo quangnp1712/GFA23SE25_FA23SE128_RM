@@ -8,7 +8,7 @@ import lombok.Builder;
 @Builder
 public record PageRequestCustom(PageRequest pageRequest) {
     public static PageRequestCustom of(Integer pageSize, Integer current) {
-        PageRequest pageRequest = PageRequest.of(current, pageSize);
+        PageRequest pageRequest = PageRequest.of((current - 1), pageSize);
         return PageRequestCustom.builder().pageRequest(pageRequest).build();
     }
 

@@ -1,16 +1,26 @@
 package com.realman.becore.controller.api.account.auth;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.realman.becore.controller.api.account.models.AccountModelMapper;
 import com.realman.becore.controller.api.account.models.AccountRequest;
+import com.realman.becore.controller.api.account.models.AccountResponse;
+import com.realman.becore.controller.api.account.models.AccountSearchCriteria;
 import com.realman.becore.controller.api.branch.models.BranchId;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.enums.ERole;
 import com.realman.becore.service.account.AccountUseCaseService;
+import com.realman.becore.util.response.PageImplResponse;
+import com.realman.becore.util.response.PageRequestCustom;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +45,22 @@ public class AccountsAuthController implements AccountsAuthAPI {
         Account dto = accountModelMapper
                 .toDto(account.format(), ERole.BRANCH_MANAGER);
         accountUseCaseService.save(dto, new BranchId(branchId));
+    }
+
+    @Override
+    public PageImplResponse<AccountResponse> findAll(List<String> searches, ERole role, @Min(1) Integer current,
+            Integer pageSize,
+            String sorter) {
+        PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
+        List<String> searchesCriteria = Objects.nonNull(searches) ? searches
+                : new ArrayList<>();
+        AccountSearchCriteria criteria = AccountSearchCriteria.builder()
+                .searches(searchesCriteria).role(role).build();
+        Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
+        Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
+        return new PageImplResponse<>(responses.getContent(),
+                responses.getTotalElements(), responses.getSize(),
+                pageRequestCustom.current());
     }
 
 }

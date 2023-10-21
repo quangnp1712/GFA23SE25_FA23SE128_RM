@@ -13,9 +13,9 @@ public enum EPermission {
     SCHEDULE_VIEW("schedule:view"),
     SCHEDULE_ADD("schedule:add"),
     SCHEDULE_UPDATE("schedule:update"),
-    STAFF_VIEW("staff:view"),
-    STAFF_ADD("staff:add"),
-    STAFF_UPDATE("staff:update"),
+    ACCOUNT_VIEW("account:view"),
+    ACCOUNT_ADD("account:add"),
+    ACCOUNT_UPDATE("account:update"),
     BRANCH_VIEW("branch:view"),
     BRANCH_ADD("branch:add"),
     BRANCH_UPDATE("branch:update");

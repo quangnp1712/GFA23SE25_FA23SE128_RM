@@ -1,13 +1,16 @@
 package com.realman.becore.service.account;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.controller.api.account.models.AccountId;
+import com.realman.becore.controller.api.account.models.AccountSearchCriteria;
 import com.realman.becore.controller.api.branch.models.BranchId;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.enums.EProfessional;
+import com.realman.becore.util.response.PageRequestCustom;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +62,10 @@ public class AccountUseCaseService {
 
     public Account findByPhone(AccountPhone accountPhone) {
         return accountQueryService.findByPhone(accountPhone.value());
+    }
+
+    public Page<Account> findAll(AccountSearchCriteria criteria,
+            PageRequestCustom pageRequestCustom) {
+        return accountQueryService.findAll(criteria, pageRequestCustom);
     }
 }

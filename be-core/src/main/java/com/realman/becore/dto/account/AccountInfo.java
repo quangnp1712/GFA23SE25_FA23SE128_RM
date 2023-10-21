@@ -9,6 +9,8 @@ import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.enums.ERole;
 
 public interface AccountInfo {
+    void setAccountId(Long accountId);
+    void setBranchId(Long branchId);
     void setFirstName(String firstName);
     void setLastName(String lastName);
     void setThumbnailUrl(String thumbnailUrl);
@@ -27,6 +29,8 @@ public interface AccountInfo {
 
     void setItimacyLevel(EItimacyLevel itimacyLevel);
 
+    Long getAccountId();
+    Long getBranchId();
     String getFirstName();
     String getLastName();
     String getThumbnailUrl();

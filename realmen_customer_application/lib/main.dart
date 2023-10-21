@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
         ),
         // initialRoute: SplashScreen.SplashScreenRoute,
-        initialRoute: NavBarScreen.NavBarScreenRoute,
+        initialRoute: MainScreen.MainScreenRoute,
         routes: {
           LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
               const LoginPhoneScreen(),

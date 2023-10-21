@@ -1,9 +1,9 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:realmen_customer_application/screens/TUAN/RecomendServices_screen.dart';
-import 'package:realmen_customer_application/screens/TUAN/barbertop.dart';
-import 'package:realmen_customer_application/screens/TUAN/branchShopNearYou.dart';
+import 'package:realmen_customer_application/screens/home/components/recoment_services.dart';
+import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
+import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatefulWidget {

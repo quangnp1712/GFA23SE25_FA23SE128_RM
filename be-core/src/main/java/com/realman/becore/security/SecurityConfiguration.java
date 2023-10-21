@@ -68,7 +68,8 @@ public class SecurityConfiguration {
                                 AntPathRequestMatcher.antMatcher("/v3/api-docs/*"),
                                 AntPathRequestMatcher.antMatcher("/v3/api-docs"),
                                 AntPathRequestMatcher.antMatcher("/v1/account/**"),
-                                AntPathRequestMatcher.antMatcher("/v1/otp/**")).permitAll())
+                                AntPathRequestMatcher.antMatcher("/v1/otp/**"),
+                                AntPathRequestMatcher.antMatcher("/v1/autocomplete/**")).permitAll())
 
                 .authorizeHttpRequests(t -> t.anyRequest().authenticated())
 

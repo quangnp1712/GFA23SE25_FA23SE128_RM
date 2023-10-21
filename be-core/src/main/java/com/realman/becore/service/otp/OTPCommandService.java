@@ -18,7 +18,7 @@ import com.realman.becore.repository.database.otp.OTPRepository;
 import com.realman.becore.repository.database.otp.OTPEntity.OTPEntityBuilder;
 import com.realman.becore.security.jwt.JwtConfiguration;
 import com.realman.becore.service.account.AccountQueryService;
-import com.realman.becore.util.TwilioUtil;
+import com.realman.becore.service.twilio.TwilioUseCaseService;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +26,24 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OTPCommandService {
+
     @NonNull
     private final OTPRepository otpRepository;
+    
     @NonNull
     private final AccountQueryService accountQueryService;
+    
     @NonNull
     private final OTPMapper otpMapper;
+    
     @NonNull
     private final PasswordEncoder passwordEncoder;
+    
     @NonNull
     private final JwtConfiguration jwtConfiguration;
+
+    @NonNull
+    private final TwilioUseCaseService twilioUseCaseService;
 
     public void save(AccountPhone accountPhone) {
         Optional<OTPEntity> otpExisted = otpRepository.findByPhoneAttemp(accountPhone.value());
@@ -55,7 +63,7 @@ public class OTPCommandService {
                 .expTime(15)
                 .isAvailable(true);
         otpRepository.save(entityBuilder.build());
-        TwilioUtil.sendOTP(accountPhone.value(), passCodeBuilder.toString());
+        twilioUseCaseService.sendOTP(accountPhone.value(), passCodeBuilder.toString());
     }
 
     public Boolean accountRegister(AccountPhone accountPhone) {
@@ -80,7 +88,7 @@ public class OTPCommandService {
                     .expTime(15)
                     .isAvailable(true);
             otpRepository.save(entityBuilder.build());
-            TwilioUtil.sendOTP(accountPhone.value(), passCodeBuilder.toString());
+            twilioUseCaseService.sendOTP(accountPhone.value(), passCodeBuilder.toString());
         }
 
         return isExist;

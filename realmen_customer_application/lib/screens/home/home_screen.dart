@@ -5,6 +5,8 @@ import 'package:realmen_customer_application/screens/home/components/recoment_se
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
 import 'package:sizer/sizer.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    padding: const EdgeInsets.only(top: 30, left: 0),
+                    padding: const EdgeInsets.only(top: 20, left: 0),
                     width: 90.w,
                     height: 90.h,
                     // height: MediaQuery.of(context).size.height,
@@ -49,21 +51,110 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView(
                       children: [
                         Container(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
+                          height: 80,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          alignment: Alignment.topLeft,
+                          child: Image.asset('assets/images/logo.png'),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 70,
+                          margin: const EdgeInsets.only(right: 25),
+                          padding: EdgeInsets.only(left: 25),
+                          decoration: const ShapeDecoration(
+                            shape: CustomRoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(200),
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                              // leftSide: BorderSide.none,
+                              topRightCornerSide: BorderSide(
+                                width: 1,
+                                color: Color(0x73444444),
+                              ),
+                              bottomRightCornerSide: BorderSide(
+                                width: 1,
+                                color: Color(0x73444444),
+                              ),
+                              bottomSide: BorderSide(
+                                width: 1,
+                                color: Color(0x73444444),
+                              ),
+                              topSide: BorderSide(
+                                width: 1,
+                                color: Color(0x73444444),
+                              ),
+                              rightSide: BorderSide(
+                                width: 1,
+                                color: Color(0x73444444),
                               ),
                             ),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: CircleAvatar(
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      "assets/images/admin.png",
+                                      fit: BoxFit.cover,
+                                      width: 120,
+                                      height: 120,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                child: Flexible(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        "Chào buổi sáng, MikeMikeMikeMike",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Level 1",
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            color: Colors.white,
                             child: GridView.count(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 4,
-                              crossAxisSpacing: 25,
-                              mainAxisSpacing: 25,
-                              childAspectRatio: 4 / 4.2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 4 / 4.5,
                               children: [
                                 cardHolder(
                                   'Đặt lịch',
@@ -109,14 +200,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: SvgPicture.asset(
                                             'assets/icons/store-marker-outline.svg',
                                             color: const Color(0xff323232),
+                                            height: 24,
                                           ),
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
                                           'Chi nhánh'.toUpperCase(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 7,
+                                          style: GoogleFonts.quicksand(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12,
                                           ),
                                         )
                                       ],
@@ -140,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const SizedBox(
-                          height: 35,
+                          height: 30,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,6 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             RecomendServices(),
+                            const SizedBox(
+                              height: 30,
+                            ),
                             const Padding(
                               padding: EdgeInsets.only(left: 15),
                               child: Text(
@@ -167,6 +262,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             barberTop(),
+                            const SizedBox(
+                              height: 30,
+                            ),
                             const Padding(
                               padding: EdgeInsets.only(left: 15),
                               child: Text(
@@ -218,15 +316,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: background,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(iconData, color: Color(0xff323232)),
+                child: Icon(
+                  iconData,
+                  color: const Color(0xff323232),
+                  size: 24,
+                ),
               ),
               const SizedBox(height: 5),
               Text(
                 title.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 7,
+                style: GoogleFonts.quicksand(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
                 ),
               )
             ],

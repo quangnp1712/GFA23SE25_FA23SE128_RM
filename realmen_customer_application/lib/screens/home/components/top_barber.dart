@@ -12,7 +12,7 @@ class barberTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 370,
+      height: 320,
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
@@ -23,8 +23,9 @@ class barberTop extends StatelessWidget {
                 Container(
                   height: 320,
                   width: 200,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                  ),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),

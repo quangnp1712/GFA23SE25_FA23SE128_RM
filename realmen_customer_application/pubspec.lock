@@ -113,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  custom_rounded_rectangle_border:
+    dependency: "direct main"
+    description:
+      name: custom_rounded_rectangle_border
+      sha256: "3e8ca0c26b8d22d5d3842bab59dfd209995f8e42af7c2eef03da70642c040819"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   fake_async:
     dependency: transitive
     description:

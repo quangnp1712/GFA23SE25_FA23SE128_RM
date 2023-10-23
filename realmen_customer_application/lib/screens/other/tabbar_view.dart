@@ -9,12 +9,12 @@ class BodyTabBarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const TabBarView(children: [
-      PopularScreen(),
-      ProfileScreen(),
-      HomeScreen(),
-      ProfileScreen(),
-      ProfileScreen(),
-      ProfileScreen(),
+      //   PopularScreen(),
+      //   ProfileScreen(),
+      //   HomeScreen(),
+      //   ProfileScreen(),
+      //   ProfileScreen(),
+      //   ProfileScreen(),
     ]);
   }
 }

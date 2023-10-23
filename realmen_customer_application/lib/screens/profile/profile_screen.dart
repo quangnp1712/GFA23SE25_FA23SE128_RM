@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  Function callback;
+  ProfileScreen(this.callback);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

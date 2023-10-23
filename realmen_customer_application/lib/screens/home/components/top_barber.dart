@@ -129,20 +129,22 @@ class barberTop extends StatelessWidget {
                             ),
                             SizedBox(
                               height: 80,
-                              child: Flexible(
+                              child: Container(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      nameBarber[index],
-                                      maxLines: 2,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
+                                    Expanded(
+                                      child: Text(
+                                        nameBarber[index],
+                                        maxLines: 2,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                                   ],

@@ -10,7 +10,7 @@ import 'package:realmen_customer_application/screens/profile/profile_screen.dart
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -19,18 +19,56 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int bottomIndex = 1;
-  List<Widget> pages = const [
-    HomeScreen(),
-    ServicePriceListScreen(),
-    MembershipScreen(),
-    BookingScreen(),
-    ProfileScreen(),
-  ];
+  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+
+  late final HomeScreen homeScreen;
+  late final ServicePriceListScreen servicePriceListScreen;
+  late final MembershipScreen membershipScreen;
+  late final BookingScreen bookingScreen;
+  late final ProfileScreen profileScreen;
+
+  void setPage(index) {
+    final CurvedNavigationBarState? navBarState =
+        _bottomNavigationKey.currentState;
+    navBarState?.setPage(index);
+  }
+
+  @override
+  void initState() {
+    homeScreen = HomeScreen(setPage);
+    servicePriceListScreen = ServicePriceListScreen(setPage);
+    membershipScreen = MembershipScreen(setPage);
+    bookingScreen = BookingScreen(setPage);
+    profileScreen = ProfileScreen(setPage);
+    super.initState();
+  }
+
+  pageChooser(int page) {
+    try {
+      switch (page) {
+        case 0:
+          return homeScreen;
+        case 1:
+          return servicePriceListScreen;
+        case 2:
+          return membershipScreen;
+        case 3:
+          return bookingScreen;
+        case 4:
+          return profileScreen;
+      }
+    } catch (e) {
+      return homeScreen;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[bottomIndex],
+      // key: _bottomNavigationKey,
+      body: pageChooser(bottomIndex),
       bottomNavigationBar: CurvedNavigationBar(
+        key: _bottomNavigationKey,
         color: Colors.white,
         backgroundColor: Colors.black87,
         items: const [

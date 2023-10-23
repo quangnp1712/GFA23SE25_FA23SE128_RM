@@ -5,6 +5,7 @@ import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
+
 import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 import 'package:realmen_customer_application/screens/message/message_test_screen.dart';
 import 'package:realmen_customer_application/screens/other/navbar_screen.dart';
@@ -45,13 +46,13 @@ class MyApp extends StatelessWidget {
           RegisterScreen.RegisterScreenRoute: (context) =>
               const RegisterScreen(),
           MainScreen.MainScreenRoute: (context) => const MainScreen(),
-          HomeScreen.LoginPhoneScreenRoute: (context) => const HomeScreen(),
-          ServicePriceListScreen.ServicePriceListScreenRoute: (context) =>
-              const ServicePriceListScreen(),
-          MembershipScreen.MembershipScreenRoute: (context) =>
-              const MembershipScreen(),
-          BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
-          ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
+          // HomeScreen.LoginPhoneScreenRoute: (context) => const HomeScreen(),
+          // ServicePriceListScreen.ServicePriceListScreenRoute: (context) =>
+          //     const ServicePriceListScreen(),
+          // MembershipScreen.MembershipScreenRoute: (context) =>
+          //     const MembershipScreen(),
+          // BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
+          // ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
           MessageTestScreen.MessageTestScreenRoute: (context) =>
               const MessageTestScreen(),
           NavBarScreen.NavBarScreenRoute: (context) => const NavBarScreen(),

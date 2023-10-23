@@ -1,15 +1,19 @@
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:realmen_customer_application/screens/home/components/recoment_services.dart';
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen(this.callback);
+  Function callback;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -108,34 +112,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                               ),
-                              Container(
-                                child: Flexible(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        "Chào buổi sáng, MikeMikeMikeMike",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.quicksand(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20,
-                                        ),
+                              SizedBox(
+                                width: 248,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Chào buổi sáng, MikeMikeMikeMike",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.quicksand(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
                                       ),
-                                      Text(
-                                        "Level 1",
-                                        style: GoogleFonts.quicksand(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    Text(
+                                      "Level 1",
+                                      style: GoogleFonts.quicksand(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
+                                    )
+                                  ],
                                 ),
                               )
                             ],
@@ -145,90 +147,118 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 20,
                         ),
                         Container(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            color: Colors.white,
-                            child: GridView.count(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 4 / 4.5,
-                              children: [
-                                cardHolder(
-                                  'Đặt lịch',
-                                  Icons.calendar_month,
-                                  Color(0xffE3E3E3),
-                                  () {},
-                                ),
-                                cardHolder(
-                                  'Lịch sử đặt lịch',
-                                  Icons.history,
-                                  Color(0xffE3E3E3),
-                                  () {},
-                                ),
-                                cardHolder(
-                                  'Bảng giá',
-                                  CommunityMaterialIcons.view_list_outline,
-                                  Color(0xffE3E3E3),
-                                  () {},
-                                ),
-                                cardHolder(
-                                  'Realmen Member',
-                                  CommunityMaterialIcons.crown,
-                                  Color(0xffE3E3E3),
-                                  () {},
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xffE3E3E3),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: SvgPicture.asset(
-                                            'assets/icons/store-marker-outline.svg',
-                                            color: const Color(0xff323232),
-                                            height: 24,
-                                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          color: Colors.white,
+                          child: GridView.count(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 4 / 4.5,
+                            children: [
+                              cardHolder(
+                                'Đặt lịch',
+                                Icons.calendar_month,
+                                Color(0xffE3E3E3),
+                                () {},
+                              ),
+                              cardHolder(
+                                'Lịch sử đặt lịch',
+                                Icons.history,
+                                Color(0xffE3E3E3),
+                                () {},
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.callback(1);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xffE3E3E3),
+                                          shape: BoxShape.circle,
                                         ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          'Chi nhánh'.toUpperCase(),
-                                          style: GoogleFonts.quicksand(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                        child: const Icon(
+                                          CommunityMaterialIcons
+                                              .view_list_outline,
+                                          color: Color(0xff323232),
+                                          size: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Bảng giá'.toUpperCase(),
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                cardHolder(
-                                  'Ưu Đãi',
-                                  CommunityMaterialIcons.ticket_percent_outline,
-                                  const Color(0xffE3E3E3),
-                                  () {},
+                              ),
+                              cardHolder(
+                                'Realmen Member',
+                                CommunityMaterialIcons.crown,
+                                Color(0xffE3E3E3),
+                                () {},
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xffE3E3E3),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: SvgPicture.asset(
+                                          'assets/icons/store-marker-outline.svg',
+                                          color: const Color(0xff323232),
+                                          height: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Chi nhánh'.toUpperCase(),
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                cardHolder(
-                                  'Lịch đặt của bạn',
-                                  CommunityMaterialIcons.calendar_check_outline,
-                                  const Color(0xffE3E3E3),
-                                  () {},
-                                ),
-                              ],
-                            ),
+                              ),
+                              cardHolder(
+                                'Ưu Đãi',
+                                CommunityMaterialIcons.ticket_percent_outline,
+                                const Color(0xffE3E3E3),
+                                () {},
+                              ),
+                              cardHolder(
+                                'Lịch đặt của bạn',
+                                CommunityMaterialIcons.calendar_check_outline,
+                                const Color(0xffE3E3E3),
+                                () {},
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
@@ -298,14 +328,6 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            // boxShadow: [
-            //   BoxShadow(
-            //     offset: const Offset(0, 5),
-            //     // color: primaryColor.withOpacity(.2),
-            //     spreadRadius: 2,
-            //     blurRadius: 5,
-            //   )
-            // ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

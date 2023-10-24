@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int bottomIndex = 1;
+  int bottomIndex = 0;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   late final HomeScreen homeScreen;

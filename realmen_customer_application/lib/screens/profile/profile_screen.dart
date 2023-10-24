@@ -2,6 +2,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
+import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -354,13 +355,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Logic
-  Future<void> _logout() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
-    _errorMessage("Đăng xuất");
-    Navigator.pushNamed(context, LoginPhoneScreen.LoginPhoneScreenRoute);
-  }
+  // Future<void> _logout() async {
+  //   final SharedPreferences sharedPreferences =
+  //       await SharedPreferences.getInstance();
+  //   await sharedPreferences.clear();
+  //   _errorMessage("Đăng xuất");
+  //   // ignore: use_build_context_synchronously
+  //   Navigator.pushNamed(context, LoginPhoneScreen.LoginPhoneScreenRoute);
+  //
+  // }
 
   void _errorMessage(String? message) {
     try {
@@ -368,5 +371,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> _logout() async {
+    return showModalBottomSheet(
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: false,
+      context: context,
+      backgroundColor: Colors.white,
+      barrierColor: const Color(0x8c111111),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (context) => LogoutPopup(),
+    );
   }
 }

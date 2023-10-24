@@ -74,4 +74,12 @@ class SharedPreferencesService {
     };
     return resultMap;
   }
+
+  static Future<String> getAccountId() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    List<String> result = sharedPreferences.getStringList("accountInfo")!;
+    String accountId = result[3];
+    return accountId;
+  }
 }

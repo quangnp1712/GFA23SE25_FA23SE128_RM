@@ -11,6 +11,7 @@ import 'package:realmen_customer_application/screens/message/message_test_screen
 import 'package:realmen_customer_application/screens/other/navbar_screen.dart';
 import 'package:realmen_customer_application/screens/other/popular_screen.dart';
 import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
+import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
@@ -57,6 +58,8 @@ class MyApp extends StatelessWidget {
               const MessageTestScreen(),
           NavBarScreen.NavBarScreenRoute: (context) => const NavBarScreen(),
           PopularScreen.PopularScreenRoute: (context) => const PopularScreen(),
+          ViewEditProfileScreen.ViewEditProfileScreenRoute: (context) =>
+              const ViewEditProfileScreen(),
         },
       );
     });

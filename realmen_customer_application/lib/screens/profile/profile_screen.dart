@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -158,7 +159,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         child: TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context,
+                                                ViewEditProfileScreen
+                                                    .ViewEditProfileScreenRoute);
+                                          },
                                           style: TextButton.styleFrom(
                                             padding:
                                                 const EdgeInsets.only(left: 0),

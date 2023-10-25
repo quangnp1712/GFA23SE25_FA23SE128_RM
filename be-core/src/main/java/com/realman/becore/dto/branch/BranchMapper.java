@@ -12,7 +12,7 @@ import com.realman.becore.repository.database.branch.BranchEntity;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BranchMapper {
 
-    BranchEntity toEntity(Branch dto);
+    BranchEntity toEntity(Branch dto, Double lat, Double lng);
 
 
     Branch toDto(BranchEntity entity, List<String> displayUrlList);

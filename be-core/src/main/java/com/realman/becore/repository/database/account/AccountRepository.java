@@ -44,6 +44,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
     @Query("""
             SELECT
+                a.accountId AS accountId,
                 a.firstName AS firstName,
                 a.lastName AS lastName,
                 a.thumbnailUrl AS thumbnailUrl,
@@ -51,7 +52,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.dob AS dob,
                 a.phone AS phone,
                 a.address AS address,
-                a.status AS satus,
+                a.status AS status,
                 a.role AS role,
                 il.itimacyLevel AS itimacyLevel
             FROM AccountEntity a
@@ -72,7 +73,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.dob AS dob,
                 a.phone AS phone,
                 a.address AS address,
-                a.status AS satus,
+                a.status AS status,
                 a.role AS role
             FROM AccountEntity a
             WHERE a.accountId = :accountId
@@ -90,7 +91,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.dob AS dob,
                 a.phone AS phone,
                 a.address AS address,
-                a.status AS satus,
+                a.status AS status,
                 a.role AS role,
                 b.branchName AS branchName,
                 b.address AS branchAddress

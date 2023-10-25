@@ -25,10 +25,10 @@ public enum ERole {
                         EPermission.ACCOUNT_UPDATE.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
                         EPermission.BRANCH_ADD.getPermission(), EPermission.BRANCH_UPDATE.getPermission(),
                         EPermission.SCHEDULE_VIEW.getPermission())),
-        CUSTOMER(Set.of(EPermission.BOOKING_ADD.name(), EPermission.BOOKING_UPDATE.name(),
-                        EPermission.BOOKING_CANCLE.name(), EPermission.ACCOUNT_VIEW.name(),
-                        EPermission.BRANCH_VIEW.name(),
-                        EPermission.SCHEDULE_VIEW.name()));
+        CUSTOMER(Set.of(EPermission.BOOKING_ADD.getPermission(), EPermission.BOOKING_UPDATE.getPermission(),
+                        EPermission.BOOKING_CANCLE.getPermission(), EPermission.ACCOUNT_VIEW.getPermission(),
+                        EPermission.BRANCH_VIEW.getPermission(),
+                        EPermission.SCHEDULE_VIEW.getPermission()));
 
         private Set<String> permissions;
 

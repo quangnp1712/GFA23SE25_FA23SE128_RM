@@ -11,6 +11,7 @@ public record Branch(
     String branchName,
     String phone,
     String address,
+    String placeId,
     EBranchStatus status,
     Integer numberStaffs,
     LocalTime open,

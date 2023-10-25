@@ -37,6 +37,8 @@ public class BranchEntity extends Auditable {
     @Column(columnDefinition = "NVARCHAR(500)")
     @NotNull(message = "Nhập địa chỉ chi nhánh")
     private String address;
+    private Double lat;
+    private Double lng;
     private EBranchStatus status;
     private Integer numberStaffs;
     @Temporal(TemporalType.TIME)

@@ -16,6 +16,7 @@ public record BranchRequest(
         @NormalText String branchName,
         @Phone String phone,
         @NormalText String address,
+        @NormalText String placeId,
         @Enumerated(EnumType.STRING) EBranchStatus status,
         Integer numberStaffs,
         LocalDateTime open,

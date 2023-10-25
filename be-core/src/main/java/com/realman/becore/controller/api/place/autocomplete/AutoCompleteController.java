@@ -1,10 +1,10 @@
-package com.realman.becore.controller.api.autocomplete;
+package com.realman.becore.controller.api.place.autocomplete;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realman.becore.controller.api.autocomplete.models.AutoCompleteRequest;
-import com.realman.becore.controller.api.autocomplete.models.AutoCompleteResponse;
-import com.realman.becore.service.autocomplete.AutoCompleteUseCaseService;
+import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteRequest;
+import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteResponse;
+import com.realman.becore.service.place.autocomplete.AutoCompleteUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
 
 import lombok.NonNull;

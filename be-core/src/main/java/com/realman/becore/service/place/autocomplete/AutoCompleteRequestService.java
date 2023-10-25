@@ -1,12 +1,12 @@
-package com.realman.becore.service.autocomplete;
+package com.realman.becore.service.place.autocomplete;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.realman.becore.controller.api.autocomplete.models.AutoCompleteRequest;
-import com.realman.becore.controller.api.autocomplete.models.AutoCompleteResponse;
+import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteRequest;
+import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteResponse;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AutoCompleteRequestService {
 
-    @Value("${goong.apiKey}")
+    @Value("${goong.api.key}")
     private String apiKey;
 
-    private final String autoCompleteRequestUrl = "https://rsapi.goong.io/Place/AutoComplete";
+    @Value("${goong.place.autocomplete}")
+    private String autoCompleteRequestUrl;
 
     @NonNull
     private final RestTemplate restTemplate;

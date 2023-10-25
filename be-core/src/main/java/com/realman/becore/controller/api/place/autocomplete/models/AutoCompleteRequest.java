@@ -1,4 +1,4 @@
-package com.realman.becore.controller.api.autocomplete.models;
+package com.realman.becore.controller.api.place.autocomplete.models;
 
 import lombok.Builder;
 

@@ -1,9 +1,9 @@
-package com.realman.becore.service.autocomplete;
+package com.realman.becore.service.place.autocomplete;
 
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.autocomplete.models.AutoCompleteRequest;
-import com.realman.becore.controller.api.autocomplete.models.AutoCompleteResponse;
+import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteRequest;
+import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteResponse;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

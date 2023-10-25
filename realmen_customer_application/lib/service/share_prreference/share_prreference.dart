@@ -11,9 +11,14 @@ class SharedPreferencesService {
   static Future<Map<String, String>> getOtpPhone() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    List<String> result = sharedPreferences.getStringList("otpIdPhone")!;
-    Map<String, String> resultMap = {"otpId": result[0], "phone": result[1]};
-    return resultMap;
+    List<String>? result = sharedPreferences.getStringList("otpIdPhone");
+    if (result != null && result.length >= 2) {
+      Map<String, String> resultMap = {"otpId": result[0], "phone": result[1]};
+      return resultMap;
+    } else {
+      throw Exception(
+          "Failed to get OTP ID and phone number from SharedPreferences");
+    }
   }
 
   // static Future<String> getPhone() async {
@@ -33,8 +38,12 @@ class SharedPreferencesService {
   static Future<String> getPassCode() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    String result = sharedPreferences.getString("passCode")!;
-    return result;
+    String? result = sharedPreferences.getString("passCode")!;
+    if (result != null) {
+      return result;
+    } else {
+      throw Exception("Failed to get phone number from SharedPreferences");
+    }
   }
 
   static Future<void> savePhone(String phone) async {
@@ -46,8 +55,12 @@ class SharedPreferencesService {
   static Future<String> getPhone() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    String result = sharedPreferences.getString("phone")!;
-    return result;
+    String? result = sharedPreferences.getString("phone")!;
+    if (result != null) {
+      return result;
+    } else {
+      throw Exception("Failed to get phone number from SharedPreferences");
+    }
   }
 
   static Future<void> saveAccountInfo(
@@ -66,20 +79,41 @@ class SharedPreferencesService {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     List<String> result = sharedPreferences.getStringList("accountInfo")!;
-    Map<String, String> resultMap = {
-      "phone": result[0],
-      "jwtToken": result[1],
-      "role": result[2],
-      "accountId": result[3]
-    };
-    return resultMap;
+
+    if (result != null) {
+      Map<String, String> resultMap = {
+        "phone": result[0],
+        "jwtToken": result[1],
+        "role": result[2],
+        "accountId": result[3]
+      };
+      return resultMap;
+    } else {
+      throw Exception("Failed to get accountInfo from SharedPreferences");
+    }
   }
 
   static Future<String> getAccountId() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    List<String> result = sharedPreferences.getStringList("accountInfo")!;
-    String accountId = result[3];
-    return accountId;
+    List<String>? result = sharedPreferences.getStringList("accountInfo");
+    if (result != null && result.length >= 4) {
+      String accountId = result[3];
+      return accountId;
+    } else {
+      throw Exception("Failed to get account ID from SharedPreferences");
+    }
+  }
+
+  static Future<String> getJwt() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    List<String>? result = sharedPreferences.getStringList("accountInfo");
+    if (result != null && result.length >= 2) {
+      String jwtToken = result[1];
+      return jwtToken;
+    } else {
+      throw Exception("Failed to get jwtToken from SharedPreferences");
+    }
   }
 }

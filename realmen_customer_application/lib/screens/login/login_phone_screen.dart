@@ -5,6 +5,7 @@ import 'package:realmen_customer_application/screens/login/login_otp_screen.dart
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -187,19 +188,30 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   // Logic
   TextEditingController phoneController = TextEditingController();
 
+  // void submitPhone() async {
+  //   String phone = phoneController.text.toString();
+  //   LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+  //   AuthenticateService authenticateService = AuthenticateService();
+  //   try {
+  //     var result = await authenticateService.loginPhone(loginPhoneModel);
+  //     if (result["data"] == "false" && result['statusCode'] == 200) {
+  //       Navigator.pushNamed(context, RegisterScreen.RegisterScreenRoute);
+  //     } else if (result["data"] == "true" && result['statusCode'] == 200) {
+  //       Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+  //     } else {
+  //       _errorMessage("$result['statusCode'] : $result['error']");
+  //     }
+  //   } catch (e) {
+  //     print("Error: $e");
+  //   }
+  // }
+
+  // No API
   void submitPhone() async {
     String phone = phoneController.text.toString();
-    LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
-    AuthenticateService authenticateService = AuthenticateService();
+    Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
     try {
-      var result = await authenticateService.loginPhone(loginPhoneModel);
-      if (result == "false") {
-        Navigator.pushNamed(context, RegisterScreen.RegisterScreenRoute);
-      } else if (result == "true") {
-        Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-      } else {
-        _errorMessage(result.toString());
-      }
+      await SharedPreferencesService.savePhone(phone);
     } catch (e) {
       _errorMessage(e.toString());
     }

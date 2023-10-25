@@ -178,7 +178,6 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
   // Logic
   TextEditingController otpController = TextEditingController();
-
   void submitOtp() async {
     String phone = await SharedPreferencesService.getPhone();
     String otp = otpController.text.toString();
@@ -186,22 +185,21 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginOtp(loginOtpModel);
-      if (result != null) {
+      if (result != null && result['statusCode'] == 200) {
         try {
-          if (result.loginOtpResponseModel.jwtToken != null) {
+          if (result['data'].loginOtpResponseModel.jwtToken != null) {
             _successMessage("Đăng nhập thành công");
             Navigator.pushNamed(context, MainScreen.MainScreenRoute);
           } else {
-            _errorMessage(result);
+            _errorMessage(result['error']);
           }
         } catch (e) {
           _errorMessage("Sai mã OTP");
         }
       } else {
-        _errorMessage("Sai mã OTP");
+        _errorMessage("$result['statusCode'] : $result['error']");
       }
     } catch (e) {
-      // _errorMessage(e.toString());
       print("Error: $e");
     }
   }

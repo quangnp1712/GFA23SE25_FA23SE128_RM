@@ -19,81 +19,163 @@ abstract class IAuthenticateService {
 
 class AuthenticateService extends IAuthenticateService {
   @override
-  Future loginPhone(LoginPhoneModel loginPhoneModel) async {
+  Future<dynamic> loginPhone(LoginPhoneModel loginPhoneModel) async {
     Uri uri = Uri.parse(loginPhoneUrl);
     final client = http.Client();
     try {
       final response = await client
-          .post(uri,
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type': 'application/json',
-                'Accept': '*/*'
-              },
-              body: json.encode(loginPhoneModel.toJson()))
+          .post(
+            uri,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              'Content-Type': 'application/json',
+              'Accept': '*/*',
+            },
+            body: json.encode(loginPhoneModel.toJson()),
+          )
           .timeout(Duration(seconds: connectionTimeOut));
-      if (response.statusCode == 200) {
-        final _loginPhoneModel =
-            LoginPhoneModel.fromJson(json.decode(response.body));
-        await SharedPreferencesService.savePhone(
-            // loginPhoneModel.loginPhoneResponse!.otpId!.toString(),
-            // loginPhoneModel.loginPhoneResponse!.phoneAttemp!,
-            loginPhoneModel.value!);
 
-        return _loginPhoneModel.value;
-      } else if (response.statusCode == 401) {
-        final exceptionModel =
-            ServerExceptionModel.fromJson(json.decode(response.body));
-        return exceptionModel;
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+
+      if (statusCode == 200) {
+        final _loginPhoneModel =
+            LoginPhoneModel.fromJson(json.decode(responseBody));
+        await SharedPreferencesService.savePhone(loginPhoneModel.value!);
+
+        return {
+          'statusCode': statusCode,
+          'data': _loginPhoneModel.value,
+        };
+      } else if (statusCode == 401) {
+        try {
+          final exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+          };
+        } catch (e) {
+          return {
+            'statusCode': statusCode,
+            'error': e,
+          };
+        }
+      } else if (statusCode == 403) {
+        return {
+          'statusCode': statusCode,
+          'error': "Forbidden",
+        };
+      } else if (statusCode == 400) {
+        return {
+          'statusCode': statusCode,
+          'error': "Bad request",
+        };
+      } else {
+        return {
+          'statusCode': statusCode,
+          'error': 'Failed to fetch data',
+        };
       }
     } on TimeoutException catch (e) {
-      return e;
+      return {
+        'statusCode': 408,
+        'error': "Request timeout",
+      };
     } on SocketException catch (e) {
-      return e;
+      return {
+        'statusCode': 500,
+        'error': 'Socket error',
+      };
     } catch (e) {
-      return e;
+      return {
+        'statusCode': 500,
+        'error': e,
+      };
     }
   }
 
   @override
-  Future loginOtp(LoginOtpModel loginOtpModel) async {
+  Future<dynamic> loginOtp(LoginOtpModel loginOtpModel) async {
     Uri uri = Uri.parse(loginOtpUrl);
     final client = http.Client();
     try {
       final response = await client
-          .post(uri,
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                'Content-Type': 'application/json',
-                'Accept': '*/*'
-              },
-              body: json.encode(loginOtpModel.toJson()))
+          .post(
+            uri,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              'Content-Type': 'application/json',
+              'Accept': '*/*',
+            },
+            body: json.encode(loginOtpModel.toJson()),
+          )
           .timeout(Duration(seconds: connectionTimeOut));
-      if (response.statusCode == 200) {
+
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+
+      if (statusCode == 200) {
         final _loginOtpModel =
-            LoginOtpModel.fromJson(json.decode(response.body));
-        if (_loginOtpModel.loginOtpResponseModel!.jwtToken != null) {
+            LoginOtpModel.fromJson(json.decode(responseBody));
+        if (_loginOtpModel.loginOtpResponseModel?.jwtToken != null) {
           await SharedPreferencesService.saveAccountInfo(
               _loginOtpModel.loginOtpResponseModel!);
-          return _loginOtpModel;
+          return {
+            'statusCode': statusCode,
+            'data': _loginOtpModel,
+          };
         } else {
-          return "ERROR: $_loginOtpModel";
+          return {
+            'statusCode': statusCode,
+            'error': "ERROR: $_loginOtpModel",
+          };
         }
-      } else if (response.statusCode == 401) {
+      } else if (statusCode == 401) {
         try {
           final exceptionModel =
-              ServerExceptionModel.fromJson(json.decode(response.body));
-          return exceptionModel;
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+          };
         } catch (e) {
-          return e;
+          return {
+            'statusCode': statusCode,
+            'error': e,
+          };
         }
+      } else if (statusCode == 403) {
+        return {
+          'statusCode': statusCode,
+          'error': "Forbidden",
+        };
+      } else if (statusCode == 400) {
+        return {
+          'statusCode': statusCode,
+          'error': "Bad request",
+        };
+      } else {
+        return {
+          'statusCode': statusCode,
+          'error': 'Failed to fetch data',
+        };
       }
     } on TimeoutException catch (e) {
-      return e;
+      return {
+        'statusCode': 408,
+        'error': "Request timeout",
+      };
     } on SocketException catch (e) {
-      return e;
+      return {
+        'statusCode': 500,
+        'error': 'Socket error',
+      };
     } catch (e) {
-      return e;
+      return {
+        'statusCode': 500,
+        'error': e,
+      };
     }
   }
 
@@ -118,21 +200,56 @@ class AuthenticateService extends IAuthenticateService {
               },
               body: json.encode(registerCustomerModel.toJson()))
           .timeout(Duration(seconds: connectionTimeOut));
-      if (response.statusCode == 200) {
-        return 200;
-      } else if (response.statusCode == 401) {
-        final exceptionModel =
-            ServerExceptionModel.fromJson(json.decode(response.body));
-        return exceptionModel;
+      final statusCode = response.statusCode;
+      if (statusCode == 200) {
+        return {
+          'statusCode': statusCode,
+        };
+      } else if (statusCode == 401) {
+        try {
+          final exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(response.body));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+          };
+        } catch (e) {
+          return {
+            'statusCode': statusCode,
+            'error': e,
+          };
+        }
+      } else if (statusCode == 403) {
+        return {
+          'statusCode': statusCode,
+          'error': "Forbidden",
+        };
+      } else if (statusCode == 400) {
+        return {
+          'statusCode': statusCode,
+          'error': "Bad request",
+        };
       } else {
-        return response.statusCode;
+        return {
+          'statusCode': statusCode,
+          'error': 'Tên chỉ 1 từ',
+        };
       }
     } on TimeoutException catch (e) {
-      return e;
+      return {
+        'statusCode': 408,
+        'error': "Request timeout",
+      };
     } on SocketException catch (e) {
-      return e;
+      return {
+        'statusCode': 500,
+        'error': 'Socket error',
+      };
     } catch (e) {
-      return e;
+      return {
+        'statusCode': 500,
+        'error': e,
+      };
     }
   }
 

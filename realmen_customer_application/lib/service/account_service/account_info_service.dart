@@ -9,16 +9,17 @@ import 'package:realmen_customer_application/models/exception_model.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
 abstract class IAccountService {
-  Future<dynamic> getAccountInfo(AccountInfoModel accountInfoModel);
+  Future<dynamic> getAccountInfo();
 }
 
 class AccountService extends IAccountService {
   @override
-  Future getAccountInfo(AccountInfoModel accountInfoModel) async {
+  Future getAccountInfo() async {
+    AccountInfoModel accountInfoModel = AccountInfoModel();
     try {
-      final int accountId =
-          int.parse(SharedPreferencesService.getAccountId().toString());
-      final String jwtToken = SharedPreferencesService.getJwt().toString();
+      final int accountId = await SharedPreferencesService.getAccountId();
+
+      final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse("$accountInfoUrl/$accountId/$customer");
       final client = http.Client();
       final response = await client.get(

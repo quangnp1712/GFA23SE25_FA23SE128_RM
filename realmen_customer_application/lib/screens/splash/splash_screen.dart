@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _nativeToLogin();
+    _navigateToLogin();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
@@ -32,19 +32,22 @@ class _SplashScreenState extends State<SplashScreen>
         overlays: SystemUiOverlay.values);
   }
 
-  _nativeToLogin() async {
-    AuthenticateService authenticateService = AuthenticateService();
-    await Future.delayed(const Duration(milliseconds: 2000), () {});
+  Future<void> _navigateToLogin() async {
+    final authenticateService = AuthenticateService();
+    await Future.delayed(const Duration(milliseconds: 2000));
+
     try {
-      var result = await authenticateService.isLogin();
-      if (result == "false") {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginPhoneScreen()));
-      } else if (result == "true") {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MainScreen()));
+      final result = await authenticateService.isLogin();
+      if (result == true) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPhoneScreen()),
+        );
       }
     } catch (e) {
       print(e);

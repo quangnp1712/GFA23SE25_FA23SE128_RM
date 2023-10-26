@@ -254,18 +254,18 @@ class AuthenticateService extends IAuthenticateService {
   }
 
   @override
-  Future isLogin() async {
+  Future<bool> isLogin() async {
     try {
-      final SAccountInfo = await SharedPreferencesService.getAccountInfo()!;
+      final SAccountInfo = await SharedPreferencesService.getAccountInfo();
       String? jwtToken;
       if (SAccountInfo != null) {
         jwtToken = SAccountInfo["jwtToken"].toString();
-        return "true";
+        return true;
       } else {
-        return "false";
+        return false;
       }
     } catch (e) {
-      return "false";
+      return false;
     }
   }
 }

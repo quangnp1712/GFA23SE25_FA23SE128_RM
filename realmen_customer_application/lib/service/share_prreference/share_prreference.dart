@@ -93,12 +93,12 @@ class SharedPreferencesService {
     }
   }
 
-  static Future<String> getAccountId() async {
+  static Future<int> getAccountId() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     List<String>? result = sharedPreferences.getStringList("accountInfo");
     if (result != null && result.length >= 4) {
-      String accountId = result[3];
+      int accountId = int.parse(result[3]);
       return accountId;
     } else {
       throw Exception("Failed to get account ID from SharedPreferences");

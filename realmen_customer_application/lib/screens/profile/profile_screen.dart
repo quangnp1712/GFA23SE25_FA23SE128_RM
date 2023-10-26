@@ -1,10 +1,12 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realmen_customer_application/models/account_info.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
+import 'package:realmen_customer_application/service/account_service/account_info_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -71,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             margin: const EdgeInsets.only(top: 10),
                             child: Center(
                               child: Text(
-                                'Mike Tyson',
+                                name ?? '',
                                 style: GoogleFonts.quicksand(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
@@ -83,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             margin: const EdgeInsets.only(top: 0),
                             child: Center(
                               child: Text(
-                                '09xx.xxx.xxx',
+                                phone ?? "",
                                 style: GoogleFonts.quicksand(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
@@ -361,15 +363,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Logic
-  // Future<void> _logout() async {
-  //   final SharedPreferences sharedPreferences =
-  //       await SharedPreferences.getInstance();
-  //   await sharedPreferences.clear();
-  //   _errorMessage("Đăng xuất");
-  //   // ignore: use_build_context_synchronously
-  //   Navigator.pushNamed(context, LoginPhoneScreen.LoginPhoneScreenRoute);
-  //
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getAccountInfo();
+  }
+
+  AccountInfoModel? accountInfo = AccountInfoModel();
+  String? name;
+  String? phone;
+
+  Future<void> getAccountInfo() async {
+    try {
+      AccountService accountService = AccountService();
+      final result = await accountService.getAccountInfo();
+      if (result['statusCode'] == 200) {
+        setState(() {
+          accountInfo = result['data'] as AccountInfoModel;
+          name =
+              "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
+
+          phone = accountInfo!.phone ?? '';
+
+          print(accountInfo!.firstName);
+        });
+      } else {
+        _errorMessage("$result['statusCode'] : $result['error']");
+      }
+    } on Exception catch (e) {
+      _errorMessage(e.toString());
+      print("Error: $e");
+    }
+  }
 
   void _errorMessage(String? message) {
     try {

@@ -13,6 +13,7 @@ class AccountInfoModel {
   String? status;
   String? branchName;
   String? branchAddress;
+  String? itimacyLevel;
   String? professional;
   int? average;
   String? role;
@@ -30,26 +31,30 @@ class AccountInfoModel {
     this.status,
     this.branchName,
     this.branchAddress,
+    this.itimacyLevel,
     this.professional,
     this.average,
     this.role,
   });
 
-  AccountInfoModel.fromJson(Map<String, dynamic> json) {
-    accountId = json['accountId'];
-    branchId = json['branchId'];
-    thumbnailUrl = json['thumbnailUrl'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    phone = json['phone'];
-    address = json['address'];
-    dob = json['dob'];
-    gender = json['gender'];
-    status = json['status'];
-    branchName = json['branchName'];
-    branchAddress = json['branchAddress'];
-    professional = json['professional'];
-    average = json['average'];
-    role = json['role'];
+  factory AccountInfoModel.fromJson(Map<String, dynamic> json) {
+    return AccountInfoModel(
+      accountId: json['value']['accountId'],
+      branchId: json['value']['branchId'],
+      thumbnailUrl: json['value']['thumbnailUrl'],
+      firstName: json['value']['firstName'],
+      lastName: json['value']['lastName'],
+      phone: json['value']['phone'],
+      address: json['value']['address'],
+      dob: json['value']['dob'],
+      gender: json['value']['gender'],
+      status: json['value']['status'],
+      branchName: json['value']['branchName'],
+      branchAddress: json['value']['branchAddress'],
+      itimacyLevel: json['value']['itimacyLevel'],
+      professional: json['value']['professional'],
+      average: json['value']['average'],
+      role: json['value']['role'],
+    );
   }
 }

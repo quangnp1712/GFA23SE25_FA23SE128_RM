@@ -2,11 +2,14 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:realmen_customer_application/models/account_info.dart';
 import 'package:realmen_customer_application/screens/home/components/recoment_services.dart';
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
+import 'package:realmen_customer_application/service/account_service/account_info_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
@@ -123,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      "Chào buổi sáng, MikeMikeMikeMike",
+                                      "Chào buổi $time, $name",
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.quicksand(
                                         fontWeight: FontWeight.w600,
@@ -357,4 +360,55 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       );
+// Logic
+  @override
+  void initState() {
+    super.initState();
+    getAccountInfo();
+  }
+
+  AccountInfoModel? accountInfo = AccountInfoModel();
+  String? name;
+  final now = DateTime.now();
+  String? time;
+
+  Future<void> getAccountInfo() async {
+    try {
+      AccountService accountService = AccountService();
+      final result = await accountService.getAccountInfo();
+      if (result['statusCode'] == 200) {
+        setState(() {
+          accountInfo = result['data'] as AccountInfoModel;
+          name = accountInfo!.lastName ?? '';
+          time = getTimeOfDay();
+        });
+      } else {
+        _errorMessage("$result['statusCode'] : $result['error']");
+      }
+    } on Exception catch (e) {
+      _errorMessage(e.toString());
+      print("Error: $e");
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  String getTimeOfDay() {
+    if (now.hour >= 6 && now.hour < 12) {
+      return "sáng";
+    } else if (now.hour >= 12 && now.hour < 15) {
+      return "trưa";
+    } else if (now.hour >= 15 && now.hour < 19) {
+      return "chiều";
+    } else if (now.hour >= 19 && now.hour < 6) {
+      return "tối";
+    }
+    return "";
+  }
 }

@@ -9,6 +9,8 @@ class branchShopNearYou extends StatelessWidget {
     'Dien Bien Phu',
   ];
 
+  branchShopNearYou({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -83,7 +85,7 @@ class branchShopNearYou extends StatelessWidget {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xff444444),
+                                  color: const Color(0xff444444),
                                 ),
                                 child: const Center(
                                   child: Text(

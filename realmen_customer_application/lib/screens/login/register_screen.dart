@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
@@ -380,7 +381,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           await authenticateService.registerCustomer(registerCustomerModel);
       if (result['statusCode'] == 200) {
         _successMessage("Nhập thông tin thành công");
-        Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+        // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+        Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
       } else {
         _errorMessage("$result['statusCode'] : $result['error']");
       }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:realmen_customer_application/router/router.dart';
 import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
 import 'package:realmen_customer_application/screens/home/home_screen.dart';
+import 'package:realmen_customer_application/screens/list_branch/list_branch.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
@@ -31,36 +35,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
+      return GetMaterialApp(
+        // onGenerateRoute: Routers.generateRoute,
+        // onGenerateRoute: (settings) => GetPageRoute(settings: settings),
+        getPages: RouteGenerator.routes(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.grey,
         ),
         initialRoute: SplashScreen.SplashScreenRoute,
         // initialRoute: MainScreen.MainScreenRoute,
-        routes: {
-          LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
-              const LoginPhoneScreen(),
-          SplashScreen.SplashScreenRoute: (context) => const SplashScreen(),
-          LoginOTPScreen.LoginOTPScreenRoute: (context) =>
-              const LoginOTPScreen(),
-          RegisterScreen.RegisterScreenRoute: (context) =>
-              const RegisterScreen(),
-          MainScreen.MainScreenRoute: (context) => const MainScreen(),
-          // HomeScreen.LoginPhoneScreenRoute: (context) => const HomeScreen(),
-          // ServicePriceListScreen.ServicePriceListScreenRoute: (context) =>
-          //     const ServicePriceListScreen(),
-          // MembershipScreen.MembershipScreenRoute: (context) =>
-          //     const MembershipScreen(),
-          // BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
-          // ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
-          MessageTestScreen.MessageTestScreenRoute: (context) =>
-              const MessageTestScreen(),
-          NavBarScreen.NavBarScreenRoute: (context) => const NavBarScreen(),
-          PopularScreen.PopularScreenRoute: (context) => const PopularScreen(),
-          ViewEditProfileScreen.ViewEditProfileScreenRoute: (context) =>
-              const ViewEditProfileScreen(),
-        },
+        // routes: {
+        //   LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
+        //       const LoginPhoneScreen(),
+        //   SplashScreen.SplashScreenRoute: (context) => const SplashScreen(),
+        //   LoginOTPScreen.LoginOTPScreenRoute: (context) =>
+        //       const LoginOTPScreen(),
+        //   RegisterScreen.RegisterScreenRoute: (context) =>
+        //       const RegisterScreen(),
+        //   MainScreen.MainScreenRoute: (context) => const MainScreen(),
+        //   // HomeScreen.LoginPhoneScreenRoute: (context) => const HomeScreen(),
+        //   // ServicePriceListScreen.ServicePriceListScreenRoute: (context) =>
+        //   //     const ServicePriceListScreen(),
+        //   // MembershipScreen.MembershipScreenRoute: (context) =>
+        //   //     const MembershipScreen(),
+        //   // BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
+        //   // ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
+        //   MessageTestScreen.MessageTestScreenRoute: (context) =>
+        //       const MessageTestScreen(),
+        //   NavBarScreen.NavBarScreenRoute: (context) => const NavBarScreen(),
+        //   PopularScreen.PopularScreenRoute: (context) => const PopularScreen(),
+        //   ViewEditProfileScreen.ViewEditProfileScreenRoute: (context) =>
+        //       const ViewEditProfileScreen(),
+        //   ListBranchScreen.ListBranchScreenRoute: (context) =>
+        //       const ListBranchScreen(),
+        // },
       );
     });
   }

@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
 import 'package:realmen_customer_application/screens/home/home_screen.dart';
+import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -94,10 +97,14 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Tài khoản',
           ),
         ],
-        onTap: (value) {
-          setState(() {
-            bottomIndex = value;
-          });
+        onTap: (value) async {
+          if (!await SharedPreferencesService.checkJwtExpired()) {
+            setState(() {
+              bottomIndex = value;
+            });
+          } else {
+            Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+          }
         },
       ),
     );

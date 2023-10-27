@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizer/sizer.dart';
+import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 
 class LogoutPopup extends StatelessWidget {
   const LogoutPopup({super.key});
@@ -138,13 +136,9 @@ class LogoutPopup extends StatelessWidget {
 
   // Logic
   Future<void> _logout(BuildContext context) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
+    AuthenticateService authenticateService = AuthenticateService();
+    authenticateService.logout();
     _errorMessage(context, "Đăng xuất");
-    // ignore: use_build_context_synchronously
-    Navigator.pushNamed(
-        context as BuildContext, LoginPhoneScreen.LoginPhoneScreenRoute);
   }
 
   void _errorMessage(BuildContext context, String? message) {

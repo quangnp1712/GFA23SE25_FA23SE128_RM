@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MembershipScreen extends StatefulWidget {
   Function callback;
-  MembershipScreen(this.callback);
+  MembershipScreen(this.callback, {super.key});
 
   @override
   State<MembershipScreen> createState() => _MembershipScreenState();

@@ -8,6 +8,8 @@ class RecomendServices extends StatelessWidget {
     'Massage loại 2',
   ];
 
+  RecomendServices({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -53,7 +55,7 @@ class RecomendServices extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 56,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

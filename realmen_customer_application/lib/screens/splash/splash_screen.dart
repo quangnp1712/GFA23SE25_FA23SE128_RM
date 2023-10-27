@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
@@ -39,15 +40,17 @@ class _SplashScreenState extends State<SplashScreen>
     try {
       final result = await authenticateService.isLogin();
       if (result == true) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainScreen()),
-        );
+        Get.toNamed(MainScreen.MainScreenRoute);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const MainScreen()),
+        // );
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPhoneScreen()),
-        );
+        Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const LoginPhoneScreen()),
+        // );
       }
     } catch (e) {
       print(e);

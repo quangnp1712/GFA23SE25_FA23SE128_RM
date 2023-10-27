@@ -9,9 +9,11 @@ class barberTop extends StatelessWidget {
     'Nguyen Phuong Quang',
   ];
 
+  barberTop({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 320,
       child: ListView.builder(
           shrinkWrap: true,
@@ -29,7 +31,7 @@ class barberTop extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Color(0xA6444444))
+                      border: Border.all(color: const Color(0xA6444444))
                       // boxShadow: const [
                       //   BoxShadow(
                       //     // color: kPrimaryColor.withOpacity(0.23),
@@ -96,7 +98,7 @@ class barberTop extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         Text.rich(
                                           TextSpan(
                                             style: TextStyle(

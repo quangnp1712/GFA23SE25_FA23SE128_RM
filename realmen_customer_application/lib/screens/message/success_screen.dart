@@ -74,11 +74,16 @@ class ShowSnackBar {
             const SizedBox(
               width: 10,
             ),
-            Text(
-              message! ?? "Null",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 15,
+            SizedBox(
+              width: 72.w,
+              child: Text(
+                message! ?? "Null",
+                maxLines: 1,
+                style: const TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
               ),
             ),
           ],

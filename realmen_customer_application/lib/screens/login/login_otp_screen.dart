@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/login_otp_model.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
@@ -189,7 +190,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
         try {
           if (result['data'].loginOtpResponseModel.jwtToken != null) {
             _successMessage("Đăng nhập thành công");
-            Navigator.pushNamed(context, MainScreen.MainScreenRoute);
+            // Navigator.pushNamed(context, MainScreen.MainScreenRoute);
+            Get.toNamed(MainScreen.MainScreenRoute);
           } else {
             _errorMessage(result['error']);
           }

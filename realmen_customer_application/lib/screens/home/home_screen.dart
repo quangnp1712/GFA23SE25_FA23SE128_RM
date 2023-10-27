@@ -1,15 +1,15 @@
 import 'package:community_material_icon/community_material_icon.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/account_info.dart';
 import 'package:realmen_customer_application/screens/home/components/recoment_services.dart';
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
-import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/list_branch/list_branch.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:realmen_customer_application/service/account_service/account_info_service.dart';
+import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-  static const String LoginPhoneScreenRoute = "/home-screen";
+  static const String HomeScreenRoute = "/home-screen";
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Container(
                           height: 80,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           alignment: Alignment.topLeft,
                           child: Image.asset('assets/images/logo.png'),
                         ),
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Container(
                           height: 70,
                           margin: const EdgeInsets.only(right: 25),
-                          padding: EdgeInsets.only(left: 25),
+                          padding: const EdgeInsets.only(left: 25),
                           decoration: const ShapeDecoration(
                             shape: CustomRoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
@@ -163,13 +163,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               cardHolder(
                                 'Đặt lịch',
                                 Icons.calendar_month,
-                                Color(0xffE3E3E3),
+                                const Color(0xffE3E3E3),
                                 () {},
                               ),
                               cardHolder(
                                 'Lịch sử đặt lịch',
                                 Icons.history,
-                                Color(0xffE3E3E3),
+                                const Color(0xffE3E3E3),
                                 () {},
                               ),
                               GestureDetector(
@@ -212,11 +212,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               cardHolder(
                                 'Realmen Member',
                                 CommunityMaterialIcons.crown,
-                                Color(0xffE3E3E3),
+                                const Color(0xffE3E3E3),
                                 () {},
                               ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(
+                                      ListBranchScreen.ListBranchScreenRoute);
+                                },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -379,9 +382,13 @@ class _HomeScreenState extends State<HomeScreen> {
       if (result['statusCode'] == 200) {
         setState(() {
           accountInfo = result['data'] as AccountInfoModel;
-          name = accountInfo!.lastName ?? '';
+          name = accountInfo!.lastName ?? "";
           time = getTimeOfDay();
         });
+      } else if (result['statusCode'] == 403) {
+        AuthenticateService authenticateService = AuthenticateService();
+        authenticateService.logout();
+        _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
       } else {
         _errorMessage("$result['statusCode'] : $result['error']");
       }

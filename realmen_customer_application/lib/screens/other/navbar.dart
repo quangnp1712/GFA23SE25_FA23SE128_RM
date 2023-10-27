@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/home/home_screen.dart';
 
 class NavBar extends StatelessWidget {
@@ -39,7 +40,7 @@ class NavBar extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              Navigator.pushNamed(context, HomeScreen.LoginPhoneScreenRoute);
+              Get.toNamed(HomeScreen.HomeScreenRoute);
             },
           ),
           const ListTile(

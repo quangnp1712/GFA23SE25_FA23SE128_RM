@@ -1,11 +1,10 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 class ServicePriceListScreen extends StatefulWidget {
   Function callback;
-  ServicePriceListScreen(this.callback);
+  ServicePriceListScreen(this.callback, {super.key});
 
   @override
   State<ServicePriceListScreen> createState() => _ServicePriceListScreenState();
@@ -53,7 +52,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white),
                     child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       children: [
                         Container(
                           child: Center(

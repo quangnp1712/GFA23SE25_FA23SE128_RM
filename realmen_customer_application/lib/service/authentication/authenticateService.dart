@@ -8,13 +8,17 @@ import 'package:realmen_customer_application/models/exception_model.dart';
 import 'package:realmen_customer_application/models/login_otp_model.dart';
 import 'package:realmen_customer_application/models/login_phone_model.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
+import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 abstract class IAuthenticateService {
   Future<dynamic> loginPhone(LoginPhoneModel loginPhoneModel);
   Future<dynamic> loginOtp(LoginOtpModel loginOtpModel);
   Future<dynamic> registerCustomer(RegisterCustomerModel registerCustomerModel);
   Future<dynamic> isLogin();
+  Future<void> logout();
 }
 
 class AuthenticateService extends IAuthenticateService {
@@ -267,5 +271,14 @@ class AuthenticateService extends IAuthenticateService {
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  Future<void> logout() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    Get.to(() => LoginPhoneScreen());
+    return;
   }
 }

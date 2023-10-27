@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account_info.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account_service/account_info_service.dart';
+import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 
 class ViewEditProfileScreen extends StatefulWidget {
@@ -62,7 +64,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                           icon: const Icon(
                                               Icons.keyboard_arrow_left),
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Get.back();
                                           },
                                         ),
                                       ),
@@ -560,6 +562,10 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
           dobController.text = (accountInfo!.dob)!.substring(0, 10);
           print(accountInfo!.firstName);
         });
+      } else if (result['statusCode'] == 403) {
+        AuthenticateService authenticateService = AuthenticateService();
+        authenticateService.logout();
+        _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
       } else {
         _errorMessage("$result['statusCode'] : $result['error']");
       }

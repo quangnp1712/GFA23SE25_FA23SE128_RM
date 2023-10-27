@@ -1,5 +1,6 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account_info.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
@@ -7,12 +8,11 @@ import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_customer_application/service/account_service/account_info_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {
   Function callback;
-  ProfileScreen(this.callback);
+  ProfileScreen(this.callback, {super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -162,10 +162,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         child: TextButton(
                                           onPressed: () {
-                                            Navigator.pushNamed(
-                                                context,
-                                                ViewEditProfileScreen
-                                                    .ViewEditProfileScreenRoute);
+                                            Get.toNamed(ViewEditProfileScreen
+                                                .ViewEditProfileScreenRoute);
                                           },
                                           style: TextButton.styleFrom(
                                             padding:
@@ -387,6 +385,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           print(accountInfo!.firstName);
         });
+      } else if (result['statusCode'] == 403) {
+        Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+        _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
       } else {
         _errorMessage("$result['statusCode'] : $result['error']");
       }

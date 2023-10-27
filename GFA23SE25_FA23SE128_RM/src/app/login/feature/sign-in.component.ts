@@ -92,14 +92,15 @@ export class SignInComponent implements OnInit {
   submitForm(): void {
     this.model = this.validateForm.getRawValue();
     this._router.navigate(["/otp"])
-    this._siSvc
-      .getOtp(this.model)
-      .subscribe(
-        (data) => {
-          localStorage.setItem('phone', this.validateForm.controls.value.getRawValue())
-        },
-        (error) => {}
-      );
+    localStorage.setItem('phone', this.validateForm.controls.value.getRawValue())
+    // this._siSvc
+    //   .getOtp(this.model)
+    //   .subscribe(
+    //     (data) => {
+    //       localStorage.setItem('phone', this.validateForm.controls.value.getRawValue())
+    //     },
+    //     (error) => {}
+    //   );
   }
 
   ngOnInit(): void {

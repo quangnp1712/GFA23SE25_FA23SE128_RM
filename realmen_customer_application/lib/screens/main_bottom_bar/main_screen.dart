@@ -40,8 +40,8 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     homeScreen = HomeScreen(setPage);
     servicePriceListScreen = ServicePriceListScreen(setPage);
-    membershipScreen = MembershipScreen(setPage);
     bookingScreen = BookingScreen(setPage);
+    membershipScreen = MembershipScreen(setPage);
     profileScreen = ProfileScreen(setPage);
     super.initState();
   }
@@ -54,9 +54,9 @@ class _MainScreenState extends State<MainScreen> {
         case 1:
           return servicePriceListScreen;
         case 2:
-          return membershipScreen;
-        case 3:
           return bookingScreen;
+        case 3:
+          return membershipScreen;
         case 4:
           return profileScreen;
       }

@@ -3,12 +3,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realmen_customer_application/models/account_info.dart';
+import 'package:realmen_customer_application/models/account_info_model.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
-import 'package:realmen_customer_application/service/account_service/account_info_service.dart';
+import 'package:realmen_customer_application/service/account/account_info_service.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {

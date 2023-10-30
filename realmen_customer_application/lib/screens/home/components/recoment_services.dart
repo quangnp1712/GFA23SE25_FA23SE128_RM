@@ -73,7 +73,7 @@ class RecomendServices extends StatelessWidget {
                             "90,0000 VNĐ",
                             style: TextStyle(
                               fontSize: 15,
-                              color: Colors.white.withOpacity(0.6),
+                              color: Colors.white.withOpacity(0.8),
                             ),
                           ),
                         ],

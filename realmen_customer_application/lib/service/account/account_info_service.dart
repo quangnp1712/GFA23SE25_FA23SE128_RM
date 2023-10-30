@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:realmen_customer_application/global_variable.dart';
-import 'package:realmen_customer_application/models/account_info.dart';
+import 'package:realmen_customer_application/models/account_info_model.dart';
 import 'package:realmen_customer_application/models/exception_model.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 

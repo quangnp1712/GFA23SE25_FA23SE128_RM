@@ -53,6 +53,7 @@ dependencies:
   tiengviet: ^0.5.0
   jwt_decoder: ^2.0.1
   get: ^4.6.6
+  percent_indicator: ^4.2.3
 
   flutter_web_plugins:
     sdk: flutter

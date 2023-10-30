@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
+import 'package:realmen_customer_application/screens/history_booking/detail_history_hair_cut_screen.dart';
+import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
 import 'package:realmen_customer_application/screens/list_branch/list_branch.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
@@ -64,6 +67,45 @@ class RouteGenerator {
                     return const LoginPhoneScreen();
                   } else {
                     return const ListBranchScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: HistoryBookingScreen.HistoryBookingScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else {
+                    return const HistoryBookingScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: DetailHistoryBookingScreen.DetailHistoryBookingScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else {
+                    return const DetailHistoryBookingScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: BookingProcessingScreen.BookingProcessingScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else {
+                    return const BookingProcessingScreen();
                   }
                 });
           }),

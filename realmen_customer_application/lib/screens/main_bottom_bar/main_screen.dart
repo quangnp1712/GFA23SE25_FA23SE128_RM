@@ -67,45 +67,47 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // key: _bottomNavigationKey,
-      body: pageChooser(bottomIndex),
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        color: Colors.white,
-        backgroundColor: Colors.black87,
-        items: const [
-          CurvedNavigationBarItem(
-            child: Icon(Icons.home_outlined),
-            label: 'Trang chủ',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.list_alt),
-            label: 'Bảng giá',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.calendar_month),
-            label: 'Đặt lịch',
-          ),
-          CurvedNavigationBarItem(
-            // child: Icon(Icons.newspaper),
-            child: Icon(CommunityMaterialIcons.crown),
-            label: 'RM Member',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.perm_identity),
-            label: 'Tài khoản',
-          ),
-        ],
-        onTap: (value) async {
-          if (!await SharedPreferencesService.checkJwtExpired()) {
-            setState(() {
-              bottomIndex = value;
-            });
-          } else {
-            Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-          }
-        },
+    return SafeArea(
+      child: Scaffold(
+        // key: _bottomNavigationKey,
+        body: pageChooser(bottomIndex),
+        bottomNavigationBar: CurvedNavigationBar(
+          key: _bottomNavigationKey,
+          color: Colors.white,
+          backgroundColor: Colors.black87,
+          items: const [
+            CurvedNavigationBarItem(
+              child: Icon(Icons.home_outlined),
+              label: 'Trang chủ',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.list_alt),
+              label: 'Bảng giá',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.calendar_month),
+              label: 'Đặt lịch',
+            ),
+            CurvedNavigationBarItem(
+              // child: Icon(Icons.newspaper),
+              child: Icon(CommunityMaterialIcons.crown),
+              label: 'RM Member',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.perm_identity),
+              label: 'Tài khoản',
+            ),
+          ],
+          onTap: (value) async {
+            if (!await SharedPreferencesService.checkJwtExpired()) {
+              setState(() {
+                bottomIndex = value;
+              });
+            } else {
+              Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+            }
+          },
+        ),
       ),
     );
   }

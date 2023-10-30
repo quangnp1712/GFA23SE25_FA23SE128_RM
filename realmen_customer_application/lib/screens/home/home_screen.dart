@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/account_info_model.dart';
+import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
+import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
 import 'package:realmen_customer_application/screens/home/components/recoment_services.dart';
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
@@ -172,7 +174,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'Lịch sử đặt lịch',
                                 Icons.history,
                                 const Color(0xffE3E3E3),
-                                () {},
+                                () {
+                                  Get.toNamed(HistoryBookingScreen
+                                      .HistoryBookingScreenRoute);
+                                },
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -215,7 +220,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'Realmen Member',
                                 CommunityMaterialIcons.crown,
                                 const Color(0xffE3E3E3),
-                                () {},
+                                () {
+                                  widget.callback(3);
+                                },
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -264,7 +271,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'Lịch đặt của bạn',
                                 CommunityMaterialIcons.calendar_check_outline,
                                 const Color(0xffE3E3E3),
-                                () {},
+                                () {
+                                  Get.toNamed(BookingProcessingScreen
+                                      .BookingProcessingScreenRoute);
+                                },
                               ),
                             ],
                           ),

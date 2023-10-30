@@ -25,14 +25,15 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.black26,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 'Tổng trị giá điểm < : ${totalPoints}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
             ),
             Padding(
@@ -46,7 +47,7 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             // Icon
-                            Icon(
+                            const Icon(
                               Icons.card_giftcard,
                               color: Colors.red,
                               size: 24,
@@ -54,10 +55,10 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                             // Mô tả ưu đãi
                             Expanded(
                               child: Container(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 child: Text(
                                   offer.name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -72,7 +73,7 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                             children: [
                               Text(
                                 offer.description, //Thông tin về ưu đãi
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -80,10 +81,10 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        Divider(
+                        const Divider(
                           color: Colors.black,
                           height: 2,
                           thickness: 1,

@@ -122,44 +122,43 @@ class _ListBranchScreenState extends State<ListBranchScreen> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Container(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: branches.length,
-                          itemBuilder: (context, index) {
-                            return ExpansionTile(
-                              title: Text(branches[index].city),
-                              subtitle: Text(
-                                  'Số lượng chi nhánh: ${branches.length - 1}'),
-                              children: [
-                                SizedBox(
-                                  height: 200,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    children: [
-                                      Image.asset(
-                                        branches[index].image,
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ],
-                                  ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: branches.length,
+                        itemBuilder: (context, index) {
+                          return ExpansionTile(
+                            title: Text(branches[index].city),
+                            subtitle: Text(
+                                'Số lượng chi nhánh: ${branches.length - 1}'),
+                            children: [
+                              SizedBox(
+                                height: 200,
+                                width: double.infinity,
+                                child: Stack(
+                                  children: [
+                                    Image.asset(
+                                      branches[index].image,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ],
                                 ),
-                                ListTile(
-                                  title: Text(branches[index].name),
-                                  subtitle: Text(branches[index].address),
-                                  trailing: ElevatedButton(
-                                    onPressed: () {
-                                      // Xử lý sự kiện khi nhấn nút đặt lịch
-                                    },
-                                    child: const Text('Đặt lịch'),
-                                  ),
+                              ),
+                              ListTile(
+                                title: Text(branches[index].name),
+                                subtitle: Text(branches[index].address),
+                                trailing: ElevatedButton(
+                                  onPressed: () {
+                                    // Xử lý sự kiện khi nhấn nút đặt lịch
+                                  },
+                                  child: const Text('Đặt lịch'),
                                 ),
-                              ],
-                            );
-                          },
-                        ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),

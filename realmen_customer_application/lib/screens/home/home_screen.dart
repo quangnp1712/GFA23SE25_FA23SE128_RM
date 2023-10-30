@@ -1,4 +1,5 @@
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -106,8 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 60,
                                 child: CircleAvatar(
                                   child: ClipOval(
-                                    child: Image.asset(
-                                      "assets/images/admin.png",
+                                    child: Image.network(
+                                      avatarUrl ?? avatarDefault,
+                                      scale: 1.0,
                                       fit: BoxFit.cover,
                                       width: 120,
                                       height: 120,
@@ -372,18 +374,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AccountInfoModel? accountInfo = AccountInfoModel();
   String? name;
+  String? avatarUrl;
   final now = DateTime.now();
   String? time;
+  final storage = FirebaseStorage.instance;
 
+  String avatarDefault =
+      "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
   Future<void> getAccountInfo() async {
     try {
       AccountService accountService = AccountService();
       final result = await accountService.getAccountInfo();
       if (result['statusCode'] == 200) {
+        accountInfo = result['data'] as AccountInfoModel;
+        if (accountInfo!.thumbnailUrl != null &&
+            accountInfo!.thumbnailUrl != "") {
+          var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+          avatarUrl = await reference.getDownloadURL();
+        } else {
+          var reference = storage.ref('avatar/default-2.png');
+          avatarUrl = await reference.getDownloadURL();
+        }
         setState(() {
-          accountInfo = result['data'] as AccountInfoModel;
           name = accountInfo!.lastName ?? "";
           time = getTimeOfDay();
+          avatarUrl;
         });
       } else if (result['statusCode'] == 403) {
         AuthenticateService authenticateService = AuthenticateService();

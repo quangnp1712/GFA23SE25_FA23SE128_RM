@@ -1,29 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_customer_application/firebase_options.dart';
 
 import 'package:realmen_customer_application/router/router.dart';
-import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
-import 'package:realmen_customer_application/screens/home/home_screen.dart';
-import 'package:realmen_customer_application/screens/list_branch/list_branch.dart';
-import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
-import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
-import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
-import 'package:realmen_customer_application/screens/login/register_screen.dart';
 
-import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
-import 'package:realmen_customer_application/screens/message/message_test_screen.dart';
-import 'package:realmen_customer_application/screens/other/navbar_screen.dart';
-import 'package:realmen_customer_application/screens/other/popular_screen.dart';
-import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
-import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
-import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }

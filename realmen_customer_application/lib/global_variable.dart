@@ -14,6 +14,10 @@ final accountInfoUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_ACCOUNT"]}";
 final getBranchesUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BRANCHES"]}";
 final getBranchUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BRANCH"]}";
 
+// Autocomplete
+final autoCompleteUrl =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["AUTOCOMPLETE_SEARCH"]}";
+
 // common variable
 final connectionTimeOut = int.parse(dotenv.env["CONNECTION_TIMEOUT"]!);
 final customer = "${dotenv.env["CUSTOMER"]}";

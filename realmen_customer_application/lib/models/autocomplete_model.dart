@@ -1,0 +1,27 @@
+import 'dart:convert';
+
+class PredictionModel {
+  String? description;
+  String? placeId;
+
+  PredictionModel({this.description, this.placeId});
+  factory PredictionModel.fromJson(Map<String, dynamic> json) {
+    return PredictionModel(
+      description: json['description'],
+      placeId: json['placeId'],
+    );
+  }
+}
+
+class AutocompleteModel {
+  List<PredictionModel>? predictions;
+
+  AutocompleteModel({this.predictions});
+
+  factory AutocompleteModel.fromJson(Map<String, dynamic> json) {
+    return AutocompleteModel(
+        predictions: (json['value']['predictions'] as List)
+            .map((e) => PredictionModel.fromJson(e))
+            .toList());
+  }
+}

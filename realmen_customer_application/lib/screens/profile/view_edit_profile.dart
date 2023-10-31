@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account_info_model.dart';
+import 'package:realmen_customer_application/models/autocomplete_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account/account_info_service.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
 import 'package:sizer/sizer.dart';
 
 class ViewEditProfileScreen extends StatefulWidget {
@@ -478,6 +480,93 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                           ),
                                         ),
                                       ),
+                                      SizedBox(
+                                        width: 80.w,
+                                        height: 50,
+                                        child: Autocomplete<String>(
+                                          initialValue: TextEditingValue(
+                                              text: addressController.text),
+                                          optionsBuilder:
+                                              (textEditingValue) async {
+                                            _searchingWithQuery =
+                                                textEditingValue.text;
+                                            if (textEditingValue.text == "") {
+                                              return _lastOptions;
+                                            }
+                                            AutocompleteService
+                                                autocompleteService =
+                                                AutocompleteService();
+                                            final resultAuto =
+                                                await autocompleteService
+                                                    .getAutocomplete(
+                                                        _searchingWithQuery!);
+
+                                            final Iterable<String> options;
+
+                                            if (resultAuto != null) {
+                                              if (resultAuto
+                                                      .first['statusCode'] ==
+                                                  200) {
+                                                options =
+                                                    resultAuto.first['data'];
+                                                _lastOptions = options;
+
+                                                return options;
+                                              } else {
+                                                debugPrint(
+                                                    resultAuto.first['error']);
+                                              }
+                                            }
+
+                                            return [];
+                                          },
+                                          onSelected: (String address) {
+                                            debugPrint(
+                                                'You just selected $address');
+                                            addressController.text = address;
+                                          },
+                                          fieldViewBuilder: (context,
+                                              controller,
+                                              focusNode,
+                                              onEditingComplete) {
+                                            return TextField(
+                                              // controller: addressController,
+                                              controller: controller,
+                                              focusNode: focusNode,
+                                              onEditingComplete:
+                                                  onEditingComplete,
+                                              cursorColor: Colors.black,
+                                              cursorWidth: 1,
+                                              style: const TextStyle(
+                                                  height: 1.17,
+                                                  fontSize: 20,
+                                                  color: Colors.black),
+                                              decoration: InputDecoration(
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color(0xffC4C4C4)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color(0xffC4C4C4)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                ),
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        // top: 10,
+                                                        // bottom: 20,
+                                                        left: 15,
+                                                        right: 15),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -541,11 +630,14 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
     getAccountInfo();
   }
 
+  late Iterable<String> _lastOptions = <String>[];
+  AutocompleteModel? autocompleteModel = AutocompleteModel();
   AccountInfoModel? accountInfo = AccountInfoModel();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingValue addressValue = TextEditingValue();
   TextEditingController dobController = TextEditingController();
   List<String> genders = ['NAM', 'NỮ'];
   String? genderController = 'NAM';
@@ -553,6 +645,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
   final storage = FirebaseStorage.instance;
   String avatarDefault =
       "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
+  String? _searchingWithQuery;
 
   Future<void> getAccountInfo() async {
     try {
@@ -575,6 +668,9 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
           lastNameController.text = accountInfo!.lastName ?? '';
           phoneController.text = accountInfo!.phone ?? '';
           addressController.text = accountInfo!.address ?? '';
+          addressValue = TextEditingValue(
+            text: accountInfo!.address ?? '',
+          );
           dobController.text = (accountInfo!.dob)!.substring(0, 10);
         });
       } else if (result['statusCode'] == 403) {

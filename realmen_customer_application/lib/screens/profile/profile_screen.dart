@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -394,6 +396,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           name =
               "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
+          name = utf8.decode(name!.runes.toList());
           phone = accountInfo!.phone ?? '';
           avatarUrl;
         });

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -483,55 +485,100 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                       SizedBox(
                                         width: 80.w,
                                         height: 50,
-                                        child: Autocomplete<String>(
+                                        child: Autocomplete<PredictionModel>(
+                                          displayStringForOption:
+                                              displayStringForOption,
                                           initialValue: TextEditingValue(
                                               text: addressController.text),
                                           optionsBuilder:
                                               (textEditingValue) async {
                                             _searchingWithQuery =
                                                 textEditingValue.text;
-                                            if (textEditingValue.text == "") {
-                                              return _lastOptions;
+                                            if (textEditingValue.text.isEmpty ||
+                                                textEditingValue.text == '') {
+                                              return const Iterable.empty();
                                             }
-                                            AutocompleteService
-                                                autocompleteService =
-                                                AutocompleteService();
-                                            final resultAuto =
+                                            final value =
                                                 await autocompleteService
                                                     .getAutocomplete(
-                                                        _searchingWithQuery!);
+                                                        textEditingValue.text);
+                                            if (value['statusCode'] == 200) {
+                                              autocompleteModel = value['data'];
+                                              options = value['data']
+                                                  ?.predictions!
+                                                  .where((element) => utf8
+                                                      .decode(element
+                                                          .description!.runes
+                                                          .toList())
+                                                      .toLowerCase()
+                                                      .contains(textEditingValue
+                                                          .text
+                                                          .toLowerCase()));
 
-                                            final Iterable<String> options;
-
-                                            if (resultAuto != null) {
-                                              if (resultAuto
-                                                      .first['statusCode'] ==
-                                                  200) {
-                                                options =
-                                                    resultAuto.first['data'];
-                                                _lastOptions = options;
-
-                                                return options;
-                                              } else {
-                                                debugPrint(
-                                                    resultAuto.first['error']);
-                                              }
+                                              return Future.value(options);
                                             }
-
                                             return [];
+
+                                            // return autocompleteService
+                                            //     .getAutocomplete(
+                                            //         textEditingValue.text)
+                                            //     .then((value) {
+                                            //   if (value['data']
+                                            //       is AutocompleteModel) {
+                                            //     return value['data']
+                                            //         .predictions!
+                                            //         .where((element) => utf8
+                                            //             .decode(element
+                                            //                 .description!.runes
+                                            //                 .toList())
+                                            //             .toLowerCase()
+                                            //             .contains(
+                                            //                 textEditingValue
+                                            //                     .text
+                                            //                     .toLowerCase()));
+                                            //   } else {
+                                            //     return const Iterable.empty();
+                                            //   }
+                                            // });
+
+                                            // final resultAuto =
+                                            //     await autocompleteService
+                                            //         .getAutocomplete(
+                                            //             _searchingWithQuery!);
+                                            // final Iterable<String> options;
+                                            // if (resultAuto != null) {
+                                            //   if (resultAuto
+                                            //           .first['statusCode'] ==
+                                            //       200) {
+                                            //     options =
+                                            //         resultAuto.first['data'];
+                                            //     _lastOptions = options;
+                                            //     utf8.decode(
+                                            //         options.runes
+                                            //         .toList());
+                                            //     return options;
+                                            //   } else {
+                                            //     debugPrint(
+                                            //         resultAuto.first['error']);
+                                            //   }
+                                            // }
+                                            // return [];
                                           },
-                                          onSelected: (String address) {
+                                          onSelected: (address) {
                                             debugPrint(
                                                 'You just selected $address');
-                                            addressController.text = address;
+                                            addressController.text =
+                                                utf8.decode(address
+                                                    .description!.runes
+                                                    .toList());
                                           },
                                           fieldViewBuilder: (context,
                                               controller,
                                               focusNode,
                                               onEditingComplete) {
                                             return TextField(
-                                              // controller: addressController,
-                                              controller: controller,
+                                              controller: addressController,
+                                              // controller: controller,
                                               focusNode: focusNode,
                                               onEditingComplete:
                                                   onEditingComplete,
@@ -630,6 +677,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
     getAccountInfo();
   }
 
+  final AutocompleteService autocompleteService = AutocompleteService();
   late Iterable<String> _lastOptions = <String>[];
   AutocompleteModel? autocompleteModel = AutocompleteModel();
   AccountInfoModel? accountInfo = AccountInfoModel();
@@ -646,6 +694,10 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
   String avatarDefault =
       "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
   String? _searchingWithQuery;
+  Iterable<PredictionModel>? options;
+
+  String displayStringForOption(PredictionModel prediction) =>
+      utf8.decode(prediction.description!.runes.toList());
 
   Future<void> getAccountInfo() async {
     try {
@@ -665,9 +717,15 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
           accountInfo;
           avatarUrl;
           firstNameController.text = accountInfo!.firstName ?? '';
+          firstNameController.text =
+              utf8.decode(firstNameController.text!.runes.toList());
           lastNameController.text = accountInfo!.lastName ?? '';
+          lastNameController.text =
+              utf8.decode(lastNameController.text!.runes.toList());
           phoneController.text = accountInfo!.phone ?? '';
           addressController.text = accountInfo!.address ?? '';
+          addressController.text =
+              utf8.decode(addressController.text!.runes.toList());
           addressValue = TextEditingValue(
             text: accountInfo!.address ?? '',
           );

@@ -182,11 +182,11 @@ export class BranchComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this._fb.group<BranchApi.RequestFormGroup>({
-      shopOwnerId: this._fb.control(1),
+      shopOwnerId: this._fb.control(localStorage.getItem('accountId$')!),
       branchName: this._fb.control(''),
       phone: this._fb.control(''),
       address: this._fb.control(''),
-      placeId: this._fb.control(''),
+      placeId: this._fb.control('123'),
       status: this._fb.control('OPEN'),
       numberStaffs: this._fb.control(0),
       open: this._fb.control(null),
@@ -198,13 +198,13 @@ export class BranchComponent implements OnInit {
 
   addBranch() {
     this.addModel = this.form.getRawValue();
+    console.log(this.addModel);
+
     this._bApiSvc.addBranch(this.addModel).subscribe(
       (data) => {
         this._nzMessageService.success('Đăng ký chi nhánh thành công');
       },
       (error) => {
-        console.log(error);
-
         this._nzMessageService.error('Đăng ký chi nhánh thất bại.');
       }
     );

@@ -205,6 +205,7 @@ export class HomepageLayoutComponent {
   constructor(private _router: Router) {}
   isCollapsed = false;
   logout() {
+    localStorage.clear();
     this._router.navigate(['/login']);
   }
 }

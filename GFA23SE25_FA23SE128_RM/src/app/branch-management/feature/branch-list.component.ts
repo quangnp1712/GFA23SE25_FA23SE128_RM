@@ -8,7 +8,13 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
+import { BranchPagingApi } from '../data-access/model/branch-api.model';
+import { pagingSizeOptionsDefault } from 'src/app/share/data-access/const/paging-size-options-default.const';
+import { BranchApiService } from '../data-access/api/branch.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzTableDefaultSettingDirective } from 'src/app/share/ui/directive/nz-table-default-setting.directive';
+import { Paging } from 'src/app/share/data-access/model/paging.type';
 
 @Component({
   selector: 'app-branch-list',
@@ -24,6 +30,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     NzTableModule,
     RouterLink,
     NzSelectModule,
+    NzTableDefaultSettingDirective,
   ],
   template: `
     <nz-breadcrumb>
@@ -56,18 +63,44 @@ import { NzTableModule } from 'ng-zorro-antd/table';
         <nz-option nzValue="HN" nzLabel="Hà Nội"> </nz-option>
       </nz-select>
       <div nz-col nzSpan="24" class="tw-mt-5">
-        <nz-table #basicTable class="tw-mr-4">
+        <nz-table
+          appNzTableDefaultSetting
+          class="tw-mr-4"
+          [nzData]="data.content"
+          [nzFrontPagination]="false"
+          [nzTotal]="data.total"
+          [(nzPageIndex)]="pagingRequest.current"
+          [(nzPageSize)]="pagingRequest.pageSize"
+          (nzQueryParams)="onTableQueryParamsChange($event)"
+          [nzShowTotal]="totalText"
+        >
           <thead>
+            <ng-template #totalText let-total let-range="range">
+              <span
+                >{{ range[0] }} - {{ range[1] }} of {{ total }}
+                {{ 'Branches' }}</span
+              >
+            </ng-template>
+            <tr></tr>
             <tr>
               <th>STT</th>
-              <th>Ảnh</th>
               <th>Tên chi nhánh</th>
               <th>Địa chỉ</th>
+              <th>Hotline</th>
               <th>Trạng thái</th>
-              <th>Ngày tạo</th>
+              <th>Số lượng nhân viên</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <tr *ngFor="let data of data.content; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ data.branchName }}</td>
+              <td>{{ data.address }}</td>
+              <td>{{ data.phone }}</td>
+              <td>{{ data.status }}</td>
+              <td>{{ data.numberStaffs }}</td>
+            </tr>
+          </tbody>
         </nz-table>
       </div>
     </div>
@@ -75,4 +108,34 @@ import { NzTableModule } from 'ng-zorro-antd/table';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BranchListComponent {}
+export class BranchListComponent {
+  constructor(private _bApiSvc: BranchApiService) {}
+
+  data: Paging<BranchPagingApi.Response> = {
+    content: [],
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  };
+  pagingRequest: BranchPagingApi.Request = {
+    current: 1,
+    pageSize: pagingSizeOptionsDefault[0],
+    searches: '',
+    sorter: '',
+    orderDescending: false,
+  };
+
+  onTableQueryParamsChange(params: NzTableQueryParams) {
+    const { sort } = params;
+    const currentSort = sort.find((item) => item.value !== null);
+    this.pagingRequest.sorter = currentSort?.key ?? '';
+    this.pagingRequest.orderDescending = currentSort?.value !== 'ascend';
+    this.getBranchPaging();
+  }
+
+  getBranchPaging() {
+    this._bApiSvc.paging(this.pagingRequest).subscribe((data) => {
+      data = data;
+    });
+  }
+}

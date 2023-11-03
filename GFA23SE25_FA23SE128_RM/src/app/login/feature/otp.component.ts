@@ -114,6 +114,7 @@ export class OtpComponent implements OnInit {
         console.log(data.value.jwtToken);
         this._nzMessageService.success('Đăng nhập thành công.');
         localStorage.setItem('token$', data.value.jwtToken);
+        localStorage.setItem('accountId$', data.value.accountId)
         this._router.navigate(['/homepage']);
       },
       (error) => {

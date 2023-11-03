@@ -13,10 +13,11 @@ export namespace OtpApi {
 
   export interface Reponse {
     value: {
+      accountId: string;
       expTime: string;
-      isPhoneRegistered: boolean;
       jwtToken: string;
       phone: string;
-      role: string;}
+      role: string;
+    };
   }
 }

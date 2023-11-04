@@ -23,15 +23,13 @@ import jakarta.validation.constraints.Min;
 @RequestMapping("/v1/branches")
 @PreAuthorize("hasAnyAuthority({'branch:add', 'branch:view'})")
 public interface BranchesAPI {
-
     @PostMapping
     public void save(@RequestBody @Valid BranchRequest branch);
-
 
     @GetMapping
     PageImplResponse<BranchResponse> findAll(
             @RequestParam(required = false, value = "timeRanges") @DateTimeFormat(pattern = "HH:mm:ss") List<LocalDateTime> timeRanges,
-            @RequestParam(required = false, value = "searches") List<String> searches,
+            @RequestParam(required = false, value = "search", defaultValue = "") String search,
             @RequestParam(required = false, value = "isSortByDistance", defaultValue = "false") Boolean isSortByDistance,
             @RequestParam(required = false, value = "originLat") Double originLat,
             @RequestParam(required = false, value = "originLng") Double originLng,

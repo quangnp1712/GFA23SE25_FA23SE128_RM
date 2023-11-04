@@ -2,7 +2,9 @@ package com.realman.becore.dto.branch;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import lombok.Builder;
 
@@ -13,17 +15,17 @@ public record BranchSearchCriteria(
         Double originLat,
         Double originLng,
         Boolean isSortByDistance,
-        List<String> searches) {
+        String search) {
 
-    public static BranchSearchCriteria from(List<LocalDateTime> timeRanges, List<String> searches,
+    public static BranchSearchCriteria from(List<LocalDateTime> timeRanges, String search,
             Boolean isSortByDistance, Double originLat, Double originLng) {
+        timeRanges = Objects.nonNull(timeRanges) ? timeRanges : new ArrayList<>();
         BranchSearchCriteriaBuilder builder = BranchSearchCriteria.builder();
         if (!timeRanges.isEmpty()) {
             List<LocalTime> sortedTimeRanges = timeRanges.stream().sorted().map(LocalDateTime::toLocalTime).toList();
             builder.from(sortedTimeRanges.get(0)).to(sortedTimeRanges.get(1));
         }
-
-        return builder.originLat(originLat).originLng(originLng).searches(searches)
+        return builder.originLat(originLat).originLng(originLng).search(search)
                 .isSortByDistance(isSortByDistance).build();
     }
 

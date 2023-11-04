@@ -1,10 +1,7 @@
 package com.realman.becore.controller.api.branch;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,16 +36,15 @@ public class BranchesController implements BranchesAPI {
         }
 
         @Override
-        public PageImplResponse<BranchResponse> findAll(List<LocalDateTime> timeRanges, List<String> searches,
+        public PageImplResponse<BranchResponse> findAll(List<LocalDateTime> timeRanges, String search,
                         Boolean isSortByDistance, Double originLat, Double originLng, @Min(1) Integer current,
                         String sorter, Integer pageSize) {
                 PageRequestCustom pageRequestCustom = PageRequestCustom
                                 .of(pageSize, current, sorter);
 
                 BranchSearchCriteria criteria = BranchSearchCriteria
-                                .from(Objects.nonNull(timeRanges) ? timeRanges : new ArrayList<>(),
-                                      Objects.nonNull(searches) ? searches : new ArrayList<>(),
-                                      isSortByDistance, originLat, originLng);
+                                .from(timeRanges, search, isSortByDistance,
+                                                originLat, originLng);
                 Page<Branch> branches = branchUseCaseService
                                 .findAll(criteria, pageRequestCustom);
                 Page<BranchResponse> responses = branches.map(branchModelMapper::toModel);

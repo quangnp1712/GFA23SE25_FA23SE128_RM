@@ -56,7 +56,7 @@ public class BranchQueryService {
                 List<BranchEntity> entities = branchRepository.findAll(
                                 searchCriteria.from(),
                                 searchCriteria.to(),
-                                searchCriteria.searches());
+                                searchCriteria.search());
                 Map<Long, List<BranchDisplay>> branchDisplayMap = branchDisplayQueryService.findAll().stream()
                                 .collect(Collectors.groupingBy(BranchDisplay::branchId));
                 List<Branch> dtoList = entities.stream().map(entity -> {

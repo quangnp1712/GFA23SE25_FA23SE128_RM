@@ -4,8 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record Prediction(
-    String description,
-    String place_id
+    String description
 ) {
 
 }

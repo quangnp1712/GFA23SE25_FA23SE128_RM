@@ -191,7 +191,7 @@ export class BranchComponent implements OnInit {
       numberStaffs: this._fb.control(0),
       open: this._fb.control(null),
       close: this._fb.control(null),
-      displayUrlList: this._fb.control([]),
+      displayUrlList: this._fb.control(["string"]),
       serviceIdList: this._fb.control([]),
     });
   }

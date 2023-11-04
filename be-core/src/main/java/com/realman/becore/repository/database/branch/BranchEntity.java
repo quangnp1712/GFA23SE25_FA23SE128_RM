@@ -1,10 +1,8 @@
 package com.realman.becore.repository.database.branch;
 
 import java.time.LocalTime;
-
 import com.realman.becore.dto.enums.EBranchStatus;
 import com.realman.becore.repository.database.auditable.Auditable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +35,7 @@ public class BranchEntity extends Auditable {
     @Column(columnDefinition = "NVARCHAR(500)")
     @NotNull(message = "Nhập địa chỉ chi nhánh")
     private String address;
+    private String city;
     private Double lat;
     private Double lng;
     private EBranchStatus status;

@@ -3,9 +3,9 @@ package com.realman.becore.service.avatar;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.avatar.models.AvatarId;
-import com.realman.becore.controller.api.avatar.models.StaffId;
+import com.realman.becore.dto.account.StaffId;
 import com.realman.becore.dto.avatar.Avatar;
+import com.realman.becore.dto.avatar.AvatarId;
 import com.realman.becore.dto.avatar.AvatarMapper;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.avatar.AvatarEntity;

@@ -2,11 +2,11 @@ package com.realman.becore.controller.api.avatar;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realman.becore.controller.api.avatar.models.AvatarId;
 import com.realman.becore.controller.api.avatar.models.AvatarModelMapper;
 import com.realman.becore.controller.api.avatar.models.AvatarRequest;
 import com.realman.becore.controller.api.avatar.models.AvatarResponse;
 import com.realman.becore.dto.avatar.Avatar;
+import com.realman.becore.dto.avatar.AvatarId;
 import com.realman.becore.service.avatar.AvatarUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
 

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteRequest;
 import com.realman.becore.controller.api.place.autocomplete.models.AutoCompleteResponse;
-import com.realman.becore.service.place.autocomplete.AutoCompleteUseCaseService;
+import com.realman.becore.service.goong.place.autocomplete.AutoCompleteUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
 
 import lombok.NonNull;

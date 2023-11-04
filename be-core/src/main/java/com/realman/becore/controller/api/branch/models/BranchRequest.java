@@ -11,12 +11,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 public record BranchRequest(
-        Long branchId,
+        
         Long shopOwnerId,
         @NormalText String branchName,
         @Phone String phone,
         @NormalText String address,
-        @NormalText String placeId,
         @Enumerated(EnumType.STRING) EBranchStatus status,
         Integer numberStaffs,
         LocalDateTime open,

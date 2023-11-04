@@ -32,6 +32,9 @@ public interface BranchesAPI {
     PageImplResponse<BranchResponse> findAll(
             @RequestParam(required = false, value = "timeRanges") @DateTimeFormat(pattern = "HH:mm:ss") List<LocalDateTime> timeRanges,
             @RequestParam(required = false, value = "searches") List<String> searches,
+            @RequestParam(required = false, value = "isSortByDistance", defaultValue = "false") Boolean isSortByDistance,
+            @RequestParam(required = false, value = "originLat") Double originLat,
+            @RequestParam(required = false, value = "originLng") Double originLng,
             @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
             @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);

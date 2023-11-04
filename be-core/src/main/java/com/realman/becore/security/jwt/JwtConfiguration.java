@@ -21,9 +21,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class JwtConfiguration {
-    @Value("${JwtSecretKey}")
+    @Value("${jwt.secret.key}")
     private String jwtSecretKey;
-    @Value("${JwtExpiredTime}")
+    @Value("${jwt.expired.time}")
     private Long jwtExpiredTime;
 
     public String generateJwt(String phone) {

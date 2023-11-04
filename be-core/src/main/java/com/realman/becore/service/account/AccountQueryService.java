@@ -5,11 +5,11 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.account.models.AccountId;
-import com.realman.becore.controller.api.account.models.AccountSearchCriteria;
 import com.realman.becore.dto.account.Account;
+import com.realman.becore.dto.account.AccountId;
 import com.realman.becore.dto.account.AccountInfo;
 import com.realman.becore.dto.account.AccountMapper;
+import com.realman.becore.dto.account.AccountSearchCriteria;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.account.AccountEntity;
 import com.realman.becore.repository.database.account.AccountRepository;

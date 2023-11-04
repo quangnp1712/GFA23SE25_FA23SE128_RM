@@ -2,11 +2,11 @@ package com.realman.becore.controller.api.branch;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.realman.becore.controller.api.branch.models.BranchId;
 import com.realman.becore.controller.api.branch.models.BranchModelMapper;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.service.branch.BranchUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
 

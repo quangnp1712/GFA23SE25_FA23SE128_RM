@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.realman.becore.controller.api.branch.models.BranchId;
-import com.realman.becore.controller.api.branch.models.BranchSearchCriteria;
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchId;
+import com.realman.becore.dto.branch.BranchSearchCriteria;
 import com.realman.becore.util.response.PageRequestCustom;
 
 import lombok.NonNull;

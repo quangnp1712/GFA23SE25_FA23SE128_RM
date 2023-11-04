@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.branch.models.BranchId;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
+import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;
 import com.realman.becore.repository.database.account.AccountEntity;

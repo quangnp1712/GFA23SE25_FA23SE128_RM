@@ -16,7 +16,8 @@ public record BranchResponse(
     LocalTime open,
     LocalTime close,
     List<String> displayUrlList,
-    List<Long> serviceIdList
+    List<Long> serviceIdList,
+    String distanceKilometer
 ) {
     
 }

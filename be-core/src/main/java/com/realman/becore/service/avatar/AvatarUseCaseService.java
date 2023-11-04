@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.realman.becore.controller.api.avatar.models.AvatarId;
-import com.realman.becore.controller.api.avatar.models.StaffId;
+import com.realman.becore.dto.account.StaffId;
 import com.realman.becore.dto.avatar.Avatar;
+import com.realman.becore.dto.avatar.AvatarId;
 import com.realman.becore.util.response.PageRequestCustom;
 
 import lombok.NonNull;

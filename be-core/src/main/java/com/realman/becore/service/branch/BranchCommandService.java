@@ -45,7 +45,7 @@ public class BranchCommandService {
                 List<AddressComponent> addressComponents = geo.results().stream()
                                 .map(GeometryProperties::addressComponents)
                                 .findAny().orElse(new ArrayList<>());
-                String city = addressComponents.get(3).shortName();
+                String city = addressComponents.get(addressComponents.size() - 1).shortName();
                 BranchEntity entity = branchMapper.toEntity(branch, city, lat, lng);
                 BranchEntity savedEntity = branchRepository.save(entity);
                 branchDisplayCommandService.saveOrUpdate(branch.displayUrlList(),

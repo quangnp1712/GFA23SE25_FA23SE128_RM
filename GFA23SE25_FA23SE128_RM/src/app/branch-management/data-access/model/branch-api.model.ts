@@ -34,7 +34,7 @@ export namespace BranchApi {
 
 export namespace BranchPagingApi {
   export interface Request {
-    searches: string;
+    search: string;
     current: number;
     sorter: string;
     pageSize: number;

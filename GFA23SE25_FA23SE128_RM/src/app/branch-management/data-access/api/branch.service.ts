@@ -31,7 +31,7 @@ export class BranchApiService {
   }
 
   public paging(model: BranchPagingApi.Request) {
-    const url = `${this.REST_API_SERVER}/v1/branches?searches=${model.searches}&current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
+    const url = `${this.REST_API_SERVER}/v1/branches?search=${model.search}&current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
     return this._http
       .get<Paging<BranchPagingApi.Response>>(url, this.httpOptions)
       .pipe(catchError(this.handleError));

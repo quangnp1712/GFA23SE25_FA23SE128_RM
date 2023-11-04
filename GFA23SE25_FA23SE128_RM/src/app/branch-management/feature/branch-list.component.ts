@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -54,7 +55,7 @@ import { tap } from 'rxjs';
               type="text"
               nz-input
               placeholder="Tìm theo tên"
-              [(ngModel)]="pagingRequest.searches"
+              [(ngModel)]="pagingRequest.search"
               (keyup.enter)="[getBranchPaging(), flag=false]"
             />
           </nz-input-group>
@@ -120,7 +121,7 @@ import { tap } from 'rxjs';
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let data of pagingData.content; index as i">
+                <tr *ngFor="let data of pagingData.content ; index as i">
                   <td>{{ i + 1 }}</td>
                   <td>{{ data.branchName }}</td>
                   <td>{{ data.address }}</td>
@@ -137,7 +138,7 @@ import { tap } from 'rxjs';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BranchListComponent implements AfterViewInit {
+export class BranchListComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(private _bApiSvc: BranchApiService) {}
 
   isSpin = true;
@@ -151,13 +152,22 @@ export class BranchListComponent implements AfterViewInit {
   pagingRequest: BranchPagingApi.Request = {
     current: 1,
     pageSize: pagingSizeOptionsDefault[0],
-    searches: '',
+    search: '',
     sorter: '',
     orderDescending: false,
   };
 
+  ngOnInit(): void {
+    this.flag = false;
+      this.getBranchPaging()
+  }
+
   ngAfterViewInit(): void {
     this.getBranchPaging();
+  }
+
+  ngOnDestroy(): void {
+      this.flag = false
   }
 
   onTableQueryParamsChange(params: NzTableQueryParams) {
@@ -170,11 +180,8 @@ export class BranchListComponent implements AfterViewInit {
   }
 
   getBranchPaging() {
-    this._bApiSvc.paging(this.pagingRequest).pipe(
-      tap(() => {this.flag = false})
-    ).subscribe((data) => {
+    this._bApiSvc.paging(this.pagingRequest).subscribe((data) => {
       this.pagingData = data;
-      this.flag = true;
     });
   }
 }

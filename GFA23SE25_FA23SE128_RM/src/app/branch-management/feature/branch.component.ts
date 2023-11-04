@@ -19,11 +19,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
 import { BranchApi } from '../data-access/model/branch-api.model';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, pipe } from 'rxjs';
 import { CommonApiService } from 'src/app/share/data-access/api/common.service';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { BranchApiService } from '../data-access/api/branch.service';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 @Component({
   selector: 'app-branch',
@@ -43,7 +44,8 @@ import { BranchApiService } from '../data-access/api/branch.service';
     NzSelectModule,
     NzUploadModule,
     NzTimePickerModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    NzAutocompleteModule,
   ],
   providers: [NzMessageService],
   template: `
@@ -76,11 +78,17 @@ import { BranchApiService } from '../data-access/api/branch.service';
             <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ">
               <input
                 class="tw-rounded-md tw-w-[70%]"
-                nz-input
                 placeholder="Nhập địa chỉ"
                 [formControl]="form.controls.address"
+                nz-input
                 (input)="getAddress($event)"
+                [nzAutocomplete]="auto"
               />
+              <nz-autocomplete
+                [nzDataSource]="options"
+                nzBackfill
+                #auto
+              ></nz-autocomplete>
             </nz-form-control>
           </nz-form-item>
 
@@ -102,14 +110,16 @@ import { BranchApiService } from '../data-access/api/branch.service';
               >Thời gian đóng cửa</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
-              <nz-time-picker nzFormat="HH:mm" class="tw-rounded-md tw-w-[100%]" [formControl]="form.controls.close"></nz-time-picker>
+              <nz-time-picker
+                nzFormat="HH:mm"
+                class="tw-rounded-md tw-w-[100%]"
+                [formControl]="form.controls.close"
+              ></nz-time-picker>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired
-              >Hotline</nz-form-label
-            >
+            <nz-form-label class="tw-ml-3" nzRequired>Hotline</nz-form-label>
             <nz-form-control nzErrorTip="Vui lòng nhập số điện thoại">
               <input
                 class="tw-rounded-md tw-w-[70%]"
@@ -125,7 +135,13 @@ import { BranchApiService } from '../data-access/api/branch.service';
               >Số lượng nhân viên</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
-            <nz-input-number [nzMin]="1" [nzMax]="10" [nzStep]="1" class="tw-rounded-md tw-w-[70%]" [formControl]="form.controls.numberStaffs"></nz-input-number>
+              <nz-input-number
+                [nzMin]="1"
+                [nzMax]="10"
+                [nzStep]="1"
+                class="tw-rounded-md tw-w-[70%]"
+                [formControl]="form.controls.numberStaffs"
+              ></nz-input-number>
             </nz-form-control>
           </nz-form-item>
 
@@ -179,6 +195,7 @@ export class BranchComponent implements OnInit {
 
   form!: FormGroup<BranchApi.RequestFormGroup>;
   addModel!: BranchApi.Request;
+  options: string[] = [];
 
   ngOnInit(): void {
     this.form = this._fb.group<BranchApi.RequestFormGroup>({
@@ -191,14 +208,13 @@ export class BranchComponent implements OnInit {
       numberStaffs: this._fb.control(0),
       open: this._fb.control(null),
       close: this._fb.control(null),
-      displayUrlList: this._fb.control(["string"]),
+      displayUrlList: this._fb.control(['string']),
       serviceIdList: this._fb.control([]),
     });
   }
 
   addBranch() {
     this.addModel = this.form.getRawValue();
-    console.log(this.addModel);
 
     this._bApiSvc.addBranch(this.addModel).subscribe(
       (data) => {
@@ -214,9 +230,12 @@ export class BranchComponent implements OnInit {
     const value = (event.target as HTMLInputElement).value;
     this._cApiSvc
       .autocomplete(value)
-      .pipe(debounceTime(1000), distinctUntilChanged())
+      .pipe(debounceTime(1000))
       .subscribe((data) => {
-        console.log(data);
+        this.options = []
+        data.value.predictions.forEach((address) => {
+          this.options.push(address.description)
+        })
       });
   }
 }

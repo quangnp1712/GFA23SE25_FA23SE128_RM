@@ -48,7 +48,12 @@ public class BranchesController implements BranchesAPI {
                 Page<Branch> branches = branchUseCaseService
                                 .findAll(criteria, pageRequestCustom);
                 Page<BranchResponse> responses = branches.map(branchModelMapper::toModel);
-                return new PageImplResponse<>(responses.getContent(), responses.getTotalElements(), pageSize, current);
+                return new PageImplResponse<>(
+                        responses.getContent(),
+                        responses.getTotalElements(),
+                        responses.getTotalPages(), 
+                        pageSize, 
+                        current);
         }
 
 }

@@ -20,4 +20,5 @@ public class BookingServiceEntity {
     private Long bookingServiceId;
     private Long bookingId;
     private Long serviceId;
+    private Long price;
 }

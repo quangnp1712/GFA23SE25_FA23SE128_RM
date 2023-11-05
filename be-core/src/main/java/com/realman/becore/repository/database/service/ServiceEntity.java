@@ -27,8 +27,6 @@ public class ServiceEntity {
     @Column(columnDefinition = "NVARCHAR(500)")
     @Length(min = 5, max = 15, message = "Tên dịch vụ có độ dài từ 5 đến 15 ký tự")
     private String name;
-    @Min(value = 15000, message = "Giá dịch vụ ít nhất 15k")
-    private Long price;
     @Min(value = 15, message = "Thời gian dự kiến ít nhất 15 phút")
     private Integer estimateTime;
     private EServiceStatus status;

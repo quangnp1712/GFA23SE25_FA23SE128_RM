@@ -58,8 +58,11 @@ public class AccountsAuthController implements AccountsAuthAPI {
                 .searches(searchesCriteria).role(role).build();
         Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
         Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
-        return new PageImplResponse<>(responses.getContent(),
-                responses.getTotalElements(), responses.getSize(),
+        return new PageImplResponse<>(
+                responses.getContent(),
+                responses.getTotalElements(),
+                responses.getTotalPages(), 
+                responses.getSize(),
                 pageRequestCustom.current());
     }
 

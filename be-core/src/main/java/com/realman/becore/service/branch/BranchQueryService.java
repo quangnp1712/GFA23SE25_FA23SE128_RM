@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchGroupByCity;
 import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.branch.BranchMapper;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
@@ -89,6 +90,40 @@ public class BranchQueryService {
 
                 }).toList();
                 return new PageImpl<>(responses, pageRequestCustom.pageRequest(), dtoList.size());
+        }
+
+        public List<BranchGroupByCity> findBranchGroupByCity(Boolean isSortedByDistance, Double lat, Double lng) {
+                List<BranchEntity> entityList = branchRepository.findTopThree();
+                Map<String, List<BranchEntity>> entityCityMap = entityList.stream()
+                                .collect(Collectors.groupingBy(BranchEntity::getCity));
+                Map<Long, List<BranchDisplay>> branchDisplayMap = branchDisplayQueryService.findAll()
+                                .stream().collect(Collectors.groupingBy(BranchDisplay::branchId));
+                List<BranchGroupByCity> branchGroupByCityList = new ArrayList<>();
+                entityCityMap.keySet().forEach(city -> {
+                        List<Branch> dtoList = new ArrayList<>();
+                        if (isSortedByDistance) {
+                                dtoList = dtoList.stream().map(branch -> {
+                                        DistanceRequest request = DistanceRequest.of(lat,
+                                                        lng, branch.lat(), branch.lng());
+                                        DistanceResponse distance = distanceUseCaseService.requestDistance(request);
+                                        List<Elements> distanceElements = distance.rows().stream()
+                                                        .map(ElementList::elements).findAny().orElse(new ArrayList<>());
+                                        String distanceKilometer = distanceElements.stream().map(Elements::distance)
+                                                        .map(Distance::text).findAny().orElse("");
+                                        return branchMapper.updateDto(branch, distanceKilometer);
+                                }).toList();
+                        } else {
+                                dtoList = entityCityMap.get(city).stream().map(branch -> {
+                                        List<String> displayUrlList = branchDisplayMap.get(branch.getBranchId())
+                                                        .stream().map(BranchDisplay::url).toList();
+                                        return branchMapper.toDto(branch, displayUrlList);
+                                }).toList();
+                        }
+                        BranchGroupByCity branchGroupByCity = BranchGroupByCity.builder()
+                                        .city(city).branches(dtoList).build();
+                        branchGroupByCityList.add(branchGroupByCity);
+                });
+                return branchGroupByCityList;
         }
 
         private Double calculateDistance(Double originLat, Double originLng,

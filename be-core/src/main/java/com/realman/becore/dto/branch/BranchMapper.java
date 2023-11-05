@@ -15,7 +15,9 @@ public interface BranchMapper {
     @Mapping(source = "lng", target = "lng")
     BranchEntity toEntity(Branch dto, String city, Double lat, Double lng);
 
-    Branch toDto(BranchEntity entity, List<String> displayUrlList, Double distance);
+    Branch toDto(BranchEntity entity, List<String> branchUrlList, Double distance);
+
+    Branch toDto(BranchEntity entity, List<String> displayUrlList);
 
     @Mapping(source = "distanceKilometer", target = "distanceKilometer")
     Branch updateDto(Branch updateDto, String distanceKilometer);

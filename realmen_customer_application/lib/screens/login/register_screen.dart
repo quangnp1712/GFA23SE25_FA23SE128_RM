@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_customer_application/models/autocomplete_model.dart';
 import 'package:realmen_customer_application/models/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:core';
@@ -170,39 +174,121 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 height: 2.h,
                               ),
 
+                              // SizedBox(
+                              //   width: 70.w,
+                              //   // height: 40,
+                              //   child: TextField(
+                              //     controller: addressController,
+                              //     cursorColor: Colors.black,
+                              //     cursorWidth: 1,
+                              //     style: const TextStyle(
+                              //         height: 1.17,
+                              //         fontSize: 20,
+                              //         color: Colors.black),
+                              //     decoration: InputDecoration(
+                              //       enabledBorder: OutlineInputBorder(
+                              //         borderSide: const BorderSide(
+                              //             color: Color(0xffC4C4C4)),
+                              //         borderRadius: BorderRadius.circular(24),
+                              //       ),
+                              //       focusedBorder: OutlineInputBorder(
+                              //         borderSide: const BorderSide(
+                              //             color: Color(0xffC4C4C4)),
+                              //         borderRadius: BorderRadius.circular(24),
+                              //       ),
+                              //       contentPadding: const EdgeInsets.only(
+                              //           // top: 10,
+                              //           // bottom: 20,
+                              //           left: 15,
+                              //           right: 15),
+                              //       hintText: "Nhập Địa chỉ của bạn",
+                              //       hintStyle: const TextStyle(
+                              //         fontSize: 20,
+                              //         fontWeight: FontWeight.w400,
+                              //         color: Color(0xffC4C4C4),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 2.h,
+                              // ),
                               SizedBox(
                                 width: 70.w,
-                                // height: 40,
-                                child: TextField(
-                                  controller: addressController,
-                                  cursorColor: Colors.black,
-                                  cursorWidth: 1,
-                                  style: const TextStyle(
-                                      height: 1.17,
-                                      fontSize: 20,
-                                      color: Colors.black),
-                                  decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xffC4C4C4)),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xffC4C4C4)),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    contentPadding: const EdgeInsets.only(
-                                        // top: 10,
-                                        // bottom: 20,
-                                        left: 15,
-                                        right: 15),
-                                    hintText: "Nhập Địa chỉ của bạn",
-                                    hintStyle: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0xffC4C4C4)),
-                                  ),
+                                // height: 50,
+                                child: Autocomplete<PredictionModel>(
+                                  displayStringForOption:
+                                      displayStringForOption,
+                                  initialValue: TextEditingValue(
+                                      text: addressController.text),
+                                  optionsBuilder: (textEditingValue) async {
+                                    _searchingWithQuery = textEditingValue.text;
+                                    if (textEditingValue.text.isEmpty ||
+                                        textEditingValue.text == '') {
+                                      return const Iterable.empty();
+                                    }
+                                    final value = await autocompleteService
+                                        .getAutocomplete(textEditingValue.text);
+                                    if (value['statusCode'] == 200) {
+                                      autocompleteModel = value['data'];
+                                      options = value['data']
+                                          ?.predictions!
+                                          .where((element) => utf8
+                                              .decode(element.description!.runes
+                                                  .toList())
+                                              .toLowerCase()
+                                              .contains(textEditingValue.text
+                                                  .toLowerCase()));
+
+                                      return Future.value(options);
+                                    }
+                                    return [];
+                                  },
+                                  onSelected: (address) {
+                                    debugPrint('You just selected $address');
+                                    addressController.text = utf8.decode(
+                                        address.description!.runes.toList());
+                                  },
+                                  fieldViewBuilder: (context, controller,
+                                      focusNode, onEditingComplete) {
+                                    return TextField(
+                                      // controller: addressController,
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      onEditingComplete: onEditingComplete,
+                                      cursorColor: Colors.black,
+                                      cursorWidth: 1,
+                                      style: const TextStyle(
+                                          height: 1.17,
+                                          fontSize: 20,
+                                          color: Colors.black),
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color(0xffC4C4C4)),
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color(0xffC4C4C4)),
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                        ),
+                                        contentPadding: const EdgeInsets.only(
+                                            // top: 10,
+                                            // bottom: 20,
+                                            left: 15,
+                                            right: 15),
+                                        hintText: "Nhập Địa chỉ của bạn",
+                                        hintStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xffC4C4C4),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                               // DOB
@@ -341,6 +427,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<String> genders = ['NAM', 'NỮ'];
   String? genderController = 'NAM';
   DateTime? dobSubmit;
+
+  String? _searchingWithQuery;
+  AutocompleteModel? autocompleteModel = AutocompleteModel();
+  Iterable<PredictionModel>? options;
+  final AutocompleteService autocompleteService = AutocompleteService();
+
+  String displayStringForOption(PredictionModel prediction) =>
+      utf8.decode(prediction.description!.runes.toList());
 
   Future<void> _selectDate() async {
     DateTime? dob = await showDatePicker(

@@ -44,63 +44,47 @@ class AutocompleteService extends IAutocompleteService {
           try {
             final exceptionModel =
                 ServerExceptionModel.fromJson(json.decode(responseBody));
-            return [
-              {
-                'statusCode': statusCode,
-                'error': exceptionModel,
-              }
-            ];
+            return {
+              'statusCode': statusCode,
+              'error': exceptionModel,
+            };
           } catch (e) {
-            return [
-              {
-                'statusCode': statusCode,
-                'error': e,
-              }
-            ];
+            return {
+              'statusCode': statusCode,
+              'error': e,
+            };
           }
         } else if (statusCode == 403) {
-          return [
-            {
-              'statusCode': statusCode,
-              'error': "Forbidden",
-            }
-          ];
+          return {
+            'statusCode': statusCode,
+            'error': "Forbidden",
+          };
         } else if (statusCode == 400) {
-          return [
-            {
-              'statusCode': statusCode,
-              'error': "Bad request",
-            }
-          ];
+          return {
+            'statusCode': statusCode,
+            'error': "Bad request",
+          };
         } else {
-          return [
-            {
-              'statusCode': statusCode,
-              'error': 'Failed to fetch data',
-            }
-          ];
+          return {
+            'statusCode': statusCode,
+            'error': 'Failed to fetch data',
+          };
         }
       } on TimeoutException catch (e) {
-        return [
-          {
-            'statusCode': 408,
-            'error': "Request timeout",
-          }
-        ];
+        return {
+          'statusCode': 408,
+          'error': "Request timeout",
+        };
       } on SocketException catch (e) {
-        return [
-          {
-            'statusCode': 500,
-            'error': 'Socket error',
-          }
-        ];
+        return {
+          'statusCode': 500,
+          'error': 'Socket error',
+        };
       } catch (e) {
-        return [
-          {
-            'statusCode': 500,
-            'error': e,
-          }
-        ];
+        return {
+          'statusCode': 500,
+          'error': e,
+        };
       }
     }
   }

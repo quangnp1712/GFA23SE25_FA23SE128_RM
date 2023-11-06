@@ -1,10 +1,13 @@
 package com.realman.becore.service.branch;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchGroupByCity;
 import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
 import com.realman.becore.util.response.PageRequestCustom;
@@ -38,9 +41,13 @@ public class BranchUseCaseService {
 
     public Branch findById(BranchId branchId) {
         return branchQueryService.findById(branchId);
-    } 
+    }
 
     public Page<Branch> findAll(BranchSearchCriteria criteria, PageRequestCustom pageRequestCustom) {
         return branchQueryService.findAll(criteria, pageRequestCustom);
+    }
+
+    public List<BranchGroupByCity> groupingByCity(Boolean isSortedByDistance, Double lat, Double lng) {
+        return branchQueryService.findBranchGroupByCity(isSortedByDistance, lat, lng);
     }
 }

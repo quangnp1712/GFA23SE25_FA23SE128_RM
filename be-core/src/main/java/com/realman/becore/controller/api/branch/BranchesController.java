@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realman.becore.controller.api.branch.models.BranchGroupByCityResponse;
 import com.realman.becore.controller.api.branch.models.BranchModelMapper;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchGroupByCity;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
 import com.realman.becore.service.branch.BranchUseCaseService;
+import com.realman.becore.util.response.ListResponse;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.PageRequestCustom;
 
@@ -49,11 +52,22 @@ public class BranchesController implements BranchesAPI {
                                 .findAll(criteria, pageRequestCustom);
                 Page<BranchResponse> responses = branches.map(branchModelMapper::toModel);
                 return new PageImplResponse<>(
-                        responses.getContent(),
-                        responses.getTotalElements(),
-                        responses.getTotalPages(), 
-                        pageSize, 
-                        current);
+                                responses.getContent(),
+                                responses.getTotalElements(),
+                                responses.getTotalPages(),
+                                pageSize,
+                                current);
+        }
+
+        @Override
+        public ListResponse<BranchGroupByCityResponse> groupingByCity(Boolean isSortedByDistance, Double lat, Double lng) {
+                List<BranchGroupByCity> branchGroupingByCity = branchUseCaseService.groupingByCity(isSortedByDistance,
+                                lat, lng);
+                List<BranchGroupByCityResponse> responses = branchGroupingByCity.stream().map(branch -> {
+                        List<BranchResponse> bResponses = branch.branches().stream().map(branchModelMapper::toModel).toList();
+                        return BranchGroupByCityResponse.builder().city(branch.city()).branches(bResponses).build();
+                }).toList();
+                return new ListResponse<>(responses);
         }
 
 }

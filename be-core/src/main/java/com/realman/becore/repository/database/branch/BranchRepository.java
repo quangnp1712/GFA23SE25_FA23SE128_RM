@@ -21,9 +21,5 @@ public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
             LocalTime dateTo,
             String search);
 
-    @Query("""
-            SELECT b FROM BranchEntity b
-            LIMIT 3
-            """)
-    List<BranchEntity> findTopThree();
+    List<BranchEntity> findThirdByOrderByBranchName();
 }

@@ -93,7 +93,7 @@ public class BranchQueryService {
         }
 
         public List<BranchGroupByCity> findBranchGroupByCity(Boolean isSortedByDistance, Double lat, Double lng) {
-                List<BranchEntity> entityList = branchRepository.findTopThree();
+                List<BranchEntity> entityList = branchRepository.findThirdByOrderByBranchName();
                 Map<String, List<BranchEntity>> entityCityMap = entityList.stream()
                                 .collect(Collectors.groupingBy(BranchEntity::getCity));
                 Map<Long, List<BranchDisplay>> branchDisplayMap = branchDisplayQueryService.findAll()

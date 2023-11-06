@@ -21,7 +21,7 @@ public record AccountRequest(
                 @FirstName String firstName,
                 @LastName String lastName,
                 @Phone String phone,
-                @NormalText String address,
+                String address,
                 @Enumerated(EnumType.STRING) EGender gender,
                 @JsonIgnore EAccountStatus status,
                 LocalDateTime dob) {

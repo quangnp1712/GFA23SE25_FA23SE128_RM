@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.realman.becore.controller.api.branch.models.BranchGroupByCityResponse;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
+import com.realman.becore.util.response.ListResponse;
 import com.realman.becore.util.response.PageImplResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,4 +38,10 @@ public interface BranchesAPI {
             @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
             @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);
+
+    @GetMapping("/group-by/city")
+    ListResponse<BranchGroupByCityResponse> groupingByCity(
+        @RequestParam(required = false, value = "isSortedByDistance", defaultValue = "false") Boolean isSortedByDistance,
+        @RequestParam(required = false, value = "lat") Double lat,
+        @RequestParam(required = false, value = "lng") Double lng);
 }

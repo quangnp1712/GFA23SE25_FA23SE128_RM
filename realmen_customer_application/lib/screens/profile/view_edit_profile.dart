@@ -577,8 +577,8 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                               focusNode,
                                               onEditingComplete) {
                                             return TextField(
-                                              controller: addressController,
-                                              // controller: controller,
+                                              // controller: addressController,
+                                              controller: controller,
                                               focusNode: focusNode,
                                               onEditingComplete:
                                                   onEditingComplete,

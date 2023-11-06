@@ -40,8 +40,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: Alignment.center,
                   children: [
                     Positioned(
-                      // top: 10.h,
-                      bottom: 10.h,
+                      top: 10.h,
+                      // bottom: 10.h,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Container(

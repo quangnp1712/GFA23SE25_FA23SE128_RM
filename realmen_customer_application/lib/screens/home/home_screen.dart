@@ -157,14 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          color: Colors.white,
+                          color: Colors.transparent,
                           child: GridView.count(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             crossAxisCount: 4,
                             crossAxisSpacing: 20,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 4 / 4.5,
+                            mainAxisSpacing: 5,
+                            childAspectRatio: 4 / 5,
                             children: [
                               cardHolder(
                                 'Đặt lịch',
@@ -187,12 +187,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
+                                      const SizedBox(height: 5),
                                       Container(
                                         padding: const EdgeInsets.all(10),
                                         decoration: const BoxDecoration(
@@ -206,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           size: 24,
                                         ),
                                       ),
-                                      const SizedBox(height: 8),
+                                      const SizedBox(height: 5),
                                       Text(
                                         'Bảng giá'.toUpperCase(),
                                         style: GoogleFonts.quicksand(
@@ -237,8 +238,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
+                                      const SizedBox(height: 5),
                                       Container(
                                         padding: const EdgeInsets.all(10),
                                         decoration: const BoxDecoration(
@@ -251,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: 24,
                                         ),
                                       ),
-                                      const SizedBox(height: 8),
+                                      const SizedBox(height: 5),
                                       Text(
                                         'Chi nhánh'.toUpperCase(),
                                         style: GoogleFonts.quicksand(
@@ -350,8 +352,9 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(height: 5),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -441,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return "trưa";
     } else if (now.hour >= 15 && now.hour < 19) {
       return "chiều";
-    } else if (now.hour >= 19 && now.hour < 6) {
+    } else if (now.hour >= 19) {
       return "tối";
     }
     return "";

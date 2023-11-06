@@ -1,8 +1,13 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realmen_customer_application/models/account_info_model.dart';
+import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/membership/components/cardcredit_customer.dart';
 import 'package:realmen_customer_application/screens/membership/components/labeltext_level.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/service/account/account_info_service.dart';
 import 'package:sizer/sizer.dart';
 
 class MembershipScreen extends StatefulWidget {
@@ -47,6 +52,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   child: ListView(
                     children: <Widget>[
                       Container(
+                          color: Colors.transparent,
                           padding: const EdgeInsets.only(left: 7),
                           child: Center(
                             child: Stack(
@@ -80,19 +86,29 @@ class _MembershipScreenState extends State<MembershipScreen> {
                           )),
                       Column(
                         children: [
-                          const SizedBox(height: 30),
-                          const CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.grey,
-                            backgroundImage:
-                                AssetImage('assets/images/admin.png'),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: 120,
+                            height: 120,
+                            child: CircleAvatar(
+                              child: ClipOval(
+                                child: Image.network(
+                                  avatarUrl ?? avatarDefault,
+                                  scale: 1.0,
+                                  fit: BoxFit.cover,
+                                  width: 120,
+                                  height: 120,
+                                ),
+                              ),
+                            ),
                           ),
                           Container(
-                            height: 250,
-                            child: const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: CardCreditCustomer(),
-                            ),
+                            height: 200,
+                            // color: Colors.white,
+                            decoration:
+                                const BoxDecoration(color: Colors.transparent),
+                            padding: const EdgeInsets.all(10.0),
+                            child: Center(child: const CardCreditCustomer()),
                           ),
                           const SizedBox(height: 5),
                           LabelTextLevel(),
@@ -107,5 +123,54 @@ class _MembershipScreenState extends State<MembershipScreen> {
         ))
       ],
     ));
+  }
+
+// Logic
+  @override
+  void initState() {
+    super.initState();
+    getAccountInfo();
+  }
+
+  AccountInfoModel? accountInfo = AccountInfoModel();
+  String? avatarUrl;
+  final storage = FirebaseStorage.instance;
+  String avatarDefault =
+      "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
+  Future<void> getAccountInfo() async {
+    try {
+      AccountService accountService = AccountService();
+      final result = await accountService.getAccountInfo();
+      if (result['statusCode'] == 200) {
+        accountInfo = result['data'] as AccountInfoModel;
+        if (accountInfo!.thumbnailUrl != null &&
+            accountInfo!.thumbnailUrl != "") {
+          var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+          avatarUrl = await reference.getDownloadURL();
+        } else {
+          var reference = storage.ref('avatar/default-2.png');
+          avatarUrl = await reference.getDownloadURL();
+        }
+        setState(() {
+          avatarUrl;
+        });
+      } else if (result['statusCode'] == 403) {
+        Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+        _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
+      } else {
+        _errorMessage("$result['statusCode'] : $result['error']");
+      }
+    } on Exception catch (e) {
+      _errorMessage(e.toString());
+      print("Error: $e");
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
   }
 }

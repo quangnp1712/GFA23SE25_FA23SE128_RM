@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EServiceStatus {
-    OPEN(0),
-    CLOSE(1);
+    ACTIVATING(0),
+    STOP_OPERATING(1);
 
     private Integer value;
 }

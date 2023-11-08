@@ -6,9 +6,9 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 import com.realman.becore.dto.enums.EItimacyLevel;
-import com.realman.becore.dto.itimact_level.ItimacyLevelMapper;
-import com.realman.becore.repository.database.itimacty_level.ItimacyLevelEntity;
-import com.realman.becore.repository.database.itimacty_level.ItimacyLevelRepository;
+import com.realman.becore.dto.itimacy.level.ItimacyLevelMapper;
+import com.realman.becore.repository.database.itimacy.level.ItimacyLevelEntity;
+import com.realman.becore.repository.database.itimacy.level.ItimacyLevelRepository;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.realman.becore.dto.itimact_level;
+package com.realman.becore.dto.itimacy.level;
 
 import com.realman.becore.dto.enums.EItimacyLevel;
 

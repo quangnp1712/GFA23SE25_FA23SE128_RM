@@ -102,7 +102,12 @@ public class BranchQueryService {
                 entityCityMap.keySet().forEach(city -> {
                         List<Branch> dtoList = new ArrayList<>();
                         if (isSortedByDistance) {
-                                dtoList = dtoList.stream().map(branch -> {
+                                dtoList = entityCityMap.get(city).stream()
+                                        .map(branch -> {
+                                                 List<String> urlDisplayList = branchDisplayMap.get(branch.getBranchId())
+                                                        .stream().map(BranchDisplay::url).toList();
+                                                 return branchMapper.toDto(branch, urlDisplayList);
+                                        }).map(branch -> {
                                         DistanceRequest request = DistanceRequest.of(lat,
                                                         lng, branch.lat(), branch.lng());
                                         DistanceResponse distance = distanceUseCaseService.requestDistance(request);
@@ -110,8 +115,8 @@ public class BranchQueryService {
                                                         .map(ElementList::elements).findAny().orElse(new ArrayList<>());
                                         String distanceKilometer = distanceElements.stream().map(Elements::distance)
                                                         .map(Distance::text).findAny().orElse("");
-                                        return branchMapper.updateDto(branch, distanceKilometer);
-                                }).toList();
+                                        return branchMapper.updateDto(branch, distanceKilometer);})
+                                .toList();
                         } else {
                                 dtoList = entityCityMap.get(city).stream().map(branch -> {
                                         List<String> displayUrlList = branchDisplayMap.get(branch.getBranchId())

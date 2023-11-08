@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 
 import com.realman.becore.dto.enums.EItimacyLevel;
 import com.realman.becore.dto.itimacy.ItimacyMapper;
-import com.realman.becore.repository.database.itimacty_level.ItimacyLevelEntity;
 import com.realman.becore.repository.database.itimacy.ItimacyEntity;
 import com.realman.becore.repository.database.itimacy.ItimacyRepository;
+import com.realman.becore.repository.database.itimacy.level.ItimacyLevelEntity;
 import com.realman.becore.service.itimacy.level.ItimacyLevelQueryService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

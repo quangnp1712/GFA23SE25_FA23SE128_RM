@@ -1,4 +1,4 @@
-package com.realman.becore.repository.database.branch_service;
+package com.realman.becore.repository.database.branch.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

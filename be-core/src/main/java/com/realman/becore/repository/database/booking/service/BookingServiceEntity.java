@@ -1,8 +1,5 @@
-package com.realman.becore.repository.database.service;
+package com.realman.becore.repository.database.booking.service;
 
-import com.realman.becore.dto.enums.EServiceStatus;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,14 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "service")
-public class ServiceEntity {
+@Table(name = "booking_service")
+public class BookingServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bookingServiceId;
+    private Long bookingId;
     private Long serviceId;
-    @Column(columnDefinition = "NVARCHAR(500)")
-    private String name;
-    private Integer estimateTime;
-    private EServiceStatus status;
-
+    private Long price;
 }

@@ -1,4 +1,4 @@
-package com.realman.becore.repository.database.itimacty_level;
+package com.realman.becore.repository.database.itimacy.level;
 
 import java.util.Optional;
 

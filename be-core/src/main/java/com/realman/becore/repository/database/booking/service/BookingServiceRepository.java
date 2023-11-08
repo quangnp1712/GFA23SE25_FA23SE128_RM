@@ -1,4 +1,4 @@
-package com.realman.becore.repository.database.booking_service;
+package com.realman.becore.repository.database.booking.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

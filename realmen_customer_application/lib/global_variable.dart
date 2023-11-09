@@ -11,8 +11,10 @@ final registerUrl =
 final accountInfoUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_ACCOUNT"]}";
 
 //  BRANCH API
-final getBranchesUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BRANCHES"]}";
-final getBranchUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BRANCH"]}";
+final getBranchesUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_BRANCHES"]}";
+final getBranchUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_BRANCH"]}";
+final getBranchesByCityUrl =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_BRANCHES_CITY"]}";
 
 // Autocomplete
 final autoCompleteUrl =

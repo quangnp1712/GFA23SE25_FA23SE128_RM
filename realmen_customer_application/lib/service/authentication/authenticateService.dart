@@ -4,10 +4,10 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:realmen_customer_application/global_variable.dart';
-import 'package:realmen_customer_application/models/exception_model.dart';
-import 'package:realmen_customer_application/models/login_otp_model.dart';
-import 'package:realmen_customer_application/models/login_phone_model.dart';
-import 'package:realmen_customer_application/models/register_customer_model.dart';
+import 'package:realmen_customer_application/models/exception/exception_model.dart';
+import 'package:realmen_customer_application/models/login_register/login_otp_model.dart';
+import 'package:realmen_customer_application/models/login_register/login_phone_model.dart';
+import 'package:realmen_customer_application/models/login_register/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:shared_preferences/shared_preferences.dart';

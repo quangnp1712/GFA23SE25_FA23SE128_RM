@@ -1,11 +1,11 @@
 import 'package:realmen_customer_application/global_variable.dart';
-import 'package:realmen_customer_application/models/autocomplete_model.dart';
+import 'package:realmen_customer_application/models/autocomplete/autocomplete_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:realmen_customer_application/models/exception_model.dart';
+import 'package:realmen_customer_application/models/exception/exception_model.dart';
 
 abstract class IAutocompleteService {
   Future<dynamic> getAutocomplete(String address);

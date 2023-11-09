@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/history_booking/detail_history_hair_cut_screen.dart';
 import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
-import 'package:realmen_customer_application/screens/list_branch/list_branch.dart';
+import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
+import 'package:realmen_customer_application/screens/list_branch/list_branches.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
@@ -58,7 +59,7 @@ class RouteGenerator {
                 });
           }),
       GetPage(
-          name: ListBranchScreen.ListBranchScreenRoute,
+          name: BranchesOverviewScreen.BranchesOverviewScreenRoute,
           page: () {
             return FutureBuilder(
                 future: SharedPreferencesService.checkJwtExpired(),
@@ -66,7 +67,7 @@ class RouteGenerator {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
                   } else {
-                    return const ListBranchScreen();
+                    return const BranchesOverviewScreen();
                   }
                 });
           }),
@@ -106,6 +107,19 @@ class RouteGenerator {
                     return const LoginPhoneScreen();
                   } else {
                     return const BookingProcessingScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: ListBranchesScreen.ListBranchesScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else {
+                    return ListBranchesScreen();
                   }
                 });
           }),

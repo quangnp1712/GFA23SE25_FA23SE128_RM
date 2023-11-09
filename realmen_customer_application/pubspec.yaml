@@ -55,6 +55,7 @@ dependencies:
   get: ^4.6.6
   percent_indicator: ^4.2.3
   geolocator: ^10.1.0
+  dropdown_button2: ^2.3.9
 
   flutter_web_plugins:
     sdk: flutter

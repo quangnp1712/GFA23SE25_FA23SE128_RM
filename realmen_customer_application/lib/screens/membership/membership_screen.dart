@@ -2,7 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realmen_customer_application/models/account_info_model.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/membership/components/cardcredit_customer.dart';
 import 'package:realmen_customer_application/screens/membership/components/labeltext_level.dart';

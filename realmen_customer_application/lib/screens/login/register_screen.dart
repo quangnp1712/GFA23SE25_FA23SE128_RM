@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:realmen_customer_application/models/autocomplete_model.dart';
-import 'package:realmen_customer_application/models/register_customer_model.dart';
+import 'package:realmen_customer_application/models/autocomplete/autocomplete_model.dart';
+import 'package:realmen_customer_application/models/login_register/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';

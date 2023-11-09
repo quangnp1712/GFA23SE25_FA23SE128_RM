@@ -2,7 +2,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:realmen_customer_application/models/login_otp_model.dart';
+import 'package:realmen_customer_application/models/login_register/login_otp_model.dart';
 
 class SharedPreferencesService {
   static Future<void> saveOtpIdPhone(String otpId, String phone) async {

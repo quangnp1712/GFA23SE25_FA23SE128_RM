@@ -5,13 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:realmen_customer_application/models/account_info_model.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
 import 'package:realmen_customer_application/screens/home/components/recoment_services.dart';
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
-import 'package:realmen_customer_application/screens/list_branch/list_branch.dart';
+import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account/account_info_service.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
@@ -229,8 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.toNamed(
-                                      ListBranchScreen.ListBranchScreenRoute);
+                                  Get.toNamed(BranchesOverviewScreen
+                                      .BranchesOverviewScreenRoute);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

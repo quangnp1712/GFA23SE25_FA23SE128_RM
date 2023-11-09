@@ -11,6 +11,7 @@ import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchGroupByCity;
+import com.realman.becore.dto.branch.BranchGroupByCitySearchCriteria;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
 import com.realman.becore.service.branch.BranchUseCaseService;
 import com.realman.becore.util.response.ListResponse;
@@ -60,12 +61,26 @@ public class BranchesController implements BranchesAPI {
         }
 
         @Override
-        public ListResponse<BranchGroupByCityResponse> groupingByCity(Boolean isSortedByDistance, Double lat, Double lng) {
-                List<BranchGroupByCity> branchGroupingByCity = branchUseCaseService.groupingByCity(isSortedByDistance,
-                                lat, lng);
+        public ListResponse<BranchGroupByCityResponse> findBranchByCity(String city, Boolean isSortedByDistance,
+                        Double lat, Double lng, String sorter, Integer current, Integer pageSize) {
+                BranchGroupByCitySearchCriteria searchCriteria = BranchGroupByCitySearchCriteria.builder()
+                        .city(city).isSortByDistance(isSortedByDistance).lat(lat).lng(lng).build();
+                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);                
+                List<BranchGroupByCity> branchGroupingByCity = branchUseCaseService.findBranchByCity(searchCriteria,
+                         pageRequestCustom);
                 List<BranchGroupByCityResponse> responses = branchGroupingByCity.stream().map(branch -> {
-                        List<BranchResponse> bResponses = branch.branches().stream().map(branchModelMapper::toModel).toList();
-                        return BranchGroupByCityResponse.builder().city(branch.city()).branches(bResponses).build();
+                        List<BranchResponse> bResponses = branch.branchList().stream().map(branchModelMapper::toModel).toList();
+                        return BranchGroupByCityResponse.builder().city(branch.city()).branchList(bResponses).build();
+                }).toList();
+                return new ListResponse<>(responses);
+        }
+
+        @Override
+        public ListResponse<BranchGroupByCityResponse> groupByCity() {
+                List<BranchGroupByCity> groupByCityList = branchUseCaseService.groupByCity();
+                List<BranchGroupByCityResponse> responses = groupByCityList.stream().map(branch -> {
+                        
+                        return BranchGroupByCityResponse.builder().city(branch.city()).branch(branch.branch()).build();
                 }).toList();
                 return new ListResponse<>(responses);
         }

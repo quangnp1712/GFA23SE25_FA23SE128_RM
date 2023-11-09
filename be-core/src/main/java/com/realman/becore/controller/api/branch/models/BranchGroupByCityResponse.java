@@ -7,7 +7,8 @@ import lombok.Builder;
 @Builder
 public record BranchGroupByCityResponse(
     String city,
-    List<BranchResponse> branches
+    Long branch,
+    List<BranchResponse> branchList
 ) {
     
 }

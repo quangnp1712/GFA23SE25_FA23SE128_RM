@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchGroupByCity;
+import com.realman.becore.dto.branch.BranchGroupByCityInfo;
+import com.realman.becore.dto.branch.BranchGroupByCitySearchCriteria;
 import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.branch.BranchMapper;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
@@ -92,31 +94,44 @@ public class BranchQueryService {
                 return new PageImpl<>(responses, pageRequestCustom.pageRequest(), dtoList.size());
         }
 
-        public List<BranchGroupByCity> findBranchGroupByCity(Boolean isSortedByDistance, Double lat, Double lng) {
-                List<BranchEntity> entityList = branchRepository.findThirdByOrderByBranchName();
-                Map<String, List<BranchEntity>> entityCityMap = entityList.stream()
+        public List<BranchGroupByCity> groupByCity() {
+                List<BranchGroupByCityInfo> infoList = branchRepository.groupByCity();
+                return infoList.stream().map(branchMapper::toDto).toList();
+        }
+
+        public List<BranchGroupByCity> findBranchByCity(BranchGroupByCitySearchCriteria searchCriteria, 
+                        PageRequestCustom pageRequestCustom) {
+                Page<BranchEntity> branchGroupByCities = branchRepository.findAll(searchCriteria.city(),
+                        pageRequestCustom.pageRequest());
+                Map<String, List<BranchEntity>> entityCityMap = branchGroupByCities.stream()
                                 .collect(Collectors.groupingBy(BranchEntity::getCity));
                 Map<Long, List<BranchDisplay>> branchDisplayMap = branchDisplayQueryService.findAll()
                                 .stream().collect(Collectors.groupingBy(BranchDisplay::branchId));
                 List<BranchGroupByCity> branchGroupByCityList = new ArrayList<>();
                 entityCityMap.keySet().forEach(city -> {
                         List<Branch> dtoList = new ArrayList<>();
-                        if (isSortedByDistance) {
+                        if (searchCriteria.isSortByDistance()) {
                                 dtoList = entityCityMap.get(city).stream()
-                                        .map(branch -> {
-                                                 List<String> urlDisplayList = branchDisplayMap.get(branch.getBranchId())
-                                                        .stream().map(BranchDisplay::url).toList();
-                                                 return branchMapper.toDto(branch, urlDisplayList);
-                                        }).map(branch -> {
-                                        DistanceRequest request = DistanceRequest.of(lat,
-                                                        lng, branch.lat(), branch.lng());
-                                        DistanceResponse distance = distanceUseCaseService.requestDistance(request);
-                                        List<Elements> distanceElements = distance.rows().stream()
-                                                        .map(ElementList::elements).findAny().orElse(new ArrayList<>());
-                                        String distanceKilometer = distanceElements.stream().map(Elements::distance)
-                                                        .map(Distance::text).findAny().orElse("");
-                                        return branchMapper.updateDto(branch, distanceKilometer);})
-                                .toList();
+                                                .map(branch -> {
+                                                        List<String> urlDisplayList = branchDisplayMap
+                                                                        .get(branch.getBranchId())
+                                                                        .stream().map(BranchDisplay::url).toList();
+                                                        return branchMapper.toDto(branch, urlDisplayList);
+                                                }).map(branch -> {
+                                                        DistanceRequest request = DistanceRequest
+                                                                .of(searchCriteria.lat(),
+                                                                        searchCriteria.lng(), branch.lat(), branch.lng());
+                                                        DistanceResponse distance = distanceUseCaseService
+                                                                        .requestDistance(request);
+                                                        List<Elements> distanceElements = distance.rows().stream()
+                                                                        .map(ElementList::elements).findAny()
+                                                                        .orElse(new ArrayList<>());
+                                                        String distanceKilometer = distanceElements.stream()
+                                                                        .map(Elements::distance)
+                                                                        .map(Distance::text).findAny().orElse("");
+                                                        return branchMapper.updateDto(branch, distanceKilometer);
+                                                })
+                                                .toList();
                         } else {
                                 dtoList = entityCityMap.get(city).stream().map(branch -> {
                                         List<String> displayUrlList = branchDisplayMap.get(branch.getBranchId())
@@ -125,10 +140,22 @@ public class BranchQueryService {
                                 }).toList();
                         }
                         BranchGroupByCity branchGroupByCity = BranchGroupByCity.builder()
-                                        .city(city).branches(dtoList).build();
+                                        .city(city).branchList(dtoList).build();
                         branchGroupByCityList.add(branchGroupByCity);
                 });
                 return branchGroupByCityList;
+        }
+
+        public List<Branch> findByServiceId(Long serviceId) {
+                List<BranchEntity> branchList = branchRepository.findByServiceId(serviceId);
+                List<BranchDisplay> branchDisplayList = branchDisplayQueryService.findAll();
+                Map<Long, List<BranchDisplay>> branchDisplayMap = branchDisplayList
+                        .stream().collect(Collectors.groupingBy(BranchDisplay::branchId));
+                return branchList.stream().map(branch -> {
+                        List<String> urlDisplayList =  branchDisplayMap.get(branch.getBranchId())
+                        .stream().map(BranchDisplay::url).toList();
+                        return branchMapper.toDto(branch, urlDisplayList);
+                }).toList();
         }
 
         private Double calculateDistance(Double originLat, Double originLng,

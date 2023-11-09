@@ -22,6 +22,8 @@ public interface BranchMapper {
     @Mapping(source = "distanceKilometer", target = "distanceKilometer")
     Branch updateDto(Branch updateDto, String distanceKilometer);
 
+    BranchGroupByCity toDto(BranchGroupByCityInfo info);
+
     @Mapping(target = "branchId", ignore = true)
     void updateEntity(@MappingTarget BranchEntity entity, Branch dto);
 

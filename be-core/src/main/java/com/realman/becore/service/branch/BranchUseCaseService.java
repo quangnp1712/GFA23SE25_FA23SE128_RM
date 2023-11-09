@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchGroupByCity;
+import com.realman.becore.dto.branch.BranchGroupByCitySearchCriteria;
 import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
 import com.realman.becore.util.response.PageRequestCustom;
@@ -47,7 +48,16 @@ public class BranchUseCaseService {
         return branchQueryService.findAll(criteria, pageRequestCustom);
     }
 
-    public List<BranchGroupByCity> groupingByCity(Boolean isSortedByDistance, Double lat, Double lng) {
-        return branchQueryService.findBranchGroupByCity(isSortedByDistance, lat, lng);
+    public List<BranchGroupByCity> groupByCity() {
+        return branchQueryService.groupByCity();
+    }
+
+    public List<Branch> findByServiceId(Long serviceId) {
+        return branchQueryService.findByServiceId(serviceId);
+    }
+
+    public List<BranchGroupByCity> findBranchByCity(BranchGroupByCitySearchCriteria searchCriteria,
+            PageRequestCustom pageRequestCustom) {
+        return branchQueryService.findBranchByCity(searchCriteria, pageRequestCustom);
     }
 }

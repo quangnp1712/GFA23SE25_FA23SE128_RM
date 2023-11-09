@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,23 +26,31 @@ import jakarta.validation.constraints.Min;
 @RequestMapping("/v1/branches")
 @PreAuthorize("hasAnyAuthority({'branch:add', 'branch:view'})")
 public interface BranchesAPI {
-    @PostMapping
-    public void save(@RequestBody @Valid BranchRequest branch);
+        @PostMapping
+        public void save(@RequestBody @Valid BranchRequest branch);
 
-    @GetMapping
-    PageImplResponse<BranchResponse> findAll(
-            @RequestParam(required = false, value = "timeRanges") @DateTimeFormat(pattern = "HH:mm:ss") List<LocalDateTime> timeRanges,
-            @RequestParam(required = false, value = "search", defaultValue = "") String search,
-            @RequestParam(required = false, value = "isSortByDistance", defaultValue = "false") Boolean isSortByDistance,
-            @RequestParam(required = false, value = "originLat") Double originLat,
-            @RequestParam(required = false, value = "originLng") Double originLng,
-            @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
-            @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter,
-            @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);
+        @GetMapping
+        PageImplResponse<BranchResponse> findAll(
+                        @RequestParam(required = false, value = "timeRanges") @DateTimeFormat(pattern = "HH:mm:ss") List<LocalDateTime> timeRanges,
+                        @RequestParam(required = false, value = "search", defaultValue = "") String search,
+                        @RequestParam(required = false, value = "isSortByDistance", defaultValue = "false") Boolean isSortByDistance,
+                        @RequestParam(required = false, value = "originLat") Double originLat,
+                        @RequestParam(required = false, value = "originLng") Double originLng,
+                        @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
+                        @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter,
+                        @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);
 
-    @GetMapping("/group-by/city")
-    ListResponse<BranchGroupByCityResponse> groupingByCity(
-        @RequestParam(required = false, value = "isSortedByDistance", defaultValue = "false") Boolean isSortedByDistance,
-        @RequestParam(required = false, value = "lat") Double lat,
-        @RequestParam(required = false, value = "lng") Double lng);
+        @GetMapping("/{city}")
+        ListResponse<BranchGroupByCityResponse> findBranchByCity(
+                        @PathVariable String city,
+                        @RequestParam(required = false, value = "isSortedByDistance", defaultValue = "false") 
+                        Boolean isSortedByDistance,
+                        @RequestParam(required = false, value = "lat") Double lat,
+                        @RequestParam(required = false, value = "lng") Double lng,
+                        @RequestParam(required = false, value = "sorter", defaultValue = "branchName") String sorter,
+                        @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
+                        @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);
+
+        @GetMapping("/group-by-city")
+        ListResponse<BranchGroupByCityResponse> groupByCity();                
 }

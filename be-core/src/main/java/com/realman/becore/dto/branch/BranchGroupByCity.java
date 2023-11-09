@@ -7,7 +7,8 @@ import lombok.Builder;
 @Builder
 public record BranchGroupByCity(
     String city,
-    List<Branch> branches
+    Long branch,
+    List<Branch> branchList
 ) {
     
 }

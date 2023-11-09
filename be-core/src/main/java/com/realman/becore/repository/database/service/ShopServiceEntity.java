@@ -23,7 +23,9 @@ public class ShopServiceEntity {
     private Long serviceId;
     @Column(columnDefinition = "NVARCHAR(500)")
     private String name;
-    private Integer estimateTime;
+    @Column(columnDefinition = "NVARCHAR(1000)")
+    private String description;
+    private Integer duration;
     private EServiceStatus status;
 
 }

@@ -10,7 +10,7 @@ export class NzTableDefaultSettingDirective {
   constructor(private _nzTable: NzTableComponent<unknown>) {
     _nzTable.nzPageSizeOptions = pagingSizeOptionsDefault;
     _nzTable.nzFrontPagination = false;
-    _nzTable.nzPaginationPosition = 'both';
+    _nzTable.nzPaginationPosition = 'bottom';
     _nzTable.nzOuterBordered = true;
   }
 }

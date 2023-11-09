@@ -25,7 +25,7 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule
+    RouterModule,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }

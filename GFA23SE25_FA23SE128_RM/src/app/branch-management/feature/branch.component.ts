@@ -25,6 +25,10 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { BranchApiService } from '../data-access/api/branch.service';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { BranchStore } from '../data-access/store/branch.store';
+import { provideComponentStore } from '@ngrx/component-store';
+import { RxLet } from '@rx-angular/template/let';
+import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
 
 @Component({
   selector: 'app-branch',
@@ -46,16 +50,18 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
     NzTimePickerModule,
     NzInputNumberModule,
     NzAutocompleteModule,
+    RxLet,
+    OnlyNumberInputDirective,
   ],
-  providers: [NzMessageService],
+  providers: [provideComponentStore(BranchStore), NzMessageService],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý chi nhánh</nz-breadcrumb-item>
       <nz-breadcrumb-item>Tạo chi nhánh</nz-breadcrumb-item>
     </nz-breadcrumb>
     <nz-divider></nz-divider>
-    <div>
-      <form nz-form [formGroup]="form">
+    <div *rxLet="vm$ as vm">
+      <form nz-form [formGroup]="bStore.form">
         <div nz-row class="tw-ml-[12%]">
           <!-- Tên chi nhánh -->
           <nz-form-item nz-col nzSpan="12" class="">
@@ -67,7 +73,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
                 class="tw-rounded-md tw-w-[70%]"
                 nz-input
                 placeholder="Nhập tên tài khoản"
-                [formControl]="form.controls.branchName"
+                [formControl]="bStore.form.controls.branchName"
               />
             </nz-form-control>
           </nz-form-item>
@@ -79,13 +85,13 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
               <input
                 class="tw-rounded-md tw-w-[70%]"
                 placeholder="Nhập địa chỉ"
-                [formControl]="form.controls.address"
+                [formControl]="bStore.form.controls.address"
                 nz-input
                 (input)="getAddress($event)"
                 [nzAutocomplete]="auto"
               />
               <nz-autocomplete
-                [nzDataSource]="options"
+                [nzDataSource]="vm.addressData"
                 nzBackfill
                 #auto
               ></nz-autocomplete>
@@ -100,7 +106,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
               <nz-time-picker
                 nzFormat="HH:mm"
                 class="tw-rounded-md tw-w-[100%]"
-                [formControl]="form.controls.open"
+                [formControl]="bStore.form.controls.open"
               ></nz-time-picker>
             </nz-form-control>
           </nz-form-item>
@@ -113,7 +119,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
               <nz-time-picker
                 nzFormat="HH:mm"
                 class="tw-rounded-md tw-w-[100%]"
-                [formControl]="form.controls.close"
+                [formControl]="bStore.form.controls.close"
               ></nz-time-picker>
             </nz-form-control>
           </nz-form-item>
@@ -124,8 +130,9 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
               <input
                 class="tw-rounded-md tw-w-[70%]"
                 nz-input
+                appOnlyNumber
                 placeholder="Nhập số điện thoại"
-                [formControl]="form.controls.phone"
+                [formControl]="bStore.form.controls.phone"
               />
             </nz-form-control>
           </nz-form-item>
@@ -135,13 +142,12 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
               >Số lượng nhân viên</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
-              <nz-input-number
-                [nzMin]="1"
-                [nzMax]="10"
-                [nzStep]="1"
+              <input
+                nz-input
+                appOnlyNumber
                 class="tw-rounded-md tw-w-[70%]"
-                [formControl]="form.controls.numberStaffs"
-              ></nz-input-number>
+                [formControl]="bStore.form.controls.numberStaffs"
+              />
             </nz-form-control>
           </nz-form-item>
 
@@ -185,57 +191,19 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BranchComponent implements OnInit {
-  constructor(
-    private _fb: NonNullableFormBuilder,
-    private _nzMessageService: NzMessageService,
-    private _cApiSvc: CommonApiService,
-    private _bApiSvc: BranchApiService
-  ) {}
+export class BranchComponent {
+  constructor(public bStore: BranchStore) {}
 
-  form!: FormGroup<BranchApi.RequestFormGroup>;
+  vm$ = this.bStore.state$;
   addModel!: BranchApi.Request;
-  options: string[] = [];
-
-  ngOnInit(): void {
-    this.form = this._fb.group<BranchApi.RequestFormGroup>({
-      shopOwnerId: this._fb.control(localStorage.getItem('accountId$')!),
-      branchName: this._fb.control(''),
-      phone: this._fb.control(''),
-      address: this._fb.control(''),
-      placeId: this._fb.control('123'),
-      status: this._fb.control('OPEN'),
-      numberStaffs: this._fb.control(0),
-      open: this._fb.control(null),
-      close: this._fb.control(null),
-      displayUrlList: this._fb.control(['string']),
-      serviceIdList: this._fb.control([]),
-    });
-  }
 
   addBranch() {
-    this.addModel = this.form.getRawValue();
-
-    this._bApiSvc.addBranch(this.addModel).subscribe(
-      (data) => {
-        this._nzMessageService.success('Đăng ký chi nhánh thành công');
-      },
-      (error) => {
-        this._nzMessageService.error('Đăng ký chi nhánh thất bại.');
-      }
-    );
+    this.addModel = this.bStore.form.getRawValue();
+    this.bStore.addBranch({ model: this.addModel });
   }
 
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-    this._cApiSvc
-      .autocomplete(value)
-      .pipe(debounceTime(1000))
-      .subscribe((data) => {
-        this.options = []
-        data.value.predictions.forEach((address) => {
-          this.options.push(address.description)
-        })
-      });
+    this.bStore.getAddress(value);
   }
 }

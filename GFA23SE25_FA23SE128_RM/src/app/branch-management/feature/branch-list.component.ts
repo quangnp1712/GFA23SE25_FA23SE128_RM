@@ -21,6 +21,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { tap } from 'rxjs';
 import { BranchStore } from '../data-access/store/branch.store';
 import { provideComponentStore } from '@ngrx/component-store';
+import { RxLet } from '@rx-angular/template/let';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-branch-list',
@@ -37,10 +39,10 @@ import { provideComponentStore } from '@ngrx/component-store';
     RouterLink,
     NzSelectModule,
     FormsModule,
-    NzSpinModule,
-    NzTableDefaultSettingDirective
+    NzTableDefaultSettingDirective,
+    RxLet
   ],
-  providers: [provideComponentStore(BranchStore)],
+  providers: [provideComponentStore(BranchStore),NzMessageService],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý chi nhánh</nz-breadcrumb-item>
@@ -50,10 +52,10 @@ import { provideComponentStore } from '@ngrx/component-store';
     <div nz-row>
       <div nz-col nzSpan="22" class="">
         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-          <input type="text" nz-input placeholder="Tìm theo tên" />
+          <input type="text" nz-input placeholder="Tìm theo tên" [(ngModel)]="bStore.pagingRequest.search" (keyup.enter)="onSearch()"/>
         </nz-input-group>
         <ng-template #suffixIconButton>
-          <button nz-button nzType="primary" nzSearch>
+          <button nz-button nzType="primary" nzSearch (click)="onSearch()">
             <span nz-icon nzType="search"></span>
           </button>
         </ng-template>
@@ -77,12 +79,13 @@ import { provideComponentStore } from '@ngrx/component-store';
             appNzTableDefaultSetting
             class="tw-mr-4"
             [nzData]="vm.branchPaging.content"
-            [nzFrontPagination]="false"
             [nzTotal]="vm.branchPaging.total"
             [(nzPageIndex)]="bStore.pagingRequest.current"
             [(nzPageSize)]="bStore.pagingRequest.pageSize"
             (nzQueryParams)="onTableQueryParamsChange($event)"
             [nzShowTotal]="totalText"
+            [nzLoading]="!!vm.loadingCount"
+            nzShowSizeChanger
           >
             <thead>
               <ng-template #totalText let-total let-range="range">
@@ -135,5 +138,16 @@ export class BranchListComponent {
     this.bStore.pagingRequest.sorter = currentSort?.key ?? '';
     this.bStore.pagingRequest.orderDescending = currentSort?.value !== 'ascend';
     this.bStore.getBranchPaging();
+    console.log();
+
+  }
+
+  onSearch() {
+    this.bStore.pagingRequest.search = this.bStore.pagingRequest.search.replace(/[\t\n\r]/, '');
+    if (this.bStore.pagingRequest.current !== 1) {
+      this.bStore.pagingRequest.current = 1;
+    } else {
+      this.bStore.getBranchPaging();
+    }
   }
 }

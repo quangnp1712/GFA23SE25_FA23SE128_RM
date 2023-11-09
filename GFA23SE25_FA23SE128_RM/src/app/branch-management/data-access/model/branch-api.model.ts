@@ -6,7 +6,6 @@ export namespace BranchApi {
     branchName: string;
     phone: string;
     address: string;
-    placeId: string;
     status: string;
     numberStaffs: number;
     open: Date | null;
@@ -22,7 +21,6 @@ export namespace BranchApi {
     branchName: FormControl<string>;
     phone: FormControl<string>;
     address: FormControl<string>;
-    placeId: FormControl<string>;
     status: FormControl<string>;
     numberStaffs: FormControl<number>;
     open: FormControl<Date | null>;

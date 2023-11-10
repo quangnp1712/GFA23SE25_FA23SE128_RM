@@ -14,7 +14,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { AccountApi } from '../data-access/model/account-api.model';
+import { AccountAddApi } from '../data-access/model/account-api.model';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
@@ -223,11 +223,11 @@ export class AccountComponent implements OnInit {
   constructor(private _fb: NonNullableFormBuilder, private _accountSvc: AccountApiService,
     private _nzMessageService: NzMessageService,) {}
 
-  form!: FormGroup<AccountApi.RequestFormGroup>;
-  model!: AccountApi.Request;
+  form!: FormGroup<AccountAddApi.RequestFormGroup>;
+  model!: AccountAddApi.Request;
 
   ngOnInit(): void {
-    this.form = this._fb.group<AccountApi.RequestFormGroup>({
+    this.form = this._fb.group<AccountAddApi.RequestFormGroup>({
       firstName: this._fb.control('', trimRequired),
       lastName: this._fb.control('', [trimRequired]),
       address: this._fb.control('', trimRequired),

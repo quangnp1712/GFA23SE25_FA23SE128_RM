@@ -1,6 +1,7 @@
-import { FormControl } from "@angular/forms";
+import { FormControl } from '@angular/forms';
+import { RoleType } from 'src/app/share/data-access/api/enum/role.enum';
 
-export namespace AccountApi {
+export namespace AccountAddApi {
   export interface Request {
     firstName: string;
     lastName: string;
@@ -23,4 +24,34 @@ export namespace AccountApi {
     professional: FormControl<string>;
     thumbnailUrl: FormControl<string>;
   };
+}
+
+export namespace AccountPagingApi {
+  export interface Request {
+    searches: string;
+    role: string;
+    current: number;
+    pageSize: number;
+    sorter: string;
+    orderDescending: boolean;
+  }
+
+  export interface Response {
+    accountId: number;
+    branchId: number;
+    thumbnailUrl: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    address: string;
+    dob: string;
+    gender: string;
+    status: string;
+    branchName: string;
+    branchAddress: string;
+    itimacyLevel: string;
+    professional: string;
+    average: number;
+    role: RoleType;
+  }
 }

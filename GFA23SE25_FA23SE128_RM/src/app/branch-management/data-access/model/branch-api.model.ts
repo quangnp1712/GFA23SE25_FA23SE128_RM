@@ -63,3 +63,38 @@ export namespace BranchPagingApi {
     serviceIdList: string[];
   }
 }
+
+export namespace BranchUpdateApi {
+
+  export type RequestFormGroup = {
+    shopOwnerId: FormControl<string>;
+    branchName: FormControl<string>;
+    phone: FormControl<string>;
+    address: FormControl<string>;
+    status: FormControl<string>;
+    numberStaffs: FormControl<number>;
+    open: FormControl<Date | null>;
+    close: FormControl<string | null>;
+    displayUrlList: FormControl<string[]>;
+    serviceIdList: FormControl<string[]>;
+  };
+  export interface BranchDataResponse {
+    value: {
+      branchId: number;
+      shopOwnerId: string;
+      branchName: string;
+      phone: string;
+      address: string;
+      status: string;
+      numberStaffs: 0;
+      open: {
+
+      };
+      close: {
+
+      };
+      displayUrlList: string[];
+      serviceIdList: string[];
+    };
+  }
+}

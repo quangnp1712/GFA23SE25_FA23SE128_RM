@@ -1,5 +1,6 @@
 export type Paging<T> = {
-  total: number;
+  totalElements: number;
+  totalPages: number;
   pageSize: number;
   current: number;
   content: T[];

@@ -6,7 +6,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { BranchApi, BranchPagingApi } from '../model/branch-api.model';
+import { BranchApi, BranchPagingApi, BranchUpdateApi } from '../model/branch-api.model';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
 
 @Injectable({
@@ -34,6 +34,13 @@ export class BranchApiService {
     const url = `${this.REST_API_SERVER}/v1/branches?search=${model.search}&current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
     return this._http
       .get<Paging<BranchPagingApi.Response>>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  public getBranch(id: number) {
+    const url = `${this.REST_API_SERVER}/v1/branch/${id}`;
+    return this._http
+      .get<BranchUpdateApi.BranchDataResponse>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 

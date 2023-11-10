@@ -40,9 +40,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     NzSelectModule,
     FormsModule,
     NzTableDefaultSettingDirective,
-    RxLet
+    RxLet,
   ],
-  providers: [provideComponentStore(BranchStore),NzMessageService],
+  providers: [provideComponentStore(BranchStore), NzMessageService],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý chi nhánh</nz-breadcrumb-item>
@@ -52,7 +52,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     <div nz-row>
       <div nz-col nzSpan="22" class="">
         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-          <input type="text" nz-input placeholder="Tìm theo tên" [(ngModel)]="bStore.pagingRequest.search" (keyup.enter)="onSearch()"/>
+          <input
+            type="text"
+            nz-input
+            placeholder="Tìm theo tên"
+            [(ngModel)]="bStore.pagingRequest.search"
+            (keyup.enter)="onSearch()"
+          />
         </nz-input-group>
         <ng-template #suffixIconButton>
           <button nz-button nzType="primary" nzSearch (click)="onSearch()">
@@ -62,7 +68,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       </div>
       <div nz-col nzSpan="2" class="tw-text-center">
         <button
-          nz-button
+          nz-button nzType="primary"
           [routerLink]="['/branch-management', 'create-branch']"
         >
           Tạo chi nhánh
@@ -79,7 +85,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
             appNzTableDefaultSetting
             class="tw-mr-4"
             [nzData]="vm.branchPaging.content"
-            [nzTotal]="vm.branchPaging.total"
+            [nzTotal]="vm.branchPaging.totalElements"
             [(nzPageIndex)]="bStore.pagingRequest.current"
             [(nzPageSize)]="bStore.pagingRequest.pageSize"
             (nzQueryParams)="onTableQueryParamsChange($event)"
@@ -108,6 +114,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
                 <th>Hotline</th>
                 <th>Trạng thái</th>
                 <th>Số lượng nhân viên</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -118,6 +125,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
                 <td>{{ data.phone }}</td>
                 <td>{{ data.status }}</td>
                 <td>{{ data.numberStaffs }}</td>
+                <td class="tw-text-center">
+                  <button
+                    nz-button
+                    nzType="primary"
+                    [routerLink]="['/branch-management', data.branchId]" nzSize="small"
+                  >Edit</button>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -139,11 +153,13 @@ export class BranchListComponent {
     this.bStore.pagingRequest.orderDescending = currentSort?.value !== 'ascend';
     this.bStore.getBranchPaging();
     console.log();
-
   }
 
   onSearch() {
-    this.bStore.pagingRequest.search = this.bStore.pagingRequest.search.replace(/[\t\n\r]/, '');
+    this.bStore.pagingRequest.search = this.bStore.pagingRequest.search.replace(
+      /[\t\n\r]/,
+      ''
+    );
     if (this.bStore.pagingRequest.current !== 1) {
       this.bStore.pagingRequest.current = 1;
     } else {

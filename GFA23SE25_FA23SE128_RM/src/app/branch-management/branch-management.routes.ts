@@ -19,5 +19,10 @@ const BRANCH_MANAGEMENT_ROUTES: Route[] = [
     loadComponent: () =>
       import('./feature/branch.component').then((m) => m.BranchComponent),
   },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./feature/branch-update.component').then((m) => m.BranchUpdateComponent),
+  },
 ];
 export default BRANCH_MANAGEMENT_ROUTES;

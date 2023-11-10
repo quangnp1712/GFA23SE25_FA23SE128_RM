@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { ComponentStore } from '@ngrx/component-store';
-import { BranchApi, BranchPagingApi } from '../model/branch-api.model';
+import { Injectable, OnInit } from '@angular/core';
+import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
+import { BranchApi, BranchPagingApi, BranchUpdateApi } from '../model/branch-api.model';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
 import { BranchApiService } from '../api/branch.service';
-import { pagingSizeOptionsDefault } from 'src/app/share/data-access/const/paging-size-options-default.const';
 import {
   pipe,
   tap,
@@ -18,45 +17,47 @@ import { CommonApiService } from 'src/app/share/data-access/api/common.service';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
+import { ActivatedRoute } from '@angular/router';
 
-export interface BranchState {
-  branchPaging: Paging<BranchPagingApi.Response>;
+export interface BranchUpdateState {
   loadingCount: number;
   addressData: string[];
 }
 
-const initialState: BranchState = {
-  branchPaging: { content: [], current: 1, pageSize: 10, totalElements: 0, totalPages: 0 },
+const initialState: BranchUpdateState = {
   loadingCount: 0,
   addressData: [],
 };
 
 @Injectable()
-export class BranchStore extends ComponentStore<BranchState> {
+export class BranchUpdateStore extends ComponentStore<BranchUpdateState> implements OnStoreInit {
   constructor(
     private _bApiSvc: BranchApiService,
     private _cApiSvc: CommonApiService,
     private _fb: NonNullableFormBuilder,
     private _nzMessageService: NzMessageService,
+    private _activatedRoute: ActivatedRoute
   ) {
     super(initialState);
   }
+  ngrxOnStoreInit() {
+    console.log(this.id);
+    this.getBranchData()
+  };
 
+
+  id = Number(this._activatedRoute.snapshot.paramMap.get('id'));
   addressData!: AutocompleteApi.Response;
   options: string[] = [];
 
-  pagingRequest: BranchPagingApi.Request = {
-    current: 1,
-    pageSize: pagingSizeOptionsDefault[0],
-    search: '',
-    sorter: '',
-    orderDescending: false,
-  };
-
-  form = this._fb.group<BranchApi.RequestFormGroup>({
+  form = this._fb.group<BranchUpdateApi.RequestFormGroup>({
     shopOwnerId: this._fb.control(localStorage.getItem('accountId$')!),
     branchName: this._fb.control('', trimRequired),
-    phone: this._fb.control('', [Validators.minLength(10), Validators.maxLength(11), trimRequired]),
+    phone: this._fb.control('', [
+      Validators.minLength(10),
+      Validators.maxLength(11),
+      trimRequired,
+    ]),
     address: this._fb.control('', trimRequired),
     status: this._fb.control('OPEN'),
     numberStaffs: this._fb.control(0, [Validators.min(1), Validators.max(100)]),
@@ -66,14 +67,21 @@ export class BranchStore extends ComponentStore<BranchState> {
     serviceIdList: this._fb.control([]),
   });
 
-  readonly getBranchPaging = this.effect<never>(
+  readonly getBranchData = this.effect<never>(
     pipe(
-      tap(() => this.updateLoading(true)),
+      tap(() => [this.updateLoading(true)]),
       switchMap(() =>
-        this._bApiSvc.paging(this.pagingRequest).pipe(
+        this._bApiSvc.getBranch(this.id).pipe(
           tap({
             next: (resp) => {
-              if (resp.content) this.patchState({ branchPaging: resp });
+              this.form.controls.address.setValue(resp.value.address)
+              this.form.controls.branchName.setValue(resp.value.branchName)
+              this.form.controls.shopOwnerId.setValue(resp.value.address)
+              this.form.controls.numberStaffs.setValue(resp.value.numberStaffs)
+              this.form.controls.displayUrlList.setValue(resp.value.displayUrlList)
+              this.form.controls.serviceIdList.setValue(resp.value.serviceIdList)
+              this.form.controls.phone.setValue(resp.value.phone)
+              this.form.controls.status.setValue(resp.value.status)
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -96,7 +104,7 @@ export class BranchStore extends ComponentStore<BranchState> {
                 resp.value.predictions.forEach((address) => {
                   this.options.push(address.description);
                 });
-                this.patchState({addressData: this.options})
+                this.patchState({ addressData: this.options });
               }
             },
             finalize: () => {},
@@ -106,23 +114,6 @@ export class BranchStore extends ComponentStore<BranchState> {
     )
   );
 
-  readonly addBranch = this.effect<{ model: BranchApi.Request }>($params =>
-    $params.pipe(
-      tap(() => this.updateLoading(true)),
-      switchMap(({ model }) =>
-        this._bApiSvc.addBranch(model).pipe(
-          tap({
-            next: resp => {
-                this._nzMessageService.success('Đăng ký chi nhánh thành công');
-            },
-            error: () => this._nzMessageService.error('Đăng ký chi nhánh thất bại.'),
-            finalize: () => this.updateLoading(false),
-          }),
-          catchError(() => EMPTY)
-        )
-      )
-    )
-  );
 
   readonly updateLoading = this.updater((s, isAdd: boolean) => ({
     ...s,

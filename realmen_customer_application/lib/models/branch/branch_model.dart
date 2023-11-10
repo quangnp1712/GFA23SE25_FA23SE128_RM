@@ -13,9 +13,8 @@ class BranchesModel {
   });
   factory BranchesModel.fromJson(Map<String, dynamic> json) {
     return BranchesModel(
-        content: (json['content'] as List)
-            ?.map((e) => BranchModel.fromJson(e))
-            ?.toList(),
+        content: List<BranchModel>.from(
+            json['content'].map((e) => BranchModel.fromJson(e))?.toList()),
         totalElements: json['totalElements'],
         totalPages: json['totalPages'],
         pageSize: json['pageSize'],

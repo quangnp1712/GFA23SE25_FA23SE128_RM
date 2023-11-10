@@ -134,38 +134,112 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                           const SizedBox(
                             height: 30,
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: TextField(
-                              // controller: firstNameController,
-                              cursorColor: Colors.black,
-                              cursorWidth: 1,
-                              style: const TextStyle(
-                                  height: 1.17,
-                                  fontSize: 20,
-                                  color: Colors.black),
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.search),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xffC4C4C4)),
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xffC4C4C4)),
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                contentPadding: const EdgeInsets.only(
-                                    // top: 10,
-                                    // bottom: 20,
-                                    left: 15,
-                                    right: 15),
-                                hintText: "Tìm kiếm tên chi nhánh và địa điểm",
-                                hintStyle: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xffC4C4C4)),
+                          SizedBox(
+                            // width: 80.w,
+                            // height: 50,
+                            child: FocusScope(
+                              node: focusScopeNode,
+                              child: Autocomplete<BranchModel>(
+                                displayStringForOption: displayStringForOption,
+                                // initialValue: null,
+                                optionsBuilder: (textEditingValue) async {
+                                  _searchingWithQuery = textEditingValue.text;
+                                  if (textEditingValue.text.isEmpty ||
+                                      textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  if (widget.city == "Thành Phố/Tỉnh") {
+                                    final value = await BranchService()
+                                        .getBranches(textEditingValue.text);
+                                    if (value['statusCode'] == 200) {
+                                      branchesModel = value['data'];
+                                      try {
+                                        options = (await value)['data']
+                                            ?.content! as Iterable<BranchModel>;
+
+                                        return Future.value(options);
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                    }
+                                  } else {
+                                    if (branchesForCity != null) {
+                                      options = branchesForCity!.where(
+                                          (element) => utf8
+                                              .decode(element.address!.runes
+                                                  .toList())
+                                              .toLowerCase()
+                                              .contains(textEditingValue.text
+                                                  .toLowerCase()));
+
+                                      return Future.value(options);
+                                    }
+                                  }
+
+                                  return [];
+                                },
+                                onSelected: (address) {
+                                  setState(() {
+                                    branchesForCity = [];
+                                    (branchesForCity as List<BranchModel>)
+                                        ?.add(address);
+                                    focusScopeNode.unfocus();
+                                    isSearching = true;
+                                  });
+                                  debugPrint('You just selected $address');
+                                },
+                                fieldViewBuilder: (context, controller,
+                                    focusNode, onEditingComplete) {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: TextField(
+                                      // controller: firstNameController,
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      onEditingComplete: onEditingComplete,
+                                      onSubmitted: (value) async {
+                                        searchBranches(value, focusNode);
+                                        focusNode.requestFocus();
+                                      },
+
+                                      cursorColor: Colors.black,
+                                      cursorWidth: 1,
+                                      style: const TextStyle(
+                                          height: 1.17,
+                                          fontSize: 20,
+                                          color: Colors.black),
+                                      decoration: InputDecoration(
+                                        prefixIcon: const Icon(Icons.search),
+                                        suffixIcon: buildSuffixIcon(
+                                            controller, focusNode),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color(0xffC4C4C4)),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color(0xffC4C4C4)),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        contentPadding: const EdgeInsets.only(
+                                            // top: 10,
+                                            // bottom: 20,
+                                            left: 15,
+                                            right: 15),
+                                        hintText:
+                                            "Tìm kiếm tên chi nhánh và địa điểm",
+                                        hintStyle: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xffC4C4C4)),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -382,6 +456,12 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
     cityController = widget.city;
   }
 
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   String image = "assets/images/branch1.png";
   BranchesByCityModel? branchesByCityModel = BranchesByCityModel();
   List<BranchModel>? branchesForCity;
@@ -396,6 +476,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
         try {
           if (branchesByCityModel != null) {
             getBranches();
+            cities.add("Thành Phố/Tỉnh");
             if (branchesByCityModel?.values != null) {
               for (var values in branchesByCityModel!.values!) {
                 cities.add(utf8
@@ -428,12 +509,20 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   }
 
   getBranches() {
+    branchesForCity = [];
     try {
       if (branchesByCityModel?.values != null) {
-        for (var values in branchesByCityModel!.values!) {
-          if (utf8.decode(values.city.toString().runes.toList()) ==
-              widget.city) {
-            branchesForCity = values.branches;
+        if (widget.city == "Thành Phố/Tỉnh") {
+          (branchesByCityModel?.values as List)
+              ?.map((e) =>
+                  (branchesForCity as List<BranchModel>)?.addAll(e.branches))
+              ?.toList();
+        } else {
+          for (var values in branchesByCityModel!.values!) {
+            if (utf8.decode(values.city.toString().runes.toList()) ==
+                widget.city) {
+              branchesForCity = values.branches;
+            }
           }
         }
       }
@@ -445,4 +534,59 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
       print("Error: $e");
     }
   }
+
+  bool isSearching = false;
+  FocusNode focusNode = FocusNode();
+  FocusScopeNode focusScopeNode = FocusScopeNode();
+
+  Future<void> searchBranches(String query, FocusNode focusNode) async {
+    try {
+      BranchService branchService = BranchService();
+      final result = await branchService.getBranches(query);
+      if (result['statusCode'] == 200) {
+        branchesModel = result['data'] as BranchesModel;
+        try {
+          branchesForCity = [];
+          for (var branch in branchesModel!.content!) {
+            (branchesForCity as List<BranchModel>)?.add(branch);
+          }
+        } on Exception catch (e) {
+          print(e);
+        }
+        setState(() {
+          branchesForCity;
+          isSearching = true;
+          focusNode.unfocus();
+        });
+      } else {
+        _errorMessage("$result['statusCode'] : $result['error']");
+      }
+    } on Exception catch (e) {
+      _errorMessage(e.toString());
+      print("Error: $e");
+    }
+  }
+
+  IconButton? buildSuffixIcon(controller, focusNode) {
+    return isSearching || focusNode.hasFocus
+        ? IconButton(
+            onPressed: () {
+              setState(() {
+                controller.clear();
+                isSearching = false;
+              });
+            },
+            icon: Icon(Icons.clear),
+          )
+        : null;
+  }
+
+  String displayStringForOption(BranchModel branch) =>
+      utf8.decode(branch.address!.runes.toList());
+  String? _searchingWithQuery;
+  Iterable<BranchModel>? options;
+  BranchModel branchModel = BranchModel();
+  BranchesModel branchesModel = BranchesModel();
+
+  BranchModel selectedAddress = BranchModel();
 }

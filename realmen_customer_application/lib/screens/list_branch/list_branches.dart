@@ -521,7 +521,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           for (var values in branchesByCityModel!.values!) {
             if (utf8.decode(values.city.toString().runes.toList()) ==
                 widget.city) {
-              branchesForCity = values.branches;
+              branchesForCity = values.branchList;
             }
           }
         }

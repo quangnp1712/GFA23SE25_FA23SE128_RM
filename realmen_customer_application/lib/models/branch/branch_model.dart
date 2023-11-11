@@ -38,15 +38,18 @@ class BranchesByCityModel {
 
 class BranchesValuesModel {
   String? city;
-  List<BranchModel>? branches;
+  int? branch;
+  List<BranchModel>? branchList;
   BranchesValuesModel({
     this.city,
-    this.branches,
+    this.branch,
+    this.branchList,
   });
   factory BranchesValuesModel.fromJson(Map<String, dynamic> json) {
     return BranchesValuesModel(
       city: json['city'],
-      branches: (json['branches'] as List)
+      branch: json['branch'],
+      branchList: (json['branchList'] as List)
           ?.map((e) => BranchModel.fromJson(e))
           ?.toList(),
     );

@@ -120,33 +120,39 @@ class SharedPreferencesService {
     }
   }
 
-// kiểm tra hết hạn hay chưa / false là chưa còn tiếp tục
+// no api
   static Future<bool> checkJwtExpired() async {
-    try {
-      final SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      List<String>? result = sharedPreferences.getStringList("accountInfo");
-      if (result != null && result.length >= 2) {
-        String jwtToken = result[1];
-        var isExpired = _isExpired(jwtToken);
-        if (!isExpired) {
-          return false;
-        } else {
-          AuthenticateService authenticateService = AuthenticateService();
-          authenticateService.logout();
-        }
-      } else {
-        print("Failed to get jwtToken from SharedPreferences");
-        return true;
-      }
-    } on Exception catch (e) {
-      print(e);
-      return true;
-    }
-    return true;
+    return false;
 
     // Kiểm tra hết hạn
   }
+// kiểm tra hết hạn hay chưa / false là chưa còn tiếp tục
+  // static Future<bool> checkJwtExpired() async {
+  //   try {
+  //     final SharedPreferences sharedPreferences =
+  //         await SharedPreferences.getInstance();
+  //     List<String>? result = sharedPreferences.getStringList("accountInfo");
+  //     if (result != null && result.length >= 2) {
+  //       String jwtToken = result[1];
+  //       var isExpired = _isExpired(jwtToken);
+  //       if (!isExpired) {
+  //         return false;
+  //       } else {
+  //         AuthenticateService authenticateService = AuthenticateService();
+  //         authenticateService.logout();
+  //       }
+  //     } else {
+  //       print("Failed to get jwtToken from SharedPreferences");
+  //       return true;
+  //     }
+  //   } on Exception catch (e) {
+  //     print(e);
+  //     return true;
+  //   }
+  //   return true;
+
+  //   // Kiểm tra hết hạn
+  // }
 
 // true là hết hạn
 // false là còn hạn

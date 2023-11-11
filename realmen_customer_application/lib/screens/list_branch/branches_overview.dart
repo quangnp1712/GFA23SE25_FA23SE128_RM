@@ -145,14 +145,14 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                                   .runes
                                   .toList())),
                               subtitle: Text(
-                                  'Số lượng chi nhánh: ${branchesByCityModel!.values![index].branches!.length}'),
+                                  'Số lượng chi nhánh: ${branchesByCityModel!.values![index].branch}'),
                               children: [
                                 ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: min(
                                       branchesByCityModel!
-                                          .values![index].branches!.length,
+                                          .values![index].branch!,
                                       3),
                                   itemBuilder: (context, i) {
                                     return Container(
@@ -176,7 +176,7 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                                             title: Text(utf8.decode(
                                                 branchesByCityModel!
                                                     .values![index]
-                                                    .branches![i]
+                                                    .branchList![i]
                                                     .branchName
                                                     .toString()
                                                     .runes
@@ -184,7 +184,7 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                                             subtitle: Text(utf8.decode(
                                                 branchesByCityModel!
                                                     .values![index]
-                                                    .branches![i]
+                                                    .branchList![i]
                                                     .address
                                                     .toString()
                                                     .runes
@@ -229,8 +229,7 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                                           (i !=
                                                   branchesByCityModel!
                                                           .values![index]
-                                                          .branches!
-                                                          .length -
+                                                          .branch! -
                                                       1)
                                               ? const Divider(
                                                   color: Color(0x73444444),

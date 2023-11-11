@@ -1,6 +1,8 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realmen_customer_application/screens/booking/components/branch.dart';
+import 'package:realmen_customer_application/screens/booking/components/stylist.dart';
 import 'package:realmen_customer_application/screens/membership/components/labeltext_level.dart';
 import 'package:sizer/sizer.dart';
 
@@ -13,7 +15,8 @@ class BookingScreen extends StatefulWidget {
   static const String BookingScreenRoute = "/booking-screen";
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class _BookingScreenState extends State<BookingScreen>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,20 +96,12 @@ class _BookingScreenState extends State<BookingScreen> {
                           Container(
                             height: 180,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Icon(
-                                        CommunityMaterialIcons.account_circle,
-                                        color: Colors.red,
-                                        size: 24,
-                                      ),
-                                    ),
                                     Container(
                                       margin: const EdgeInsets.only(left: 10.0),
                                       child: Align(
@@ -121,28 +116,44 @@ class _BookingScreenState extends State<BookingScreen> {
                                         ),
                                       ),
                                     ),
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Icon(
-                                        CommunityMaterialIcons.account_circle,
-                                        color: Colors.red,
-                                        size: 24,
-                                      ),
-                                    ),
                                   ],
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
                                   child: Text(
-                                    "Tính đến hiện tại, chuỗi barber tóc nam RealMen có 99 barber tại những vị trí đắc địa nhất TP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận. Hãy tìm đến barber RealMen gần bạn nhất để tận hưởng trải nghiệm cắt tóc nam đỉnh cao!",
+                                    "Bạn có hai cách để đặt lịch cắt tóc:",
                                     style: GoogleFonts.quicksand(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16,
                                     ),
                                   ),
-                                )
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Text(
+                                    "• Chọn theo chi nhánh: Bạn có thể chọn chi nhánh gần nhất với vị trí của mình để đặt lịch",
+                                    style: GoogleFonts.quicksand(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Text(
+                                    "• Chọn theo chi nhánh: Bạn có thể chọn chi nhánh gần nhất với vị trí của mình để đặt lịch",
+                                    style: GoogleFonts.quicksand(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -151,11 +162,35 @@ class _BookingScreenState extends State<BookingScreen> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          LabelTextLevel(),
+                      TabBar(
+                        controller: _tabController,
+                        labelColor: Colors.black,
+                        labelStyle: const TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 20),
+                        indicator: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        tabs: const [
+                          Tab(text: 'Theo chi nhánh'),
+                          Tab(text: 'Theo thợ cắt tóc'),
                         ],
+                      ),
+                      Container(
+                        color: Colors.amber,
+                        width: 400,
+                        height: 52.h,
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: const [
+                            Center(child: BranchOptionBooking()),
+                            Center(child: StylistOptionBooking()),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -166,5 +201,18 @@ class _BookingScreenState extends State<BookingScreen> {
         ))
       ],
     ));
+  }
+
+  late TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }

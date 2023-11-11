@@ -174,7 +174,7 @@ class BranchService implements IBranchService {
     BranchesByCityModel branchesByCityModel = BranchesByCityModel();
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
-      Uri uri = Uri.parse("$getBranchesByCityUrl?isSortedByDistance=false");
+      Uri uri = Uri.parse("$getBranchesByCityUrl");
       final client = http.Client();
       final response = await client.get(
         uri,

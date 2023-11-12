@@ -75,8 +75,7 @@ public class BranchQueryService {
                                         .collect(Collectors.groupingBy(BranchService::branchId));
                         List<BranchDisplay> branchDisplayList = branchDisplayMap.get(entity.getBranchId());
                         List<String> branchUrlList = Objects.nonNull(branchDisplayList)
-                                        ? branchDisplayList.stream().map(BranchDisplay::url).toList()
-                                        : new ArrayList<>();
+                                        ? branchDisplayList.stream().map(BranchDisplay::url).toList(): null;
                         Double distance = calculateDistance(searchCriteria.originLat(),
                                         searchCriteria.originLng(), entity.getLat(), entity.getLng());
                         return branchMapper.toDto(entity, distance, branchUrlList,
@@ -126,9 +125,11 @@ public class BranchQueryService {
                                                                 .findAllByBranchId(branch.getBranchId())
                                                                 .stream().collect(Collectors.groupingBy(
                                                                                 BranchService::branchId));
-                                                List<String> urlDisplayList = branchDisplayMap
-                                                                .get(branch.getBranchId()).stream()
-                                                                .map(BranchDisplay::url).toList();
+                                                List<BranchDisplay> branchDisplayList = branchDisplayMap
+                                                                .get(branch.getBranchId());
+                                                List<String> urlDisplayList = Objects.nonNull(branchDisplayList)
+                                                                ? branchDisplayMap.get(branch.getBranchId()).stream()
+                                                                                .map(BranchDisplay::url).toList() : null;
                                                 return branchMapper.toDto(branch, urlDisplayList,
                                                                 branchServiceMap.get(branch.getBranchId()));
                                         }).toList();

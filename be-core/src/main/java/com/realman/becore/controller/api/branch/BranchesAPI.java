@@ -33,7 +33,7 @@ public interface BranchesAPI {
         PageImplResponse<BranchResponse> findAll(
                         @RequestParam(required = false, value = "timeRanges") @DateTimeFormat(pattern = "HH:mm:ss") List<LocalDateTime> timeRanges,
                         @RequestParam(required = false, value = "search", defaultValue = "") String search,
-                        @RequestParam(required = false, value = "isSortByDistance", defaultValue = "false") Boolean isSortByDistance,
+                        @RequestParam(required = false, value = "isShowDistance", defaultValue = "false") Boolean isShowDistance,
                         @RequestParam(required = false, value = "originLat") Double originLat,
                         @RequestParam(required = false, value = "originLng") Double originLng,
                         @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
@@ -43,10 +43,10 @@ public interface BranchesAPI {
         @GetMapping("/{city}")
         ListResponse<BranchGroupByCityResponse> findBranchByCity(
                         @PathVariable String city,
-                        @RequestParam(required = false, value = "isSortedByDistance", defaultValue = "false") 
-                        Boolean isSortedByDistance,
-                        @RequestParam(required = false, value = "lat") Double lat,
-                        @RequestParam(required = false, value = "lng") Double lng,
+                        @RequestParam(required = false, value = "isShowDistance", defaultValue = "false") 
+                        Boolean isShowDistance,
+                        @RequestParam(required = false, value = "lat", defaultValue = "0.0") Double lat,
+                        @RequestParam(required = false, value = "lng", defaultValue = "0.0") Double lng,
                         @RequestParam(required = false, value = "sorter", defaultValue = "branchName") String sorter,
                         @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
                         @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);

@@ -15,9 +15,19 @@ import lombok.RequiredArgsConstructor;
 public class BranchServiceUseCaseService {
     @NonNull
     private final BranchServiceCommandService branchServiceCommandService;
+    @NonNull
+    private final BranchServiceQueryService branchServiceQueryService;
 
     @Transactional
     public void save(Long branchId, List<BranchService> branchService) {
         branchServiceCommandService.save(branchId, branchService);
+    }
+
+    public List<BranchService> findAllByServiceId(Long serviceId) {
+        return branchServiceQueryService.findAllByServiceId(serviceId);
+    }
+
+    public List<BranchService> findAllByBranchId(Long branchId) {
+        return branchServiceQueryService.findAllByBranchId(branchId);
     }
 }

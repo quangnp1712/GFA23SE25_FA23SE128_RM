@@ -41,14 +41,11 @@ public class BranchesController implements BranchesAPI {
 
         @Override
         public PageImplResponse<BranchResponse> findAll(List<LocalDateTime> timeRanges, String search,
-                        Boolean isSortByDistance, Double originLat, Double originLng, @Min(1) Integer current,
+                        Boolean isShowDistance, Double originLat, Double originLng, @Min(1) Integer current,
                         String sorter, Integer pageSize) {
-                PageRequestCustom pageRequestCustom = PageRequestCustom
-                                .of(pageSize, current, sorter);
-
+                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);
                 BranchSearchCriteria criteria = BranchSearchCriteria
-                                .from(timeRanges, search, isSortByDistance,
-                                                originLat, originLng);
+                                .from(timeRanges, search, isShowDistance, originLat, originLng);
                 Page<Branch> branches = branchUseCaseService
                                 .findAll(criteria, pageRequestCustom);
                 Page<BranchResponse> responses = branches.map(branchModelMapper::toModel);
@@ -61,10 +58,10 @@ public class BranchesController implements BranchesAPI {
         }
 
         @Override
-        public ListResponse<BranchGroupByCityResponse> findBranchByCity(String city, Boolean isSortedByDistance,
+        public ListResponse<BranchGroupByCityResponse> findBranchByCity(String city, Boolean isShowDistance,
                         Double lat, Double lng, String sorter, Integer current, Integer pageSize) {
                 BranchGroupByCitySearchCriteria searchCriteria = BranchGroupByCitySearchCriteria.builder()
-                        .city(city).isSortByDistance(isSortedByDistance).lat(lat).lng(lng).build();
+                        .city(city).isShowDistance(isShowDistance).lat(lat).lng(lng).build();
                 PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);                
                 List<BranchGroupByCity> branchGroupingByCity = branchUseCaseService.findBranchByCity(searchCriteria,
                          pageRequestCustom);

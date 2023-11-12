@@ -16,6 +16,7 @@ import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.branch.BranchEntity;
 import com.realman.becore.repository.database.branch.BranchRepository;
 import com.realman.becore.service.branch.display.BranchDisplayCommandService;
+import com.realman.becore.service.branch.service.BranchServiceUseCaseService;
 import com.realman.becore.service.goong.geocoding.GeocodingUseCaseService;
 
 import lombok.NonNull;
@@ -31,25 +32,24 @@ public class BranchCommandService {
         @NonNull
         private final GeocodingUseCaseService geocodingUseCaseService;
         @NonNull
+        private final BranchServiceUseCaseService branchServiceUseCaseService;
+        @NonNull
         private final BranchMapper branchMapper;
 
         public void save(Branch branch) {
-                GeometryResponse geo = geocodingUseCaseService
-                                .requestGeocoding(branch.address());
-                Double lat = geo.results().stream().map(GeometryProperties::geometry)
-                                .map(Geometry::location).mapToDouble(Location::lat)
-                                .findAny().orElse(0);
-                Double lng = geo.results().stream().map(GeometryProperties::geometry)
-                                .map(Geometry::location).mapToDouble(Location::lng)
-                                .findAny().orElse(0);
-                List<AddressComponent> addressComponents = geo.results().stream()
-                                .map(GeometryProperties::addressComponents)
+                GeometryResponse geo = geocodingUseCaseService.requestGeocoding(branch.address());
+                Double lat = geo.results().stream().map(GeometryProperties::geometry).map(Geometry::location)
+                                .mapToDouble(Location::lat).findAny().orElse(0);
+                Double lng = geo.results().stream().map(GeometryProperties::geometry).map(Geometry::location)
+                        .mapToDouble(Location::lng).findAny().orElse(0);
+                List<AddressComponent> addressComponents = geo.results().stream().map(GeometryProperties::addressComponents)
                                 .findAny().orElse(new ArrayList<>());
                 String city = addressComponents.get(addressComponents.size() - 1).shortName();
                 BranchEntity entity = branchMapper.toEntity(branch, city, lat, lng);
                 BranchEntity savedEntity = branchRepository.save(entity);
-                branchDisplayCommandService.saveOrUpdate(branch.displayUrlList(),
-                                savedEntity.getBranchId(), false);
+                branchDisplayCommandService.saveOrUpdate(branch.displayUrlList(), savedEntity.getBranchId(),
+                         false);
+                branchServiceUseCaseService.save(savedEntity.getBranchId(), branch.branchServiceList());
         }
 
         public void update(BranchId branchId, Branch branch) {

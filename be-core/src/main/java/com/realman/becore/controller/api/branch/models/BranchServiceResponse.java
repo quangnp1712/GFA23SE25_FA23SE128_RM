@@ -1,9 +1,6 @@
-package com.realman.becore.dto.branch.service;
+package com.realman.becore.controller.api.branch.models;
 
-import lombok.Builder;
-
-@Builder
-public record BranchService(
+public record BranchServiceResponse(
     Long serviceId,
     Long branchId,
     String branchName,

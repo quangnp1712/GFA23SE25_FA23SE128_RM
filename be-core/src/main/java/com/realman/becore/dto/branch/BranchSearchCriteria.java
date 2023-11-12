@@ -14,11 +14,11 @@ public record BranchSearchCriteria(
         LocalTime to,
         Double originLat,
         Double originLng,
-        Boolean isSortByDistance,
+        Boolean isShowDistance,
         String search) {
 
     public static BranchSearchCriteria from(List<LocalDateTime> timeRanges, String search,
-            Boolean isSortByDistance, Double originLat, Double originLng) {
+            Boolean isShowDistance, Double originLat, Double originLng) {
         timeRanges = Objects.nonNull(timeRanges) ? timeRanges : new ArrayList<>();
         BranchSearchCriteriaBuilder builder = BranchSearchCriteria.builder();
         if (!timeRanges.isEmpty()) {
@@ -26,7 +26,7 @@ public record BranchSearchCriteria(
             builder.from(sortedTimeRanges.get(0)).to(sortedTimeRanges.get(1));
         }
         return builder.originLat(originLat).originLng(originLng).search(search)
-                .isSortByDistance(isSortByDistance).build();
+                .isShowDistance(isShowDistance).build();
     }
 
 }

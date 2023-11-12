@@ -1,14 +1,12 @@
 package com.realman.becore.controller.api.services.models;
 
 import java.util.List;
-
-import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.service.BranchService;
 
 public record ShopServiceResponse(
     String name,
     String description,
-    Long price,
-    List<Branch> branchList
+    List<BranchService> branchServiceList
 ) {
     
 }

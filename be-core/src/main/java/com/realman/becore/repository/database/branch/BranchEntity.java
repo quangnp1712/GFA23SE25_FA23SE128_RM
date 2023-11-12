@@ -31,6 +31,7 @@ public class BranchEntity extends Auditable {
     private Long branchId;
     private Long shopOwnerId;
     private String branchName;
+    private String thumbnailUrl;
     private String phone;
     @Column(columnDefinition = "NVARCHAR(500)")
     @NotNull(message = "Nhập địa chỉ chi nhánh")

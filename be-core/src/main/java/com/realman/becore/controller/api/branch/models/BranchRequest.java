@@ -11,9 +11,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 public record BranchRequest(
-        
         Long shopOwnerId,
         @NormalText String branchName,
+        @NormalText String thumbnailUrl,
         @Phone String phone,
         @NormalText String address,
         @Enumerated(EnumType.STRING) EBranchStatus status,
@@ -21,6 +21,6 @@ public record BranchRequest(
         LocalDateTime open,
         LocalDateTime close,
         List<String> displayUrlList,
-        List<Long> serviceIdList) {
+        List<BranchServiceRequest> branchServiceList) {
 
 }

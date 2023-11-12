@@ -9,6 +9,7 @@ public record BranchResponse(
     Long branchId,
     Long shopOwnerId,
     String branchName,
+    String thumbnailUrl,
     String phone,
     String address,
     EBranchStatus status,
@@ -16,7 +17,7 @@ public record BranchResponse(
     LocalTime open,
     LocalTime close,
     List<String> displayUrlList,
-    List<Long> serviceIdList,
+    List<BranchServiceResponse> branchServiceList,
     String distanceKilometer
 ) {
     

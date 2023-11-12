@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record BranchGroupByCitySearchCriteria(
     String city,
-    Boolean isSortByDistance,
+    Boolean isShowDistance,
     Double lat,
     Double lng
 ) {

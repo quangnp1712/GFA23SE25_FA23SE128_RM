@@ -26,31 +26,6 @@ class _StylistOptionBookingState extends State<StylistOptionBooking> {
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Container(
-                //   decoration: BoxDecoration(
-                //     border: Border.all(color: Colors.black),
-                //     borderRadius: BorderRadius.circular(10),
-                //   ),
-                //   child: Row(
-                //     children: [
-                //       CircleAvatar(
-                //         backgroundColor: Colors.white,
-                //         radius: 20,
-                //         child: Image.asset(
-                //           "assets/images/admin.png",
-                //           height: 50,
-                //         ),
-                //       ),
-                //       const SizedBox(width: 10),
-                //       const Expanded(
-                //         child: Text(
-                //           'Đầu tiên anh <name> chọn “Xem stylist” ở ngay bên dưới để tìm Stylist thích nhất nhé!',
-                //           style: TextStyle(fontSize: 12, color: Colors.black),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
@@ -305,7 +280,7 @@ class _StylistOptionBookingState extends State<StylistOptionBooking> {
                     const SizedBox(height: 10),
                     Container(
                       height: 200,
-                      child: TimeSlot(),
+                      child: TimeSlot(type: "d"),
                     ),
                     const SizedBox(height: 10),
                     Container(

@@ -9,6 +9,8 @@ import 'package:realmen_customer_application/models/account/account_info_model.d
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/screens/other/test.dart';
+
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_customer_application/service/account/account_info_service.dart';
 import 'package:sizer/sizer.dart';
@@ -291,6 +293,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         fontWeight:
                                                             FontWeight.w400,
                                                         color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 82.w,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                                color: Color(0x4D444444),
+                                                width: 1.0),
+                                          ),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            Get.toNamed(
+                                                TestScreen.TestScreenRoute);
+                                          },
+                                          style: TextButton.styleFrom(
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Icon(
+                                                  CommunityMaterialIcons
+                                                      .storefront,
+                                                  color: Colors.black,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "TEST",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.red),
                                                   ),
                                                 ),
                                               )

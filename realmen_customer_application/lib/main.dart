@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/firebase_options.dart';
 
 import 'package:realmen_customer_application/router/router.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.grey,
+          textTheme: GoogleFonts.ebGaramondTextTheme(
+            Theme.of(context).textTheme,
+          ),
         ),
         initialRoute: SplashScreen.SplashScreenRoute,
         // initialRoute: MainScreen.MainScreenRoute,
@@ -39,26 +43,7 @@ class MyApp extends StatelessWidget {
         //   LoginPhoneScreen.LoginPhoneScreenRoute: (context) =>
         //       const LoginPhoneScreen(),
         //   SplashScreen.SplashScreenRoute: (context) => const SplashScreen(),
-        //   LoginOTPScreen.LoginOTPScreenRoute: (context) =>
-        //       const LoginOTPScreen(),
-        //   RegisterScreen.RegisterScreenRoute: (context) =>
-        //       const RegisterScreen(),
-        //   MainScreen.MainScreenRoute: (context) => const MainScreen(),
-        //   // HomeScreen.LoginPhoneScreenRoute: (context) => const HomeScreen(),
-        //   // ServicePriceListScreen.ServicePriceListScreenRoute: (context) =>
-        //   //     const ServicePriceListScreen(),
-        //   // MembershipScreen.MembershipScreenRoute: (context) =>
-        //   //     const MembershipScreen(),
-        //   // BookingScreen.BookingScreenRoute: (context) => const BookingScreen(),
-        //   // ProfileScreen.ProfileScreenRoute: (context) => const ProfileScreen(),
-        //   MessageTestScreen.MessageTestScreenRoute: (context) =>
-        //       const MessageTestScreen(),
-        //   NavBarScreen.NavBarScreenRoute: (context) => const NavBarScreen(),
-        //   PopularScreen.PopularScreenRoute: (context) => const PopularScreen(),
-        //   ViewEditProfileScreen.ViewEditProfileScreenRoute: (context) =>
-        //       const ViewEditProfileScreen(),
-        //   ListBranchScreen.ListBranchScreenRoute: (context) =>
-        //       const ListBranchScreen(),
+        //
         // },
       );
     });

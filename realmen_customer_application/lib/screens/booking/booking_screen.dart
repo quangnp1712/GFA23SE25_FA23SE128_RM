@@ -1,9 +1,10 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:realmen_customer_application/screens/booking/components/branch.dart';
-import 'package:realmen_customer_application/screens/booking/components/stylist.dart';
+import 'package:realmen_customer_application/screens/booking/branch/branch.dart';
+import 'package:realmen_customer_application/screens/booking/stylist/stylist.dart';
 import 'package:realmen_customer_application/screens/membership/components/labeltext_level.dart';
+
 import 'package:sizer/sizer.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -162,33 +163,41 @@ class _BookingScreenState extends State<BookingScreen>
                       const SizedBox(
                         height: 30,
                       ),
-                      TabBar(
-                        controller: _tabController,
-                        labelColor: Colors.black,
-                        labelStyle: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20),
-                        indicator: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black,
-                              width: 2.0,
+                      DefaultTabController(
+                        length: 2,
+                        child: Column(
+                          children: [
+                            TabBar(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: _tabController,
+                              labelColor: Colors.black,
+                              labelStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 20),
+                              indicator: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 2.0,
+                                  ),
+                                ),
+                              ),
+                              tabs: const [
+                                Tab(text: 'Theo chi nhánh'),
+                                Tab(text: 'Theo thợ cắt tóc'),
+                              ],
                             ),
-                          ),
-                        ),
-                        tabs: const [
-                          Tab(text: 'Theo chi nhánh'),
-                          Tab(text: 'Theo thợ cắt tóc'),
-                        ],
-                      ),
-                      Container(
-                        color: Colors.amber,
-                        width: 400,
-                        height: 52.h,
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: const [
-                            Center(child: BranchOptionBooking()),
-                            Center(child: StylistOptionBooking()),
+                            Container(
+                              // color: Colors.amber,
+                              width: 400,
+                              height: 52.h,
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: const [
+                                  BranchOptionBooking(),
+                                  Center(child: StylistOptionBooking()),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

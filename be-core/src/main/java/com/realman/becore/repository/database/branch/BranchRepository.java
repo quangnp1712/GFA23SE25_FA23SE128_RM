@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.realman.becore.dto.branch.BranchGroupByCityInfo;
+import com.realman.becore.dto.branch.BranchInfo;
 
 @Repository
 public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
@@ -49,4 +50,24 @@ public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
             WHERE bs.serviceId = :serviceId
                     """)
     List<BranchEntity> findByServiceId(Long serviceId);
+
+    @Query("""
+                SELECT 
+                        b.branchId AS branchId,
+                        b.branchName AS branchName
+                FROM BranchEntity b
+                WHERE :#{#branchName.isEmpty()} = TRUE OR b.branchName LIKE %:branchName%
+                    """)
+    List<BranchInfo> findByBranchName(String branchName, Pageable pageable);
+
+    @Query("""
+                SELECT
+                        b.branchId AS branchId,
+                        b.branchName AS branchName,
+                        b.address AS address,
+                        b.numberStaffs AS numberStaffs
+                FROM BranchEntity b
+                WHERE b.branchId = :branchId
+                    """)
+    BranchInfo findByBranchId(Long branchId);
 }

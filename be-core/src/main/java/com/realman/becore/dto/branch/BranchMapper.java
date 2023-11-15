@@ -25,6 +25,8 @@ public interface BranchMapper {
 
     BranchGroupByCity toDto(BranchGroupByCityInfo info);
 
+    BranchForAccount toDto(BranchInfo info);
+
     @Mapping(target = "branchId", ignore = true)
     void updateEntity(@MappingTarget BranchEntity entity, Branch dto);
 

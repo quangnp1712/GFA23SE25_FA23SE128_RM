@@ -1,11 +1,15 @@
 package com.realman.becore.controller.api.branch;
 
+import java.time.LocalDateTime;
+
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realman.becore.controller.api.branch.models.BranchForAccountResponse;
 import com.realman.becore.controller.api.branch.models.BranchModelMapper;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchForAccount;
 import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.service.branch.BranchUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
@@ -34,8 +38,17 @@ public class BranchController implements BranchAPI {
     @Override
     public ValueResponse<BranchResponse> findById(Long branchId) {
         Branch dto = branchUseCaseService.findById(new BranchId(branchId));
-        BranchResponse response = branchModelMapper.toModel(dto);
+        LocalDateTime open = LocalDateTime.now().toLocalDate().atTime(dto.open());
+        LocalDateTime close = LocalDateTime.now().toLocalDate().atTime(dto.close());
+        BranchResponse response = branchModelMapper.toModel(dto, open, close);
         return new ValueResponse<BranchResponse>(response);
+    }
+
+    @Override
+    public ValueResponse<BranchForAccountResponse> findBranchForAccount(Long branchId) {
+        BranchForAccount branchForAccount = branchUseCaseService.findBranchForAccount(branchId);
+        BranchForAccountResponse response = branchModelMapper.toModel(branchForAccount);
+        return new ValueResponse<>(response);
     }
 
 }

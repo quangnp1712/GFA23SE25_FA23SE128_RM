@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.realman.becore.controller.api.branch.models.BranchForAccountResponse;
 import com.realman.becore.controller.api.branch.models.BranchGroupByCityResponse;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
@@ -34,8 +35,8 @@ public interface BranchesAPI {
                         @RequestParam(required = false, value = "timeRanges") @DateTimeFormat(pattern = "HH:mm:ss") List<LocalDateTime> timeRanges,
                         @RequestParam(required = false, value = "search", defaultValue = "") String search,
                         @RequestParam(required = false, value = "isShowDistance", defaultValue = "false") Boolean isShowDistance,
-                        @RequestParam(required = false, value = "originLat") Double originLat,
-                        @RequestParam(required = false, value = "originLng") Double originLng,
+                        @RequestParam(required = false, value = "originLat", defaultValue = "0.0") Double originLat,
+                        @RequestParam(required = false, value = "originLng", defaultValue = "0.0") Double originLng,
                         @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
                         @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter,
                         @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);
@@ -52,5 +53,9 @@ public interface BranchesAPI {
                         @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);
 
         @GetMapping("/group-by-city")
-        ListResponse<BranchGroupByCityResponse> groupByCity();                
+        ListResponse<BranchGroupByCityResponse> groupByCity();
+        
+        @GetMapping("/branch-for-account/list")
+        ListResponse<BranchForAccountResponse> findBranchForAccount(
+                @RequestParam(required = false ,value = "branchName", defaultValue = "") String branchName);
 }

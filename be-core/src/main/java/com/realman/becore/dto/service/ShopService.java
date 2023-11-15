@@ -8,6 +8,7 @@ import lombok.Builder;
 
 @Builder
 public record ShopService(
+    Long serviceId,
     String name,
     String description,
     Integer duration,

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchForAccount;
 import com.realman.becore.dto.branch.BranchGroupByCity;
 import com.realman.becore.dto.branch.BranchGroupByCitySearchCriteria;
 import com.realman.becore.dto.branch.BranchId;
@@ -59,5 +60,13 @@ public class BranchUseCaseService {
     public List<BranchGroupByCity> findBranchByCity(BranchGroupByCitySearchCriteria searchCriteria,
             PageRequestCustom pageRequestCustom) {
         return branchQueryService.findBranchByCity(searchCriteria, pageRequestCustom);
+    }
+
+    public List<BranchForAccount> findBranchForAccountList(String branchName) {
+        return branchQueryService.findBranchForAccountList(branchName);
+    }
+
+    public BranchForAccount findBranchForAccount(Long branchId) {
+        return branchQueryService.findBranchForAccount(branchId);
     }
 }

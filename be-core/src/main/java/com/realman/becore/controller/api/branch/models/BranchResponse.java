@@ -1,6 +1,6 @@
 package com.realman.becore.controller.api.branch.models;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.realman.becore.dto.enums.EBranchStatus;
@@ -14,8 +14,8 @@ public record BranchResponse(
     String address,
     EBranchStatus status,
     Integer numberStaffs,
-    LocalTime open,
-    LocalTime close,
+    LocalDateTime open,
+    LocalDateTime close,
     List<String> displayUrlList,
     List<BranchServiceResponse> branchServiceList,
     String distanceKilometer

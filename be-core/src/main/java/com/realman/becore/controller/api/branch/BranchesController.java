@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realman.becore.controller.api.branch.models.BranchForAccountResponse;
 import com.realman.becore.controller.api.branch.models.BranchGroupByCityResponse;
 import com.realman.becore.controller.api.branch.models.BranchModelMapper;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
@@ -48,7 +49,11 @@ public class BranchesController implements BranchesAPI {
                                 .from(timeRanges, search, isShowDistance, originLat, originLng);
                 Page<Branch> branches = branchUseCaseService
                                 .findAll(criteria, pageRequestCustom);
-                Page<BranchResponse> responses = branches.map(branchModelMapper::toModel);
+                Page<BranchResponse> responses = branches.map(branch -> {
+                        LocalDateTime open = LocalDateTime.now().toLocalDate().atTime(branch.open());
+                        LocalDateTime close = LocalDateTime.now().toLocalDate().atTime(branch.close());
+                        return branchModelMapper.toModel(branch, open, close);
+                });
                 return new PageImplResponse<>(
                                 responses.getContent(),
                                 responses.getTotalElements(),
@@ -61,13 +66,18 @@ public class BranchesController implements BranchesAPI {
         public ListResponse<BranchGroupByCityResponse> findBranchByCity(String city, Boolean isShowDistance,
                         Double lat, Double lng, String sorter, Integer current, Integer pageSize) {
                 BranchGroupByCitySearchCriteria searchCriteria = BranchGroupByCitySearchCriteria.builder()
-                        .city(city).isShowDistance(isShowDistance).lat(lat).lng(lng).build();
-                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);                
+                                .city(city).isShowDistance(isShowDistance).lat(lat).lng(lng).build();
+                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);
                 List<BranchGroupByCity> branchGroupingByCity = branchUseCaseService.findBranchByCity(searchCriteria,
-                         pageRequestCustom);
-                List<BranchGroupByCityResponse> responses = branchGroupingByCity.stream().map(branch -> {
-                        List<BranchResponse> bResponses = branch.branchList().stream().map(branchModelMapper::toModel).toList();
-                        return BranchGroupByCityResponse.builder().city(branch.city()).branchList(bResponses).build();
+                                pageRequestCustom);
+                List<BranchGroupByCityResponse> responses = branchGroupingByCity.stream().map(branchGroupByCity -> {
+                        List<BranchResponse> bResponses = branchGroupByCity.branchList().stream().map(branch -> {
+                                LocalDateTime open = LocalDateTime.now().toLocalDate().atTime(branch.open());
+                                LocalDateTime close = LocalDateTime.now().toLocalDate().atTime(branch.close());
+                                return branchModelMapper.toModel(branch, open, close);
+                        }).toList();
+                        return BranchGroupByCityResponse.builder().city(branchGroupByCity.city())
+                                .branchList(bResponses).build();
                 }).toList();
                 return new ListResponse<>(responses);
         }
@@ -76,10 +86,18 @@ public class BranchesController implements BranchesAPI {
         public ListResponse<BranchGroupByCityResponse> groupByCity() {
                 List<BranchGroupByCity> groupByCityList = branchUseCaseService.groupByCity();
                 List<BranchGroupByCityResponse> responses = groupByCityList.stream().map(branch -> {
-                        
+
                         return BranchGroupByCityResponse.builder().city(branch.city()).branch(branch.branch()).build();
                 }).toList();
                 return new ListResponse<>(responses);
+        }
+
+        @Override
+        public ListResponse<BranchForAccountResponse> findBranchForAccount(String branchName) {
+                List<BranchForAccountResponse> branchForAccountList = branchUseCaseService
+                                .findBranchForAccountList(branchName).stream().map(branchModelMapper::toModel).toList();
+
+                return new ListResponse<>(branchForAccountList);
         }
 
 }

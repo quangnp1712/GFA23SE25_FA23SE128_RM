@@ -5,17 +5,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchForAccount;
 import com.realman.becore.dto.branch.BranchGroupByCity;
 import com.realman.becore.dto.branch.BranchGroupByCityInfo;
 import com.realman.becore.dto.branch.BranchGroupByCitySearchCriteria;
 import com.realman.becore.dto.branch.BranchId;
+import com.realman.becore.dto.branch.BranchInfo;
 import com.realman.becore.dto.branch.BranchMapper;
 import com.realman.becore.dto.branch.BranchSearchCriteria;
 import com.realman.becore.dto.branch.display.BranchDisplay;
@@ -75,7 +77,8 @@ public class BranchQueryService {
                                         .collect(Collectors.groupingBy(BranchService::branchId));
                         List<BranchDisplay> branchDisplayList = branchDisplayMap.get(entity.getBranchId());
                         List<String> branchUrlList = Objects.nonNull(branchDisplayList)
-                                        ? branchDisplayList.stream().map(BranchDisplay::url).toList(): null;
+                                        ? branchDisplayList.stream().map(BranchDisplay::url).toList()
+                                        : null;
                         Double distance = calculateDistance(searchCriteria.originLat(),
                                         searchCriteria.originLng(), entity.getLat(), entity.getLng());
                         return branchMapper.toDto(entity, distance, branchUrlList,
@@ -129,7 +132,8 @@ public class BranchQueryService {
                                                                 .get(branch.getBranchId());
                                                 List<String> urlDisplayList = Objects.nonNull(branchDisplayList)
                                                                 ? branchDisplayMap.get(branch.getBranchId()).stream()
-                                                                                .map(BranchDisplay::url).toList() : null;
+                                                                                .map(BranchDisplay::url).toList()
+                                                                : null;
                                                 return branchMapper.toDto(branch, urlDisplayList,
                                                                 branchServiceMap.get(branch.getBranchId()));
                                         }).toList();
@@ -171,6 +175,17 @@ public class BranchQueryService {
                                         .stream().map(BranchDisplay::url).toList();
                         return branchMapper.toDto(branch, urlDisplayList, branchServiceMap.get(branch.getBranchId()));
                 }).toList();
+        }
+
+        public List<BranchForAccount> findBranchForAccountList(String branchName) {
+                List<BranchForAccount> branchList = branchRepository.findByBranchName(branchName,
+                                PageRequest.of(0, 50)).stream().map(branchMapper::toDto).toList();
+                return branchList;
+        }
+
+        public BranchForAccount findBranchForAccount(Long branchId) {
+                BranchInfo info = branchRepository.findByBranchId(branchId);
+                return branchMapper.toDto(info);
         }
 
         private Double calculateDistance(Double originLat, Double originLng,

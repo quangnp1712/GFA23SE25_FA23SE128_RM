@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.realman.becore.controller.api.branch.models.BranchForAccountResponse;
 import com.realman.becore.controller.api.branch.models.BranchRequest;
 import com.realman.becore.controller.api.branch.models.BranchResponse;
 import com.realman.becore.util.response.ValueResponse;
@@ -26,4 +27,6 @@ public interface BranchAPI {
     @GetMapping
     ValueResponse<BranchResponse> findById(@PathVariable Long branchId);
 
+    @GetMapping("/branch-for-account")
+    ValueResponse<BranchForAccountResponse> findBranchForAccount(@PathVariable Long branchId);
 }

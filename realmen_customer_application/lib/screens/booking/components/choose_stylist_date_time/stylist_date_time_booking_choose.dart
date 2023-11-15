@@ -71,43 +71,470 @@ class _ChooseStylistAndDateTimeBookingState
                 ],
               ),
               children: [
-                SizedBox(
-                  height: 70,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: const [
-                      Column(
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.blue,
-                            radius: 20,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 5, bottom: 0, left: 0, right: 5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: 72,
+                                      height: 72,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                          width: 1,
+                                          style: BorderStyle.solid,
+                                        ),
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Colors.white,
+                                      ),
+                                      padding: const EdgeInsets.all(2),
+                                      child: Center(
+                                        child: Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.black,
+                                              width: 1,
+                                              style: BorderStyle.solid,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            color: Colors.black,
+                                          ),
+                                          padding: const EdgeInsets.all(3),
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            radius: 20,
+                                            child: ClipOval(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Image.asset(
+                                                  "assets/images/logo-no-text.png",
+                                                  scale: 1,
+                                                  fit: BoxFit.fitHeight,
+                                                  width: 70,
+                                                  height: 70,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 1,
+                                      right: 4,
+                                      child: Container(
+                                        height: 22,
+                                        width: 22,
+                                        // color: Colors.white,
+                                        child: const CircleAvatar(
+                                          backgroundColor: Colors.black,
+                                          child: ClipOval(
+                                            child: Icon(
+                                              Icons.done,
+                                              size: 18,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text("Stylist 1"),
+                                const Padding(
+                                  padding: EdgeInsets.all(0.0),
+                                  child: Icon(
+                                    Icons.keyboard_arrow_up,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(
-                            height: 5,
+                            width: 245,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.only(left: 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                  style: BorderStyle.solid,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.black,
+                                              ),
+                                              padding: const EdgeInsets.all(3),
+                                              child: const CircleAvatar(
+                                                backgroundColor: Colors.blue,
+                                                radius: 20,
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 5,
+                                              child: Container(
+                                                height: 22,
+                                                width: 22,
+                                                // color: Colors.white,
+                                                child: const CircleAvatar(
+                                                  backgroundColor: Colors.black,
+                                                  child: ClipOval(
+                                                    child: Icon(
+                                                      Icons.done,
+                                                      size: 18,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const Text("Stylist 1"),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                  style: BorderStyle.solid,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.black,
+                                              ),
+                                              padding: const EdgeInsets.all(3),
+                                              child: const CircleAvatar(
+                                                backgroundColor: Colors.blue,
+                                                radius: 20,
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 5,
+                                              child: Container(
+                                                height: 22,
+                                                width: 22,
+                                                // color: Colors.white,
+                                                child: const CircleAvatar(
+                                                  backgroundColor: Colors.black,
+                                                  child: ClipOval(
+                                                    child: Icon(
+                                                      Icons.done,
+                                                      size: 18,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const Text("Stylist 1"),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                  style: BorderStyle.solid,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.black,
+                                              ),
+                                              padding: const EdgeInsets.all(3),
+                                              child: const CircleAvatar(
+                                                backgroundColor: Colors.blue,
+                                                radius: 20,
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 5,
+                                              child: Container(
+                                                height: 22,
+                                                width: 22,
+                                                // color: Colors.white,
+                                                child: const CircleAvatar(
+                                                  backgroundColor: Colors.black,
+                                                  child: ClipOval(
+                                                    child: Icon(
+                                                      Icons.done,
+                                                      size: 18,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const Text("Stylist 1"),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                  style: BorderStyle.solid,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.black,
+                                              ),
+                                              padding: const EdgeInsets.all(3),
+                                              child: const CircleAvatar(
+                                                backgroundColor: Colors.blue,
+                                                radius: 20,
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 5,
+                                              child: Container(
+                                                height: 22,
+                                                width: 22,
+                                                // color: Colors.white,
+                                                child: const CircleAvatar(
+                                                  backgroundColor: Colors.black,
+                                                  child: ClipOval(
+                                                    child: Icon(
+                                                      Icons.done,
+                                                      size: 18,
+                                                      color: Colors.white,
+                                                      weight: 2,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const Text("Stylist 2"),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Text("Stylist 1"),
                         ],
                       ),
-                      SizedBox(width: 10),
-                      Column(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.blue,
-                            radius: 20,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black,
+                              width: 1,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Stylist: ",
+                                            style: GoogleFonts.ebGaramond(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "Phương Quang",
+                                            style: GoogleFonts.ebGaramond(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: const Text(
+                                        "Xem thêm",
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Chuyên môn: ",
+                                      style: GoogleFonts.ebGaramond(
+                                        textStyle: const TextStyle(
+                                            fontSize: 17,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "Cắt, Uốn, Nhuộm",
+                                      style: GoogleFonts.ebGaramond(
+                                        textStyle: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 120,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 105,
+                                        height: 75,
+                                        margin:
+                                            EdgeInsets.only(left: 0, right: 5),
+                                        child: Image.asset(
+                                          "assets/images/admin.png",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Stylist 2"),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -187,13 +614,14 @@ class _ChooseStylistAndDateTimeBookingState
                                                         child: Text(
                                                           item['date']
                                                               as String,
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color:
-                                                                  Colors.black),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Colors
+                                                                      .black),
                                                         ),
                                                       ),
                                                     ),

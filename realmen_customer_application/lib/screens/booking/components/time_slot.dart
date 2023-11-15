@@ -64,9 +64,7 @@ class _TimeSlotState extends State<TimeSlot> {
           child: Container(
             width: 240.0,
             height: 220.0, // Limit height
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.0),
-            ),
+
             child: TimeSlotGrid(
                 type: type,
                 selectedTimeSlot: _selectedTimeSlot,
@@ -216,7 +214,8 @@ class TimeSlotCard extends StatelessWidget {
         // height: 20.0,
         // width: 40.0,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 1.0),
+          border:
+              isSelectable ? Border.all(color: Colors.black, width: 1.0) : null,
           borderRadius: BorderRadius.circular(5.0),
           color: backgroundColor,
         ),

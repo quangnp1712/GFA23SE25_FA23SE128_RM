@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'dart:io';
 
 abstract class IBranchService {
-  Future<dynamic> getBranches(String search);
+  Future<dynamic> getBranches(String search, int pageSize);
   Future<dynamic> getBranchId(int branchId);
   Future<dynamic> getBranchesByCity();
 }
@@ -88,11 +88,14 @@ class BranchService implements IBranchService {
   }
 
   @override
-  Future getBranches(String search) async {
+  Future getBranches(String search, int pageSize) async {
     BranchesModel branchesModel = BranchesModel();
     int current = 1;
-    String sorter = "createdAt";
-    int pageSize = 20;
+    String sorter = "branchName";
+
+    double lat = 0;
+    double lng = 0;
+
     if (search == null && search == '') {
       return const Iterable<String>.empty();
     } else {
@@ -100,7 +103,7 @@ class BranchService implements IBranchService {
         final String jwtToken = await SharedPreferencesService.getJwt();
         Uri uri;
         uri = Uri.parse(
-            "$getBranchesUrl?search=$search&current=$current&sorter=$sorter&pageSize=$pageSize");
+            "$getBranchesUrl/$search?isShowDistance=false&lat=$lat&lng=$lng&sorter=$sorter&current=$current&pageSize=$pageSize");
 
         final client = http.Client();
         final response = await client.get(
@@ -170,8 +173,97 @@ class BranchService implements IBranchService {
   }
 
   @override
+  Future getSearchBranches(String search, int pageSize) async {
+    BranchesModel branchesModel = BranchesModel();
+    int current = 1;
+    String sorter = "createdAt";
+
+    double lat = 0;
+    double lng = 0;
+
+    if (search == null && search == '') {
+      return const Iterable<String>.empty();
+    } else {
+      try {
+        final String jwtToken = await SharedPreferencesService.getJwt();
+        Uri uri;
+        uri = Uri.parse(
+            "$getBranchesUrl?search=$search&isShowDistance=false&originLat=$lat&originLng=$lng&current=$current&sorter=$sorter&pageSize=$pageSize");
+
+        final client = http.Client();
+        final response = await client.get(
+          uri,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'Bearer $jwtToken'
+          },
+        ).timeout(Duration(seconds: connectionTimeOut));
+        final statusCode = response.statusCode;
+        final responseBody = response.body;
+        if (statusCode == 200) {
+          final branch = json.decode(responseBody);
+          final branches = (branch['content'] as List)
+              ?.map((e) => BranchModel.fromJson(e))
+              ?.toList();
+
+          return {
+            'statusCode': statusCode,
+            'data': branches,
+          };
+        } else if (statusCode == 401) {
+          try {
+            final exceptionModel =
+                ServerExceptionModel.fromJson(json.decode(responseBody));
+            return {
+              'statusCode': statusCode,
+              'error': exceptionModel,
+            };
+          } catch (e) {
+            return {
+              'statusCode': statusCode,
+              'error': e,
+            };
+          }
+        } else if (statusCode == 403) {
+          return {
+            'statusCode': statusCode,
+            'error': "Forbidden",
+          };
+        } else if (statusCode == 400) {
+          return {
+            'statusCode': statusCode,
+            'error': "Bad request",
+          };
+        } else {
+          return {
+            'statusCode': statusCode,
+            'error': 'Failed to fetch data',
+          };
+        }
+      } on TimeoutException catch (e) {
+        return {
+          'statusCode': 408,
+          'error': "Request timeout",
+        };
+      } on SocketException catch (e) {
+        return {
+          'statusCode': 500,
+          'error': 'Socket error',
+        };
+      } catch (e) {
+        return {
+          'statusCode': 500,
+          'error': e,
+        };
+      }
+    }
+  }
+
+  @override
   Future getBranchesByCity() async {
-    BranchesByCityModel branchesByCityModel = BranchesByCityModel();
+    BranchesModel branchesByCityModel = BranchesModel();
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse("$getBranchesByCityUrl");
@@ -188,8 +280,7 @@ class BranchService implements IBranchService {
       final statusCode = response.statusCode;
       final responseBody = response.body;
       if (statusCode == 200) {
-        final branches =
-            BranchesByCityModel.fromJson(json.decode(responseBody));
+        final branches = BranchesModel.fromJson(json.decode(responseBody));
         return {
           'statusCode': statusCode,
           'data': branches,

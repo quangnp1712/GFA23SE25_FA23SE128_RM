@@ -1,7 +1,9 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/choose_service_screen.dart';
+import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseServiceBooking extends StatefulWidget {
@@ -51,9 +53,48 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
             ),
             Container(
               child: ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(ChooseServiceBookingScreen
-                      .ChooseServiceBookingScreenRoute);
+                onPressed: () async {
+                  List<String>? selectedServices = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChangeNotifierProvider<ChangeNotifierServices>.value(
+                        value: selectedServicesProvider,
+                        child: ChooseServiceBookingScreen(),
+                      ),
+                    ),
+                  );
+
+                  // Handle the selected services here
+                  if (selectedServices != null) {
+                    setState(() {
+                      // Update your UI or perform other actions with selectedServices
+                      hasSelectedServices = selectedServices.isNotEmpty;
+                      if (hasSelectedServices) {
+                        textContainers = selectedServices.map((service) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              service,
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black),
+                            ),
+                          );
+                        }).toList();
+                      }
+                      // Update the button text
+                      buttonText = hasSelectedServices
+                          ? 'Đã chọn ${selectedServices.length} dịch vụ'
+                          : 'Xem tất cả danh sách dịch vụ';
+                    });
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -82,10 +123,10 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
                             ),
                             Container(
                               margin: const EdgeInsets.only(left: 10.0),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  "Xem tất cả danh sách dịch vụ",
+                                  buttonText,
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
@@ -106,7 +147,7 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
             ),
             const SizedBox(height: 10),
             Wrap(
-              children: textContainers,
+              children: hasSelectedServices ? textContainers : [],
             ),
             const SizedBox(height: 20),
           ],
@@ -115,51 +156,17 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
     );
   }
 
-  // Logic
-  @override
+  String buttonText = 'Xem tất cả danh sách dịch vụ'; // giữ
+  bool hasSelectedServices = false; // giữ
+  List<Widget> textContainers = []; // giữ
+  ChangeNotifierServices selectedServicesProvider =
+      ChangeNotifierServices(); // giữ
+  @override // giữ
   void initState() {
     super.initState();
+    hasSelectedServices = textContainers.isNotEmpty;
   }
 
   int _index = 0;
   bool isActived = false;
-
-  List<Widget> textContainers = [
-    Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Text(
-        'REALMEN Combo cắt gọi 100 bước ',
-        style: TextStyle(fontSize: 12, color: Colors.black),
-      ),
-    ),
-    Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Text(
-        'Cắt gọi 100 bước ',
-        style: TextStyle(fontSize: 12, color: Colors.black),
-      ),
-    ),
-    Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Text(
-        'Cắt gọi 100 bước ',
-        style: TextStyle(fontSize: 12, color: Colors.black),
-      ),
-    ),
-  ];
 }

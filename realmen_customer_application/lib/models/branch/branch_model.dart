@@ -1,34 +1,10 @@
 class BranchesModel {
-  List<BranchModel>? content;
-  int? totalElements;
-  int? totalPages;
-  int? pageSize;
-  int? current;
+  List<BranchesValuesModel>? values;
   BranchesModel({
-    this.content,
-    this.totalElements,
-    this.totalPages,
-    this.pageSize,
-    this.current,
+    this.values,
   });
   factory BranchesModel.fromJson(Map<String, dynamic> json) {
     return BranchesModel(
-        content: List<BranchModel>.from(
-            json['content'].map((e) => BranchModel.fromJson(e))?.toList()),
-        totalElements: json['totalElements'],
-        totalPages: json['totalPages'],
-        pageSize: json['pageSize'],
-        current: json['current']);
-  }
-}
-
-class BranchesByCityModel {
-  List<BranchesValuesModel>? values;
-  BranchesByCityModel({
-    this.values,
-  });
-  factory BranchesByCityModel.fromJson(Map<String, dynamic> json) {
-    return BranchesByCityModel(
       values: (json['values'] as List)
           ?.map((e) => BranchesValuesModel.fromJson(e))
           ?.toList(),
@@ -48,10 +24,12 @@ class BranchesValuesModel {
   factory BranchesValuesModel.fromJson(Map<String, dynamic> json) {
     return BranchesValuesModel(
       city: json['city'],
-      branch: json['branch'],
-      branchList: (json['branchList'] as List)
-          ?.map((e) => BranchModel.fromJson(e))
-          ?.toList(),
+      branch: json['branch'] != null ? json['branch'] : null,
+      branchList: json['branchList'] != null
+          ? (json['branchList'] as List)
+              ?.map((e) => BranchModel.fromJson(e))
+              ?.toList()
+          : null,
     );
   }
 }
@@ -60,6 +38,7 @@ class BranchModel {
   int? branchId;
   int? shopOwnerId;
   String? branchName;
+  String? thumbnailUrl;
   String? phone;
   String? address;
   String? status;
@@ -67,13 +46,14 @@ class BranchModel {
   String? open;
   String? close;
   List<String>? displayUrlList;
-  List<int>? serviceIdList;
+  List<BranchServiceModel>? branchServiceList;
   String? distanceKilometer;
 
   BranchModel(
       {this.branchId,
       this.shopOwnerId,
       this.branchName,
+      this.thumbnailUrl,
       this.phone,
       this.address,
       this.status,
@@ -81,7 +61,7 @@ class BranchModel {
       this.open,
       this.close,
       this.displayUrlList,
-      this.serviceIdList,
+      this.branchServiceList,
       this.distanceKilometer});
 
   factory BranchModel.fromJson(Map<String, dynamic> json) {
@@ -95,13 +75,13 @@ class BranchModel {
       numberStaffs: json['numberStaffs'],
       open: json['open'],
       close: json['close'],
-      // open: json['open'] != null ? OpenModel.fromJson(json['open']) : null,
-      // close: json['close'] != null ? CloseModel.fromJson(json['close']) : null,
       displayUrlList: json['displayUrlList'] != null
           ? json['displayUrlList'].cast<String>()
           : null,
-      serviceIdList: json['serviceIdList'] != null
-          ? json['serviceIdList'].cast<int>()
+      branchServiceList: json['branchServiceList'] != null
+          ? (json['branchServiceList'] as List)
+              ?.map((e) => BranchServiceModel.fromJson(e))
+              ?.toList()
           : null,
       distanceKilometer:
           json['distanceKilometer'] != null ? json['distanceKilometer'] : null,
@@ -153,4 +133,27 @@ class CloseModel {
       nano: json['nano'],
     );
   }
+}
+
+class BranchServiceModel {
+  int? serviceId;
+  int? branchId;
+  String? branchName;
+  String? thumbnailUrl;
+  int? price;
+
+  BranchServiceModel(
+      {this.serviceId,
+      this.branchId,
+      this.branchName,
+      this.thumbnailUrl,
+      this.price});
+
+  factory BranchServiceModel.fromJson(Map<String, dynamic> json) =>
+      BranchServiceModel(
+          serviceId: json["serviceId"],
+          branchId: json["branchId"],
+          branchName: json["branchName"],
+          thumbnailUrl: json["thumbnailUrl"],
+          price: json["price"]);
 }

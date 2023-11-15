@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:sizer/sizer.dart';
 
 class ChooseServiceBookingScreen extends StatefulWidget {
@@ -12,17 +14,30 @@ class ChooseServiceBookingScreen extends StatefulWidget {
 
 class _ChooseServiceBookingScreenState
     extends State<ChooseServiceBookingScreen> {
-  int selectedServiceCount = 0; // Số lượng dịch vụ đã chọn
+  List<String> selectedServices = [];
 
-  // Hàm cập nhật selectedServiceCount
-  void updateSelectedServiceCount(bool isSelected) {
+  @override
+  void initState() {
+    super.initState();
+    var selectedServicesProvider =
+        Provider.of<ChangeNotifierServices>(context, listen: false);
+    selectedServices = selectedServicesProvider.selectedServices;
+  }
+
+  void updateSelectedServiceCount(bool isSelected, String serviceName) {
     setState(() {
-      selectedServiceCount += isSelected ? 1 : -1;
+      if (isSelected) {
+        selectedServices.add(serviceName);
+      } else {
+        selectedServices.remove(serviceName);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    var selectedServicesProvider = Provider.of<ChangeNotifierServices>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -88,10 +103,9 @@ class _ChooseServiceBookingScreenState
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(
-                                8.0), // Điều chỉnh khoảng cách xung quanh tiêu đề
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "Dịch vụ đã chọn: $selectedServiceCount",
+                              "Dịch vụ đã chọn: ${selectedServices.length}",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -105,7 +119,8 @@ class _ChooseServiceBookingScreenState
                                   price: '20',
                                   image: 'assets/images/admin.png',
                                   onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(isSelected);
+                                    updateSelectedServiceCount(
+                                        isSelected, 'Combo 1');
                                   },
                                 ),
                                 SubServiceTile(
@@ -113,14 +128,13 @@ class _ChooseServiceBookingScreenState
                                   price: '25',
                                   image: 'assets/images/admin.png',
                                   onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(isSelected);
+                                    updateSelectedServiceCount(
+                                        isSelected, 'Combo 2');
                                   },
                                 ),
-                                // Add more SubServiceTile as needed
                               ],
                             ],
-                            isGridView:
-                                false, // Đặt thành false để sắp xếp theo cột
+                            isGridView: false,
                           ),
                           ServiceCategoryTile(
                             title: 'Spa Services',
@@ -131,7 +145,8 @@ class _ChooseServiceBookingScreenState
                                   price: '30',
                                   image: 'assets/images/admin.png',
                                   onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(isSelected);
+                                    updateSelectedServiceCount(
+                                        isSelected, 'Facial');
                                   },
                                 ),
                                 SubServiceTile(
@@ -139,14 +154,13 @@ class _ChooseServiceBookingScreenState
                                   price: '15',
                                   image: 'assets/images/admin.png',
                                   onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(isSelected);
+                                    updateSelectedServiceCount(
+                                        isSelected, 'Manicure');
                                   },
                                 ),
-                                // Add more SubServiceTile as needed
                               ],
                             ],
-                            isGridView:
-                                true, // Đặt thành true để sắp xếp theo grid
+                            isGridView: true,
                           ),
                         ],
                       ),
@@ -154,27 +168,24 @@ class _ChooseServiceBookingScreenState
                   ),
                 ),
                 Positioned(
-                  bottom: 0.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      width: 90.w,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Your logic for the button click goes here
-                        },
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            backgroundColor: Colors.white),
-                        child: Text(
-                          selectedServiceCount == 0
-                              ? 'Chọn dịch vụ'
-                              : 'Chọn $selectedServiceCount dịch vụ',
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                      ),
+                  bottom: 16.0,
+                  left: 16.0,
+                  right: 16.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      selectedServicesProvider
+                          .updateSelectedServices(selectedServices);
+                      Navigator.pop(context, selectedServices);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                    child: Text(
+                      selectedServices.isEmpty
+                          ? 'Chọn dịch vụ'
+                          : 'Chọn ${selectedServices.length} dịch vụ',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                   ),
                 ),
@@ -254,6 +265,17 @@ class SubServiceTile extends StatefulWidget {
 
 class _SubServiceTileState extends State<SubServiceTile> {
   bool isSelected = false;
+  var selectedServicesProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    // Khởi tạo trạng thái isSelected từ danh sách dịch vụ đã chọn
+    selectedServicesProvider =
+        Provider.of<ChangeNotifierServices>(context, listen: false);
+    isSelected =
+        selectedServicesProvider.selectedServices.contains(widget.title);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,11 +290,8 @@ class _SubServiceTileState extends State<SubServiceTile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Hình ảnh
           Image.asset(widget.image,
               width: double.infinity, height: 150, fit: BoxFit.cover),
-
-          // Dòng chứa tiêu đề và giá tiền
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
@@ -280,22 +299,16 @@ class _SubServiceTileState extends State<SubServiceTile> {
               children: [
                 Text(
                   widget.title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 SizedBox(height: 5),
                 Text(
                   ' ${widget.price} VNĐ',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(color: Colors.white),
                 ),
               ],
             ),
           ),
-          // Button chọn
           Container(
             width: 400,
             child: ElevatedButton(

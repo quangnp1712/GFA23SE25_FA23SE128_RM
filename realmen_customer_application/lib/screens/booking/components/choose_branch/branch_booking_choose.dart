@@ -1,7 +1,9 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
+import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseBranchBooking extends StatefulWidget {
@@ -50,8 +52,27 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
             ),
             Container(
               child: ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(ChooseBranchesScreen.ChooseBranchesScreenRoute);
+                onPressed: () async {
+                  String selectedBranch = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChangeNotifierProvider<ChangeNotifierServices>.value(
+                        value: selectedServicesProvider,
+                        child: ChooseBranchesScreen(),
+                      ),
+                    ),
+                  );
+                  if (selectedBranch != null) {
+                    setState(() {
+                      hasSelectedServices = selectedBranch.isNotEmpty;
+                      buttonText = hasSelectedServices
+                          ? selectedBranch
+                          : 'Xem tất cả danh sách dịch vụ';
+                    });
+                  }
+
+                  // Get.toNamed(ChooseBranchesScreen.ChooseBranchesScreenRoute);
                 },
                 style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -67,31 +88,38 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Container(
-                        child: Row(
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Icon(
-                                CommunityMaterialIcons.storefront,
-                                color: Colors.black,
-                                size: 24,
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10.0),
-                              child: const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Xem tất cả chi nhánh REALMEN",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black),
+                      Flexible(
+                        child: ClipRRect(
+                          child: Container(
+                            child: Row(
+                              children: [
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Icon(
+                                    CommunityMaterialIcons.storefront,
+                                    color: Colors.black,
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
+                                Flexible(
+                                  child: ClipRRect(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        buttonText,
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       const Align(
@@ -116,4 +144,7 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
 
   int _index = 0;
   bool isActived = true;
+  String buttonText = 'Xem tất cả chi nhánh REALMEN';
+  ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();
+  bool hasSelectedServices = false;
 }

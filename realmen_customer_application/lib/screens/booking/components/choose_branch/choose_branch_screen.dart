@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
+import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -22,6 +24,7 @@ class ChooseBranchesScreen extends StatefulWidget {
 class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   @override
   Widget build(BuildContext context) {
+    var selectedProvider = Provider.of<ChangeNotifierServices>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -150,12 +153,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                   }
                                   if (widget.city == "Thành Phố/Tỉnh") {
                                     final value = await BranchService()
-                                        .getBranches(textEditingValue.text);
+                                        .getSearchBranches(
+                                            textEditingValue.text, 10);
                                     if (value['statusCode'] == 200) {
-                                      branchesModel = value['data'];
                                       try {
                                         options = (await value)['data']
-                                            ?.content! as Iterable<BranchModel>;
+                                            as Iterable<BranchModel>;
 
                                         return Future.value(options);
                                       } catch (e) {
@@ -318,7 +321,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     onChanged: (city) => setState(() {
                                       cityController = city!;
                                       widget.city = city;
-                                      getBranches();
+                                      getBranches(city);
                                     }),
                                     dropdownStyleData: DropdownStyleData(
                                       maxHeight: 160,
@@ -396,6 +399,21 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                               ),
                                               child: ElevatedButton(
                                                 onPressed: () {
+                                                  setState(() {
+                                                    selectedBranch =
+                                                        utf8.decode(
+                                                            branchesForCity![
+                                                                    index]
+                                                                .address
+                                                                .toString()
+                                                                .runes
+                                                                .toList());
+                                                  });
+                                                  selectedProvider
+                                                      .updateSelectedBranch(
+                                                          selectedBranch);
+                                                  Navigator.pop(
+                                                      context, selectedBranch);
                                                   // Xử lý sự kiện khi nhấn nút đặt lịch
                                                 },
                                                 style: ElevatedButton.styleFrom(
@@ -463,7 +481,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   }
 
   String image = "assets/images/branch1.png";
-  BranchesByCityModel? branchesByCityModel = BranchesByCityModel();
+  BranchesModel? branchesByCityModel = BranchesModel();
   List<BranchModel>? branchesForCity;
   String? cityController;
   List<String> cities = [];
@@ -472,10 +490,13 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
       BranchService branchService = BranchService();
       final result = await branchService.getBranchesByCity();
       if (result['statusCode'] == 200) {
-        branchesByCityModel = result['data'] as BranchesByCityModel;
+        branchesByCityModel = result['data'] as BranchesModel;
         try {
           if (branchesByCityModel != null) {
-            getBranches();
+            if (widget.city != null) {
+              getBranches(widget.city);
+            }
+
             cities.add("Thành Phố/Tỉnh");
             if (branchesByCityModel?.values != null) {
               for (var values in branchesByCityModel!.values!) {
@@ -508,24 +529,17 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     }
   }
 
-  getBranches() {
+  getBranches(String search) async {
     branchesForCity = [];
     try {
-      if (branchesByCityModel?.values != null) {
-        if (widget.city == "Thành Phố/Tỉnh") {
-          (branchesByCityModel?.values as List)
-              ?.map((e) =>
-                  (branchesForCity as List<BranchModel>)?.addAll(e.branches))
-              ?.toList();
-        } else {
-          for (var values in branchesByCityModel!.values!) {
-            if (utf8.decode(values.city.toString().runes.toList()) ==
-                widget.city) {
-              branchesForCity = values.branchList;
-            }
-          }
+      BranchService branchService = BranchService();
+      final result = await branchService.getBranches(search, 10);
+      if (result['statusCode'] == 200) {
+        for (var branch in result['data'].values!) {
+          branchesForCity = branch.branchList;
         }
       }
+
       setState(() {
         branchesForCity;
       });
@@ -542,17 +556,11 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   Future<void> searchBranches(String query, FocusNode focusNode) async {
     try {
       BranchService branchService = BranchService();
-      final result = await branchService.getBranches(query);
+      final result = await branchService.getBranches(query, 10);
       if (result['statusCode'] == 200) {
-        branchesModel = result['data'] as BranchesModel;
-        try {
-          branchesForCity = [];
-          for (var branch in branchesModel!.content!) {
-            (branchesForCity as List<BranchModel>)?.add(branch);
-          }
-        } on Exception catch (e) {
-          print(e);
-        }
+        branchesForCity = [];
+        branchesForCity = result['data'] as List<BranchModel>;
+
         setState(() {
           branchesForCity;
           isSearching = true;
@@ -589,4 +597,5 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   BranchesModel branchesModel = BranchesModel();
 
   BranchModel selectedAddress = BranchModel();
+  String selectedBranch = "";
 }

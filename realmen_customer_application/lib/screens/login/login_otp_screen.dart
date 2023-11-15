@@ -143,13 +143,11 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                       borderRadius: BorderRadius.circular(24),
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: () => Get.toNamed(
-                                          MainScreen.MainScreenRoute)
-                                      // submitOtp
-                                      // () {
-                                      // Navigator.pushNamed(context,
-                                      //     RegisterScreen.RegisterScreenRoute);
-                                      // }
+                                      onPressed: submitOtp
+                                      // No API
+                                      // () => Get.toNamed(
+                                      //     MainScreen.MainScreenRoute)
+
                                       ,
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(

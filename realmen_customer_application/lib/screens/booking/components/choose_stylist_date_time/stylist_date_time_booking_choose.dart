@@ -2,9 +2,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 import 'package:realmen_customer_application/screens/booking/components/time_slot.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseStylistAndDateTimeBooking extends StatefulWidget {
   const ChooseStylistAndDateTimeBooking({
@@ -162,7 +163,17 @@ class _ChooseStylistAndDateTimeBookingState
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                const Text("Stylist 1"),
+                                Container(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 76),
+                                    child: const Text(
+                                      "REALMEN Chọn hộ anh",
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )),
                                 const Padding(
                                   padding: EdgeInsets.all(0.0),
                                   child: Icon(
@@ -174,15 +185,14 @@ class _ChooseStylistAndDateTimeBookingState
                           ),
                           SizedBox(
                             width: 245,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.only(left: 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.only(left: 0),
+                                itemCount: 3,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 0, left: 0, right: 5),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -192,243 +202,95 @@ class _ChooseStylistAndDateTimeBookingState
                                         Stack(
                                           children: [
                                             Container(
-                                              width: 70,
-                                              height: 70,
+                                              width: 72,
+                                              height: 72,
                                               decoration: BoxDecoration(
                                                 border: Border.all(
-                                                  color: Colors.black,
+                                                  color: Colors.transparent,
                                                   width: 1,
                                                   style: BorderStyle.solid,
                                                 ),
                                                 borderRadius:
                                                     BorderRadius.circular(50),
-                                                color: Colors.black,
+                                                color: Colors.white,
                                               ),
-                                              padding: const EdgeInsets.all(3),
-                                              child: const CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                radius: 20,
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 5,
-                                              child: Container(
-                                                height: 22,
-                                                width: 22,
-                                                // color: Colors.white,
-                                                child: const CircleAvatar(
-                                                  backgroundColor: Colors.black,
-                                                  child: ClipOval(
-                                                    child: Icon(
-                                                      Icons.done,
-                                                      size: 18,
-                                                      color: Colors.white,
+                                              padding: const EdgeInsets.all(2),
+                                              child: Center(
+                                                child: Container(
+                                                  width: 70,
+                                                  height: 70,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.black,
+                                                      width: 1,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    color: Colors.black,
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(3),
+                                                  child: CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    radius: 20,
+                                                    child: ClipOval(
+                                                      child: Image.asset(
+                                                        "assets/images/admin.png",
+                                                        scale: 1,
+                                                        fit: BoxFit.cover,
+                                                        width: 70,
+                                                        height: 70,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ),
+                                            // Positioned(
+                                            //   bottom: 1,
+                                            //   right: 4,
+                                            //   child: Container(
+                                            //     height: 22,
+                                            //     width: 22,
+                                            //     // color: Colors.white,
+                                            //     child: const CircleAvatar(
+                                            //       backgroundColor: Colors.black,
+                                            //       child: ClipOval(
+                                            //         child: Icon(
+                                            //           Icons.done,
+                                            //           size: 18,
+                                            //           color: Colors.white,
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        const Text("Stylist 1"),
+                                        Container(
+                                            constraints: const BoxConstraints(
+                                                maxWidth: 76),
+                                            child: const Text(
+                                              "Phuong Quang",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            )),
+                                        // const Icon(
+                                        //   Icons.keyboard_arrow_up,
+                                        // ),
                                       ],
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Container(
-                                              width: 70,
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 1,
-                                                  style: BorderStyle.solid,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.black,
-                                              ),
-                                              padding: const EdgeInsets.all(3),
-                                              child: const CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                radius: 20,
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 5,
-                                              child: Container(
-                                                height: 22,
-                                                width: 22,
-                                                // color: Colors.white,
-                                                child: const CircleAvatar(
-                                                  backgroundColor: Colors.black,
-                                                  child: ClipOval(
-                                                    child: Icon(
-                                                      Icons.done,
-                                                      size: 18,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text("Stylist 1"),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Container(
-                                              width: 70,
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 1,
-                                                  style: BorderStyle.solid,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.black,
-                                              ),
-                                              padding: const EdgeInsets.all(3),
-                                              child: const CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                radius: 20,
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 5,
-                                              child: Container(
-                                                height: 22,
-                                                width: 22,
-                                                // color: Colors.white,
-                                                child: const CircleAvatar(
-                                                  backgroundColor: Colors.black,
-                                                  child: ClipOval(
-                                                    child: Icon(
-                                                      Icons.done,
-                                                      size: 18,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text("Stylist 1"),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Container(
-                                              width: 70,
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 1,
-                                                  style: BorderStyle.solid,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                color: Colors.black,
-                                              ),
-                                              padding: const EdgeInsets.all(3),
-                                              child: const CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                radius: 20,
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 5,
-                                              child: Container(
-                                                height: 22,
-                                                width: 22,
-                                                // color: Colors.white,
-                                                child: const CircleAvatar(
-                                                  backgroundColor: Colors.black,
-                                                  child: ClipOval(
-                                                    child: Icon(
-                                                      Icons.done,
-                                                      size: 18,
-                                                      color: Colors.white,
-                                                      weight: 2,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text("Stylist 2"),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  );
+                                }),
                           ),
                         ],
                       ),
@@ -521,8 +383,8 @@ class _ChooseStylistAndDateTimeBookingState
                                       Container(
                                         width: 105,
                                         height: 75,
-                                        margin:
-                                            EdgeInsets.only(left: 0, right: 5),
+                                        margin: const EdgeInsets.only(
+                                            left: 0, right: 5),
                                         child: Image.asset(
                                           "assets/images/admin.png",
                                           fit: BoxFit.cover,
@@ -847,4 +709,19 @@ class _ChooseStylistAndDateTimeBookingState
     'saturday': 'Thứ bảy',
     'sunday': 'Chủ nhật'
   };
+
+  final List<StylistModel> stylist = [];
+}
+
+class StylistModel {
+  String name;
+  String avatar;
+  List<String> specialties;
+  List<String> images;
+  StylistModel({
+    required this.name,
+    required this.avatar,
+    required this.specialties,
+    required this.images,
+  });
 }

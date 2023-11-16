@@ -3,7 +3,7 @@ import 'package:realmen_customer_application/screens/booking/components/choose_b
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/service_booking_choose.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/stylist_date_time_booking_choose.dart';
-import 'package:realmen_customer_application/screens/booking/components/time_slot.dart';
+import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class BranchOptionBooking extends StatefulWidget {

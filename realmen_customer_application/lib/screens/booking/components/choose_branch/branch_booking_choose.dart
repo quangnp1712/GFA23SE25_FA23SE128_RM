@@ -53,7 +53,7 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
             Container(
               child: ElevatedButton(
                 onPressed: () async {
-                  String selectedBranch = await Navigator.push(
+                  String? selectedBranch = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>

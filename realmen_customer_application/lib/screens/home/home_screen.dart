@@ -387,6 +387,11 @@ class _HomeScreenState extends State<HomeScreen> {
     getAccountInfo();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   AccountInfoModel? accountInfo = AccountInfoModel();
   String? name;
   String? avatarUrl;

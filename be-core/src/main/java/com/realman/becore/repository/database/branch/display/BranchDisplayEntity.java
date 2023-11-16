@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "branch_display")
 public class BranchDisplayEntity extends Auditable {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long branchDisplayId;

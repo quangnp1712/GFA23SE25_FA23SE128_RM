@@ -21,8 +21,7 @@ import jakarta.validation.Valid;
 public interface BranchAPI {
 
     @PutMapping
-    void update(@PathVariable Long branchId,
-            @RequestBody @Valid BranchRequest branch);
+    void update(@PathVariable Long branchId, @RequestBody @Valid BranchRequest branch);
     
     @GetMapping
     ValueResponse<BranchResponse> findById(@PathVariable Long branchId);

@@ -16,7 +16,7 @@ public record BranchResponse(
     Integer numberStaffs,
     LocalDateTime open,
     LocalDateTime close,
-    List<String> displayUrlList,
+    List<BranchDisplayResponse> branchDisplayList,
     List<BranchServiceResponse> branchServiceList,
     String distanceKilometer
 ) {

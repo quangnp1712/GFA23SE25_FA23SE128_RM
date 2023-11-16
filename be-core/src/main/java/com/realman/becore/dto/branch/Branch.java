@@ -3,6 +3,7 @@ package com.realman.becore.dto.branch;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.realman.becore.dto.branch.display.BranchDisplay;
 import com.realman.becore.dto.branch.service.BranchService;
 import com.realman.becore.dto.enums.EBranchStatus;
 
@@ -20,7 +21,7 @@ public record Branch(
         Integer numberStaffs,
         LocalTime open,
         LocalTime close,
-        List<String> displayUrlList,
+        List<BranchDisplay> branchDisplayList,
         List<BranchService> branchServiceList,
         Double lat,
         Double lng,

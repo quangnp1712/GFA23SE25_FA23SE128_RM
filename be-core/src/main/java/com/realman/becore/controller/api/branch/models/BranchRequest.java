@@ -20,7 +20,7 @@ public record BranchRequest(
         Integer numberStaffs,
         LocalDateTime open,
         LocalDateTime close,
-        List<String> displayUrlList,
+        List<BranchDisplayRequest> branchDisplayList,
         List<BranchServiceRequest> branchServiceList) {
 
 }

@@ -27,8 +27,10 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
 
     @Query("""
             SELECT 
+                 bs.branchServiceId AS branchServiceId,       
                  s.serviceId AS serviceId,
                  b.branchId AS branchId,
+                 s.name AS serviceName,
                  b.branchName AS branchName,
                  b.thumbnailUrl AS thumbnailUrl,
                  bs.price AS price

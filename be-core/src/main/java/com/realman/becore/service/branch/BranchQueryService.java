@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -58,8 +57,7 @@ public class BranchQueryService {
                                 .orElseThrow(ResourceNotFoundException::new);
                 List<BranchDisplay> branchDisplayList = branchDisplayQueryService.findAll(branchId.value());
                 List<BranchService> branchServiceList = branchServiceUseCaseService.findAllByBranchId(branchId.value());
-                List<String> displayUrlList = branchDisplayList.stream().map(BranchDisplay::url).toList();
-                return branchMapper.toDto(entity, displayUrlList, branchServiceList);
+                return branchMapper.toDto(entity, branchDisplayList, branchServiceList);
         }
 
         public Page<Branch> findAll(BranchSearchCriteria searchCriteria, PageRequestCustom pageRequestCustom) {
@@ -75,13 +73,9 @@ public class BranchQueryService {
                         Map<Long, List<BranchService>> branchServiceMap = branchServiceUseCaseService
                                         .findAllByBranchId(entity.getBranchId()).stream()
                                         .collect(Collectors.groupingBy(BranchService::branchId));
-                        List<BranchDisplay> branchDisplayList = branchDisplayMap.get(entity.getBranchId());
-                        List<String> branchUrlList = Objects.nonNull(branchDisplayList)
-                                        ? branchDisplayList.stream().map(BranchDisplay::url).toList()
-                                        : null;
                         Double distance = calculateDistance(searchCriteria.originLat(),
                                         searchCriteria.originLng(), entity.getLat(), entity.getLng());
-                        return branchMapper.toDto(entity, distance, branchUrlList,
+                        return branchMapper.toDto(entity, distance, branchDisplayMap.get(entity.getBranchId()),
                                         branchServiceMap.get(entity.getBranchId()));
                 }).toList();
                 dtoList = dtoList.stream().sorted(Comparator.comparing(Branch::distance)).toList();
@@ -121,20 +115,14 @@ public class BranchQueryService {
                         List<Branch> dtoList = entityCityMap.get(city).stream()
                                         .map(branch -> {
                                                 Map<Long, List<BranchDisplay>> branchDisplayMap = branchDisplayQueryService
-                                                                .findAll().stream()
-                                                                .collect(Collectors.groupingBy(
-                                                                                BranchDisplay::branchId));
+                                                                .findAll(branch.getBranchId()).stream()
+                                                                .collect(Collectors
+                                                                                .groupingBy(BranchDisplay::branchId));
                                                 Map<Long, List<BranchService>> branchServiceMap = branchServiceUseCaseService
                                                                 .findAllByBranchId(branch.getBranchId())
-                                                                .stream().collect(Collectors.groupingBy(
-                                                                                BranchService::branchId));
-                                                List<BranchDisplay> branchDisplayList = branchDisplayMap
-                                                                .get(branch.getBranchId());
-                                                List<String> urlDisplayList = Objects.nonNull(branchDisplayList)
-                                                                ? branchDisplayMap.get(branch.getBranchId()).stream()
-                                                                                .map(BranchDisplay::url).toList()
-                                                                : null;
-                                                return branchMapper.toDto(branch, urlDisplayList,
+                                                                .stream().collect(Collectors
+                                                                                .groupingBy(BranchService::branchId));
+                                                return branchMapper.toDto(branch, branchDisplayMap.get(branch.getBranchId()),
                                                                 branchServiceMap.get(branch.getBranchId()));
                                         }).toList();
                         if (searchCriteria.isShowDistance()) {
@@ -171,9 +159,8 @@ public class BranchQueryService {
                         Map<Long, List<BranchService>> branchServiceMap = branchServiceUseCaseService
                                         .findAllByBranchId(branch.getBranchId()).stream()
                                         .collect(Collectors.groupingBy(BranchService::branchId));
-                        List<String> urlDisplayList = branchDisplayMap.get(branch.getBranchId())
-                                        .stream().map(BranchDisplay::url).toList();
-                        return branchMapper.toDto(branch, urlDisplayList, branchServiceMap.get(branch.getBranchId()));
+                        return branchMapper.toDto(branch, branchDisplayMap.get(branch.getBranchId()), 
+                                branchServiceMap.get(branch.getBranchId()));
                 }).toList();
         }
 

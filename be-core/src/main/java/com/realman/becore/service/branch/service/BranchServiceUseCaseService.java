@@ -23,6 +23,11 @@ public class BranchServiceUseCaseService {
         branchServiceCommandService.save(branchId, branchService);
     }
 
+    @Transactional
+    public void update(Long branchId, List<BranchService> branchServices) {
+        branchServiceCommandService.update(branchId, branchServices);
+    }
+
     public List<BranchService> findAllByServiceId(Long serviceId) {
         return branchServiceQueryService.findAllByServiceId(serviceId);
     }

@@ -24,6 +24,11 @@ public class ShopServiceUseCaseService {
         shopServiceCommandService.save(service);
     }
 
+    @Transactional
+    public void update(Long serviceId, ShopService shopService) {
+        shopServiceCommandService.update(serviceId, shopService);
+    }
+
     public Page<ShopService> findAll(PageRequestCustom pageRequestCustom) {
         return shopServiceQueryService.findAll(pageRequestCustom);
     }

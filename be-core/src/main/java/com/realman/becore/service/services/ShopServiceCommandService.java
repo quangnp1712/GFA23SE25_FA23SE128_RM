@@ -28,7 +28,7 @@ public class ShopServiceCommandService {
     public void update(Long serviceId, ShopService shopService) {
         ShopServiceEntity foundService = shopServiceRepository.findById(serviceId)
                 .orElseThrow(ResourceNotFoundException::new);
-        
+        shopServiceMapper.updateService(foundService, shopService);
         
     }
 }

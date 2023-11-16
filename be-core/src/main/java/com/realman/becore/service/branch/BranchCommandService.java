@@ -47,8 +47,7 @@ public class BranchCommandService {
                 String city = addressComponents.get(addressComponents.size() - 1).shortName();
                 BranchEntity entity = branchMapper.toEntity(branch, city, lat, lng);
                 BranchEntity savedEntity = branchRepository.save(entity);
-                branchDisplayCommandService.saveOrUpdate(branch.displayUrlList(), savedEntity.getBranchId(),
-                         false);
+                branchDisplayCommandService.save(branch.branchDisplayList(), savedEntity.getBranchId());
                 branchServiceUseCaseService.save(savedEntity.getBranchId(), branch.branchServiceList());
         }
 
@@ -56,9 +55,9 @@ public class BranchCommandService {
                 BranchEntity foundEntity = branchRepository.findById(branchId.value())
                                 .orElseThrow(ResourceNotFoundException::new);
                 branchMapper.updateEntity(foundEntity, branch);
-                BranchEntity savedEntity = branchRepository.save(foundEntity);
-                branchDisplayCommandService.saveOrUpdate(branch.displayUrlList(),
-                                savedEntity.getBranchId(), true);
+                branchRepository.save(foundEntity);
+                branchDisplayCommandService.update(branchId.value(), branch.branchDisplayList());
+                branchServiceUseCaseService.update(branchId.value(), branch.branchServiceList());
         }
 
         public void delete(BranchId branchId) {

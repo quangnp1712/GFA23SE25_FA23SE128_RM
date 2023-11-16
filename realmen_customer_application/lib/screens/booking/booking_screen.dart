@@ -194,7 +194,7 @@ class _BookingScreenState extends State<BookingScreen>
                                 controller: _tabController,
                                 children: const [
                                   BranchOptionBooking(),
-                                  Center(child: StylistOptionBooking()),
+                                  StylistOptionBooking(),
                                 ],
                               ),
                             ),

@@ -9,6 +9,8 @@ class BookingHaircutTemporary extends StatefulWidget {
   @override
   State<BookingHaircutTemporary> createState() =>
       BookingHaircutTemporaryState();
+  static const String BookingHaircutTemporaryScreenRoute =
+      "/booking-temporary-screen";
 }
 
 class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
@@ -138,7 +140,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: 240,
+                width: 230,
                 child: const Text(
                   "1111 Hoàng Sa, Phường 5, Quận 3, TP.Hồ Chí Minh",
                   maxLines: 2,

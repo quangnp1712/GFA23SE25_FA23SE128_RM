@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/branch_booking_choose.dart';
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/service_booking_choose.dart';
@@ -46,6 +48,8 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
           ),
           child: ElevatedButton(
             onPressed: () {
+              Get.toNamed(
+                  BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute);
               // Xử lý chuyển trang khi nhấn nút
               // Navigator.push(context, MaterialPageRoute(builder: (context) => YourNextScreen()));
             },

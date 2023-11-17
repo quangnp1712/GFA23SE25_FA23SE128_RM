@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/choose_service_screen.dart';
@@ -177,6 +178,19 @@ class RouteGenerator {
                     return const LoginPhoneScreen();
                   } else {
                     return ChooseStylistScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else {
+                    return BookingHaircutTemporary();
                   }
                 });
           }),

@@ -72,7 +72,7 @@ class _BookingScreenState extends State<BookingScreen>
                                 child: Center(
                                   child: Text(
                                     "đặt lịch giữ chỗ".toUpperCase(),
-                                    style: GoogleFonts.quicksand(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 24,
                                     ),
@@ -105,11 +105,11 @@ class _BookingScreenState extends State<BookingScreen>
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.only(left: 10.0),
-                                      child: Align(
+                                      child: const Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           "Chào mừng bạn đến với REALMEN",
-                                          style: GoogleFonts.quicksand(
+                                          style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700,
                                             fontSize: 18,
@@ -119,36 +119,33 @@ class _BookingScreenState extends State<BookingScreen>
                                     ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                   child: Text(
                                     "Bạn có hai cách để đặt lịch cắt tóc:",
-                                    style: GoogleFonts.quicksand(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16,
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                   child: Text(
                                     "• Chọn theo chi nhánh: Bạn có thể chọn chi nhánh gần nhất với vị trí của mình để đặt lịch",
-                                    style: GoogleFonts.quicksand(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16,
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                   child: Text(
                                     "• Chọn theo chi nhánh: Bạn có thể chọn chi nhánh gần nhất với vị trí của mình để đặt lịch",
-                                    style: GoogleFonts.quicksand(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16,
@@ -181,9 +178,19 @@ class _BookingScreenState extends State<BookingScreen>
                                   ),
                                 ),
                               ),
-                              tabs: const [
-                                Tab(text: 'Theo chi nhánh'),
-                                Tab(text: 'Theo thợ cắt tóc'),
+                              tabs: [
+                                Tab(
+                                  child: Text(
+                                    'Theo chi nhánh',
+                                    style: GoogleFonts.ebGaramond(fontSize: 22),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Theo thợ cắt tóc',
+                                    style: GoogleFonts.ebGaramond(fontSize: 22),
+                                  ),
+                                ),
                               ],
                             ),
                             Container(

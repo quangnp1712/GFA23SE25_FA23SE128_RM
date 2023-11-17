@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
@@ -79,7 +79,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     child: Center(
                                       child: Text(
                                         "chọn chi nhánh".toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -108,14 +108,14 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                 height: 180,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
+                                child: const Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
                                       "HỆ THỐNG CHI NHÁNH CỦA REALMEN",
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18,
@@ -123,7 +123,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     ),
                                     Text(
                                       "Tính đến hiện tại, chuỗi barber tóc nam RealMen có 99 barber tại những vị trí đắc địa nhất TP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận. Hãy tìm đến barber RealMen gần bạn nhất để tận hưởng trải nghiệm cắt tóc nam đỉnh cao!",
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
@@ -584,7 +584,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                 isSearching = false;
               });
             },
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
           )
         : null;
   }

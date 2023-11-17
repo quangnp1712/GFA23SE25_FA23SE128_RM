@@ -78,7 +78,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         child: Center(
                                           child: Text(
                                             "thông tin tài khoản".toUpperCase(),
-                                            style: GoogleFonts.quicksand(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               fontSize: 24,
                                             ),
@@ -150,7 +150,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     children: [
                                       Text(
                                         "Họ và Tên đệm",
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black),
@@ -207,7 +207,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     children: [
                                       Text(
                                         "Tên",
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black),
@@ -264,7 +264,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     children: [
                                       Text(
                                         "Số điện thoại",
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black),
@@ -321,7 +321,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     children: [
                                       Text(
                                         "Ngày tháng năm sinh ",
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black),
@@ -386,7 +386,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     children: [
                                       Text(
                                         "Giới tính ",
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black),
@@ -444,7 +444,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     children: [
                                       Text(
                                         "Địa chỉ",
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.black),

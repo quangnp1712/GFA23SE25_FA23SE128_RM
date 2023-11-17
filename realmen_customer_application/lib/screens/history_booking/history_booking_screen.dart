@@ -69,7 +69,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                 child: Center(
                                   child: Text(
                                     "Lịch sử đặt lịch".toUpperCase(),
-                                    style: GoogleFonts.quicksand(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 24,
                                     ),

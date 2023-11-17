@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Center(
                               child: Text(
                                 name ?? '',
-                                style: GoogleFonts.quicksand(
+                                style: TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black),
@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Center(
                               child: Text(
                                 phone ?? "",
-                                style: GoogleFonts.quicksand(
+                                style: TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black),

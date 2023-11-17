@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/membership/components/detaillevel_membership.dart';
 
 class LabelTextLevel extends StatefulWidget {
@@ -41,9 +42,24 @@ class _LabelTextLevelState extends State<LabelTextLevel>
               ),
             ),
             tabs: [
-              const Tab(text: 'Level 1'),
-              const Tab(text: 'Level 2'),
-              const Tab(text: 'Level 3'),
+              Tab(
+                child: Text(
+                  'Level 1',
+                  style: GoogleFonts.ebGaramond(fontSize: 22),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Level 2',
+                  style: GoogleFonts.ebGaramond(fontSize: 22),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Level 3',
+                  style: GoogleFonts.ebGaramond(fontSize: 22),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 1),

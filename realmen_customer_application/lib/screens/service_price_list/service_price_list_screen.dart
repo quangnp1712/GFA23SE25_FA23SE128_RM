@@ -77,7 +77,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                     child: Center(
                                       child: Text(
                                         "bảng giá".toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -104,7 +104,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                             ),
                             child: Text(
                               "realmen combo".toUpperCase(),
-                              style: GoogleFonts.quicksand(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
                               ),
@@ -216,7 +216,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                             ),
                             child: Text(
                               "realmen combo".toUpperCase(),
-                              style: GoogleFonts.quicksand(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
                               ),
@@ -330,7 +330,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                             ),
                             child: Text(
                               "realmen combo".toUpperCase(),
-                              style: GoogleFonts.quicksand(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
                               ),

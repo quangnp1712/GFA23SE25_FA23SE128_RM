@@ -74,7 +74,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                                   child: Center(
                                     child: Text(
                                       "realmen member".toUpperCase(),
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 24,
                                       ),

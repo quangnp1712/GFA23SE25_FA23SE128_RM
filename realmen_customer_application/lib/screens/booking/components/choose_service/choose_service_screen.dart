@@ -91,7 +91,7 @@ class _ChooseServiceBookingScreenState
                                     child: Center(
                                       child: Text(
                                         "đặt lịch giữ chỗ".toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),

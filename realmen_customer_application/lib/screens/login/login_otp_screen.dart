@@ -92,7 +92,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                   ),
                                   Text(
                                     "ĐĂNG NHẬP",
-                                    style: GoogleFonts.quicksand(
+                                    style: TextStyle(
                                       fontSize: 35,
                                       fontWeight: FontWeight.w700,
                                       color: const Color(0xff444444),
@@ -103,7 +103,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                   ),
                                   Text(
                                     "Nhập OTP",
-                                    style: GoogleFonts.quicksand(
+                                    style: TextStyle(
                                       fontSize: 27,
                                       fontWeight: FontWeight.w400,
                                       color: const Color(0xff444444),

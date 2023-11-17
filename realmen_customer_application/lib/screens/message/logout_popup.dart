@@ -18,7 +18,7 @@ class LogoutPopup extends StatelessWidget {
           Center(
             child: Text(
               "đăng xuất".toUpperCase(),
-              style: GoogleFonts.quicksand(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 26,
               ),
@@ -36,7 +36,7 @@ class LogoutPopup extends StatelessWidget {
           Center(
             child: Text(
               "Xác nhận đăng xuất",
-              style: GoogleFonts.quicksand(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 20,
                 color: const Color(0xff7a7a7a),

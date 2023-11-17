@@ -76,7 +76,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     child: Center(
                                       child: Text(
                                         "hệ thống chi nhánh".toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -112,7 +112,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                   children: [
                                     Text(
                                       "HỆ THỐNG CHI NHÁNH CỦA REALMEN",
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18,
@@ -120,7 +120,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     ),
                                     Text(
                                       "Tính đến hiện tại, chuỗi barber tóc nam RealMen có 99 barber tại những vị trí đắc địa nhất TP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận. Hãy tìm đến barber RealMen gần bạn nhất để tận hưởng trải nghiệm cắt tóc nam đỉnh cao!",
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,

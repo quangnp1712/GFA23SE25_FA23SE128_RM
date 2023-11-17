@@ -70,7 +70,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                                     child: Center(
                                       child: Text(
                                         "lịch đặt của bạn".toUpperCase(),
-                                        style: GoogleFonts.poppins(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),

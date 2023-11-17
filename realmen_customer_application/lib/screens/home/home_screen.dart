@@ -134,14 +134,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(
                                       "Chào buổi $time, $name",
                                       overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20,
                                       ),
                                     ),
                                     Text(
                                       "Level 1",
-                                      style: GoogleFonts.quicksand(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16,
                                       ),
@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(height: 5),
                                       Text(
                                         'Bảng giá'.toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
                                         ),
@@ -256,7 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(height: 5),
                                       Text(
                                         'Chi nhánh'.toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
                                         ),
@@ -371,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 title.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.quicksand(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                 ),

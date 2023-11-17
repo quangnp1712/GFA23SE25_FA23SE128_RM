@@ -71,7 +71,7 @@ class _DetailHistoryBookingScreenState
                                     child: Center(
                                       child: Text(
                                         "chi tiết hóa đơn".toUpperCase(),
-                                        style: GoogleFonts.quicksand(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),

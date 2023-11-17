@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/choose_service_screen.dart';
+import 'package:realmen_customer_application/screens/booking/components/choose_stylist_branch/choose_stylist_screen.dart';
 import 'package:realmen_customer_application/screens/history_booking/detail_history_hair_cut_screen.dart';
 import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
 import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
@@ -163,6 +164,19 @@ class RouteGenerator {
                     return const LoginPhoneScreen();
                   } else {
                     return TestScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: ChooseStylistScreen.ChooseStylistScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else {
+                    return ChooseStylistScreen();
                   }
                 });
           }),

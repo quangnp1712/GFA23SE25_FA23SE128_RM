@@ -1,7 +1,9 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
+import 'package:realmen_customer_application/screens/booking/components/choose_stylist_branch/choose_stylist_screen.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -41,7 +43,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "1. Chọn chi nhánh ",
+              "1. Chọn Stylist",
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(
@@ -50,22 +52,23 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
             Container(
               child: ElevatedButton(
                 onPressed: () async {
-                  String? selectedBranch = await Navigator.push(
+                  var selectedStylist = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
                           ChangeNotifierProvider<ChangeNotifierServices>.value(
                         value: selectedServicesProvider,
-                        child: ChooseBranchesScreen(),
+                        child: ChooseStylistScreen(),
                       ),
                     ),
                   );
-                  if (selectedBranch != null) {
+                  if (selectedStylist != null) {
                     setState(() {
-                      hasSelectedServices = selectedBranch.isNotEmpty;
+                      hasSelectedServices = selectedStylist.isNotEmpty;
                       buttonText = hasSelectedServices
-                          ? selectedBranch
-                          : 'Xem tất cả danh sách dịch vụ';
+                          ? selectedStylist['name']
+                          : 'Xem stylist';
+                      stylistData = selectedStylist;
                     });
                   }
 
@@ -127,6 +130,249 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                 ),
               ),
             ),
+            stylistData != null && stylistData['name'] != null
+                ? Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'assets/images/image1.png',
+                                      scale: 1,
+                                      fit: BoxFit.cover,
+                                      width: 80,
+                                      height: 80,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10.0),
+                              Expanded(
+                                child: Container(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: "Stylist: ",
+                                                style: GoogleFonts.ebGaramond(
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: stylistData['name'],
+                                                //  "Cắt",
+                                                // utf8.decode(_selectedStylist!.name
+                                                //     .toString()
+                                                //     .runes
+                                                //     .toList()),
+                                                style: GoogleFonts.ebGaramond(
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: "Chuyên môn: ",
+                                              style: GoogleFonts.ebGaramond(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 17,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  stylistData['specialization']
+                                                      .join(', ')
+                                                      .toString(),
+                                              style: GoogleFonts.ebGaramond(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
+            stylistData != null && stylistData['name'] != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        const Text(
+                          "Chi nhánh theo stylist",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      child: Image.asset(
+                                        'assets/images/branch1.png',
+                                        scale: 1,
+                                        fit: BoxFit.cover,
+                                        width: 80,
+                                        height: 80,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10.0),
+                                    Expanded(
+                                      child: Container(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: "Nguyễn Văn Tăng",
+                                                      //  "Cắt",
+                                                      // utf8.decode(_selectedStylist!.name
+                                                      //     .toString()
+                                                      //     .runes
+                                                      //     .toList()),
+                                                      style: GoogleFonts
+                                                          .ebGaramond(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 18,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 8,
+                                            ),
+                                            RichText(
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: stylistData['branch'],
+
+                                                    //  "Cắt",
+                                                    // utf8.decode(_selectedStylist!.name
+                                                    //     .toString()
+                                                    //     .runes
+                                                    //     .toList()),
+                                                    style:
+                                                        GoogleFonts.ebGaramond(
+                                                      textStyle:
+                                                          const TextStyle(
+                                                        fontSize: 17,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ])
+                : Container(),
           ],
         ),
       ),
@@ -141,7 +387,8 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
 
   int _index = 0;
   bool isActived = true;
-  String buttonText = 'Xem tất cả chi nhánh REALMEN';
+  String buttonText = 'Xem stylist';
   ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();
   bool hasSelectedServices = false;
+  var stylistData;
 }

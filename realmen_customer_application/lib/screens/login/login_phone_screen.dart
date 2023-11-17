@@ -216,7 +216,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   //   }
   // }
 
-  // No API
+  // // No API
   void submitPhone() async {
     String phone = phoneController.text.toString();
     Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);

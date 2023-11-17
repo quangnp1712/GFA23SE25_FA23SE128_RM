@@ -73,14 +73,6 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
                       if (hasSelectedServices) {
                         textContainers = selectedServices.map((service) {
                           return Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
                             child: Text(
                               service,
                               style:

@@ -15,6 +15,9 @@ import { NzTableDefaultSettingDirective } from 'src/app/share/ui/directive/nz-ta
 import { RxLet } from '@rx-angular/template/let';
 import { MapRoleTypeNamePipe } from '../until/role.pipe';
 import { FormsModule } from '@angular/forms';
+import { roleTypeNameMapping } from 'src/app/share/data-access/api/enum/role.enum';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
 
 @Component({
   selector: 'app-account-list',
@@ -32,7 +35,9 @@ import { FormsModule } from '@angular/forms';
     NzTableDefaultSettingDirective,
     RxLet,
     MapRoleTypeNamePipe,
-    FormsModule
+    FormsModule,
+    NzSelectModule,
+    NzSelectChangeDirective
   ],
   providers: [provideComponentStore(AccountStore), NzMessageService],
   template: `
@@ -44,7 +49,13 @@ import { FormsModule } from '@angular/forms';
     <div nz-row>
       <div nz-col nzSpan="22" class="">
         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-          <input type="text" nz-input placeholder="Tìm theo tên" [(ngModel)]="aStore.pagingRequest.searches" (keyup.enter)="onSearch()"/>
+          <input
+            type="text"
+            nz-input
+            placeholder="Tìm theo tên"
+            [(ngModel)]="aStore.pagingRequest.searches"
+            (keyup.enter)="onSearch()"
+          />
         </nz-input-group>
         <ng-template #suffixIconButton>
           <button nz-button nzType="primary" nzSearch (click)="onSearch()">
@@ -60,6 +71,14 @@ import { FormsModule } from '@angular/forms';
           Tạo tài khoản
         </button>
       </div>
+      <nz-select class="tw-w-[150px] tw-mt-5" nzPlaceHolder="Chọn chức vụ" (nzSelectChange)="onChangeLicense()" [(ngModel)]="aStore.pagingRequest.role">
+        <nz-option
+          *ngFor="let option of roleTypeNameMapping"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
+        >
+        </nz-option>
+      </nz-select>
       <div nz-col nzSpan="24" class="tw-mt-5">
         <ng-container *rxLet="vm$ as vm">
           <nz-table
@@ -137,4 +156,14 @@ export class AccountListComponent {
       this.aStore.getAccountPaging();
     }
   }
+
+  onChangeLicense(){
+    if (this.aStore.pagingRequest.current !== 1) {
+      this.aStore.pagingRequest.current = 1;
+    } else {
+      this.aStore.getAccountPaging();
+    }
+  }
+
+  readonly roleTypeNameMapping = roleTypeNameMapping;
 }

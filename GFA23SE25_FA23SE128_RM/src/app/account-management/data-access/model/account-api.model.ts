@@ -9,7 +9,7 @@ export namespace AccountAddApi {
     address: string;
     gender: string;
     dob: string;
-    branch: string;
+    branch: number;
     professional: string;
     thumbnailUrl: string;
   }
@@ -20,9 +20,10 @@ export namespace AccountAddApi {
     address: FormControl<string>;
     gender: FormControl<string>;
     dob: FormControl<string>;
-    branch: FormControl<string>;
+    branch: FormControl<number>;
     professional: FormControl<string>;
     thumbnailUrl: FormControl<string>;
+    branchAddress: FormControl<string>;
   };
 }
 

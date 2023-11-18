@@ -22,6 +22,11 @@ import { usernameRegex } from 'src/app/share/form-validator/username.const';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { AccountApiService } from '../data-access/api/account.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { AccountStore } from '../data-access/store/account.store';
+import { provideComponentStore } from '@ngrx/component-store';
+import { RxLet } from '@rx-angular/template/let';
+import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 @Component({
   selector: 'app-account',
@@ -40,15 +45,18 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     ReactiveFormsModule,
     NzSelectModule,
     NzDatePickerModule,
+    RxLet,
+    NzSelectChangeDirective,
+    NzAutocompleteModule
   ],
-  providers: [NzMessageService],
+  providers: [NzMessageService, provideComponentStore(AccountStore)],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý tài khoản</nz-breadcrumb-item>
       <nz-breadcrumb-item>Tạo tài khoản</nz-breadcrumb-item>
     </nz-breadcrumb>
     <nz-divider></nz-divider>
-    <div>
+    <div *rxLet="vm$ as vm">
       <form nz-form [formGroup]="form">
         <div nz-row class="tw-ml-[12%]">
           <!-- first name -->
@@ -68,9 +76,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
           <!-- last name -->
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired
-              >Tên</nz-form-label
-            >
+            <nz-form-label class="tw-ml-3" nzRequired>Tên</nz-form-label>
             <nz-form-control nzErrorTip="Vui lòng nhập tên">
               <input
                 class="tw-rounded-md tw-w-[70%]"
@@ -86,12 +92,19 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Địa chỉ</nz-form-label>
             <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ">
-              <input
+            <input
                 class="tw-rounded-md tw-w-[70%]"
+                placeholder="Nhập địa chỉ"
                 [formControl]="form.controls.address"
                 nz-input
-                placeholder="Nhập địa chỉ"
+                (input)="getAddress($event)"
+                [nzAutocomplete]="auto"
               />
+              <nz-autocomplete
+                [nzDataSource]="vm.addressData"
+                nzBackfill
+                #auto
+              ></nz-autocomplete>
             </nz-form-control>
           </nz-form-item>
 
@@ -162,16 +175,26 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Chi nhánh</nz-form-label>
             <nz-form-control>
-              <nz-select class="tw-w-[70%]" [formControl]='form.controls.branch'>
-                <nz-option nzValue="1" nzLabel="1"></nz-option>
-                <nz-option nzValue="2" nzLabel="2"></nz-option>
+              <nz-select
+                class="tw-w-[70%]"
+                [formControl]="form.controls.branch"
+                nzShowSearch="true"
+                nzServerSearch="false"
+                (nzOnSearch)="onSeachBranchName($event)"
+                (nzSelectChange)="onChangeLicense($event)"
+              >
+                <nz-option
+                  *ngFor="let option of vm.branchNameData.values"
+                  [nzValue]="option.branchId"
+                  [nzLabel]="option.branchName"
+                ></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3">Địa chỉ chi nhánh</nz-form-label>
             <nz-form-control>
-              <input class="tw-rounded-md tw-w-[70%]" nz-input placeholder="" />
+              <input class="tw-rounded-md tw-w-[70%]" nz-input [formControl]="form.controls.branchAddress" />
             </nz-form-control>
           </nz-form-item>
           <!-- ca -->
@@ -193,12 +216,12 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Chức vụ</nz-form-label>
             <nz-form-control>
-              <nz-select class="tw-w-[70%]" [formControl]="form.controls.professional">
+              <nz-select
+                class="tw-w-[70%]"
+                [formControl]="form.controls.professional"
+              >
                 <nz-option nzValue="STYLIST" nzLabel="Stylist"></nz-option>
-                <nz-option
-                  nzValue="MASSEUR"
-                  nzLabel="Masseur"
-                ></nz-option>
+                <nz-option nzValue="MASSEUR" nzLabel="Masseur"></nz-option>
                 <nz-option
                   nzValue="RECEPTIONIST"
                   nzLabel="Receptionist"
@@ -209,8 +232,16 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         </div>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary" (click)="form.reset()">Làm mới</button>
-        <button nz-button nzType="primary" class="tw-ml-4" (click)="createAccount()" [disabled]="form.invalid">
+        <button nz-button nzDanger nzType="primary" (click)="form.reset()">
+          Làm mới
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          class="tw-ml-4"
+          (click)="createAccount()"
+          [disabled]="form.invalid"
+        >
           Tạo tài khoản
         </button>
       </div>
@@ -220,28 +251,19 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent implements OnInit {
-  constructor(private _fb: NonNullableFormBuilder, private _accountSvc: AccountApiService,
-    private _nzMessageService: NzMessageService,) {}
+  constructor(
+    private _fb: NonNullableFormBuilder,
+    private _accountSvc: AccountApiService,
+    private _nzMessageService: NzMessageService,
+    public aStore: AccountStore
+  ) {}
 
-  form!: FormGroup<AccountAddApi.RequestFormGroup>;
+  vm$ = this.aStore.state$;
+  form = this.aStore.form;
   model!: AccountAddApi.Request;
 
   ngOnInit(): void {
-    this.form = this._fb.group<AccountAddApi.RequestFormGroup>({
-      firstName: this._fb.control('', trimRequired),
-      lastName: this._fb.control('', [trimRequired]),
-      address: this._fb.control('', trimRequired),
-      dob: this._fb.control('', Validators.required),
-      gender: this._fb.control('', Validators.required),
-      phone: this._fb.control('', [
-        trimRequired,
-        Validators.minLength(10),
-        Validators.maxLength(12),
-      ]),
-      professional: this._fb.control(''),
-      branch: this._fb.control(''),
-      thumbnailUrl: this._fb.control('123')
-    });
+    this.aStore.getBranchName('');
   }
 
   createAccount() {
@@ -257,4 +279,16 @@ export class AccountComponent implements OnInit {
     );
   }
 
+  onSeachBranchName(branchName: string){
+    this.aStore.getBranchName(branchName);
+  }
+
+  onChangeLicense(branchId: number){
+    this.aStore.getBranchData(branchId)
+  }
+
+  getAddress(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.aStore.getAddress(value);
+  }
 }

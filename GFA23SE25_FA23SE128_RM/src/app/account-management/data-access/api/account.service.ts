@@ -20,7 +20,7 @@ export class AccountApiService {
   private REST_API_SERVER = 'http://localhost:8080';
 
   public createAccount(model: AccountAddApi.Request) {
-    const url =`${this.REST_API_SERVER}/v1/auth/account/staff?professional=${model.professional}&branchId=${model.branch}`;
+    const url =`${this.REST_API_SERVER}/v1/auth/accounts/staff?professional=${model.professional}&branchId=${model.branch}`;
     return this._http
     .post<any>(url,model ,this.httpOptions)
     .pipe(catchError(this.handleError));

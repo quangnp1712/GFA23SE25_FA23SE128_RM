@@ -2,6 +2,7 @@ import { FormControl } from '@angular/forms';
 
 export namespace BranchApi {
   export interface Request {
+    thumbnailUrl: string;
     shopOwnerId: string;
     branchName: string;
     phone: string;
@@ -10,13 +11,24 @@ export namespace BranchApi {
     numberStaffs: number;
     open: Date | null;
     close: Date | null;
-    displayUrlList: string[];
-    serviceIdList: string[];
+    branchDisplayList: branchDisplayList
+    ,
+    branchServiceList: branchServiceList
   }
+
+  export type branchDisplayList = {
+    url: string
+  }[]
+
+  export type branchServiceList = {
+    serviceId: number,
+    price: number
+  }[]
 
   export type displayUrlList = [];
   export type serviceIdList = [];
   export type RequestFormGroup = {
+    thumbnailUrl: FormControl<string>,
     shopOwnerId: FormControl<string>;
     branchName: FormControl<string>;
     phone: FormControl<string>;
@@ -25,8 +37,8 @@ export namespace BranchApi {
     numberStaffs: FormControl<number>;
     open: FormControl<Date | null>;
     close: FormControl<Date | null>;
-    displayUrlList: FormControl<string[]>;
-    serviceIdList: FormControl<string[]>;
+    branchDisplayList: FormControl<branchDisplayList>;
+    branchServiceList: FormControl<branchServiceList>;
   };
 }
 

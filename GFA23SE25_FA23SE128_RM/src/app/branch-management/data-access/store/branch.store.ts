@@ -62,8 +62,9 @@ export class BranchStore extends ComponentStore<BranchState> {
     numberStaffs: this._fb.control(0, [Validators.min(1), Validators.max(100)]),
     open: this._fb.control(null, Validators.required),
     close: this._fb.control(null, Validators.required),
-    displayUrlList: this._fb.control(['string']),
-    serviceIdList: this._fb.control([]),
+    branchDisplayList: this._fb.control([]),
+    branchServiceList: this._fb.control([]),
+    thumbnailUrl: this._fb.control('123', trimRequired),
   });
 
   readonly getBranchPaging = this.effect<never>(

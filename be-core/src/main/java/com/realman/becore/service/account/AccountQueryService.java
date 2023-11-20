@@ -25,13 +25,10 @@ import lombok.RequiredArgsConstructor;
 public class AccountQueryService {
         @NonNull
         private final AccountRepository accountRepository;
-
         @NonNull
         private final AccountMapper accountMapper;
-
         @NonNull
         private final CustomerUseCaseService customerUserCaseService;
-
         @NonNull
         private final StaffUsecaseService staffUsercaseService;
 

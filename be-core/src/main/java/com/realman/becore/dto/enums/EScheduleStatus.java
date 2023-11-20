@@ -6,10 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EScheduleStatus {
-    PRESENT(0),
-    ABSENT(1),
-    LATE(2),
-    EXCHANGE(3);
+    ONGOING(0),
+    PRESENT(1),
+    ABSENT(2);
 
     private Integer value;
 }

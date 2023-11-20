@@ -5,6 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:realmen_customer_application/models/login_register/login_otp_model.dart';
 
 class SharedPreferencesService {
+  static Future<SharedPreferences> initSharedPreferenced() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences;
+  }
+
   static Future<void> saveOtpIdPhone(String otpId, String phone) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
@@ -58,7 +63,7 @@ class SharedPreferencesService {
   static Future<String> getPhone() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    String? result = sharedPreferences.getString("phone")!;
+    String? result = sharedPreferences.getString("phone");
     if (result != null) {
       return result;
     } else {
@@ -81,7 +86,7 @@ class SharedPreferencesService {
   static Future<Map<String, String>> getAccountInfo() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    List<String> result = sharedPreferences.getStringList("accountInfo")!;
+    List<String>? result = sharedPreferences.getStringList("accountInfo");
 
     if (result != null) {
       Map<String, String> resultMap = {
@@ -161,5 +166,30 @@ class SharedPreferencesService {
     DateTime expiration = DateTime.fromMillisecondsSinceEpoch(expiry * 1000);
     final dateNow = DateTime.now();
     return expiration.isBefore(dateNow);
+  }
+
+  static Future<bool> getLocationPermission() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    bool? result = sharedPreferences.getBool("locationPermission");
+    if (result != null) {
+      return result;
+    } else {
+      return false;
+      throw Exception("Failed to get phone number from SharedPreferences");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getLongLat() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    double? lng = sharedPreferences.getDouble("longitude");
+    double? lat = sharedPreferences.getDouble("latitude");
+    if (lng != null && lat != null) {
+      Map<String, dynamic> result = {"lng": lng, "lat": lat};
+      return result;
+    } else {
+      throw Exception("Failed to get phone number from SharedPreferences");
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
@@ -9,6 +10,8 @@ import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
+import 'package:realmen_customer_application/service/location/location_service.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -268,7 +271,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                 ),
                                 child: TextButton(
                                   style: const ButtonStyle(),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    searchBranchesWithLocation();
+                                  },
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -589,6 +594,32 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     }
   }
 
+  Future<void> searchBranchesWithLocation() async {
+    if (!_isDisposed) {
+      final locationPermission =
+          await SharedPreferencesService.getLocationPermission();
+      if (!locationPermission) {
+        await locationService.getUserCurrentLocation();
+      }
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getSearchBranches("", 5);
+        if (result['statusCode'] == 200) {
+          branchesForCity = [];
+          branchesForCity = result['data'] as List<BranchModel>;
+          setState(() {
+            branchesForCity;
+          });
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
   IconButton? buildSuffixIcon(controller, focusNode) {
     return isSearching || focusNode.hasFocus
         ? IconButton(
@@ -612,4 +643,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
 
   BranchModel selectedAddress = BranchModel();
   String selectedBranch = "";
+
+  LocationService locationService = LocationService();
+  Position? position;
 }

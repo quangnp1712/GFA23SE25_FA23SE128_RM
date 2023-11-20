@@ -423,6 +423,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getAccountInfo();
   }
 
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   AccountInfoModel? accountInfo = AccountInfoModel();
   String? name;
   String? phone;
@@ -432,35 +439,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
 
   Future<void> getAccountInfo() async {
-    try {
-      AccountService accountService = AccountService();
-      final result = await accountService.getAccountInfo();
-      if (result['statusCode'] == 200) {
-        accountInfo = result['data'] as AccountInfoModel;
-        if (accountInfo!.thumbnailUrl != null &&
-            accountInfo!.thumbnailUrl != "") {
-          var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
-          avatarUrl = await reference.getDownloadURL();
+    if (!_isDisposed) {
+      try {
+        AccountService accountService = AccountService();
+        final result = await accountService.getAccountInfo();
+        if (result['statusCode'] == 200) {
+          accountInfo = result['data'] as AccountInfoModel;
+          if (accountInfo!.thumbnailUrl != null &&
+              accountInfo!.thumbnailUrl != "") {
+            var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+            avatarUrl = await reference.getDownloadURL();
+          } else {
+            var reference = storage.ref('avatar/default-2.png');
+            avatarUrl = await reference.getDownloadURL();
+          }
+          setState(() {
+            name =
+                "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
+            name = utf8.decode(name!.runes.toList());
+            phone = accountInfo!.phone ?? '';
+            avatarUrl;
+          });
+        } else if (result['statusCode'] == 403) {
+          Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+          _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
         } else {
-          var reference = storage.ref('avatar/default-2.png');
-          avatarUrl = await reference.getDownloadURL();
+          _errorMessage("$result['statusCode'] : $result['error']");
         }
-        setState(() {
-          name =
-              "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
-          name = utf8.decode(name!.runes.toList());
-          phone = accountInfo!.phone ?? '';
-          avatarUrl;
-        });
-      } else if (result['statusCode'] == 403) {
-        Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-        _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
       }
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 
@@ -473,19 +482,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
-    return showModalBottomSheet(
-      enableDrag: true,
-      isDismissible: true,
-      isScrollControlled: false,
-      context: context,
-      backgroundColor: Colors.white,
-      barrierColor: const Color(0x8c111111),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
+    if (!_isDisposed) {
+      return showModalBottomSheet(
+        enableDrag: true,
+        isDismissible: true,
+        isScrollControlled: false,
+        context: context,
+        backgroundColor: Colors.white,
+        barrierColor: const Color(0x8c111111),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
         ),
-      ),
-      builder: (context) => LogoutPopup(),
-    );
+        builder: (context) => LogoutPopup(),
+      );
+    }
   }
 }

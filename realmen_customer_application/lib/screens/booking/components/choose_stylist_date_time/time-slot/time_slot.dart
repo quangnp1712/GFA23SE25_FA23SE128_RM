@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ChooseDateAndTimeSlot extends StatefulWidget {
-  const ChooseDateAndTimeSlot({super.key});
+  final void Function(dynamic date) onDateSelected;
+  final void Function(dynamic time) onTimeSelected;
+
+  ChooseDateAndTimeSlot(
+      {super.key, required this.onDateSelected, required this.onTimeSelected});
 
   @override
   State<ChooseDateAndTimeSlot> createState() => _ChooseDateAndTimeSlotState();
@@ -156,7 +160,10 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                               type == "Thứ bảy" || type == "Chủ nhật"
                                   ? type = "Cuối tuần"
                                   : type = "Ngày thường";
+                              isCurrentDate = _isCurrentDate(value);
                             });
+                            widget.onDateSelected(dateController);
+                            timeSlotKey.currentState?.rebuildTimeslot();
                           },
                           dropdownStyleData: DropdownStyleData(
                             maxHeight: 200,
@@ -192,7 +199,11 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
         const SizedBox(height: 10),
         Container(
           height: 200,
-          child: TimeSlot(type: type),
+          child: TimeSlot(
+              key: timeSlotKey,
+              type: type,
+              isCurrentDate: isCurrentDate,
+              onTimeSelected: widget.onTimeSelected),
         ),
       ],
     );
@@ -205,8 +216,19 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 
     getDate();
     dateController = listDate?.first?['date'].toString();
+    type = listDate!.first['type'].toString();
+    // widget.onDateSelected(dateController);
   }
 
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true; // Đánh dấu widget đã bị dispose
+    super.dispose();
+  }
+
+  GlobalKey<_TimeSlotState> timeSlotKey = GlobalKey();
+  bool isCurrentDate = true;
   int _index = 0;
   bool isActived = false;
   String? dateController;
@@ -233,6 +255,16 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     };
   }
 
+  bool _isCurrentDate(dynamic dateSelected) {
+    DateTime now = DateTime.now();
+    String dateNow = formatDate(now.add(Duration(days: 0)))['date'];
+    if (dateSelected == dateNow) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   String formatDay(String day) {
     return dayNames[day.toLowerCase()] ?? day;
   }
@@ -249,8 +281,14 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 }
 
 class TimeSlot extends StatefulWidget {
-  TimeSlot({super.key, required this.type});
+  TimeSlot(
+      {super.key,
+      required this.type,
+      required this.onTimeSelected,
+      required this.isCurrentDate});
   final String type;
+  final bool isCurrentDate;
+  final void Function(dynamic time) onTimeSelected;
 
   @override
   _TimeSlotState createState() => _TimeSlotState();
@@ -273,6 +311,12 @@ class _TimeSlotState extends State<TimeSlot> {
     });
 
     super.didUpdateWidget(oldWidget);
+  }
+
+  void rebuildTimeslot() {
+    setState(() {
+      _selectedTimeSlot = '';
+    });
   }
 
   @override
@@ -314,6 +358,7 @@ class _TimeSlotState extends State<TimeSlot> {
 
             child: TimeSlotGrid(
                 type: type,
+                isCurrentDate: widget.isCurrentDate,
                 selectedTimeSlot: _selectedTimeSlot,
                 onTimeSlotSelected: _onTimeSlotSelected),
           ),
@@ -327,8 +372,10 @@ class _TimeSlotState extends State<TimeSlot> {
       if (timeSlot == _selectedTimeSlot) {
         // Deselect the time slot if it's already selected
         _selectedTimeSlot = '';
+        widget.onTimeSelected(_selectedTimeSlot);
       } else {
         _selectedTimeSlot = timeSlot;
+        widget.onTimeSelected(_selectedTimeSlot);
       }
     });
   }
@@ -336,21 +383,56 @@ class _TimeSlotState extends State<TimeSlot> {
 
 class TimeSlotGrid extends StatefulWidget {
   final String type;
+  final bool isCurrentDate;
 
   final String selectedTimeSlot;
   final void Function(String timeSlot) onTimeSlotSelected;
 
   TimeSlotGrid({
+    Key? key,
+    required this.type,
+    required this.isCurrentDate,
     required this.selectedTimeSlot,
     required this.onTimeSlotSelected,
-    required this.type,
-  });
+  }) : super(key: key);
 
   @override
   State<TimeSlotGrid> createState() => _TimeSlotGridState();
 }
 
 class _TimeSlotGridState extends State<TimeSlotGrid> {
+  @override
+  void initState() {
+    super.initState();
+    timeSlots = generateTimeSlots();
+
+    Future.delayed(Duration.zero, () {
+      // Gọi sau khi build xong
+      final now = DateTime.now();
+      final formatter = DateFormat('HH:mm');
+      final currentTime = formatter.format(now);
+      List<int> scrollListIndex = [];
+      if (widget.isCurrentDate) {
+        for (int i = 0; i < timeSlots.length; i++) {
+          final timeSlot = timeSlots[i];
+          final isSelectable = timeSlot.compareTo(currentTime) >= 0;
+          if (isSelectable) {
+            scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
+          }
+        }
+      } else {
+        for (int i = 0; i < timeSlots.length; i++) {
+          final timeSlot = timeSlots[i];
+          scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
+        }
+      }
+      if (scrollListIndex != null) {
+        final _scrollIndex = scrollListIndex.first;
+        scrollToIndex(_scrollIndex);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
@@ -369,7 +451,12 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
       itemBuilder: (BuildContext context, int index) {
         final timeSlot = timeSlots[index];
         final isSelected = timeSlot == widget.selectedTimeSlot;
-        final isSelectable = timeSlot.compareTo(currentTime) >= 0;
+        final isSelectable;
+        if (widget.isCurrentDate) {
+          isSelectable = timeSlot.compareTo(currentTime) >= 0;
+        } else {
+          isSelectable = true;
+        }
 
         return TimeSlotCard(
           type: widget.type,
@@ -380,31 +467,6 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
         );
       },
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    timeSlots = generateTimeSlots();
-
-    Future.delayed(Duration.zero, () {
-      // Gọi sau khi build xong
-      final now = DateTime.now();
-      final formatter = DateFormat('HH:mm');
-      final currentTime = formatter.format(now);
-      List<int> scrollListIndex = [];
-      for (int i = 0; i < timeSlots.length; i++) {
-        final timeSlot = timeSlots[i];
-        final isSelectable = timeSlot.compareTo(currentTime) >= 0;
-        if (isSelectable) {
-          scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
-        }
-      }
-      if (scrollListIndex != null) {
-        final _scrollIndex = scrollListIndex.first;
-        scrollToIndex(_scrollIndex);
-      }
-    });
   }
 
   List<String> timeSlots = [];

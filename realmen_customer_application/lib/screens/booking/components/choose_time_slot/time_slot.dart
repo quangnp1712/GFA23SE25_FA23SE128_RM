@@ -4,7 +4,10 @@ import 'package:realmen_customer_application/screens/booking/components/on_off_s
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseTimeSlot extends StatefulWidget {
-  const ChooseTimeSlot({super.key});
+  final void Function(dynamic date) onDateSelected;
+  final void Function(dynamic time) onTimeSelected;
+  ChooseTimeSlot(
+      {super.key, required this.onDateSelected, required this.onTimeSelected});
 
   @override
   State<ChooseTimeSlot> createState() => _ChooseTimeSlotState();
@@ -45,60 +48,114 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
             const SizedBox(
               height: 10,
             ),
-            ChooseDateAndTimeSlot(),
+            ChooseDateAndTimeSlot(
+                onDateSelected: widget.onDateSelected,
+                onTimeSelected: widget.onTimeSelected),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             Container(
-              width: 300,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(0),
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(
-                          Icons.person,
-                          size: 16,
-                        ),
-                        const Text(
-                          "Yêu Cầu Tư Vấn",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 24,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Yêu Cầu Tư Vấn",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(width: 50),
-                        OnOffSwitch(),
+                        OnOffSwitch(
+                          initialValue: isSwitched1,
+                          onChanged: (value) {
+                            setState(() {
+                              isSwitched1 = value;
+                            });
+                          },
+                        ),
                       ],
                     ),
-                    const Text(
-                      "Anh không cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
-                      style: TextStyle(fontSize: 12),
+                    SizedBox(
+                      height: 6,
                     ),
+                    isSwitched1
+                        ? const Text(
+                            "Anh cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
+                            style: TextStyle(fontSize: 14),
+                          )
+                        : const Text(
+                            "Anh không cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
+                            style: TextStyle(fontSize: 14),
+                          ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Icon(
-                          Icons.person,
-                          size: 16,
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 24,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Chụp Hình Sau Khi Cắt",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                        const Text(
-                          "Chụp Hình Sau Khi Cắt",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        OnOffSwitch(
+                          initialValue: isSwitched2,
+                          onChanged: (value) {
+                            setState(() {
+                              isSwitched2 = value;
+                            });
+                          },
                         ),
-                        const SizedBox(width: 20),
-                        OnOffSwitch(),
                       ],
                     ),
-                    const Text(
-                      "Anh cho phép các em chụp hình lưu lại kiểu tóc, để lần sau không phải mô tả lại cho thợ khác.",
-                      style: TextStyle(fontSize: 12),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    isSwitched2
+                        ? const Text(
+                            "Anh cho phép các em chụp hình lưu lại kiểu tóc, để lần sau không phải mô tả lại cho thợ khác.",
+                            style: TextStyle(fontSize: 14),
+                          )
+                        : const Text(
+                            "Anh không cho phép các em chụp hình lưu lại kiểu tóc.",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                    SizedBox(
+                      height: 15,
                     ),
                   ],
                 ),
@@ -111,4 +168,6 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
   }
 
   bool isActived = false;
+  bool isSwitched1 = true;
+  bool isSwitched2 = true;
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ChangeNotifierServices extends ChangeNotifier {
   List<String> _selectedServices = [];
-  String _selectedBranch = "";
+  dynamic _selectedBranch;
   dynamic _selectedStylist;
 
   List<String> get selectedServices => _selectedServices;
@@ -14,7 +14,7 @@ class ChangeNotifierServices extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedBranch(String branch) {
+  void updateSelectedBranch(dynamic branch) {
     _selectedBranch = branch;
     notifyListeners();
   }

@@ -55,6 +55,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '557539940447',
     projectId: 'realmen-2023',
     authDomain: 'realmen-2023.firebaseapp.com',
+    databaseURL: 'https://realmen-2023-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'realmen-2023.appspot.com',
     measurementId: 'G-7M4RJ8FDJJ',
   );
@@ -64,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:557539940447:android:e90663ca165b67cc1ea3ea',
     messagingSenderId: '557539940447',
     projectId: 'realmen-2023',
+    databaseURL: 'https://realmen-2023-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'realmen-2023.appspot.com',
   );
 }

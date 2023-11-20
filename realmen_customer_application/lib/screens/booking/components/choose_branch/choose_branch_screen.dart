@@ -14,7 +14,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 class ChooseBranchesScreen extends StatefulWidget {
   ChooseBranchesScreen({super.key});
-  var city = Get.arguments;
 
   @override
   State<ChooseBranchesScreen> createState() => _ChooseBranchesScreenState();
@@ -151,7 +150,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                       textEditingValue.text == '') {
                                     return const Iterable.empty();
                                   }
-                                  if (widget.city == "Thành Phố/Tỉnh") {
+                                  if (cityController == "Thành Phố/Tỉnh") {
                                     final value = await BranchService()
                                         .getSearchBranches(
                                             textEditingValue.text, 10);
@@ -182,13 +181,15 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                   return [];
                                 },
                                 onSelected: (address) {
-                                  setState(() {
-                                    branchesForCity = [];
-                                    (branchesForCity as List<BranchModel>)
-                                        ?.add(address);
-                                    focusScopeNode.unfocus();
-                                    isSearching = true;
-                                  });
+                                  if (!_isDisposed) {
+                                    setState(() {
+                                      branchesForCity = [];
+                                      (branchesForCity as List<BranchModel>)
+                                          ?.add(address);
+                                      focusScopeNode.unfocus();
+                                      isSearching = true;
+                                    });
+                                  }
                                   debugPrint('You just selected $address');
                                 },
                                 fieldViewBuilder: (context, controller,
@@ -320,7 +321,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                         : [],
                                     onChanged: (city) => setState(() {
                                       cityController = city!;
-                                      widget.city = city;
+
                                       getBranches(city);
                                     }),
                                     dropdownStyleData: DropdownStyleData(
@@ -399,16 +400,19 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                               ),
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  setState(() {
-                                                    selectedBranch =
-                                                        utf8.decode(
-                                                            branchesForCity![
-                                                                    index]
-                                                                .address
-                                                                .toString()
-                                                                .runes
-                                                                .toList());
-                                                  });
+                                                  if (!_isDisposed) {
+                                                    setState(() {
+                                                      selectedBranch =
+                                                          utf8.decode(
+                                                              branchesForCity![
+                                                                      index]
+                                                                  .address
+                                                                  .toString()
+                                                                  .runes
+                                                                  .toList());
+                                                    });
+                                                  }
+                                                  ;
                                                   selectedProvider
                                                       .updateSelectedBranch(
                                                           selectedBranch);
@@ -471,12 +475,14 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   void initState() {
     super.initState();
     getBranchesByCity();
-    cityController = widget.city;
+    cityController = "Thành Phố/Tỉnh";
   }
 
+  bool _isDisposed = false;
   @override
   void dispose() {
     focusNode.dispose();
+    _isDisposed = true;
     super.dispose();
   }
 
@@ -486,38 +492,42 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   String? cityController;
   List<String> cities = [];
   Future<void> getBranchesByCity() async {
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getBranchesByCity();
-      if (result['statusCode'] == 200) {
-        branchesByCityModel = result['data'] as BranchesModel;
-        try {
-          if (branchesByCityModel != null) {
-            if (widget.city != null) {
-              getBranches(widget.city);
-            }
+    if (!_isDisposed) {
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getBranchesByCity();
+        if (result['statusCode'] == 200) {
+          branchesByCityModel = result['data'] as BranchesModel;
+          try {
+            if (branchesByCityModel != null) {
+              if (cityController != null) {
+                getBranches(cityController!);
+              }
 
-            cities.add("Thành Phố/Tỉnh");
-            if (branchesByCityModel?.values != null) {
-              for (var values in branchesByCityModel!.values!) {
-                cities.add(utf8
-                    .decode(values.city.toString().runes.toList())
-                    .toString());
+              cities.add("Thành Phố/Tỉnh");
+              if (branchesByCityModel?.values != null) {
+                for (var values in branchesByCityModel!.values!) {
+                  cities.add(utf8
+                      .decode(values.city.toString().runes.toList())
+                      .toString());
+                }
               }
             }
+          } on Exception catch (e) {
+            print(e);
           }
-        } on Exception catch (e) {
-          print(e);
+          if (!_isDisposed) {
+            setState(() {
+              cities;
+            });
+          }
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
         }
-        setState(() {
-          cities;
-        });
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
       }
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 
@@ -530,22 +540,24 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   }
 
   getBranches(String search) async {
-    branchesForCity = [];
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getBranches(search, 10);
-      if (result['statusCode'] == 200) {
-        for (var branch in result['data'].values!) {
-          branchesForCity = branch.branchList;
+    if (!_isDisposed) {
+      branchesForCity = [];
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getBranches(search, 10);
+        if (result['statusCode'] == 200) {
+          for (var branch in result['data'].values!) {
+            branchesForCity = branch.branchList;
+          }
         }
-      }
 
-      setState(() {
-        branchesForCity;
-      });
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
+        setState(() {
+          branchesForCity;
+        });
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
+      }
     }
   }
 
@@ -554,24 +566,26 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   FocusScopeNode focusScopeNode = FocusScopeNode();
 
   Future<void> searchBranches(String query, FocusNode focusNode) async {
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getBranches(query, 10);
-      if (result['statusCode'] == 200) {
-        branchesForCity = [];
-        branchesForCity = result['data'] as List<BranchModel>;
+    if (!_isDisposed) {
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getSearchBranches(query, 10);
+        if (result['statusCode'] == 200) {
+          branchesForCity = [];
+          branchesForCity = result['data'] as List<BranchModel>;
 
-        setState(() {
-          branchesForCity;
-          isSearching = true;
-          focusNode.unfocus();
-        });
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+          setState(() {
+            branchesForCity;
+            isSearching = true;
+            focusNode.unfocus();
+          });
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
       }
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 

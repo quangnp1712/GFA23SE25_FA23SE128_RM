@@ -7,7 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../stylist_date_time_booking_choose.dart';
 
 class ChooseStylist extends StatefulWidget {
-  const ChooseStylist({super.key});
+  final void Function(dynamic stylist) onStylistSelected;
+  ChooseStylist({super.key, required this.onStylistSelected});
 
   @override
   State<ChooseStylist> createState() => _ChooseStylistState();
@@ -52,6 +53,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                         if (_selectedStylist.id != null) {
                           isDefaultSelected = true;
                           _selectedStylist = StylistModel();
+                          widget.onStylistSelected("Random");
                         } else {
                           isDefaultSelected = true;
                         }
@@ -424,8 +426,10 @@ class _ChooseStylistState extends State<ChooseStylist> {
       if (stylist.id == _selectedStylist.id) {
         _selectedStylist = StylistModel();
         isDefaultSelected = true;
+        widget.onStylistSelected("random");
       } else {
         _selectedStylist = stylist;
+        widget.onStylistSelected(_selectedStylist.name);
         isDefaultSelected = false;
       }
     });

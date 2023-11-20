@@ -24,14 +24,23 @@ class _ChooseServiceBookingScreenState
     selectedServices = selectedServicesProvider.selectedServices;
   }
 
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   void updateSelectedServiceCount(bool isSelected, String serviceName) {
-    setState(() {
-      if (isSelected) {
-        selectedServices.add(serviceName);
-      } else {
-        selectedServices.remove(serviceName);
-      }
-    });
+    if (!_isDisposed) {
+      setState(() {
+        if (isSelected) {
+          selectedServices.add(serviceName);
+        } else {
+          selectedServices.remove(serviceName);
+        }
+      });
+    }
   }
 
   @override
@@ -275,6 +284,13 @@ class _SubServiceTileState extends State<SubServiceTile> {
         Provider.of<ChangeNotifierServices>(context, listen: false);
     isSelected =
         selectedServicesProvider.selectedServices.contains(widget.title);
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 
   @override

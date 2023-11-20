@@ -367,23 +367,32 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
     getBranchesByCity();
   }
 
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   String image = "assets/images/branch1.png";
   BranchesModel? branchesByCityModel = BranchesModel();
   Future<void> getBranchesByCity() async {
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getBranchesByCity();
-      if (result['statusCode'] == 200) {
-        branchesByCityModel = result['data'] as BranchesModel;
-        setState(() {
-          branchesByCityModel;
-        });
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+    if (!_isDisposed) {
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getBranchesByCity();
+        if (result['statusCode'] == 200) {
+          branchesByCityModel = result['data'] as BranchesModel;
+          setState(() {
+            branchesByCityModel;
+          });
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
       }
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 

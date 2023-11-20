@@ -4,7 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 class BookingHaircutTemporary extends StatefulWidget {
-  const BookingHaircutTemporary({super.key});
+  BookingHaircutTemporary({super.key});
+  Map<String, dynamic> params = Get.arguments;
+
+  dynamic branch = Get.arguments['branch'];
+  dynamic service = Get.arguments['service']; //List<String>
+  dynamic stylist = Get.arguments['stylist'];
+  dynamic date = Get.arguments['date'];
+  dynamic time = Get.arguments['time'];
 
   @override
   State<BookingHaircutTemporary> createState() =>
@@ -70,7 +77,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                                     child: Center(
                                       child: Text(
                                         "hóa đơn lịch đặt".toUpperCase(),
-                                        style: GoogleFonts.poppins(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -83,8 +90,9 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                           ),
                           Column(
                             children: [
-                              _buildInfoUser(),
-                              _buildService(),
+                              _buildInfoUser(widget.branch, widget.stylist,
+                                  widget.date, widget.time),
+                              _buildService(widget.service),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
@@ -115,69 +123,110 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
-  Widget _buildInfoUser() {
+  Widget _buildInfoUser(
+      dynamic branch, dynamic stylist, dynamic date, dynamic time) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Salon: "),
-              SizedBox(height: 24),
-              Text("Stylist: "),
-              SizedBox(height: 12),
-              Text("Ngày và giờ hẹn: "),
-            ],
-          ),
-          const SizedBox(
-            width: 30,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
               Container(
-                width: 230,
+                width: 130,
                 child: const Text(
-                  "1111 Hoàng Sa, Phường 5, Quận 3, TP.Hồ Chí Minh",
-                  maxLines: 2,
+                  "Salon: ",
                   style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              Container(
+                width: 225,
+                child: Text(
+                  branch != null ? branch : "",
+                  maxLines: 3,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
                     overflow: TextOverflow.ellipsis,
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
+                    fontSize: 17,
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
-                "Lê Anh Tuấn",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 130,
+                child: const Text(
+                  "Stylist: ",
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
                 ),
               ),
-              const SizedBox(height: 12),
-              const Row(
-                children: [
-                  Text(
-                    "17/11/2023",
-                    style: TextStyle(
+              Container(
+                width: 225,
+                child: Text(
+                  stylist != null ? stylist : "",
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                    ),
+                      fontSize: 17,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 130,
+                child: const Text(
+                  "Ngày và giờ hẹn: ",
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
-                  SizedBox(width: 5),
-                  Text(
-                    "7:30",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                ),
+              ),
+              Container(
+                width: 225,
+                child: Row(
+                  children: [
+                    Text(
+                      date != null ? date : " ",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17),
                     ),
-                  ),
-                ],
+                    // const SizedBox(width: 5),
+                    Text(
+                      time != null ? ",  $time" : "",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -186,7 +235,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
-  Widget _buildService() {
+  Widget _buildService(dynamic service) {
     return Column(
       children: [
         const Padding(
@@ -214,17 +263,21 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           child: ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5, // The number of items in the list
+            itemCount: service != null && service.length > 0
+                ? service.length
+                : 1, // The number of items in the list
             itemBuilder: (context, index) {
               // Return a Card widget for each item in the list
-              return const Padding(
-                padding: EdgeInsets.all(10.0),
+              return Padding(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 10, left: 10, right: 20),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Massage Thư Giản"),
-                    SizedBox(width: 140),
-                    Text("250.000"),
+                    Text(service != null ? service[index].toString() : ""),
+                    const SizedBox(width: 140),
+                    const Text("250.000"),
                   ],
                 ),
               );

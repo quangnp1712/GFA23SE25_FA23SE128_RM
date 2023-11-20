@@ -2,13 +2,16 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
-import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
+import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
+
 class ChooseBranchBooking extends StatefulWidget {
-  const ChooseBranchBooking({
+  final void Function(dynamic branch) onBranchSelected;
+  ChooseBranchBooking({
     super.key,
+    required this.onBranchSelected,
   });
 
   @override
@@ -53,23 +56,28 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
             Container(
               child: ElevatedButton(
                 onPressed: () async {
-                  String? selectedBranch = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChangeNotifierProvider<ChangeNotifierServices>.value(
-                        value: selectedServicesProvider,
-                        child: ChooseBranchesScreen(),
+                  if (!_isDisposed) {
+                    var selectedBranch = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider<
+                            ChangeNotifierServices>.value(
+                          value: selectedServicesProvider,
+                          child: ChooseBranchesScreen(),
+                        ),
                       ),
-                    ),
-                  );
-                  if (selectedBranch != null) {
-                    setState(() {
-                      hasSelectedServices = selectedBranch.isNotEmpty;
-                      buttonText = hasSelectedServices
-                          ? selectedBranch
-                          : 'Xem tất cả danh sách dịch vụ';
-                    });
+                    );
+                    if (selectedBranch != null) {
+                      if (!_isDisposed) {
+                        setState(() {
+                          hasSelectedServices = selectedBranch.isNotEmpty;
+                          buttonText = hasSelectedServices
+                              ? selectedBranch
+                              : 'Xem tất cả danh sách dịch vụ';
+                          widget.onBranchSelected(selectedBranch);
+                        });
+                      }
+                    }
                   }
 
                   // Get.toNamed(ChooseBranchesScreen.ChooseBranchesScreenRoute);
@@ -147,4 +155,10 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
   String buttonText = 'Xem tất cả chi nhánh REALMEN';
   ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();
   bool hasSelectedServices = false;
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
 }

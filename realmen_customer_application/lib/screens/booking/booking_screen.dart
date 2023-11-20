@@ -48,6 +48,7 @@ class _BookingScreenState extends State<BookingScreen>
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white),
                   child: ListView(
+                    physics: NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       Container(
                         color: Colors.transparent,
@@ -158,7 +159,7 @@ class _BookingScreenState extends State<BookingScreen>
                         ],
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 15,
                       ),
                       DefaultTabController(
                         length: 2,
@@ -196,10 +197,10 @@ class _BookingScreenState extends State<BookingScreen>
                             Container(
                               // color: Colors.amber,
                               width: 400,
-                              height: 46.h,
+                              height: 445,
                               child: TabBarView(
                                 controller: _tabController,
-                                children: const [
+                                children: [
                                   BranchOptionBooking(),
                                   StylistOptionBooking(),
                                 ],
@@ -226,8 +227,10 @@ class _BookingScreenState extends State<BookingScreen>
     _tabController = TabController(length: 2, vsync: this);
   }
 
+  bool _isDisposed = false;
   @override
   void dispose() {
+    _isDisposed = true;
     _tabController.dispose();
     super.dispose();
   }

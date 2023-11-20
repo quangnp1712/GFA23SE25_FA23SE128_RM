@@ -143,40 +143,44 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                 displayStringForOption: displayStringForOption,
                                 // initialValue: null,
                                 optionsBuilder: (textEditingValue) async {
-                                  _searchingWithQuery = textEditingValue.text;
-                                  if (textEditingValue.text.isEmpty ||
-                                      textEditingValue.text == '') {
-                                    return const Iterable.empty();
-                                  }
-                                  if (widget.city == "Thành Phố/Tỉnh") {
-                                    final value = await BranchService()
-                                        .getSearchBranches(
-                                            textEditingValue.text, 10);
-                                    if (value['statusCode'] == 200) {
-                                      try {
-                                        options = (await value)['data']
-                                            as Iterable<BranchModel>;
+                                  if (!_isDisposed) {
+                                    _searchingWithQuery = textEditingValue.text;
+                                    if (textEditingValue.text.isEmpty ||
+                                        textEditingValue.text == '') {
+                                      return const Iterable.empty();
+                                    }
+                                    if (widget.city == "Thành Phố/Tỉnh") {
+                                      final value = await BranchService()
+                                          .getSearchBranches(
+                                              textEditingValue.text, 10);
+                                      if (value['statusCode'] == 200) {
+                                        try {
+                                          options = (await value)['data']
+                                              as Iterable<BranchModel>;
+
+                                          return Future.value(options);
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                      }
+                                    } else {
+                                      if (branchesForCity != null) {
+                                        options = branchesForCity!.where(
+                                            (element) => utf8
+                                                .decode(element.address!.runes
+                                                    .toList())
+                                                .toLowerCase()
+                                                .contains(textEditingValue.text
+                                                    .toLowerCase()));
 
                                         return Future.value(options);
-                                      } catch (e) {
-                                        print(e);
                                       }
                                     }
+
+                                    return [];
                                   } else {
-                                    if (branchesForCity != null) {
-                                      options = branchesForCity!.where(
-                                          (element) => utf8
-                                              .decode(element.address!.runes
-                                                  .toList())
-                                              .toLowerCase()
-                                              .contains(textEditingValue.text
-                                                  .toLowerCase()));
-
-                                      return Future.value(options);
-                                    }
+                                    return [];
                                   }
-
-                                  return [];
                                 },
                                 onSelected: (address) {
                                   setState(() {
@@ -199,8 +203,10 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                       focusNode: focusNode,
                                       onEditingComplete: onEditingComplete,
                                       onSubmitted: (value) async {
-                                        searchBranches(value, focusNode);
-                                        focusNode.requestFocus();
+                                        if (!_isDisposed) {
+                                          searchBranches(value, focusNode);
+                                          focusNode.requestFocus();
+                                        }
                                       },
 
                                       cursorColor: Colors.black,
@@ -459,6 +465,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   @override
   void dispose() {
     focusNode.dispose();
+    _isDisposed = true;
     super.dispose();
   }
 
@@ -468,35 +475,37 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   String? cityController;
   List<String> cities = [];
   Future<void> getBranchesByCity() async {
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getBranchesByCity();
-      if (result['statusCode'] == 200) {
-        branchesByCityModel = result['data'] as BranchesModel;
-        try {
-          if (branchesByCityModel != null) {
-            getBranches(widget.city);
-            cities.add("Thành Phố/Tỉnh");
-            if (branchesByCityModel?.values != null) {
-              for (var values in branchesByCityModel!.values!) {
-                cities.add(utf8
-                    .decode(values.city.toString().runes.toList())
-                    .toString());
+    if (!_isDisposed) {
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getBranchesByCity();
+        if (result['statusCode'] == 200) {
+          branchesByCityModel = result['data'] as BranchesModel;
+          try {
+            if (branchesByCityModel != null) {
+              getBranches(widget.city);
+              cities.add("Thành Phố/Tỉnh");
+              if (branchesByCityModel?.values != null) {
+                for (var values in branchesByCityModel!.values!) {
+                  cities.add(utf8
+                      .decode(values.city.toString().runes.toList())
+                      .toString());
+                }
               }
             }
+          } on Exception catch (e) {
+            print(e);
           }
-        } on Exception catch (e) {
-          print(e);
+          setState(() {
+            cities;
+          });
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
         }
-        setState(() {
-          cities;
-        });
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
       }
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 
@@ -509,22 +518,24 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   }
 
   getBranches(String search) async {
-    branchesForCity = [];
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getBranches(search, 10);
-      if (result['statusCode'] == 200) {
-        for (var branch in result['data'].values!) {
-          branchesForCity = branch.branchList;
+    if (!_isDisposed) {
+      branchesForCity = [];
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getBranches(search, 10);
+        if (result['statusCode'] == 200) {
+          for (var branch in result['data'].values!) {
+            branchesForCity = branch.branchList;
+          }
         }
-      }
 
-      setState(() {
-        branchesForCity;
-      });
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
+        setState(() {
+          branchesForCity;
+        });
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
+      }
     }
   }
 
@@ -533,24 +544,26 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   FocusScopeNode focusScopeNode = FocusScopeNode();
 
   Future<void> searchBranches(String query, FocusNode focusNode) async {
-    try {
-      BranchService branchService = BranchService();
-      final result = await branchService.getSearchBranches(query, 10);
-      if (result['statusCode'] == 200) {
-        branchesForCity = [];
-        branchesForCity = result['data'] as List<BranchModel>;
+    if (!_isDisposed) {
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getSearchBranches(query, 10);
+        if (result['statusCode'] == 200) {
+          branchesForCity = [];
+          branchesForCity = result['data'] as List<BranchModel>;
 
-        setState(() {
-          branchesForCity;
-          isSearching = true;
-          focusNode.unfocus();
-        });
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+          setState(() {
+            branchesForCity;
+            isSearching = true;
+            focusNode.unfocus();
+          });
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        _errorMessage(e.toString());
+        print("Error: $e");
       }
-    } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 
@@ -576,4 +589,5 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   BranchesModel branchesModel = BranchesModel();
 
   BranchModel selectedAddress = BranchModel();
+  bool _isDisposed = false;
 }

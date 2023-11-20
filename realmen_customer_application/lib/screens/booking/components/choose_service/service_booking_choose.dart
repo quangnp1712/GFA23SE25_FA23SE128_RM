@@ -7,8 +7,10 @@ import 'package:realmen_customer_application/service/change_notifier_provider/ch
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseServiceBooking extends StatefulWidget {
-  const ChooseServiceBooking({
+  final void Function(dynamic service) onServiceSelected;
+  ChooseServiceBooking({
     super.key,
+    required this.onServiceSelected,
   });
 
   @override
@@ -54,38 +56,49 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
             Container(
               child: ElevatedButton(
                 onPressed: () async {
-                  List<String>? selectedServices = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChangeNotifierProvider<ChangeNotifierServices>.value(
-                        value: selectedServicesProvider,
-                        child: ChooseServiceBookingScreen(),
+                  if (!_isDisposed) {
+                    List<String>? selectedServices = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider<
+                            ChangeNotifierServices>.value(
+                          value: selectedServicesProvider,
+                          child: ChooseServiceBookingScreen(),
+                        ),
                       ),
-                    ),
-                  );
+                    );
 
-                  // Handle the selected services here
-                  if (selectedServices != null) {
-                    setState(() {
-                      // Update your UI or perform other actions with selectedServices
-                      hasSelectedServices = selectedServices.isNotEmpty;
-                      if (hasSelectedServices) {
-                        textContainers = selectedServices.map((service) {
-                          return Container(
-                            child: Text(
-                              service,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black),
-                            ),
-                          );
-                        }).toList();
-                      }
-                      // Update the button text
-                      buttonText = hasSelectedServices
-                          ? 'Đã chọn ${selectedServices.length} dịch vụ'
-                          : 'Xem tất cả danh sách dịch vụ';
-                    });
+                    // Handle the selected services here
+                    if (selectedServices != null) {
+                      setState(() {
+                        // Update your UI or perform other actions with selectedServices
+                        hasSelectedServices = selectedServices.isNotEmpty;
+                        if (hasSelectedServices) {
+                          textContainers = selectedServices.map((service) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 2),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                service,
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black),
+                              ),
+                            );
+                          }).toList();
+                        }
+                        // Update the button text
+                        buttonText = hasSelectedServices
+                            ? 'Đã chọn ${selectedServices.length} dịch vụ'
+                            : 'Xem tất cả danh sách dịch vụ';
+                      });
+                      widget.onServiceSelected(selectedServices);
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -161,4 +174,10 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
 
   int _index = 0;
   bool isActived = false;
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
 }

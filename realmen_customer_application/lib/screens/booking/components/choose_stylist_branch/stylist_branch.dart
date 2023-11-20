@@ -8,7 +8,12 @@ import 'package:realmen_customer_application/service/change_notifier_provider/ch
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseStylistAndBranch extends StatefulWidget {
-  const ChooseStylistAndBranch({super.key});
+  final void Function(dynamic branch) onBranchSelected;
+  final void Function(dynamic stylist) onStylistSelected;
+  ChooseStylistAndBranch(
+      {super.key,
+      required this.onBranchSelected,
+      required this.onStylistSelected});
 
   @override
   State<ChooseStylistAndBranch> createState() => _ChooseStylistAndBranchState();
@@ -52,24 +57,28 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
             Container(
               child: ElevatedButton(
                 onPressed: () async {
-                  var selectedStylist = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChangeNotifierProvider<ChangeNotifierServices>.value(
-                        value: selectedServicesProvider,
-                        child: ChooseStylistScreen(),
+                  if (!_isDisposed) {
+                    var selectedStylist = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider<
+                            ChangeNotifierServices>.value(
+                          value: selectedServicesProvider,
+                          child: const ChooseStylistScreen(),
+                        ),
                       ),
-                    ),
-                  );
-                  if (selectedStylist != null) {
-                    setState(() {
-                      hasSelectedServices = selectedStylist.isNotEmpty;
-                      buttonText = hasSelectedServices
-                          ? selectedStylist['name']
-                          : 'Xem stylist';
-                      stylistData = selectedStylist;
-                    });
+                    );
+                    if (selectedStylist != null) {
+                      setState(() {
+                        hasSelectedServices = selectedStylist.isNotEmpty;
+                        buttonText = hasSelectedServices
+                            ? selectedStylist['name']
+                            : 'Xem stylist';
+                        stylistData = selectedStylist;
+                        widget.onStylistSelected(stylistData['name']);
+                        widget.onBranchSelected(stylistData['branch']);
+                      });
+                    }
                   }
 
                   // Get.toNamed(ChooseBranchesScreen.ChooseBranchesScreenRoute);
@@ -132,7 +141,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
             ),
             stylistData != null && stylistData['name'] != null
                 ? Container(
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.black,
@@ -206,7 +215,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       RichText(
@@ -238,7 +247,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                     ],
@@ -264,7 +273,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                           height: 10,
                         ),
                         Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.black,
@@ -328,7 +337,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 8,
                                             ),
                                             RichText(
@@ -358,7 +367,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                           ],
@@ -383,6 +392,13 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
   @override
   void initState() {
     super.initState();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 
   int _index = 0;

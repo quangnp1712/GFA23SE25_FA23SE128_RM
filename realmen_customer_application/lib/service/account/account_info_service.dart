@@ -78,7 +78,7 @@ class AccountService extends IAccountService {
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Socket error',
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {

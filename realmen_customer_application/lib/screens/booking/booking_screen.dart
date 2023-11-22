@@ -197,7 +197,7 @@ class _BookingScreenState extends State<BookingScreen>
                             Container(
                               // color: Colors.amber,
                               width: 400,
-                              height: 445,
+                              height: 500,
                               child: TabBarView(
                                 controller: _tabController,
                                 children: [

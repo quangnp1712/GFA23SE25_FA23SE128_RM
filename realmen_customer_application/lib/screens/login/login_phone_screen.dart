@@ -99,7 +99,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                                       controller: phoneController,
                                       keyboardType: TextInputType.number,
                                       inputFormatters: [
-                                        LengthLimitingTextInputFormatter(10),
+                                        LengthLimitingTextInputFormatter(11),
                                         FilteringTextInputFormatter.digitsOnly
                                       ],
                                       cursorColor: Colors.black,
@@ -128,9 +128,10 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                                             right: 15),
                                         hintText: "Nhập số điện thoại của bạn",
                                         hintStyle: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xffC4C4C4)),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xffC4C4C4),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -201,24 +202,30 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   //   String phone = phoneController.text.toString();
   //   LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
   //   AuthenticateService authenticateService = AuthenticateService();
-  //   try {
-  //     var result = await authenticateService.loginPhone(loginPhoneModel);
-  //     if (result["data"] == "false" && result['statusCode'] == 200) {
-  //       Get.toNamed(RegisterScreen.RegisterScreenRoute);
-  //     } else if (result["data"] == "true" && result['statusCode'] == 200) {
-  //       Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
-  //       // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-  //     } else {
-  //       _errorMessage("$result['statusCode'] : $result['error']");
+  //   if (phone != null && phone != '') {
+  //     try {
+  //       var result = await authenticateService.loginPhone(loginPhoneModel);
+  //       if (result["data"] == "false" && result['statusCode'] == 200) {
+  //         Get.toNamed(RegisterScreen.RegisterScreenRoute);
+  //       } else if (result["data"] == "true" && result['statusCode'] == 200) {
+  //         Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
+  //         // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+  //       } else {
+  //         _errorMessage("$result['statusCode'] : $result['error']");
+  //       }
+  //     } catch (e) {
+  //       print("Error: $e");
   //     }
-  //   } catch (e) {
-  //     print("Error: $e");
+  //   } else if (phone == null || phone == '') {
+  //     _errorMessage("Xon nhập số điện thoại");
+  //   } else if (phone.length < 8 || phone.length > 11) {
+  //     _errorMessage("Số điện thoại không đúng");
   //   }
   // }
 
   // // No API
   void submitPhone() async {
-    String phone = phoneController.text.toString();
+    String phone = "0917901487";
     Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
     try {
       await SharedPreferencesService.savePhone(phone);

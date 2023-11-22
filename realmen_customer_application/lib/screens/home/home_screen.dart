@@ -170,7 +170,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'Đặt lịch',
                                 Icons.calendar_month,
                                 const Color(0xffE3E3E3),
-                                () {},
+                                () {
+                                  widget.callback(2);
+                                },
                               ),
                               cardHolder(
                                 'Lịch sử đặt lịch',
@@ -318,17 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(
                               height: 30,
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Text(
-                                "Chi Nhánh Gần Bạn",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            branchShopNearYou(),
+                            branchShopNearYou(widget.callback),
                           ],
                         ),
                       ],

@@ -7,6 +7,7 @@ import 'package:realmen_customer_application/screens/booking/components/choose_s
 import 'package:realmen_customer_application/screens/booking/components/choose_time_slot/time_slot.dart';
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class StylistOptionBooking extends StatefulWidget {
@@ -58,15 +59,25 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
           ),
           child: ElevatedButton(
             onPressed: () {
-              Get.toNamed(
-                  BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
-                  arguments: {
-                    'branch': selectedBranch,
-                    'service': selectedService,
-                    'stylist': selectedStylist,
-                    'date': selectedDate,
-                    'time': selectedTime,
-                  });
+              if (selectedStylist == null) {
+                _errorMessage("Xin chọn stylist");
+              } else if (selectedService == null) {
+                _errorMessage("Xin chọn dịch vụ");
+              } else if (selectedDate == null) {
+                _errorMessage("Xin chọn ngày");
+              } else if (selectedTime == null) {
+                _errorMessage("Xin chọn giờ");
+              } else {
+                Get.toNamed(
+                    BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
+                    arguments: {
+                      'branch': selectedBranch,
+                      'service': selectedService,
+                      'stylist': selectedStylist,
+                      'date': selectedDate,
+                      'time': selectedTime,
+                    });
+              }
             },
             style: ElevatedButton.styleFrom(
               primary: Colors.black12,
@@ -180,5 +191,13 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
       selectedTime = time;
       print(selectedTime);
     });
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
   }
 }

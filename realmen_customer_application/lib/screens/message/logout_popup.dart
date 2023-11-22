@@ -20,7 +20,7 @@ class LogoutPopup extends StatelessWidget {
               "đăng xuất".toUpperCase(),
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 26,
+                fontSize: 25,
               ),
             ),
           ),

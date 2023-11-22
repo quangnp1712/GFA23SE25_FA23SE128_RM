@@ -3,12 +3,11 @@ package com.realman.becore.dto.category.services;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import com.realman.becore.dto.category.Category;
-import com.realman.becore.repository.database.category.CategoryEntity;
+import com.realman.becore.repository.database.category.services.CategoryServiceEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryServiceMapper {
-    CategoryEntity toEntity(Category dto);
+    CategoryServiceEntity toEntity(CategoryService dto);
 
-    Category toDto(CategoryServiceInfo info);
+    CategoryService toDto(CategoryServiceInfo info);
 }

@@ -1,5 +1,7 @@
 package com.realman.becore.service.category;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,5 +21,13 @@ public class CategoryUseCaseService {
     @Transactional
     public void save(Category category) {
         categoryCommandService.save(category);
+    }
+
+    public Category findById(Long categoryId) {
+        return categoryQueryService.findById(categoryId);
+    }
+
+    public List<Category> findAll() {
+        return categoryQueryService.findAll();
     }
 }

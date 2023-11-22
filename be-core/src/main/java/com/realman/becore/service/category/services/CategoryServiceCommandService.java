@@ -1,10 +1,8 @@
 package com.realman.becore.service.category.services;
 
 import org.springframework.stereotype.Service;
-
 import com.realman.becore.repository.database.category.services.CategoryServiceEntity;
 import com.realman.becore.repository.database.category.services.CategoryServiceRepository;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

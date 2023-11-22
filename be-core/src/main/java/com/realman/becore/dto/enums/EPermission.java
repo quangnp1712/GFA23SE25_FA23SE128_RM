@@ -21,7 +21,10 @@ public enum EPermission {
     ACCOUNT_UPDATE("account:update"),
     BRANCH_VIEW("branch:view"),
     BRANCH_ADD("branch:add"),
-    BRANCH_UPDATE("branch:update");
+    BRANCH_UPDATE("branch:update"),
+    CATEGORY_ADD("category:add"),
+    CATEGORY_VIEW("category:view"),
+    CATEGORY_UPDATE("category:update");
 
     private String permission;
 }

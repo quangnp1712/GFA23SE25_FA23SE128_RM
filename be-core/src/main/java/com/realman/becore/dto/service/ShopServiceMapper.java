@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import com.realman.becore.dto.branch.service.BranchService;
-import com.realman.becore.dto.category.services.CategoryServiceInfo;
+import com.realman.becore.dto.category.services.CategoryService;
 import com.realman.becore.dto.enums.EServiceStatus;
 import com.realman.becore.repository.database.service.ShopServiceEntity;
 
@@ -21,7 +21,7 @@ public interface ShopServiceMapper {
     
     ShopService toDto(ShopServiceEntity entity);
 
-    ShopService toDto(CategoryServiceInfo info);
+    ShopService toDto(CategoryService categoryService);
 
     @Mapping(target = "serviceId", ignore = true)
     void updateService(@MappingTarget ShopServiceEntity foundEntity, ShopService dto);

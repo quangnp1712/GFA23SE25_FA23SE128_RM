@@ -1,7 +1,5 @@
 package com.realman.becore.repository.database.category;
 
-import com.realman.becore.dto.enums.ECategory;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,5 +18,5 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
-    private ECategory title;
+    private String title;
 }

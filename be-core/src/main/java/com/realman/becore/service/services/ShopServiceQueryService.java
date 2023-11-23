@@ -38,4 +38,16 @@ public class ShopServiceQueryService {
         return shopServiceMapper.toDto(service, branchServiceList);
     }
 
+    public List<ShopService> findByCategoryId(Long categoryId) {
+        List<ShopService> categoryList = shopServiceRepository.findByCategoryId(categoryId).stream()
+                .map(shopServiceMapper::toDto).toList();
+        return categoryList;
+    }
+
+    public List<ShopService> findAll() {
+        List<ShopService> categoryList = shopServiceRepository.findAll().stream()
+                .map(shopServiceMapper::toDto).toList();
+        return categoryList;
+    }
+
 }

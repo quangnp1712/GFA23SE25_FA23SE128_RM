@@ -30,4 +30,8 @@ public class CategoryUseCaseService {
     public List<Category> findAll() {
         return categoryQueryService.findAll();
     }
+
+    public List<Category> findCategoryFields() {
+        return categoryQueryService.findCategoryFields();
+    }
 }

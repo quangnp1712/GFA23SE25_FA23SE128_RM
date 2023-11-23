@@ -19,8 +19,7 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
             SELECT 
                 s.serviceId AS serviceId,
                 s.name AS name,
-                s.description AS description,
-                s.duration AS duration,
+                s.serviceDescription AS description,
                 b.branchId AS branchId,
                 b.branchName AS branchName,
                 bs.price AS price 
@@ -30,4 +29,11 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
             WHERE s.serviceId = :serviceId
             """)
     List<ShopServiceInfo> findServiceId(Long serviceId);
+
+    @Query("""
+            SELECT s
+            FROM ShopServiceEntity s
+            WHERE s.categoryId = :categoryId
+            """)
+    List<ShopServiceEntity> findByCategoryId(Long categoryId);
 }

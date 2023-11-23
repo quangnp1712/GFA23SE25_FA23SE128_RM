@@ -21,10 +21,11 @@ public class ShopServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long serviceId;
+    private Long categoryId;
     @Column(columnDefinition = "NVARCHAR(500)")
     private String name;
-    @Column(columnDefinition = "NVARCHAR(1000)")
-    private String description;
+    @Column(name = "description" ,columnDefinition = "NVARCHAR(1000)")
+    private String serviceDescription;
     private Integer duration;
     private EServiceStatus status;
 

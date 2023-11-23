@@ -8,7 +8,7 @@ import java.util.List;
 public record Category(
     Long categoryId,
     String title,
+    String categoryDescription,
     List<ShopService> serviceList
 ) {
-    
 }

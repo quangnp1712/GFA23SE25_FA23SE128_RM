@@ -1,5 +1,6 @@
 package com.realman.becore.repository.database.category;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,5 +19,8 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
+    @Column(name = "description", columnDefinition = "NVARCHAR(500)")
+    private String categoryDescription;
+    @Column(columnDefinition = "NVARCHAR(500)")
     private String title;
 }

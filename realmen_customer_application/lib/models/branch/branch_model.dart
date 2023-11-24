@@ -3,6 +3,7 @@ class BranchesModel {
   BranchesModel({
     this.values,
   });
+// hàm factory BranchesModel lấy json về để chuyển thành kiểu dữ liệu
   factory BranchesModel.fromJson(Map<String, dynamic> json) {
     return BranchesModel(
       values: (json['values'] as List)

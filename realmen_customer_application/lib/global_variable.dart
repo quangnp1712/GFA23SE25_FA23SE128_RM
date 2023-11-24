@@ -20,6 +20,9 @@ final getBranchesByCityUrl =
 final autoCompleteUrl =
     "${dotenv.env["DOMAIN"]}/${dotenv.env["AUTOCOMPLETE_SEARCH"]}";
 
+// Category Service List
+final getCategoryServicesUrl =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_CATEGORYSERVICES"]}";
 // common variable
 final connectionTimeOut = int.parse(dotenv.env["CONNECTION_TIMEOUT"]!);
 final customer = "${dotenv.env["CUSTOMER"]}";

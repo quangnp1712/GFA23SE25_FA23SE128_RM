@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 20,
                               ),
                               SizedBox(
-                                width: 248,
+                                width: 220,
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 4,
                             crossAxisSpacing: 20,
                             mainAxisSpacing: 5,
-                            childAspectRatio: 4 / 5,
+                            childAspectRatio: 4 / 6,
                             children: [
                               cardHolder(
                                 'Đặt lịch',

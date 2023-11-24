@@ -70,7 +70,12 @@ import { SignInApi } from '../data-access/model/sign-in-api.model';
         </ng-template>
       </nz-form-item>
       <div class="tw-text-center">
-        <button nz-button class="tw-mr-1 tw-rounded-full" nzType="primary" (click)="sendOtp()">
+        <button
+          nz-button
+          class="tw-mr-1 tw-rounded-full"
+          nzType="primary"
+          (click)="sendOtp()"
+        >
           Gửi lại
         </button>
         <button
@@ -111,11 +116,12 @@ export class OtpComponent implements OnInit {
     this._otpSvc.getOtp(this.model).subscribe(
       (data) => {
         console.log(data.value);
-        console.log(data.value.jwtToken);
-        this._nzMessageService.success('Đăng nhập thành công.');
-        localStorage.setItem('token$', data.value.jwtToken);
-        localStorage.setItem('accountId$', data.value.accountId)
-        this._router.navigate(['/homepage']);
+        if (data.value.role !== 'CUSTOMER') {
+          this._nzMessageService.success('Đăng nhập thành công.');
+          localStorage.setItem('token$', data.value.jwtToken);
+          localStorage.setItem('accountId$', data.value.accountId);
+          this._router.navigate(['/homepage']);
+        } else this._nzMessageService.error('Bạn không có quyền truy cập.');
       },
       (error) => {
         this._nzMessageService.error('Otp không đúng.');

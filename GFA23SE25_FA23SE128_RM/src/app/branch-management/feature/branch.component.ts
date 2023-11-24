@@ -199,7 +199,6 @@ export class BranchComponent {
 
   addBranch() {
     this.addModel = this.bStore.form.getRawValue();
-
     this.bStore.addBranch({ model: this.addModel });
   }
 

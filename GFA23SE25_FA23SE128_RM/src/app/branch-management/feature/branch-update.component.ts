@@ -21,6 +21,7 @@ import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
 import { BranchUpdateStore } from '../data-access/store/branch-update.store';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-branch-update',
@@ -44,6 +45,7 @@ import { BranchUpdateStore } from '../data-access/store/branch-update.store';
     NzAutocompleteModule,
     RxLet,
     OnlyNumberInputDirective,
+    RouterLink,
   ],
   providers: [provideComponentStore(BranchUpdateStore), NzMessageService],
   template: `
@@ -94,9 +96,9 @@ import { BranchUpdateStore } from '../data-access/store/branch-update.store';
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian mở cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
+            <nz-form-control nzErrorTip="Vui lòng chọn giờ mở cửa" class="tw-w-[70%]">
               <nz-time-picker
-                nzFormat="HH:mm"
+                [nzFormat]="'HH:mm'"
                 class="tw-rounded-md tw-w-[100%]"
                 [formControl]="buStore.form.controls.open"
               ></nz-time-picker>
@@ -107,7 +109,7 @@ import { BranchUpdateStore } from '../data-access/store/branch-update.store';
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian đóng cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
+            <nz-form-control nzErrorTip="Vui lòng chọn giờ đóng cửa" class="tw-w-[70%]">
               <nz-time-picker
                 nzFormat="HH:mm"
                 class="tw-rounded-md tw-w-[100%]"
@@ -168,13 +170,14 @@ import { BranchUpdateStore } from '../data-access/store/branch-update.store';
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary">Làm mới</button>
+        <button nz-button nzDanger nzType="primary" [routerLink]="['/branch-management', 'branch-list']">trở lại</button>
         <button
           nz-button
           nzType="primary"
           class="tw-ml-4"
+          (click)="updateBranch()"
         >
-          Tạo Chi nhánh
+          Cập nhật
         </button>
       </div>
     </div>
@@ -195,5 +198,9 @@ export class BranchUpdateComponent implements OnInit {
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.buStore.getAddress(value);
+  }
+
+  updateBranch() {
+    this.buStore.updateBranch({id: this.buStore.form.controls.branchId.getRawValue(), model: this.buStore.form.getRawValue()})
   }
 }

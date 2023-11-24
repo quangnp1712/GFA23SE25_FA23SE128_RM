@@ -9,34 +9,33 @@ export namespace BranchApi {
     address: string;
     status: string;
     numberStaffs: number;
-    open: Date | null;
-    close: Date | null;
-    branchDisplayList: branchDisplayList
-    ,
-    branchServiceList: branchServiceList
+    open: string | null;
+    close: string | null;
+    branchDisplayList: branchDisplayList;
+    branchServiceList: branchServiceList;
   }
 
   export type branchDisplayList = {
-    url: string
-  }[]
+    url: string;
+  }[];
 
   export type branchServiceList = {
-    serviceId: number,
-    price: number
-  }[]
+    serviceId: number;
+    price: number;
+  }[];
 
   export type displayUrlList = [];
   export type serviceIdList = [];
   export type RequestFormGroup = {
-    thumbnailUrl: FormControl<string>,
+    thumbnailUrl: FormControl<string>;
     shopOwnerId: FormControl<string>;
     branchName: FormControl<string>;
     phone: FormControl<string>;
     address: FormControl<string>;
     status: FormControl<string>;
     numberStaffs: FormControl<number>;
-    open: FormControl<Date | null>;
-    close: FormControl<Date | null>;
+    open: FormControl<string | null>;
+    close: FormControl<string | null>;
     branchDisplayList: FormControl<branchDisplayList>;
     branchServiceList: FormControl<branchServiceList>;
   };
@@ -59,18 +58,8 @@ export namespace BranchPagingApi {
     address: string;
     status: string;
     numberStaffs: 0;
-    open: {
-      hour: number;
-      minute: number;
-      second: number;
-      nano: number;
-    };
-    close: {
-      hour: number;
-      minute: number;
-      second: number;
-      nano: number;
-    };
+    open: string
+    close: string
     displayUrlList: string[];
     serviceIdList: string[];
   }
@@ -78,18 +67,49 @@ export namespace BranchPagingApi {
 
 export namespace BranchUpdateApi {
 
+  export interface Request {
+    thumbnailUrl: string;
+    shopOwnerId: string;
+    branchName: string;
+    phone: string;
+    address: string;
+    status: string;
+    numberStaffs: number;
+    open: string | null;
+    close: string | null;
+    branchDisplayList: branchDisplayList;
+    branchServiceList: branchServiceList;
+  }
+
+
   export type RequestFormGroup = {
+    branchId: FormControl<number>;
     shopOwnerId: FormControl<string>;
     branchName: FormControl<string>;
+    thumbnailUrl: FormControl<string>
     phone: FormControl<string>;
     address: FormControl<string>;
     status: FormControl<string>;
     numberStaffs: FormControl<number>;
-    open: FormControl<Date | null>;
+    open: FormControl<string | null>;
     close: FormControl<string | null>;
-    displayUrlList: FormControl<string[]>;
-    serviceIdList: FormControl<string[]>;
+    branchDisplayList: FormControl<branchDisplayList>;
+    branchServiceList: FormControl<branchServiceList>;
   };
+
+  export type branchDisplayList = {
+    url: string;
+  }[];
+
+  export type branchServiceList = {
+    serviceId: number;
+    branchId: number;
+    serviceName: string;
+    branchName: string;
+    thumbnailUrl: string;
+    price: number;
+  }[];
+
   export interface BranchDataResponse {
     value: {
       branchId: number;
@@ -98,15 +118,11 @@ export namespace BranchUpdateApi {
       phone: string;
       address: string;
       status: string;
-      numberStaffs: 0;
-      open: {
-
-      };
-      close: {
-
-      };
-      displayUrlList: string[];
-      serviceIdList: string[];
+      numberStaffs: number;
+      open: string | null;
+      close: string | null;
+      branchDisplayList: branchDisplayList;
+      branchServiceList: branchServiceList;
     };
   }
 }

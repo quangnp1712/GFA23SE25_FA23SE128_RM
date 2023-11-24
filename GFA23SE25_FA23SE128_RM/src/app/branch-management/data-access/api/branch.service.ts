@@ -44,6 +44,13 @@ export class BranchApiService {
       .pipe(catchError(this.handleError));
   }
 
+  public updateBranch(id: number, model: BranchUpdateApi.Request) {
+    const url = `${this.REST_API_SERVER}/v1/branch/${id}`;
+    return this._http
+      .put<any>(url, model, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     return throwError(error.error['message']);
   }

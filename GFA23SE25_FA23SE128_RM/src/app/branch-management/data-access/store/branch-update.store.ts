@@ -41,8 +41,6 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
     super(initialState);
   }
   ngrxOnStoreInit() {
-    console.log(this.id);
-    this.getBranchData()
   };
 
 
@@ -63,8 +61,10 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
     numberStaffs: this._fb.control(0, [Validators.min(1), Validators.max(100)]),
     open: this._fb.control(null, Validators.required),
     close: this._fb.control(null, Validators.required),
-    displayUrlList: this._fb.control(['string']),
-    serviceIdList: this._fb.control([]),
+    branchDisplayList: this._fb.control([]),
+    branchServiceList: this._fb.control([]),
+    branchId: this._fb.control(-1),
+    thumbnailUrl: this._fb.control('123'),
   });
 
   readonly getBranchData = this.effect<never>(
@@ -76,12 +76,15 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
             next: (resp) => {
               this.form.controls.address.setValue(resp.value.address)
               this.form.controls.branchName.setValue(resp.value.branchName)
-              this.form.controls.shopOwnerId.setValue(resp.value.address)
               this.form.controls.numberStaffs.setValue(resp.value.numberStaffs)
-              this.form.controls.displayUrlList.setValue(resp.value.displayUrlList)
-              this.form.controls.serviceIdList.setValue(resp.value.serviceIdList)
+              this.form.controls.branchDisplayList.setValue(resp.value.branchDisplayList)
+              this.form.controls.branchServiceList.setValue(resp.value.branchServiceList)
               this.form.controls.phone.setValue(resp.value.phone)
               this.form.controls.status.setValue(resp.value.status)
+              this.form.controls.open.setValue(resp.value.open+'Z')
+              this.form.controls.close.setValue(resp.value.close+'Z')
+              this.form.controls.branchId.setValue(resp.value.branchId)
+
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -111,6 +114,24 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
           })
         );
       })
+    )
+  );
+
+  readonly updateBranch = this.effect<{id: number, model: BranchUpdateApi.Request }>($params =>
+    $params.pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(({ id, model }) =>
+        this._bApiSvc.updateBranch(id, model).pipe(
+          tap({
+            next: resp => {
+              this._nzMessageService.success('Cập nhật chi nhánh thành công');
+            },
+            error: () => this._nzMessageService.error('Cập nhật chi nhánh thất bại.'),
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
     )
   );
 

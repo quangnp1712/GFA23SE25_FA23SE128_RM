@@ -176,7 +176,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary">Làm mới</button>
+        <button nz-button nzDanger nzType="primary" (click)="bStore.form.reset()">Làm mới</button>
         <button
           nz-button
           nzType="primary"

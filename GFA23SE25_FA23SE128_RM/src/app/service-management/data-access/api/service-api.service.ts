@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
-import { CategoryAddApi } from '../model/service-api.model';
+import { CategoryAddApi, CategoryDataGet, ServiceAddApi, ServicePagingApi } from '../model/service-api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,19 +23,33 @@ export class ServiceApiService {
 
   private REST_API_SERVER = 'http://localhost:8080';
 
-  public addBranch(model: CategoryAddApi.Request) {
+  public addCategory(model: CategoryAddApi.Request) {
     const url = `${this.REST_API_SERVER}/v1/category`;
     return this._http
       .post<any>(url, model, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
-  // public paging(model: BranchPagingApi.Request) {
-  //   const url = `${this.REST_API_SERVER}/v1/branches?search=${model.search}&current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
-  //   return this._http
-  //     .get<Paging<BranchPagingApi.Response>>(url, this.httpOptions)
-  //     .pipe(catchError(this.handleError));
-  // }
+  public CategoryDataGet() {
+    const url = `${this.REST_API_SERVER}/v1/category/fields`;
+    return this._http
+      .get<CategoryDataGet.Response>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  public addService(model: ServiceAddApi.Request) {
+    const url = `${this.REST_API_SERVER}/v1/services`;
+    return this._http
+      .post<any>(url, model, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  public paging(model: ServicePagingApi.Request) {
+    const url = `${this.REST_API_SERVER}/v1/services?current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
+    return this._http
+      .get<Paging<ServicePagingApi.Response>>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
 
   // public getBranch(id: number) {
   //   const url = `${this.REST_API_SERVER}/v1/branch/${id}`;

@@ -10,7 +10,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { CategoryAddComponent } from '../ui/category-add-modal.component';
 import { CategoryAddApi } from '../data-access/model/service-api.model';
 import { ServiceStore } from '../data-access/store/service.store';
@@ -18,6 +18,7 @@ import { tap } from 'rxjs';
 import { provideComponentStore } from '@ngrx/component-store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
+import { RxLet } from '@rx-angular/template/let';
 
 @Component({
   selector: 'app-service-list',
@@ -33,8 +34,13 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
     NzTableModule,
     RouterLink,
     NzSelectModule,
+    RxLet,
   ],
-  providers: [NzModalService, provideComponentStore(ServiceStore), NzMessageService],
+  providers: [
+    NzModalService,
+    provideComponentStore(ServiceStore),
+    NzMessageService,
+  ],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý dịch vụ</nz-breadcrumb-item>
@@ -42,7 +48,7 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
     </nz-breadcrumb>
     <nz-divider></nz-divider>
     <div nz-row>
-      <div nz-col nzSpan="17" class="">
+      <div nz-col nzSpan="24" class="">
         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
           <input type="text" nz-input placeholder="Tìm theo tên" />
         </nz-input-group>
@@ -52,7 +58,8 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
           </button>
         </ng-template>
       </div>
-      <div nz-col nzSpan="2" class="tw-text-center">
+      <!-- <div nz-row class="tw-mt-4 tw-flex"> -->
+      <div class="tw-text-center tw-mt-4 tw-mr-3">
         <button
           nz-button
           [routerLink]="['/service-management', 'create-service']"
@@ -61,40 +68,51 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
           Tạo dịch vụ
         </button>
       </div>
-      <div nz-col nzSpan="2" class="">
-        <button
-          nz-button
-          nzType="primary"
-          (click)="onAddCategory()"
-        >
+      <div class="tw-text-center tw-mt-4 tw-mr-3">
+        <button nz-button nzType="primary" (click)="onAddCategory()">
           Tạo loại dịch vụ
         </button>
       </div>
-      <div nz-col nzSpan="2" class="tw-ml-2">
-        <button
-          nz-button
-          nzType="primary"
-        >
-          Xem loại dịch vụ
-        </button>
+      <div class="tw-text-center tw-mt-4">
+        <button nz-button nzType="primary">Xem loại dịch vụ</button>
       </div>
-    </div>
-    <div nz-row>
+      <!-- </div> -->
       <div nz-col nzSpan="24" class="tw-mt-5">
-        <nz-table #basicTable class="tw-mr-4">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Ảnh</th>
-              <th>Tên dịch vụ</th>
-              <th>Mô tả</th>
-              <th>giá</th>
-              <th>Trạng thái</th>
-              <th>Ngày tạo</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </nz-table>
+        <ng-container *rxLet="vm$ as vm">
+          <nz-table
+            appNzTableDefaultSetting
+            class="tw-mr-4"
+            [nzData]="vm.servicePaging.content"
+            [nzTotal]="vm.servicePaging.totalElements"
+            [(nzPageIndex)]="sStore.pagingRequest.current"
+            [(nzPageSize)]="sStore.pagingRequest.pageSize"
+            (nzQueryParams)="onTableQueryParamsChange($event)"
+            [nzShowTotal]="totalText"
+            [nzLoading]="!!vm.loadingCount"
+            nzShowSizeChanger
+          >
+            <thead>
+              <ng-template #totalText let-total let-range="range">
+                <span
+                  >{{ range[0] }} - {{ range[1] }} of {{ total }}
+                  {{ 'Services' }}</span
+                >
+              </ng-template>
+              <tr>
+                <th>STT</th>
+                <th>Tên dịch vụ</th>
+                <th>Mô tả</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of vm.servicePaging.content; index as i">
+                <td>{{ i+1 }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.description }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </ng-container>
       </div>
     </div>
   `,
@@ -102,7 +120,22 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceListComponent {
-  constructor(private _nzModalSvc: NzModalService, private _fb: NonNullableFormBuilder, public sStrore: ServiceStore){}
+  constructor(
+    private _nzModalSvc: NzModalService,
+    private _fb: NonNullableFormBuilder,
+    public sStore: ServiceStore
+  ) {}
+
+  vm$ = this.sStore.state$;
+
+  onTableQueryParamsChange(params: NzTableQueryParams) {
+    const { sort } = params;
+    const currentSort = sort.find((item) => item.value !== null);
+    this.sStore.pagingRequest.sorter = currentSort?.key ?? '';
+    this.sStore.pagingRequest.orderDescending = currentSort?.value !== 'ascend';
+    this.sStore.getServicePaging();
+    console.log();
+  }
 
   onAddCategory() {
     const modalRef = this._nzModalSvc.create({
@@ -117,7 +150,7 @@ export class ServiceListComponent {
     modalRef
       .componentInstance!.clickSubmit.pipe(
         tap(() => {
-          this.sStrore.addCategory({
+          this.sStore.addCategory({
             model: CategoryAddApi.mapModel(form),
             modalRef: modalRef,
           });

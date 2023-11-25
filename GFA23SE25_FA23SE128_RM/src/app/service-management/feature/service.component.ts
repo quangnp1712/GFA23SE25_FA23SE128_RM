@@ -19,6 +19,10 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { ServiceStore } from '../data-access/store/service.store';
+import { provideComponentStore } from '@ngrx/component-store';
+import { RxLet } from '@rx-angular/template/let';
+import { ServiceAddApi } from '../data-access/model/service-api.model';
 
 @Component({
   selector: 'app-service',
@@ -31,54 +35,52 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
     NzInputModule,
     NzIconModule,
     NzButtonModule,
-    NzTableModule,
     NzFormModule,
     FormsModule,
     ReactiveFormsModule,
     NzSelectModule,
-    NzDatePickerModule,
     NzUploadModule,
+    RxLet
   ],
-  providers: [NzMessageService],
+  providers: [NzMessageService, provideComponentStore(ServiceStore)],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý dịch vụ</nz-breadcrumb-item>
       <nz-breadcrumb-item>Tạo dịch vụ</nz-breadcrumb-item>
     </nz-breadcrumb>
     <nz-divider></nz-divider>
-    <div>
-      <form nz-form>
+    <div *rxLet="vm$ as vm">
+      <form nz-form [formGroup]="form">
         <div nz-row class="tw-ml-[12%]">
           <!-- Tên chi nhánh -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Tên dịch vụ</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
+            <nz-form-control nzErrorTip="Vui lòng nhập tên dịch vụ">
               <input
                 class="tw-rounded-md tw-w-[70%]"
                 nz-input
+                [formControl]="form.controls.name"
                 placeholder="Nhập tên dịch vụ"
               />
             </nz-form-control>
           </nz-form-item>
 
-          <!-- địa chỉ -->
+          <!-- loaij dichj vuj -->
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Giá dịch vụ</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập tên">
-              <input
-                class="tw-rounded-md tw-w-[70%]"
-                nz-input
-                placeholder="Nhập giá dịch vụ"
-              />
+            <nz-form-label class="tw-ml-3" nzRequired>Loại dịch vụ</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
+              <nz-select class="tw-rounded-md tw-w-[70%]" [formControl]="form.controls.categoryId">
+            <nz-option *ngFor="let option of vm.categoryData.values" [nzLabel]="option.title" [nzValue]="option.categoryId"></nz-option>
+            </nz-select>
             </nz-form-control>
           </nz-form-item>
 
-          <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Mô tả dịch vụ</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập tên">
-            <textarea  class="tw-w-[70%]" rows="5" nz-input></textarea>
+          <nz-form-item nz-col nzSpan="12">
+            <nz-form-label class="tw-ml-3">Mô tả dịch vụ</nz-form-label>
+            <nz-form-control>
+            <textarea  class="tw-w-[70%]" rows="5" nz-input [formControl]="form.controls.description"></textarea>
             </nz-form-control>
           </nz-form-item>
 
@@ -106,8 +108,8 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary">Làm mới</button>
-        <button nz-button nzType="primary" class="tw-ml-4">
+        <button nz-button nzDanger nzType="primary" (click)="form.reset()">Làm mới</button>
+        <button nz-button nzType="primary" class="tw-ml-4" (click)="addService()" [disabled]="form.invalid">
           Tạo dịch vụ
         </button>
       </div>
@@ -116,4 +118,13 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceComponent {}
+export class ServiceComponent {
+  constructor(public sStore: ServiceStore){}
+
+  vm$ = this.sStore.state$
+  form = this.sStore.form
+
+  addService(){
+    this.sStore.addService({model: ServiceAddApi.mapModel(this.form)})
+  }
+}

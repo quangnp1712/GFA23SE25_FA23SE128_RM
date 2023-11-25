@@ -26,7 +26,13 @@ export interface BranchState {
 }
 
 const initialState: BranchState = {
-  branchPaging: { content: [], current: 1, pageSize: 10, totalElements: 0, totalPages: 0 },
+  branchPaging: {
+    content: [],
+    current: 1,
+    pageSize: 10,
+    totalElements: 0,
+    totalPages: 0,
+  },
   loadingCount: 0,
   addressData: [],
 };
@@ -37,7 +43,7 @@ export class BranchStore extends ComponentStore<BranchState> {
     private _bApiSvc: BranchApiService,
     private _cApiSvc: CommonApiService,
     private _fb: NonNullableFormBuilder,
-    private _nzMessageService: NzMessageService,
+    private _nzMessageService: NzMessageService
   ) {
     super(initialState);
   }
@@ -56,7 +62,11 @@ export class BranchStore extends ComponentStore<BranchState> {
   form = this._fb.group<BranchApi.RequestFormGroup>({
     shopOwnerId: this._fb.control(localStorage.getItem('accountId$')!),
     branchName: this._fb.control('', trimRequired),
-    phone: this._fb.control('', [Validators.minLength(10), Validators.maxLength(11), trimRequired]),
+    phone: this._fb.control('', [
+      Validators.minLength(10),
+      Validators.maxLength(11),
+      trimRequired,
+    ]),
     address: this._fb.control('', trimRequired),
     status: this._fb.control('OPEN'),
     numberStaffs: this._fb.control(0, [Validators.min(1), Validators.max(100)]),
@@ -97,7 +107,7 @@ export class BranchStore extends ComponentStore<BranchState> {
                 resp.value.predictions.forEach((address) => {
                   this.options.push(address.description);
                 });
-                this.patchState({addressData: this.options})
+                this.patchState({ addressData: this.options });
               }
             },
             finalize: () => {},
@@ -107,16 +117,18 @@ export class BranchStore extends ComponentStore<BranchState> {
     )
   );
 
-  readonly addBranch = this.effect<{ model: BranchApi.Request }>($params =>
+  readonly addBranch = this.effect<{ model: BranchApi.Request }>(($params) =>
     $params.pipe(
       tap(() => this.updateLoading(true)),
       switchMap(({ model }) =>
         this._bApiSvc.addBranch(model).pipe(
           tap({
-            next: resp => {
-                this._nzMessageService.success('Đăng ký chi nhánh thành công');
+            next: (resp) => {
+              this.form.reset();
+              this._nzMessageService.success('Đăng ký chi nhánh thành công');
             },
-            error: () => this._nzMessageService.error('Đăng ký chi nhánh thất bại.'),
+            error: () =>
+              this._nzMessageService.error('Đăng ký chi nhánh thất bại.'),
             finalize: () => this.updateLoading(false),
           }),
           catchError(() => EMPTY)

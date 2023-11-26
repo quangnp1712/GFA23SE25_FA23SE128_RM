@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:convert';
 import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
-import 'package:get/get.dart';
+import 'dart:typed_data';
 
 class ServicePriceListScreen extends StatefulWidget {
   Function callback;
@@ -17,35 +16,25 @@ class ServicePriceListScreen extends StatefulWidget {
 }
 
 class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
-  List name = [
-    'Nguyen Xuan Soan',
-    'Hoang Sa',
-    'Tran Huu Nghia',
-    'Dien Bien Phu',
-  ];
-  List<CategoryServiceModel>? categoryServiceList;
+  List<CategoryModel>? categories;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    // Gọi API để lấy danh sách category và dịch vụ
+    _fetchCategoryServiceList();
   }
 
-  Future<void> fetchData() async {
-    try {
-      final result = await CategoryServices().getCategoryServiceList();
+  Future<void> _fetchCategoryServiceList() async {
+    final categoryService = CategoryServices();
+    final result = await categoryService.getCategoryServiceList();
 
-      if (result['statusCode'] == 200) {
-        setState(() {
-          categoryServiceList = (result['data'] as List<dynamic>)
-              .map((item) => CategoryServiceModel.fromJson(item))
-              .toList();
-        });
-      } else {
-        print('Error fetching data');
-      }
-    } catch (e) {
-      print('Error: $e');
+    if (result['statusCode'] == 200) {
+      setState(() {
+        categories = result['data'].values;
+      });
+    } else {
+      // Xử lý lỗi nếu cần
     }
   }
 
@@ -105,7 +94,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                     height: 50,
                                     child: Center(
                                       child: Text(
-                                        "dịch vụ".toUpperCase(),
+                                        "bảng dịch vụ".toUpperCase(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
@@ -226,15 +215,16 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                         // const SizedBox(
                         //   height: 20,
                         // ),
-
+// chỉ xử lý code API từ đây trở xuống
+                        // chỉ xử lý API từ đây xuống
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: ListView.builder(
-                            itemCount:
-                                2, // Assuming there are two categories in this section
+                            itemCount: categories?.length ?? 0,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
+                            itemBuilder: (context, categoryIndex) {
+                              final category = categories?[categoryIndex];
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -249,11 +239,17 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                     decoration: const BoxDecoration(
                                       border: Border(
                                         left: BorderSide(
-                                            color: Colors.black, width: 8),
+                                          color: Colors.black,
+                                          width: 8,
+                                        ),
                                       ),
                                     ),
                                     child: Text(
-                                      "cắt tóc".toUpperCase(),
+                                      // category?.title?.toUpperCase() ?? '',
+                                      utf8
+                                          .decode(category?.title?.codeUnits ??
+                                              Uint8List(0))
+                                          .toUpperCase(),
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20,
@@ -267,7 +263,8 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
                                     child: GridView.builder(
-                                      itemCount: 4,
+                                      itemCount:
+                                          category?.serviceList?.length ?? 0,
                                       scrollDirection: Axis.vertical,
                                       padding: const EdgeInsets.all(5),
                                       shrinkWrap: true,
@@ -278,9 +275,12 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                         crossAxisCount: 2,
                                         crossAxisSpacing: 10,
                                         mainAxisSpacing: 20,
-                                        childAspectRatio: 2 / 2.9,
+                                        childAspectRatio: 2 / 3.1,
                                       ),
-                                      itemBuilder: (context, index) {
+                                      itemBuilder: (context, serviceIndex) {
+                                        final service = category
+                                            ?.serviceList?[serviceIndex];
+// final thumbnailUrl = service?.branchServiceList?.first.thumbnailUrl ?? '';
                                         return Container(
                                           height: 204,
                                           decoration: BoxDecoration(
@@ -292,7 +292,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                             padding: const EdgeInsets.all(2.0),
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
@@ -303,7 +303,8 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                         Radius.circular(10),
                                                   ),
                                                   child: Image.asset(
-                                                    "assets/images/admin.png",
+                                                    "assets/images/image1.png",
+                                                    // service?.thumbnailUrl ?? '',
                                                     height: 140,
                                                     width:
                                                         MediaQuery.of(context)
@@ -315,29 +316,51 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.all(5),
+                                                      const EdgeInsets.all(2),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceEvenly,
+                                                            .spaceAround,
                                                     children: [
                                                       const SizedBox(
                                                         height: 5,
                                                       ),
-                                                      Text(
-                                                        name[index],
-                                                        maxLines: 1,
-                                                        style: const TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colors.white,
-                                                        ),
+                                                      Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: ClipRRect(
+                                                              child: Container(
+                                                                child: Text(
+                                                                  utf8.decode(service
+                                                                          ?.name
+                                                                          ?.codeUnits ??
+                                                                      Uint8List(
+                                                                          0)),
+                                                                  maxLines:
+                                                                      2, // Số dòng tối đa
+                                                                  softWrap:
+                                                                      true, // Cho phép tự động xuống dòng
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                       const SizedBox(
                                                         height: 5,

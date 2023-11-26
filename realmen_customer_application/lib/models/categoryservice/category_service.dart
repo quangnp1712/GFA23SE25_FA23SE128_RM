@@ -1,46 +1,51 @@
-class CategoryServiceModel {
-  // String description;
+class CategoryListModel {
+  List<CategoryModel>? values;
+
+  CategoryListModel({this.values});
+
+  factory CategoryListModel.fromJson(Map<String, dynamic> json) {
+    return CategoryListModel(
+      values: (json['values'] as List<dynamic>?)
+          ?.map((item) => CategoryModel.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class CategoryModel {
+  String? description;
   int? categoryId;
   String? title;
   List<SubServiceModel>? serviceList;
 
-  CategoryServiceModel({
-    // required this.description,
-    this.categoryId,
-    this.title,
-    this.serviceList,
-  });
+  CategoryModel(
+      {this.description, this.categoryId, this.title, this.serviceList});
 
-  factory CategoryServiceModel.fromJson(Map<String, dynamic> json) {
-    return CategoryServiceModel(
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
+      description: json['description'],
       categoryId: json['categoryId'],
       title: json['title'],
       serviceList: (json['serviceList'] as List<dynamic>?)
-          ?.map(
-            (subService) => SubServiceModel.fromJson(subService),
-          )
+          ?.map((item) => SubServiceModel.fromJson(item))
           .toList(),
     );
   }
 }
 
 class SubServiceModel {
-  // String description;
+  String? description;
   String? name;
   List<BranchServiceModel>? branchServiceList;
 
-  SubServiceModel({
-    // required this.description,
-    this.name,
-    this.branchServiceList,
-  });
+  SubServiceModel({this.description, this.name, this.branchServiceList});
 
   factory SubServiceModel.fromJson(Map<String, dynamic> json) {
     return SubServiceModel(
-      // description: json['description'],
+      description: json['description'],
       name: json['name'],
-      branchServiceList: (json['branchServiceList'] as List<dynamic>)
-          .map((branchService) => BranchServiceModel.fromJson(branchService))
+      branchServiceList: (json['branchServiceList'] as List<dynamic>?)
+          ?.map((item) => BranchServiceModel.fromJson(item))
           .toList(),
     );
   }

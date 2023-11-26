@@ -15,7 +15,7 @@ abstract class ICategoryService {
 class CategoryServices implements ICategoryService {
   @override
   Future getCategoryServiceList() async {
-    CategoryServiceModel categoryServiceModel = CategoryServiceModel();
+    CategoryListModel categoryServiceModel = CategoryListModel();
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse("$getCategoryServicesUrl");
@@ -34,8 +34,7 @@ class CategoryServices implements ICategoryService {
       final responseBody = response.body;
 
       if (statusCode == 200) {
-        final category =
-            CategoryServiceModel.fromJson(json.decode(responseBody));
+        final category = CategoryListModel.fromJson(json.decode(responseBody));
         return {
           'statusCode': statusCode,
           'data': category,

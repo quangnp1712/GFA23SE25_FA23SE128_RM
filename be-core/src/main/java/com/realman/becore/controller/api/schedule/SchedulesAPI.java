@@ -11,8 +11,8 @@ import com.realman.becore.controller.api.schedule.models.ScheduleRequest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@RequestMapping("/schedule")
 @Tag(name = "Schedule", description = "schedule management API")
+@RequestMapping("/v1/schedules")
 @PreAuthorize("hasAnyAuthority({'schedule:add', 'schedule:view'})")
 public interface SchedulesAPI {
     @PostMapping

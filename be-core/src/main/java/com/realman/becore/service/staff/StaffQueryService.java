@@ -20,7 +20,7 @@ public class StaffQueryService {
     private final StaffMapper staffMapper;
 
     public Staff findByAccountId(Long accountId) {
-        StaffEntity staffEntity = staffRepository.findById(accountId)
+        StaffEntity staffEntity = staffRepository.findByAccountId(accountId)
                 .orElseThrow(ResourceNotFoundException::new);
         return staffMapper.toDto(staffEntity);
     }

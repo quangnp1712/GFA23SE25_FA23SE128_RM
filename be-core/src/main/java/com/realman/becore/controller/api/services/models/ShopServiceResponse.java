@@ -9,6 +9,7 @@ public record ShopServiceResponse(
     String name,
     @JsonProperty(value = "description")
     String serviceDescription,
+    List<ServiceDisplayResponse> serviceDisplayList,
     List<BranchService> branchServiceList
 ) {
     

@@ -17,12 +17,14 @@ public interface ScheduleRepository extends JpaRepository<ScheduleEntity, Long>{
                 sc.scheduleId AS scheduleId,
                 sc.staffId AS staffId,
                 sc.shiftId AS shiftId,
+                s.shift AS shift,
                 sc.workingDate AS workingDate,
                 sc.scheduleStatus AS scheduleStatus,
                 s.start AS start,
                 s.end AS end
             FROM ScheduleEntity sc 
             INNER JOIN ShiftEntity s ON s.shiftId = sc.shiftId
+            INNER JOIN StaffEntity st ON st.staffId = sc.staffId
             WHERE sc.staffId = :staffId
             """)
     List<ScheduleInfo> findInfoByStaffId(Long staffId);

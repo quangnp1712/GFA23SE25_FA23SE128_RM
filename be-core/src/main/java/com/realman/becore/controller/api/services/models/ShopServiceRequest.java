@@ -1,5 +1,7 @@
 package com.realman.becore.controller.api.services.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record ShopServiceRequest(
@@ -7,6 +9,7 @@ public record ShopServiceRequest(
     Long categoryId,
     @JsonProperty(value = "description")
     String serviceDescription,
+    List<ServiceDisplayRequest> serviceDisplayList,
     Integer duration
 ) {
     

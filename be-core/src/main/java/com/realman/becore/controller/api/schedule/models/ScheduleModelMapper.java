@@ -8,4 +8,6 @@ import com.realman.becore.dto.schedule.Schedule;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ScheduleModelMapper {
     Schedule toDto(ScheduleRequest model);
+
+    ScheduleResponse toModel(Schedule dto);
 }

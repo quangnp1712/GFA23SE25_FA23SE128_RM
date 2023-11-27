@@ -1,7 +1,6 @@
 package com.realman.becore.service.account;
 
 import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,7 @@ import com.realman.becore.dto.account.AccountId;
 import com.realman.becore.dto.account.AccountInfo;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.account.AccountSearchCriteria;
+import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.account.AccountEntity;
 import com.realman.becore.repository.database.account.AccountRepository;
@@ -36,8 +36,8 @@ public class AccountQueryService {
                 AccountEntity entity = accountRepository
                                 .findByPhone(phone)
                                 .orElseThrow(ResourceNotFoundException::new);
-
-                return accountMapper.toDto(entity);
+                Staff staff = staffUsercaseService.findByAccountId(entity.getAccountId());
+                return accountMapper.toDto(entity, staff);
         }
 
         public Boolean isAccountExist(String phone) {
@@ -48,7 +48,8 @@ public class AccountQueryService {
         public Account findStaffAccount(AccountId accountId) {
                 AccountInfo info = accountRepository.findStaffAccount(accountId.value())
                                 .orElseThrow(ResourceNotFoundException::new);
-                return accountMapper.fromInfo(info);
+                Staff staff = staffUsercaseService.findByAccountId(accountId.value());
+                return accountMapper.fromInfo(info, staff);
         }
 
         public Account findCustomerAccount(AccountId accountId) {

@@ -1,6 +1,7 @@
 package com.realman.becore.service.otp;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -29,16 +30,16 @@ public class OTPCommandService {
 
     @NonNull
     private final OTPRepository otpRepository;
-    
+
     @NonNull
     private final AccountQueryService accountQueryService;
-    
+
     @NonNull
     private final OTPMapper otpMapper;
-    
+
     @NonNull
     private final PasswordEncoder passwordEncoder;
-    
+
     @NonNull
     private final JwtConfiguration jwtConfiguration;
 
@@ -98,8 +99,8 @@ public class OTPCommandService {
         OTPEntity otpEntity = otpRepository
                 .findByPhoneAttemp(loginRequest.phone())
                 .orElse(OTPEntity.builder()
-                .passCode(passwordEncoder.encode("12345"))
-                .build());
+                        .passCode(passwordEncoder.encode("12345"))
+                        .build());
         Account account = accountQueryService.findByPhone(
                 loginRequest.phone());
         if (!passwordEncoder
@@ -111,6 +112,7 @@ public class OTPCommandService {
         LocalDateTime expiredTime = jwtConfiguration.expireTime();
         return LoginResponse.builder()
                 .accountId(account.accountId())
+                .staffId(Objects.nonNull(account.staff()) ? account.staff().staffId() : null)
                 .phone(account.phone())
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)

@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.enums.EGender;
 import com.realman.becore.dto.enums.EItimacyLevel;
-import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.enums.ERole;
+import com.realman.becore.dto.staff.Staff;
 
 import lombok.Builder;
 
@@ -24,8 +24,7 @@ public record Account(
                 EAccountStatus status,
                 String branchName,
                 String branchAddress,
-                EProfessional professional,
-                Double average,
+                Staff staff,
                 EItimacyLevel itimacyLevel,
                 ERole role) {
 

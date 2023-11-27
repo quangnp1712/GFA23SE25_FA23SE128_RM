@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class ScheduleController implements ScheduleAPI{
+public class ScheduleController implements ScheduleAPI {
     @NonNull
     private final ScheduleUseCaseService scheduleUseCaseService;
     @NonNull
@@ -22,9 +22,9 @@ public class ScheduleController implements ScheduleAPI{
 
     @Override
     public ListResponse<ScheduleResponse> findByAccountId(Long accountId) {
-        List<Schedule> scheduleList = scheduleUseCaseService.findByAccountId(accountId);
+        List<Schedule> scheduleList = scheduleUseCaseService.findById(accountId);
         List<ScheduleResponse> responses = scheduleList.stream().map(scheduleModelMapper::toModel).toList();
         return new ListResponse<>(responses);
     }
-    
+
 }

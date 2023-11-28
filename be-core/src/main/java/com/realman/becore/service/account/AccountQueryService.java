@@ -73,6 +73,7 @@ public class AccountQueryService {
         public Page<Account> findAll(AccountSearchCriteria criteria,
                         PageRequestCustom pageRequestCustom) {
                 Page<AccountInfo> infoList = accountRepository.findAll(criteria.searches(), criteria.role(),
+                                criteria.branchId(),
                                 pageRequestCustom.pageRequest());
                 return infoList.map(info -> {
                         Staff staff = staffUsercaseService.findByAccountId(info.getAccountId());

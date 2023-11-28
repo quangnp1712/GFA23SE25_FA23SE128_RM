@@ -27,43 +27,44 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class AccountsAuthController implements AccountsAuthAPI {
-    @NonNull
-    private final AccountUseCaseService accountUseCaseService;
+        @NonNull
+        private final AccountUseCaseService accountUseCaseService;
 
-    @NonNull
-    private final AccountModelMapper accountModelMapper;
+        @NonNull
+        private final AccountModelMapper accountModelMapper;
 
-    @Override
-    public void saveStaff(@Valid AccountRequest account, EProfessional professional,
-            Long branchId) {
-        Account dto = accountModelMapper.toDto(account.format(), ERole.STAFF);
-        accountUseCaseService.saveStaff(dto, new BranchId(branchId), professional);
-    }
+        @Override
+        public void saveStaff(@Valid AccountRequest account, EProfessional professional,
+                        Long branchId) {
+                Account dto = accountModelMapper.toDto(account.format(), ERole.STAFF);
+                accountUseCaseService.saveStaff(dto, new BranchId(branchId), professional);
+        }
 
-    @Override
-    public void saveManager(@Valid AccountRequest account, Long branchId) {
-        Account dto = accountModelMapper
-                .toDto(account.format(), ERole.BRANCH_MANAGER);
-        accountUseCaseService.save(dto, new BranchId(branchId));
-    }
+        @Override
+        public void saveManager(@Valid AccountRequest account, Long branchId) {
+                Account dto = accountModelMapper
+                                .toDto(account.format(), ERole.BRANCH_MANAGER);
+                accountUseCaseService.save(dto, new BranchId(branchId));
+        }
 
-    @Override
-    public PageImplResponse<AccountResponse> findAll(List<String> searches, ERole role, @Min(1) Integer current,
-            Integer pageSize,
-            String sorter) {
-        PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
-        List<String> searchesCriteria = Objects.nonNull(searches) ? searches
-                : new ArrayList<>();
-        AccountSearchCriteria criteria = AccountSearchCriteria.builder()
-                .searches(searchesCriteria).role(role).build();
-        Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
-        Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
-        return new PageImplResponse<>(
-                responses.getContent(),
-                responses.getTotalElements(),
-                responses.getTotalPages(), 
-                responses.getSize(),
-                pageRequestCustom.current());
-    }
+        @Override
+        public PageImplResponse<AccountResponse> findAll(List<String> searches, Long branchId, ERole role,
+                        @Min(1) Integer current,
+                        Integer pageSize,
+                        String sorter) {
+                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
+                List<String> searchesCriteria = Objects.nonNull(searches) ? searches
+                                : new ArrayList<>();
+                AccountSearchCriteria criteria = AccountSearchCriteria.builder()
+                                .searches(searchesCriteria).branchId(branchId).role(role).build();
+                Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
+                Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
+                return new PageImplResponse<>(
+                                responses.getContent(),
+                                responses.getTotalElements(),
+                                responses.getTotalPages(),
+                                responses.getSize(),
+                                pageRequestCustom.current());
+        }
 
 }

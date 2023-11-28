@@ -23,23 +23,23 @@ import jakarta.validation.constraints.Min;
 @PreAuthorize("hasRole('ROLE_SHOP_OWNER')")
 @RequestMapping("/v1/auth/accounts")
 public interface AccountsAuthAPI {
-    @PostMapping("/staff")
-    void saveStaff(
-            @RequestBody @Valid AccountRequest account,
-            @RequestParam(required = false, value = "professional", defaultValue = "STYLIST") EProfessional professional,
-            @RequestParam(required = true, value = "branchId") Long branchId);
+        @PostMapping("/staff")
+        void saveStaff(
+                        @RequestBody @Valid AccountRequest account,
+                        @RequestParam(required = false, value = "professional", defaultValue = "STYLIST") EProfessional professional,
+                        @RequestParam(required = true, value = "branchId") Long branchId);
 
-    @PostMapping("/manager")
-    void saveManager(
-            @RequestBody @Valid AccountRequest account,
-            @RequestParam(required = true, value = "branchId") Long branchId);
+        @PostMapping("/manager")
+        void saveManager(
+                        @RequestBody @Valid AccountRequest account,
+                        @RequestParam(required = true, value = "branchId") Long branchId);
 
-     @GetMapping
-     PageImplResponse<AccountResponse> findAll(
-        @RequestParam(required = false, value = "searches") List<String> searches,
-        @RequestParam(required = false, value = "role", defaultValue = "STAFF") ERole role,
-        @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
-        @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize,
-        @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter
-     );
+        @GetMapping
+        PageImplResponse<AccountResponse> findAll(
+                        @RequestParam(required = false, value = "searches") List<String> searches,
+                        @RequestParam(required = false) Long branchId,
+                        @RequestParam(required = false, value = "role", defaultValue = "STAFF") ERole role,
+                        @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
+                        @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize,
+                        @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter);
 }

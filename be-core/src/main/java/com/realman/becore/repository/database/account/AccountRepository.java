@@ -104,6 +104,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
     @Query("""
             SELECT
                 a.accountId AS accountId,
+                b.branchId AS branchId,
                 a.firstName AS firstName,
                 a.lastName AS lastName,
                 a.thumbnailUrl AS thumbnailUrl,
@@ -112,15 +113,19 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.gender AS gender,
                 a.dob AS dob,
                 a.status AS status,
+                b.branchName AS branchName,
+                b.address AS branchAddress,
                 a.role AS role
             FROM AccountEntity a
+            INNER JOIN BranchEntity b ON a.branchId = b.branchId
             WHERE a.role = :role
             AND (:#{#searches.isEmpty()} = TRUE)
-            OR (a.firstName IN (:searches)
-            OR a.lastName IN (:searches) OR a.phone IN (:searches)
-            OR a.address IN (:searches))
+                OR (a.firstName IN (:searches)
+                OR a.lastName IN (:searches) OR a.phone IN (:searches)
+                OR a.address IN (:searches))
+            AND :branchId IS NULL OR a.branchId = :branchId
             """)
-    Page<AccountInfo> findAll(List<String> searches, ERole role,
+    Page<AccountInfo> findAll(List<String> searches, ERole role, Long branchId,
             Pageable pageable);
 
 }

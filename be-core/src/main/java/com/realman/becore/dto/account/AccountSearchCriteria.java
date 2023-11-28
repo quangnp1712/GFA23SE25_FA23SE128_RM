@@ -8,8 +8,8 @@ import lombok.Builder;
 
 @Builder
 public record AccountSearchCriteria(
-    List<String> searches,
-    ERole role
-) {
-    
+                List<String> searches,
+                Long branchId,
+                ERole role) {
+
 }

@@ -113,6 +113,7 @@ public class OTPCommandService {
         return LoginResponse.builder()
                 .accountId(account.accountId())
                 .staffId(Objects.nonNull(account.staff()) ? account.staff().staffId() : null)
+                .branchId(Objects.nonNull(account.branchId()) ? account.branchId() : null)
                 .phone(account.phone())
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)

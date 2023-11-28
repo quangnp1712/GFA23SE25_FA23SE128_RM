@@ -145,7 +145,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 ),
               ),
               Container(
-                width: 225,
+                width: 200,
                 child: Text(
                   branch != null ? branch : "",
                   maxLines: 3,
@@ -176,7 +176,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 ),
               ),
               Container(
-                width: 225,
+                width: 200,
                 child: Text(
                   stylist != null ? stylist : "",
                   textAlign: TextAlign.left,
@@ -204,7 +204,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 ),
               ),
               Container(
-                width: 225,
+                width: 200,
                 child: Row(
                   children: [
                     Text(

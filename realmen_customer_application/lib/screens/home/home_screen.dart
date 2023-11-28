@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 20,
                               ),
                               SizedBox(
-                                width: 248,
+                                width: 220,
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,

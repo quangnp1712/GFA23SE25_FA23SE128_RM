@@ -238,7 +238,7 @@ class ServiceCategoryTile extends StatelessWidget {
                     crossAxisCount: 2, // Thay đổi giá trị này nếu cần
                     crossAxisSpacing: 8.0,
                     mainAxisSpacing: 8.0,
-                    childAspectRatio: 2 / 3.2,
+                    childAspectRatio: 2 / 3.3,
                   ),
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),

@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 @Tag(name = "Account", description = "manage account by owner API")
-@PreAuthorize("hasRole('ROLE_SHOP_OWNER')")
+@PreAuthorize("hasAnyRole({'ROLE_SHOP_OWNER', 'ROLE_BRANCH_MANAGER'})")
 @RequestMapping("/v1/auth/accounts")
 public interface AccountsAuthAPI {
         @PostMapping("/staff")

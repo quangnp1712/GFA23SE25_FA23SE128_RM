@@ -35,4 +35,8 @@ public class BranchServiceUseCaseService {
     public List<BranchService> findAllByBranchId(Long branchId) {
         return branchServiceQueryService.findAllByBranchId(branchId);
     }
+
+    public List<BranchService> findAll() {
+        return branchServiceQueryService.findAll();
+    }
 }

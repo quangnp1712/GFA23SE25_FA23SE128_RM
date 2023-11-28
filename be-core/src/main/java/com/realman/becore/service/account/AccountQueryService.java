@@ -74,6 +74,9 @@ public class AccountQueryService {
                         PageRequestCustom pageRequestCustom) {
                 Page<AccountInfo> infoList = accountRepository.findAll(criteria.searches(), criteria.role(),
                                 pageRequestCustom.pageRequest());
-                return infoList.map(accountMapper::fromInfo);
+                return infoList.map(info -> {
+                        Staff staff = staffUsercaseService.findByAccountId(info.getAccountId());
+                        return accountMapper.fromInfo(info, staff);
+                });
         }
 }

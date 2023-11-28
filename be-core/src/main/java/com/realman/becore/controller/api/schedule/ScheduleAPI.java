@@ -10,9 +10,9 @@ import com.realman.becore.util.response.ListResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Schedule", description = "schedule management API")
-@RequestMapping("/v1/schedule")
+@RequestMapping("/v1/schedule/{staffId}")
 @PreAuthorize("hasAuthority('schedule:view')")
 public interface ScheduleAPI {
-    @GetMapping("/{accountId}")
-    ListResponse<ScheduleResponse> findByAccountId(@PathVariable Long accountId);
+    @GetMapping
+    ListResponse<ScheduleResponse> findByAccountId(@PathVariable Long staffId);
 }

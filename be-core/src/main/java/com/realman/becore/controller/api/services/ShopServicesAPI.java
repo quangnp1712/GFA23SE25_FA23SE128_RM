@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.realman.becore.controller.api.services.models.ShopServiceFieldResponse;
 import com.realman.becore.controller.api.services.models.ShopServiceRequest;
 import com.realman.becore.controller.api.services.models.ShopServiceResponse;
+import com.realman.becore.util.response.ListResponse;
 import com.realman.becore.util.response.PageImplResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +26,10 @@ public interface ShopServicesAPI {
 
     @GetMapping
     PageImplResponse<ShopServiceResponse> findAll(
-        @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
-        @RequestParam(required = false, value = "sorter", defaultValue = "name") String sorter,
-        @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize
-    );
+            @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
+            @RequestParam(required = false, value = "sorter", defaultValue = "name") String sorter,
+            @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);
+
+    @GetMapping("/field")
+    ListResponse<ShopServiceFieldResponse> findAllServiceField();
 }

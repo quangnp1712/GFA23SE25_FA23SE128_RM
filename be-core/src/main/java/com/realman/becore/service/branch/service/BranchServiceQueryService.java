@@ -30,4 +30,10 @@ public class BranchServiceQueryService {
                 .stream().map(branchServiceMapper::toDto).toList();
         return branchServiceList;
     }
+
+    public List<BranchService> findAll() {
+        List<BranchService> branchServiceList = branchServiceRepository.findAllServiceInfo().stream()
+                .map(branchServiceMapper::toDto).toList();
+        return branchServiceList;
+    }
 }

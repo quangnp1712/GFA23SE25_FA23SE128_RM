@@ -9,5 +9,7 @@ import com.realman.becore.dto.service.ShopService;
 public interface ShopServiceModelMapper {
     ShopService toDto(ShopServiceRequest model);
 
+    ShopServiceFieldResponse toFieldModel(ShopService dto);
+
     ShopServiceResponse toModel(ShopService dto);
 }

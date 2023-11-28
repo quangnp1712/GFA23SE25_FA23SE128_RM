@@ -19,6 +19,8 @@ public interface ShopServiceMapper {
     ShopService toDto(ShopServiceEntity entity, List<BranchService> branchServiceList,
             List<ServiceDisplay> serviceDisplayList);
 
+    ShopService toDto(ShopServiceInfo info);
+
     @Mapping(source = "serviceDisplayList", target = "serviceDisplayList")
     ShopService toDtoServiceDisplayList(ShopServiceEntity entity, List<ServiceDisplay> serviceDisplayList);
 

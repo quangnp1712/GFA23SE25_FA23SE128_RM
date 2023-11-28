@@ -34,7 +34,7 @@ public class ScheduleUseCaseService {
         scheduleCommandService.updateStatus(scheduleId, scheduleStatus);
     }
 
-    public List<Schedule> findById(Long accountId) {
-        return scheduleQueryService.findById(accountId);
+    public List<Schedule> findById(Long staffId) {
+        return scheduleQueryService.findById(staffId);
     }
 }

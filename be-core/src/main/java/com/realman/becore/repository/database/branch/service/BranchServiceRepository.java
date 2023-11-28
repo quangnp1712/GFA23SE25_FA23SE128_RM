@@ -11,33 +11,49 @@ import com.realman.becore.dto.branch.service.BranchServiceInfo;
 @Repository
 public interface BranchServiceRepository extends JpaRepository<BranchServiceEntity, Long> {
 
-    @Query("""
-            SELECT 
-                 s.serviceId AS serviceId,
-                 b.branchId AS branchId,
-                 b.branchName AS branchName,
-                 b.thumbnailUrl AS thumbnailUrl,
-                 bs.price AS price
-            FROM BranchServiceEntity bs 
-            INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
-            INNER JOIN BranchEntity b ON b.branchId = bs.branchId
-            WHERE bs.serviceId = :serviceId
-            """)
-    List<BranchServiceInfo> findAllByServiceId(Long serviceId);
+        @Query("""
+                        SELECT
+                             s.serviceId AS serviceId,
+                             b.branchId AS branchId,
+                             s.name AS serviceName,
+                             b.branchName AS branchName,
+                             b.thumbnailUrl AS thumbnailUrl,
+                             bs.price AS price
+                        FROM BranchServiceEntity bs
+                        INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
+                        INNER JOIN BranchEntity b ON b.branchId = bs.branchId
+                        WHERE bs.serviceId = :serviceId
+                        """)
+        List<BranchServiceInfo> findAllByServiceId(Long serviceId);
 
-    @Query("""
-            SELECT 
-                 bs.branchServiceId AS branchServiceId,       
-                 s.serviceId AS serviceId,
-                 b.branchId AS branchId,
-                 s.name AS serviceName,
-                 b.branchName AS branchName,
-                 b.thumbnailUrl AS thumbnailUrl,
-                 bs.price AS price
-            FROM BranchServiceEntity bs 
-            INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
-            INNER JOIN BranchEntity b ON b.branchId = bs.branchId
-            WHERE bs.branchId = :branchId
-            """)
-    List<BranchServiceInfo> findAllByBranchId(Long branchId);
+        @Query("""
+                        SELECT
+                             bs.branchServiceId AS branchServiceId,
+                             s.serviceId AS serviceId,
+                             b.branchId AS branchId,
+                             s.name AS serviceName,
+                             b.branchName AS branchName,
+                             b.thumbnailUrl AS thumbnailUrl,
+                             bs.price AS price
+                        FROM BranchServiceEntity bs
+                        INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
+                        INNER JOIN BranchEntity b ON b.branchId = bs.branchId
+                        WHERE bs.branchId = :branchId
+                        """)
+        List<BranchServiceInfo> findAllByBranchId(Long branchId);
+
+        @Query("""
+                        SELECT
+                             bs.branchServiceId AS branchServiceId,
+                             s.serviceId AS serviceId,
+                             b.branchId AS branchId,
+                             s.name AS serviceName,
+                             b.branchName AS branchName,
+                             b.thumbnailUrl AS thumbnailUrl,
+                             bs.price AS price
+                        FROM BranchServiceEntity bs
+                        INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
+                        INNER JOIN BranchEntity b ON b.branchId = bs.branchId
+                        """)
+        List<BranchServiceInfo> findAllServiceInfo();
 }

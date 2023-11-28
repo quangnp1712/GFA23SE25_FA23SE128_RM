@@ -1,13 +1,17 @@
 package com.realman.becore.controller.api.services;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realman.becore.controller.api.services.models.ShopServiceFieldResponse;
 import com.realman.becore.controller.api.services.models.ShopServiceModelMapper;
 import com.realman.becore.controller.api.services.models.ShopServiceRequest;
 import com.realman.becore.controller.api.services.models.ShopServiceResponse;
 import com.realman.becore.dto.service.ShopService;
 import com.realman.becore.service.services.ShopServiceUseCaseService;
+import com.realman.becore.util.response.ListResponse;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.PageRequestCustom;
 
@@ -37,6 +41,13 @@ public class ShopServicesController implements ShopServicesAPI {
         Page<ShopServiceResponse> responses = shopServices.map(shopServiceModelMapper::toModel);
         return new PageImplResponse<>(responses.getContent(), responses.getTotalElements(), responses.getTotalPages(),
                 pageSize, current);
+    }
+
+    @Override
+    public ListResponse<ShopServiceFieldResponse> findAllServiceField() {
+        List<ShopServiceFieldResponse> responses = shopServiceUseCaseService.findAllServiceField().stream()
+                .map(shopServiceModelMapper::toFieldModel).toList();
+        return new ListResponse<>(responses);
     }
 
 }

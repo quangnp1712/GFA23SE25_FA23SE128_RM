@@ -17,4 +17,5 @@ public class StaffUsecaseService {
     public Staff findByAccountId(Long accountId) {
         return staffQueryService.findByAccountId(accountId);
     }
+
 }

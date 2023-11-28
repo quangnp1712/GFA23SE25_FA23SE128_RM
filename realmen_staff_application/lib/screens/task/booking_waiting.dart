@@ -21,7 +21,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
         child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5, // The number of items in the list
+          itemCount: 1, // The number of items in the list
           itemBuilder: (context, index) {
             // Return a Card widget for each item in the list
             return ExpansionTile(
@@ -130,7 +130,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 5, // The number of items in the list
+                              itemCount: 1, // The number of items in the list
                               itemBuilder: (context, index) {
                                 // Return a Card widget for each item in the list
                                 return Padding(

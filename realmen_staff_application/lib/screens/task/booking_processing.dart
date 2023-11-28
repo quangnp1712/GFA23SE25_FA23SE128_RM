@@ -113,7 +113,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 5, // The number of items in the list
+                itemCount: 1, // The number of items in the list
                 itemBuilder: (context, index) {
                   // Return a Card widget for each item in the list
                   return ExpansionTile(
@@ -131,19 +131,23 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                               horizontal: 5, vertical: 5),
                           decoration: BoxDecoration(
                             // color: Color(0xff207A20),
-                            color: Colors.white,
+                            color: isDone == false
+                                ? Colors.white
+                                : Color(0xff207A20),
                             border: Border.all(
                                 color: Colors.black54,
                                 style: BorderStyle.solid),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "ĐANG LÀM",
+                              isDone == false ? "ĐANG LÀM" : "HOÀN THÀNH",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
                                 // color: Colors.white,
-                                color: Colors.black,
+                                color: isDone == false
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                           ),
@@ -213,7 +217,11 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                                               BorderRadius.circular(10)),
                                       margin: EdgeInsets.all(10),
                                       child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          setState(() {
+                                            isDone = true;
+                                          });
+                                        },
                                         child: Center(
                                           child: Text(
                                             "Xác nhận",
@@ -260,6 +268,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
     );
   }
 
+  bool isDone = false;
   @override
   bool get wantKeepAlive => true;
 

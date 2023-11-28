@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 4,
                             crossAxisSpacing: 20,
                             mainAxisSpacing: 5,
-                            childAspectRatio: 4 / 5,
+                            childAspectRatio: 4 / 6,
                             children: [
                               cardHolder(
                                 'Đặt lịch',

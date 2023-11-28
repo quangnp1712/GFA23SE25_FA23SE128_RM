@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart';
+import 'package:realmen_staff_application/models/schedule/schedule_model.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
+import 'package:realmen_staff_application/screens/work_schedule/appointment_editor.dart';
+import 'package:realmen_staff_application/service/schedule/schedule_service.dart';
+import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -12,6 +19,21 @@ class WorkScheduleScreen extends StatefulWidget {
 }
 
 class _WorkScheduleState extends State<WorkScheduleScreen> {
+  _WorkScheduleState();
+  _AppointmentDataSource _dataSource = _AppointmentDataSource(<Appointment>[]);
+  final GlobalKey _globalKey = GlobalKey();
+  Appointment? _selectedAppointment;
+  final CalendarController calendarController = CalendarController();
+
+  @override
+  void initState() {
+    calendarController.view = _view;
+    _selectedAppointment = null;
+    _dataSource = _AppointmentDataSource(_getAppointmentDetails());
+    _getSchedule();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +41,7 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
         children: [
           Positioned(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/bg.png'),
                   fit: BoxFit.cover,
@@ -52,7 +74,7 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                               child: Center(
                                 child: Text(
                                   "lịch làm".toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24,
                                   ),
@@ -64,12 +86,33 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                         Container(
                           // width: 80.w,
                           height: 80.w,
+                          key: _globalKey,
                           child: SfCalendar(
-                            view: CalendarView.week,
-                            monthViewSettings:
-                                MonthViewSettings(showAgenda: true),
+                            controller: calendarController,
+                            allowedViews: _allowedViews,
+                            showWeekNumber: true,
+                            showDatePickerButton: true,
+                            showNavigationArrow: true,
+                            monthViewSettings: const MonthViewSettings(
+                                showAgenda: true, numberOfWeeksInView: 2),
+                            firstDayOfWeek: 7,
+                            dataSource:
+                                // MeetingDataSource(getAppointments()),
+                                _dataSource,
+                            timeSlotViewSettings: const TimeSlotViewSettings(
+                              startHour: 7,
+                              endHour: 23,
+                              timeInterval: Duration(hours: 8),
+                              timeIntervalHeight: 100,
+                              timelineAppointmentHeight: 500,
+                              timeRulerSize: 80,
+                              timeFormat: "CA TỐI",
+                            ),
+                            specialRegions: _specialTimeRegions != null
+                                ? _specialTimeRegions
+                                : <TimeRegion>[],
                           ),
-                        )
+                        ),
                       ],
                     )),
               )
@@ -79,4 +122,114 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
       ),
     );
   }
+
+  _getAppointmentDetails() {
+    final List<Appointment> appointments = <Appointment>[];
+    return appointments;
+  }
+
+  final List<TimeRegion> _specialTimeRegions = <TimeRegion>[];
+  CalendarView _view = CalendarView.week;
+  SchedulesModel? schedulesModel = SchedulesModel();
+
+  _getSchedule() async {
+    final List<Appointment> appointments = <Appointment>[];
+    ScheduleService scheduleService = ScheduleService();
+
+    try {
+      int accountId = await SharedPreferencesService.getAccountId();
+      var result = await scheduleService.getSchedule(accountId);
+      if (result['statusCode'] == 200) {
+        schedulesModel = result['data'] as SchedulesModel;
+        for (var schedule in schedulesModel!.scheduleModel!) {
+          Appointment? newAppointment;
+          DateTime dateSchedule =
+              DateTime.parse(schedule.workingDate.toString());
+          // Lấy start time
+          final startTimeString = schedule.start.toString();
+          List<String> partsStartTimeString = startTimeString.split(":");
+          int hourStart = int.parse(partsStartTimeString[0]);
+          int minuteStart = int.parse(partsStartTimeString[1]);
+          DateTime startDate = DateTime(dateSchedule.year, dateSchedule.month,
+              dateSchedule.day, hourStart, minuteStart);
+
+          // Lấy end time
+          final endTimeString = schedule.end.toString();
+          List<String> partsEndTimeString = endTimeString.split(":");
+          int hourEnd = int.parse(partsEndTimeString[0]);
+          int minuteEnd = int.parse(partsEndTimeString[1]);
+          DateTime endDate = DateTime(dateSchedule.year, dateSchedule.month,
+              dateSchedule.day, hourEnd, minuteEnd);
+
+          String subject = '';
+          Color colorSchedule = Colors.transparent;
+          if (schedule.shift == 'MORNING') {
+            subject = "CA SÁNG";
+            colorSchedule = Colors.deepOrange.shade400;
+            final DateTime startTimeRegion = DateTime(dateSchedule.year,
+                dateSchedule.month, dateSchedule.day, 15, 0, 0);
+            final DateTime endTimeRegion = DateTime(dateSchedule.year,
+                dateSchedule.month, dateSchedule.day, 23, 0, 0);
+            if (_specialTimeRegions.any((region) =>
+                    region.startTime.isAtSameMomentAs(startTimeRegion) &&
+                    region.endTime.isAtSameMomentAs(endTimeRegion)) ==
+                false) {
+              _specialTimeRegions.add(TimeRegion(
+                startTime: startTimeRegion,
+                endTime: endTimeRegion,
+                enablePointerInteraction: false,
+              ));
+            }
+          } else if (schedule.shift == 'NIGHT') {
+            subject = "CA TỐI";
+            colorSchedule = Colors.deepPurple.shade400;
+            final DateTime startTimeRegion = DateTime(dateSchedule.year,
+                dateSchedule.month, dateSchedule.day, 7, 0, 0);
+            final DateTime endTimeRegion = DateTime(dateSchedule.year,
+                dateSchedule.month, dateSchedule.day, 15, 0, 0);
+            if (_specialTimeRegions.any((region) =>
+                    region.startTime.isAtSameMomentAs(startTimeRegion) &&
+                    region.endTime.isAtSameMomentAs(endTimeRegion)) ==
+                false) {
+              _specialTimeRegions.add(TimeRegion(
+                startTime: startTimeRegion,
+                endTime: endTimeRegion,
+                enablePointerInteraction: false,
+              ));
+            }
+          }
+
+          newAppointment = Appointment(
+            startTime: startDate,
+            endTime: endDate,
+            color: colorSchedule,
+            subject: subject,
+          );
+
+          setState(() {
+            _dataSource.notifyListeners(
+                CalendarDataSourceAction.add, <Appointment>[newAppointment!]);
+          });
+        }
+      } else {
+        print("$result['statusCode'] : $result['error']");
+        return appointments;
+      }
+    } catch (e) {
+      return appointments;
+    }
+  }
+
+  final List<CalendarView> _allowedViews = <CalendarView>[
+    CalendarView.week,
+    CalendarView.month,
+    CalendarView.schedule,
+  ];
+}
+
+class _AppointmentDataSource extends CalendarDataSource {
+  _AppointmentDataSource(this.source);
+  List<Appointment> source;
+  @override
+  List<dynamic> get appointments => source;
 }

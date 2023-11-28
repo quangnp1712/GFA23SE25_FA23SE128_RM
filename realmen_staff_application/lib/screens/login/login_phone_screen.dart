@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:realmen_staff_application/models/login_register/login_phone_model.dart';
 import 'package:realmen_staff_application/screens/login/login_otp_screen.dart';
-import 'package:realmen_staff_application/screens/login/register_screen.dart';
+
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
@@ -225,7 +225,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
 
   // // No API
   void submitPhone() async {
-    String phone = "0917901487";
+    String phone = "0917901489";
     Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
     try {
       await SharedPreferencesService.savePhone(phone);

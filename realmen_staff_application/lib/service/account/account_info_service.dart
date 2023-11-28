@@ -20,7 +20,7 @@ class AccountService extends IAccountService {
       final int accountId = await SharedPreferencesService.getAccountId();
 
       final String jwtToken = await SharedPreferencesService.getJwt();
-      Uri uri = Uri.parse("$accountInfoUrl/$accountId/$customer");
+      Uri uri = Uri.parse("$accountInfoUrl/$accountId/$staff");
       final client = http.Client();
       final response = await client.get(
         uri,

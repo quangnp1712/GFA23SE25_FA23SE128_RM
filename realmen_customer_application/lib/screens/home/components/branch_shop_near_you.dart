@@ -49,7 +49,8 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: 5,
+                  itemCount:
+                      branchesForCity!.length > 5 ? 5 : branchesForCity!.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {},

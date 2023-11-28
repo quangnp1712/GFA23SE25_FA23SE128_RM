@@ -120,6 +120,7 @@ export class OtpComponent implements OnInit {
           this._nzMessageService.success('Đăng nhập thành công.');
           localStorage.setItem('token$', data.value.jwtToken);
           localStorage.setItem('accountId$', data.value.accountId);
+          localStorage.setItem('role$', data.value.role);
           this._router.navigate(['/homepage']);
         } else this._nzMessageService.error('Bạn không có quyền truy cập.');
       },

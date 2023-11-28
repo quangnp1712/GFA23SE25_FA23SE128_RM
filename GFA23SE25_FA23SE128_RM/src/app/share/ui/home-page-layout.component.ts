@@ -68,6 +68,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nz-menu-item
                 [routerLink]="['/account-management', 'create-account']"
                 nzMatchRouter
+                *ngIf="role == 'SHOP_OWNER'"
               >
                 Tạo tài khoản
               </li>
@@ -109,14 +110,14 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
               </li>
             </ul>
           </li>
-          <li
+          <!-- <li
             nz-menu-item
             [routerLink]="['/schedule-management', 'schedule']"
             nzMatchRouter
           >
             <span nz-icon nzType="schedule"></span>
             <span>Quản lý lịch nhân viên</span>
-          </li>
+          </li> -->
           <li nz-submenu nzTitle="Quản lý doanh thu" nzIcon="money-collect">
             <ul>
               <li nz-menu-item>Tổng doanh thu</li>
@@ -216,6 +217,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 export class HomepageLayoutComponent {
   constructor(private _router: Router) {}
   isCollapsed = false;
+  role = localStorage.getItem('role$')
   logout() {
     localStorage.clear();
     this._router.navigate(['/login']);

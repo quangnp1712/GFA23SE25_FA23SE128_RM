@@ -66,6 +66,7 @@ export class AccountStore extends ComponentStore<AccountState> {
     sorter: '',
     orderDescending: false,
     role: RoleType.STAFF,
+    branchId: localStorage.getItem('branchId$')!
   };
 
   form = new FormGroup<AccountAddApi.RequestFormGroup>({

@@ -14,6 +14,7 @@ export namespace OtpApi {
   export interface Reponse {
     value: {
       accountId: string;
+      branchId: number;
       expTime: string;
       jwtToken: string;
       phone: string;

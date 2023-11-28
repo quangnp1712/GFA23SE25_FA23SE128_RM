@@ -55,14 +55,14 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
             <span nz-icon nzType="home"></span>
             <span>Tổng quan</span>
           </li>
-          <li nz-submenu nzTitle="Quản lý tài khoản" nzIcon="team">
+          <li nz-submenu nzTitle="Quản lý nhân viên" nzIcon="team">
             <ul>
               <li
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/account-management', 'account-list']"
               >
-                Danh sách tài khoản
+                Danh sách nhân viên
               </li>
               <li
                 nz-menu-item

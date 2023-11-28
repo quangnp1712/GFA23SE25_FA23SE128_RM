@@ -24,7 +24,7 @@ export namespace AccountAddApi {
     professional: FormControl<string>;
     thumbnailUrl: FormControl<string>;
     branchAddress: FormControl<string>;
-    numberStaffs: FormControl<number | null>
+    numberStaffs: FormControl<number | null>;
   };
 }
 
@@ -35,6 +35,7 @@ export namespace AccountPagingApi {
     current: number;
     pageSize: number;
     sorter: string;
+    branchId: string;
     orderDescending: boolean;
   }
 
@@ -54,6 +55,32 @@ export namespace AccountPagingApi {
     itimacyLevel: string;
     professional: string;
     average: number;
+    staff: {
+      staffId: number;
+      averageRating: number;
+      scheduleList: [
+        {
+          scheduleId: number;
+          staffId: number;
+          shift: string;
+          workingDate: string;
+          start: {
+            hour: number;
+            minute: number;
+            second: number;
+            nano: number;
+          };
+          end: {
+            hour: number;
+            minute: number;
+            second: number;
+            nano: number;
+          };
+          scheduleStatus: string;
+        }
+      ];
+      professional: string;
+    };
     role: RoleType;
   }
 }

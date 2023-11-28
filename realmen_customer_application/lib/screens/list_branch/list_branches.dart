@@ -160,7 +160,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
 
                                           return Future.value(options);
                                         } catch (e) {
-                                          print(e);
+                                          print(e.toString());
                                         }
                                       }
                                     } else {
@@ -531,26 +531,18 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
               }
             }
           } on Exception catch (e) {
-            print(e);
+            print(e.toString());
           }
           setState(() {
             cities;
           });
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
-    }
-  }
-
-  void _errorMessage(String? message) {
-    try {
-      ShowSnackBar.ErrorSnackBar(context, message!);
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -570,7 +562,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           branchesForCity;
         });
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
     }
@@ -609,10 +601,10 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
             focusNode.unfocus();
           });
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
     }

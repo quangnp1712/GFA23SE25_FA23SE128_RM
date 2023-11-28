@@ -26,3 +26,6 @@ final getCategoryServicesUrl =
 // common variable
 final connectionTimeOut = int.parse(dotenv.env["CONNECTION_TIMEOUT"]!);
 final customer = "${dotenv.env["CUSTOMER"]}";
+
+// Service API
+final getServices = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_SERVICE"]}";

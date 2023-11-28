@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:sizer/sizer.dart';
@@ -46,7 +47,7 @@ class _ChooseServiceBookingScreenState
   @override
   Widget build(BuildContext context) {
     var selectedServicesProvider = Provider.of<ChangeNotifierServices>(context);
-
+    NumberFormat formatter = NumberFormat("#,##0");
     return Scaffold(
       body: Stack(
         children: [
@@ -65,7 +66,7 @@ class _ChooseServiceBookingScreenState
               children: [
                 Positioned(
                   top: 15,
-                  bottom: 50,
+                  bottom: 70,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
@@ -99,7 +100,7 @@ class _ChooseServiceBookingScreenState
                                     height: 50,
                                     child: Center(
                                       child: Text(
-                                        "đặt lịch giữ chỗ".toUpperCase(),
+                                        "chọn dịch vụ".toUpperCase(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
@@ -124,21 +125,21 @@ class _ChooseServiceBookingScreenState
                             serviceLists: [
                               [
                                 SubServiceTile(
-                                  title: 'Combo 1',
-                                  price: '20',
-                                  image: 'assets/images/admin.png',
+                                  title: 'Combo Cắt 9 bước',
+                                  price: formatter.format(100000),
+                                  image: 'assets/images/3.png',
                                   onSelect: (bool isSelected) {
                                     updateSelectedServiceCount(
-                                        isSelected, 'Combo 1');
+                                        isSelected, 'Combo Cắt 9 bước');
                                   },
                                 ),
                                 SubServiceTile(
-                                  title: 'Combo 2',
-                                  price: '25',
-                                  image: 'assets/images/admin.png',
+                                  title: 'Combo Massage Cao Cấp',
+                                  price: formatter.format(200000),
+                                  image: 'assets/images/massage.jpg',
                                   onSelect: (bool isSelected) {
                                     updateSelectedServiceCount(
-                                        isSelected, 'Combo 2');
+                                        isSelected, 'Combo Massage Cao Cấp');
                                   },
                                 ),
                               ],
@@ -146,25 +147,25 @@ class _ChooseServiceBookingScreenState
                             isGridView: false,
                           ),
                           ServiceCategoryTile(
-                            title: 'Spa Services',
+                            title: 'Cắt tóc',
                             serviceLists: [
                               [
                                 SubServiceTile(
-                                  title: 'Facial',
-                                  price: '30',
-                                  image: 'assets/images/admin.png',
+                                  title: 'Cắt tóc tạo kiểu',
+                                  price: formatter.format(70000),
+                                  image: 'assets/images/image1.png',
                                   onSelect: (bool isSelected) {
                                     updateSelectedServiceCount(
-                                        isSelected, 'Facial');
+                                        isSelected, 'Cắt tóc tạo kiểu');
                                   },
                                 ),
                                 SubServiceTile(
-                                  title: 'Manicure',
-                                  price: '15',
-                                  image: 'assets/images/admin.png',
+                                  title: 'Cắt tóc trẻ em',
+                                  price: formatter.format(50000),
+                                  image: 'assets/images/5.jpg',
                                   onSelect: (bool isSelected) {
                                     updateSelectedServiceCount(
-                                        isSelected, 'Manicure');
+                                        isSelected, 'Cắt tóc trẻ em');
                                   },
                                 ),
                               ],

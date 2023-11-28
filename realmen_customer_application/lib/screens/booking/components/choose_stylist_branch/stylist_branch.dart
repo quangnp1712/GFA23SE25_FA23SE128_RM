@@ -165,7 +165,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                   radius: 30,
                                   child: ClipOval(
                                     child: Image.asset(
-                                      'assets/images/image1.png',
+                                      stylistData['avatar'],
                                       scale: 1,
                                       fit: BoxFit.cover,
                                       width: 80,
@@ -294,7 +294,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                       width: 80,
                                       height: 80,
                                       child: Image.asset(
-                                        'assets/images/branch1.png',
+                                        'assets/images/barber1.jpg',
                                         scale: 1,
                                         fit: BoxFit.cover,
                                         width: 80,

@@ -11,6 +11,7 @@ import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'service/change_notifier_provider/change_notifier_provider_service.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return GetMaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('vi'),
+        ],
         // onGenerateRoute: Routers.generateRoute,
         // onGenerateRoute: (settings) => GetPageRoute(settings: settings),
         getPages: RouteGenerator.routes(),

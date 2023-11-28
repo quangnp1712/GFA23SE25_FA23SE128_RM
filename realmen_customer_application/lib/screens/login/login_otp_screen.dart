@@ -199,15 +199,17 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             // Navigator.pushNamed(context, MainScreen.MainScreenRoute);
             Get.toNamed(MainScreen.MainScreenRoute);
           } else {
-            _errorMessage(result['error']);
+            _errorMessage("Lỗi đăng nhập");
           }
         } catch (e) {
           _errorMessage("Sai mã OTP");
         }
       } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+        _errorMessage("Sai mã OTP");
+        print("$result['statusCode'] : $result['error']");
       }
     } catch (e) {
+      _errorMessage("Lỗi đăng nhập");
       print("Error: $e");
     }
   }

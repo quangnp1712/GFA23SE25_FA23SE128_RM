@@ -1,16 +1,16 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class barberTop extends StatelessWidget {
+class barberTop extends StatefulWidget {
   // const barberTop({super.key});
-  List nameBarber = [
-    'Nguyen Anh Quan.Nguyen Anh Quan Nguyen Anh Quan Nguyen Anh Quan',
-    'Le Anh Tuan',
-    'Tran Quang Minh',
-    'Nguyen Phuong Quang',
-  ];
 
   barberTop({super.key});
 
+  @override
+  State<barberTop> createState() => _barberTopState();
+}
+
+class _barberTopState extends State<barberTop> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -18,7 +18,7 @@ class barberTop extends StatelessWidget {
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemCount: 4,
+          itemCount: stylists.length,
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -52,12 +52,28 @@ class barberTop extends StatelessWidget {
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15),
                               ),
-                              child: Image.asset(
-                                // "assets/barber/${index + 1}.png",
-                                "assets/images/admin.png",
-                                height: 200,
-                                width: 200,
-                                fit: BoxFit.cover,
+                              child: FutureBuilder(
+                                future: getImageFB(stylists[index].url!),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<Widget> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasData) {
+                                      return snapshot
+                                          .data!; // Return the widget when the future is complete
+                                    } else {
+                                      return Container(
+                                          height:
+                                              200); // Handle the case when the future completes with an error
+                                    }
+                                  } else {
+                                    return const SizedBox(
+                                        height: 200,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator())); // Show a loading indicator while the future is in progress
+                                  }
+                                },
                               ),
                             ),
                           ),
@@ -84,7 +100,7 @@ class barberTop extends StatelessWidget {
                                               color:
                                                   Colors.black.withOpacity(0.6),
                                             ),
-                                            children: const [
+                                            children: [
                                               WidgetSpan(
                                                 child: Icon(
                                                   Icons.star,
@@ -94,7 +110,10 @@ class barberTop extends StatelessWidget {
                                               WidgetSpan(
                                                 child: SizedBox(width: 4),
                                               ),
-                                              TextSpan(text: "4.5"),
+                                              TextSpan(
+                                                  text: stylists[index]
+                                                      .rate
+                                                      .toString()),
                                             ],
                                           ),
                                         ),
@@ -106,7 +125,7 @@ class barberTop extends StatelessWidget {
                                               color:
                                                   Colors.black.withOpacity(0.6),
                                             ),
-                                            children: const [
+                                            children: [
                                               WidgetSpan(
                                                 child: Icon(
                                                   Icons.location_on,
@@ -116,7 +135,10 @@ class barberTop extends StatelessWidget {
                                               WidgetSpan(
                                                 child: SizedBox(width: 4),
                                               ),
-                                              TextSpan(text: "Ho Chi Minh"),
+                                              TextSpan(
+                                                  text: stylists[index]
+                                                      .city
+                                                      .toString()),
                                             ],
                                           ),
                                         ),
@@ -138,7 +160,7 @@ class barberTop extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        nameBarber[index],
+                                        stylists[index].name.toString(),
                                         maxLines: 2,
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
@@ -164,4 +186,61 @@ class barberTop extends StatelessWidget {
           }),
     );
   }
+
+  List<StylistModel> stylists = [
+    StylistModel(
+        name: 'Phương Quang', rate: 4.9, city: "Hồ Chí Minh", url: "1.jpg"),
+    StylistModel(name: 'Anh Quân', rate: 4.8, city: "Thủ Đức", url: "2.jpg"),
+    StylistModel(name: 'Quang Minh', rate: 4.9, city: "Đà Nẵng", url: "3.jpg"),
+    StylistModel(name: 'Anh Tuấn', rate: 4.7, city: "Hà Nội", url: "4.jpg"),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  final storage = FirebaseStorage.instance;
+  Future<Widget> getImageFB(String url) async {
+    try {
+      if (url != null && url != '') {
+        var reference = storage.ref('stylist/$url');
+        return Image.network(
+          await reference.getDownloadURL(),
+          scale: 1,
+          height: 200,
+          width: 200,
+          fit: BoxFit.cover,
+        );
+      } else
+        return Container(
+          height: 200,
+        );
+    } catch (e) {
+      return Container(
+        height: 200,
+      );
+    }
+  }
+}
+
+class StylistModel {
+  String? name;
+  double? rate;
+  String? city;
+  String? url;
+
+  StylistModel({
+    this.name,
+    this.rate,
+    this.city,
+    this.url,
+  });
 }

@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      "Chào buổi $time, $name",
+                                      " ${time != null ? "Chào buổi $time," : ""} ${name != null ? name : ''}",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        'Bảng giá'.toUpperCase(),
+                                        'Dịch vụ'.toUpperCase(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
@@ -378,6 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getAccountInfo();
+    time = getTimeOfDay();
   }
 
   bool _isDisposed = false;
@@ -405,49 +406,39 @@ class _HomeScreenState extends State<HomeScreen> {
           accountInfo = result['data'] as AccountInfoModel;
           if (accountInfo!.thumbnailUrl != null &&
               accountInfo!.thumbnailUrl != "") {
-                try {
-                  var reference =
+            try {
+              var reference =
                   storage.ref('avatar/${accountInfo!.thumbnailUrl}');
               avatarUrl = await reference.getDownloadURL();
-                } catch (e) {
-                  var reference = storage.ref('avatar/default-2.png');
+            } catch (e) {
+              var reference = storage.ref('avatar/default.png');
               avatarUrl = await reference.getDownloadURL();
-                }
-            
+            }
           } else {
-            var reference = storage.ref('avatar/default-2.png');
+            var reference = storage.ref('avatar/default.png');
             avatarUrl = await reference.getDownloadURL();
           }
           setState(() {
             name = accountInfo!.lastName ?? "";
             name = utf8.decode(name!.runes.toList());
-            time = getTimeOfDay();
+
             avatarUrl;
           });
         } else if (result['statusCode'] == 403) {
           AuthenticateService authenticateService = AuthenticateService();
           authenticateService.logout();
-          _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
+          print("Cần đăng nhập lại");
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
         print("Error: $e");
       }
     }
   }
 
-  void _errorMessage(String? message) {
-    try {
-      ShowSnackBar.ErrorSnackBar(context, message!);
-    } catch (e) {
-      print(e);
-    }
-  }
-
   String getTimeOfDay() {
-    if (now.hour >= 6 && now.hour < 12) {
+    if (now.hour >= 0 && now.hour < 12) {
       return "sáng";
     } else if (now.hour >= 12 && now.hour < 15) {
       return "trưa";

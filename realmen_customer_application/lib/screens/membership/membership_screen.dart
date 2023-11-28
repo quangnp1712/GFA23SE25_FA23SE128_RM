@@ -156,7 +156,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
             var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
             avatarUrl = await reference.getDownloadURL();
           } else {
-            var reference = storage.ref('avatar/default-2.png');
+            var reference = storage.ref('avatar/default.png');
             avatarUrl = await reference.getDownloadURL();
           }
           setState(() {
@@ -164,12 +164,11 @@ class _MembershipScreenState extends State<MembershipScreen> {
           });
         } else if (result['statusCode'] == 403) {
           Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-          _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
+          _errorMessage(": Cần đăng nhập lại");
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
         print("Error: $e");
       }
     }

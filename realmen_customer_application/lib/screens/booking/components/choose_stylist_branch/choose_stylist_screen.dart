@@ -69,7 +69,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                   height: 50,
                                   child: Center(
                                     child: Text(
-                                      "chọn chi nhánh".toUpperCase(),
+                                      "chọn stylist".toUpperCase(),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 24,
@@ -213,7 +213,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                         radius: 30,
                         child: ClipOval(
                           child: Image.asset(
-                            'assets/images/image1.png',
+                            stylistData['avatar']!,
                             scale: 1,
                             fit: BoxFit.cover,
                             width: 80,
@@ -538,30 +538,55 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   // Sample stylist history data
   List<Map<String, dynamic>> stylistHistoryData = [
     {
+      'avatar': 'assets/images/s1.jpg',
       'name': 'Anh Tuấn',
       'specialization': ['Cắt tóc', 'Uốn tóc', 'Nhuộm tóc'],
-      'branch':
-          '411 Nguyễn Văn Tăng, 411 Nguyễn Văn Tăng, 411 Nguyễn Văn Tăng, P. Long Thạnh, Q.9, TP.Hồ Chí Minh',
-      'services': ['Cắt gọi 100 bước', 'Massage 1'],
+      'branch': '411 Nguyễn Văn Tăng, P. Long Thạnh, Q.9, TP.Hồ Chí Minh',
+      'services': ['Cắt gọi 10 bước', 'Massage Cao Cấp'],
       'images': [
-        'assets/images/image1.png',
-        'assets/images/image2.png',
-        'assets/images/image1.png',
-        'assets/images/image2.png',
+        'assets/images/3.png',
+        'assets/images/5.jpg',
         'assets/images/image1.png',
         'assets/images/image2.png',
       ],
     },
     {
-      'name': 'John Doe',
+      'avatar': 'assets/images/s2.jpg',
+      'name': 'Phương Quang',
       'specialization': ['Cắt tóc', 'Uốn tóc'],
-      'branch': '123 ABC Street, XYZ Ward, City',
+      'branch': '270 Nghĩa Phát, Phường 6, Tân Bình, Hồ Chí Minh',
+      'images': [
+        'assets/images/5.jpg',
+        'assets/images/image1.png',
+        'assets/images/3.png',
+        'assets/images/image2.png',
+        'assets/images/5.jpg',
+      ],
+    },
+    {
+      'avatar': 'assets/images/s3.jpg',
+      'name': 'Quang Minh',
+      'specialization': ['Cắt tóc', 'Nhuộm tóc', 'Uốn tóc'],
+      'branch': '590 Cách Mạng Tháng 8, Phường 11, Quận 3, Hồ Chí Minh',
+      'services': ['Cắt tóc', 'Ráy tai'],
       'images': [
         'assets/images/image1.png',
         'assets/images/image2.png',
-        'assets/images/image1.png',
+        'assets/images/5.jpg',
+        'assets/images/3.png',
+        'assets/images/image2.png',
+      ],
+    },
+    {
+      'avatar': 'assets/images/s4.jpg',
+      'name': 'Anh Quân',
+      'specialization': ['Cắt tóc', 'Uốn tóc'],
+      'branch': '203 Nguyễn Thượng Hiền, Phường 6, Bình Thạnh, Hồ Chí Minh',
+      'images': [
+        'assets/images/3.png',
         'assets/images/image2.png',
         'assets/images/image1.png',
+        'assets/images/5.jpg',
         'assets/images/image2.png',
       ],
     },

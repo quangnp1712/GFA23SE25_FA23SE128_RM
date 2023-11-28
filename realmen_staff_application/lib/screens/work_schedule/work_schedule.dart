@@ -85,17 +85,18 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                         ),
                         Container(
                           // width: 80.w,
-                          height: 80.w,
+                          height: 69.w,
                           key: _globalKey,
                           child: SfCalendar(
                             controller: calendarController,
                             allowedViews: _allowedViews,
+                            view: CalendarView.month,
                             showWeekNumber: true,
                             showDatePickerButton: true,
                             showNavigationArrow: true,
                             monthViewSettings: const MonthViewSettings(
                                 showAgenda: true, numberOfWeeksInView: 2),
-                            firstDayOfWeek: 7,
+                            firstDayOfWeek: 1,
                             dataSource:
                                 // MeetingDataSource(getAppointments()),
                                 _dataSource,
@@ -170,16 +171,16 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                 dateSchedule.month, dateSchedule.day, 15, 0, 0);
             final DateTime endTimeRegion = DateTime(dateSchedule.year,
                 dateSchedule.month, dateSchedule.day, 23, 0, 0);
-            if (_specialTimeRegions.any((region) =>
-                    region.startTime.isAtSameMomentAs(startTimeRegion) &&
-                    region.endTime.isAtSameMomentAs(endTimeRegion)) ==
-                false) {
-              _specialTimeRegions.add(TimeRegion(
-                startTime: startTimeRegion,
-                endTime: endTimeRegion,
-                enablePointerInteraction: false,
-              ));
-            }
+            // if (_specialTimeRegions.any((region) =>
+            //         region.startTime.isAtSameMomentAs(startTimeRegion) &&
+            //         region.endTime.isAtSameMomentAs(endTimeRegion)) ==
+            //     false) {
+            //   _specialTimeRegions.add(TimeRegion(
+            //     startTime: startTimeRegion,
+            //     endTime: endTimeRegion,
+            //     enablePointerInteraction: false,
+            //   ));
+            // }
           } else if (schedule.shift == 'NIGHT') {
             subject = "CA TỐI";
             colorSchedule = Colors.deepPurple.shade400;
@@ -187,16 +188,16 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                 dateSchedule.month, dateSchedule.day, 7, 0, 0);
             final DateTime endTimeRegion = DateTime(dateSchedule.year,
                 dateSchedule.month, dateSchedule.day, 15, 0, 0);
-            if (_specialTimeRegions.any((region) =>
-                    region.startTime.isAtSameMomentAs(startTimeRegion) &&
-                    region.endTime.isAtSameMomentAs(endTimeRegion)) ==
-                false) {
-              _specialTimeRegions.add(TimeRegion(
-                startTime: startTimeRegion,
-                endTime: endTimeRegion,
-                enablePointerInteraction: false,
-              ));
-            }
+            // if (_specialTimeRegions.any((region) =>
+            //         region.startTime.isAtSameMomentAs(startTimeRegion) &&
+            //         region.endTime.isAtSameMomentAs(endTimeRegion)) ==
+            //     false) {
+            //   _specialTimeRegions.add(TimeRegion(
+            //     startTime: startTimeRegion,
+            //     endTime: endTimeRegion,
+            //     enablePointerInteraction: false,
+            //   ));
+            // }
           }
 
           newAppointment = Appointment(

@@ -62,7 +62,7 @@ class _RegisterWorkScheduleScreenState
                               height: 50,
                               child: Center(
                                 child: Text(
-                                  "lịch làm".toUpperCase(),
+                                  "đăng ký lịch làm".toUpperCase(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24,
@@ -74,28 +74,34 @@ class _RegisterWorkScheduleScreenState
                         ),
                         Container(
                           // width: 80.w,
-                          height: 80.w,
+                          height: 68.h,
                           key: _globalKey,
                           child: SfCalendar(
                             controller: calendarController,
                             allowedViews: _allowedViews,
                             initialDisplayDate: DateTime.now(),
-                            minDate: DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day -
-                                    DateTime.now().weekday +
-                                    1),
-                            maxDate: DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day +
-                                    (7 - DateTime.now().weekday)),
+                            // minDate: DateTime(
+                            //     DateTime.now().year,
+                            //     DateTime.now().month,
+                            //     DateTime.now().day -
+                            //         DateTime.now().weekday +
+                            //         1),
+                            maxDate: maxDateSfCalendar,
+                            // DateTime(
+                            //     DateTime.now().year,
+                            //     DateTime.now().month,
+                            //     DateTime.now().day +
+                            //         (8 - DateTime.now().weekday)),
+                            // DateTime.now()
+                            //     .add(Duration(
+                            //         days: 8 - DateTime.now().weekday))
+                            //     .add(Duration(days: 6)),
+
                             showWeekNumber: true,
                             showDatePickerButton: true,
                             monthViewSettings:
                                 const MonthViewSettings(showAgenda: true),
-                            firstDayOfWeek: 7,
+                            firstDayOfWeek: 1,
                             dataSource:
                                 // MeetingDataSource(getAppointments()),
                                 _dataSource,
@@ -164,6 +170,12 @@ class _RegisterWorkScheduleScreenState
     _selectedAppointment = null;
     _dataSource = _AppointmentDataSource(_getAppointmentDetails());
     _getSchedule();
+    DateTime nextWeekEnd = DateTime.now()
+        .add(Duration(days: 8 - DateTime.now().weekday))
+        .add(Duration(days: 6));
+    maxDateSfCalendar = DateTime(
+        nextWeekEnd.year, nextWeekEnd.month, nextWeekEnd.day + 1, 0, 0, 0);
+
     super.initState();
   }
 
@@ -372,6 +384,8 @@ class _RegisterWorkScheduleScreenState
           );
 
           setState(() {
+            _dataSource.source.add(newAppointment!);
+            // _dataSource.notifyListeners();
             _dataSource.notifyListeners(
                 CalendarDataSourceAction.add, <Appointment>[newAppointment!]);
           });
@@ -390,6 +404,8 @@ class _RegisterWorkScheduleScreenState
     CalendarView.month,
     CalendarView.schedule,
   ];
+
+  DateTime maxDateSfCalendar = DateTime.now();
 }
 
 class _AppointmentDataSource extends CalendarDataSource {

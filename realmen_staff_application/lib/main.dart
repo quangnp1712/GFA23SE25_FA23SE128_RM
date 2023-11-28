@@ -12,6 +12,10 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'service/change_notifier_provider/change_notifier_provider_service.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -34,6 +38,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return GetMaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          SfGlobalLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('vi'),
+        ],
         // onGenerateRoute: Routers.generateRoute,
         // onGenerateRoute: (settings) => GetPageRoute(settings: settings),
         getPages: RouteGenerator.routes(),

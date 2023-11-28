@@ -183,16 +183,19 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
         });
       } else {
         if (widget.selectedAppointment != null) {
-          widget._dataSource.appointments!.removeAt(widget
-              ._dataSource.appointments!
-              .indexOf(widget.selectedAppointment));
-          widget._dataSource.notifyListeners(CalendarDataSourceAction.remove,
-              <Appointment>[widget.selectedAppointment!]);
-          ChangeNotifierServices changeNotifierServices =
-              ChangeNotifierServices();
+          if (widget._dataSource.appointments!
+              .contains(widget.selectedAppointment)) {
+            widget._dataSource.appointments!.removeAt(widget
+                ._dataSource.appointments!
+                .indexOf(widget.selectedAppointment));
+            widget._dataSource.notifyListeners(CalendarDataSourceAction.remove,
+                <Appointment>[widget.selectedAppointment!]);
+            ChangeNotifierServices changeNotifierServices =
+                ChangeNotifierServices();
 
-          changeNotifierServices
-              .removeSpecialTimeRegion(widget.selectedAppointment!);
+            changeNotifierServices
+                .removeSpecialTimeRegion(widget.selectedAppointment!);
+          }
         }
         if (workShift == null) {
           if (widget.selectedAppointment!.subject == "CA SÁNG") {

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/firebase_options.dart';
-
+import 'firebase_options.dart';
 import 'package:realmen_customer_application/router/router.dart';
 
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';

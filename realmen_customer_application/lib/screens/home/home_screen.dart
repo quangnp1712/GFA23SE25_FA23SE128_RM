@@ -405,8 +405,15 @@ class _HomeScreenState extends State<HomeScreen> {
           accountInfo = result['data'] as AccountInfoModel;
           if (accountInfo!.thumbnailUrl != null &&
               accountInfo!.thumbnailUrl != "") {
-            var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
-            avatarUrl = await reference.getDownloadURL();
+                try {
+                  var reference =
+                  storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+              avatarUrl = await reference.getDownloadURL();
+                } catch (e) {
+                  var reference = storage.ref('avatar/default-2.png');
+              avatarUrl = await reference.getDownloadURL();
+                }
+            
           } else {
             var reference = storage.ref('avatar/default-2.png');
             avatarUrl = await reference.getDownloadURL();

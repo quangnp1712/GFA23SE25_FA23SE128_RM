@@ -36,7 +36,11 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
           <div *ngIf="!isCollapsed">
             <img
               nz-image
-              [nzSrc]=" isCollapsed ? '../assets/icon/logo.png' : '../assets/icon/icon.png'"
+              [nzSrc]="
+                isCollapsed
+                  ? '../assets/icon/logo.png'
+                  : '../assets/icon/icon.png'
+              "
               heigth="50px"
               width="114px"
             />
@@ -104,6 +108,14 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 Tạo dịch vụ
               </li>
             </ul>
+          </li>
+          <li
+            nz-menu-item
+            [routerLink]="['/schedule-management', 'schedule']"
+            nzMatchRouter
+          >
+            <span nz-icon nzType="schedule"></span>
+            <span>Quản lý lịch nhân viên</span>
           </li>
           <li nz-submenu nzTitle="Quản lý doanh thu" nzIcon="money-collect">
             <ul>

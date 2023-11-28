@@ -24,6 +24,7 @@ export namespace AccountAddApi {
     professional: FormControl<string>;
     thumbnailUrl: FormControl<string>;
     branchAddress: FormControl<string>;
+    numberStaffs: FormControl<number | null>
   };
 }
 

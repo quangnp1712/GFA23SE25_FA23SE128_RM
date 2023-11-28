@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -17,8 +14,6 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTableDefaultSettingDirective } from 'src/app/share/ui/directive/nz-table-default-setting.directive';
 import { FormsModule } from '@angular/forms';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { tap } from 'rxjs';
 import { BranchStore } from '../data-access/store/branch.store';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
@@ -74,11 +69,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           Tạo chi nhánh
         </button>
       </div>
-      <nz-select class="tw-w-[150px] tw-mt-5" nzPlaceHolder="Chọn Chi Nhánh">
-        <nz-option nzValue="TONG" nzLabel="Tổng"> </nz-option>
-        <nz-option nzValue="HCM" nzLabel="Hồ Chí Minh"> </nz-option>
-        <nz-option nzValue="HN" nzLabel="Hà Nội"> </nz-option>
-      </nz-select>
       <div nz-col nzSpan="24" class="tw-mt-5">
         <ng-container *rxLet="vm$ as vm">
           <nz-table

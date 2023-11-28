@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -18,8 +16,6 @@ import { AccountAddApi } from '../data-access/model/account-api.model';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { usernameRegex } from 'src/app/share/form-validator/username.const';
-import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { AccountApiService } from '../data-access/api/account.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AccountStore } from '../data-access/store/account.store';
@@ -199,17 +195,11 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
           </nz-form-item>
           <!-- ca -->
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired
-              >Ca làm việc</nz-form-label
+            <nz-form-label class="tw-ml-3"
+              >Số lượng nhân viên của chi nhánh</nz-form-label
             >
             <nz-form-control>
-              <nz-select class="tw-w-[70%]">
-                <nz-option nzValue="Nam" nzLabel="Sáng (7h - 15h)"></nz-option>
-                <nz-option
-                  nzValue="Nữ"
-                  nzLabel="Chiều tối (15h - 23h)"
-                ></nz-option>
-              </nz-select>
+            <input class="tw-rounded-md tw-w-[70%]" nz-input [formControl]="form.controls.numberStaffs" />
             </nz-form-control>
           </nz-form-item>
           <!-- chuc vu -->

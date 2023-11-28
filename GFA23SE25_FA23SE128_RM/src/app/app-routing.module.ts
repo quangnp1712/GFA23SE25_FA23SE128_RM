@@ -6,6 +6,7 @@ import ACCOUNT_MANAGEMENT_ROUTES from './account-management/account-management.r
 import { HomepageLayoutComponent } from './share/ui/home-page-layout.component';
 import BRANCH_MANAGEMENT_ROUTES from './branch-management/branch-management.routes';
 import SERVICE_MANAGEMENT_ROUTES from './service-management/service-management.routes';
+import SCHEDULE_MANAGEMENT_ROUTES from './schedule-management/schedule.routes';
 
 const routes: Routes = [
   {path: '', loadChildren: () => LOGIN_ROUTES},
@@ -25,6 +26,10 @@ const routes: Routes = [
     {
       path: "service-management",
       loadChildren: () => SERVICE_MANAGEMENT_ROUTES
+    },
+    {
+      path: "schedule-management",
+      loadChildren: () => SCHEDULE_MANAGEMENT_ROUTES
     }
   ]},
 ];

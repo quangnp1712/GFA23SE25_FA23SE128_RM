@@ -81,7 +81,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     professional: this._fb.control(''),
     branch: this._fb.control(-1),
     thumbnailUrl: this._fb.control('123'),
-    branchAddress: this._fb.control({value:'', disabled: true})
+    branchAddress: this._fb.control({value:'', disabled: true}),
+    numberStaffs: this._fb.control({value:null, disabled: true})
   });
 
   readonly getAccountPaging = this.effect<never>(
@@ -126,6 +127,7 @@ export class AccountStore extends ComponentStore<AccountState> {
           tap({
             next: (resp) => {
               this.form.controls.branchAddress.setValue(resp.value.address)
+              this.form.controls.numberStaffs.setValue(resp.value.numberStaffs)
             },
             finalize: () => this.updateLoading(false),
           }),

@@ -211,13 +211,15 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   //         Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
   //         // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
   //       } else {
-  //         _errorMessage("$result['statusCode'] : $result['error']");
+  //         _errorMessage("Số điện thoại không đúng");
+  //         print("$result['statusCode'] : $result['error']");
   //       }
   //     } catch (e) {
+  //       _errorMessage("Số điện thoại không đúng");
   //       print("Error: $e");
   //     }
   //   } else if (phone == null || phone == '') {
-  //     _errorMessage("Xon nhập số điện thoại");
+  //     _errorMessage("Xin nhập số điện thoại");
   //   } else if (phone.length < 8 || phone.length > 11) {
   //     _errorMessage("Số điện thoại không đúng");
   //   }

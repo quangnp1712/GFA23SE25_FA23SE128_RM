@@ -461,28 +461,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String gender = genderController.toString();
     String thumbnailUrl = "";
     String status = "ACTIVATED";
-    RegisterCustomerModel registerCustomerModel = RegisterCustomerModel(
-        thumbnailUrl: thumbnailUrl,
-        firstName: firstName,
-        lastName: lastName,
-        address: address,
-        gender: gender,
-        status: status,
-        dob: dob);
-    AuthenticateService authenticateService = AuthenticateService();
-    try {
-      var result =
-          await authenticateService.registerCustomer(registerCustomerModel);
-      if (result['statusCode'] == 200) {
-        _successMessage("Nhập thông tin thành công");
-        // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-        Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
-      } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+    if (firstName == null || firstName == '') {
+      _errorMessage("Xin nhập họ và tên đệm");
+    } else if (lastName == null || lastName == '') {
+      _errorMessage("Xin nhập tên");
+    } else if (lastName.contains(' ')) {
+      _errorMessage("Tên chỉ chứa 1 từ");
+    } else {
+      RegisterCustomerModel registerCustomerModel = RegisterCustomerModel(
+          thumbnailUrl: thumbnailUrl,
+          firstName: firstName,
+          lastName: lastName,
+          address: address,
+          gender: gender,
+          status: status,
+          dob: dob);
+      AuthenticateService authenticateService = AuthenticateService();
+      try {
+        var result =
+            await authenticateService.registerCustomer(registerCustomerModel);
+        if (result['statusCode'] == 200) {
+          _successMessage("Nhập thông tin thành công");
+          // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+          Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
+        } else {
+          _errorMessage("Nhập thông tin thất bại");
+          print("$result['statusCode'] : $result['error']");
+        }
+      } catch (e) {
+        _errorMessage("Nhập thông tin thất bại");
+        print("Error: $e");
       }
-    } catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
     }
   }
 

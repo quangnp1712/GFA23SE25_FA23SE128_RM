@@ -31,74 +31,84 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
             onStylistSelected: updateSelectedStylist),
 
         // 2
-        ChooseServiceBooking(onServiceSelected: updateSelectedService),
+        selectedBranch != null && selectedStylist != null
+            ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
+            : Container(),
 
         // 3
-        ChooseTimeSlot(
-          onDateSelected: updateSelectedDate,
-          onTimeSelected: updateSelectedTime,
-        ),
+        selectedBranch != null &&
+                selectedStylist != null &&
+                selectedService != null
+            ? ChooseTimeSlot(
+                onDateSelected: updateSelectedDate,
+                onTimeSelected: updateSelectedTime,
+              )
+            : Container(),
 
         // button Đặt Lịch
-
-        Container(
-          width: 81.w,
-          margin: const EdgeInsets.symmetric(horizontal: 15),
-          padding: const EdgeInsets.all(0),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xff302E2E),
-                  Color(0xe6444141),
-                  Color(0x8c484646),
-                  Color(0x26444141),
-                ]),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ElevatedButton(
-            onPressed: () {
-              if (selectedStylist == null) {
-                _errorMessage("Xin chọn stylist");
-              } else if (selectedService == null) {
-                _errorMessage("Xin chọn dịch vụ");
-              } else if (selectedDate == null) {
-                _errorMessage("Xin chọn ngày");
-              } else if (selectedTime == null) {
-                _errorMessage("Xin chọn giờ");
-              } else {
-                Get.toNamed(
-                    BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
-                    arguments: {
-                      'branch': selectedBranch,
-                      'service': selectedService,
-                      'stylist': selectedStylist,
-                      'date': selectedDate,
-                      'time': selectedTime,
-                    });
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.black12,
-              onPrimary: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              minimumSize: const Size(200, 50),
-              padding: const EdgeInsets.all(0),
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Đặt Lịch',
-              style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  letterSpacing: 1.5,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-        ),
+        selectedBranch != null &&
+                selectedStylist != null &&
+                selectedService != null
+            ? Container(
+                width: 81.w,
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xff302E2E),
+                        Color(0xe6444141),
+                        Color(0x8c484646),
+                        Color(0x26444141),
+                      ]),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (selectedStylist == null) {
+                      print("Xin chọn stylist");
+                    } else if (selectedService == null) {
+                      print("Xin chọn dịch vụ");
+                    } else if (selectedDate == null) {
+                      print("Xin chọn ngày");
+                    } else if (selectedTime == null) {
+                      print("Xin chọn giờ");
+                    } else {
+                      Get.toNamed(
+                          BookingHaircutTemporary
+                              .BookingHaircutTemporaryScreenRoute,
+                          arguments: {
+                            'branch': selectedBranch,
+                            'service': selectedService,
+                            'stylist': selectedStylist,
+                            'date': selectedDate,
+                            'time': selectedTime,
+                          });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.black12,
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    minimumSize: const Size(200, 50),
+                    padding: const EdgeInsets.all(0),
+                    shadowColor: Colors.transparent,
+                  ),
+                  child: const Text(
+                    'Đặt Lịch',
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              )
+            : Container(),
 
         const SizedBox(
           height: 20,
@@ -191,13 +201,5 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
       selectedTime = time;
       print(selectedTime);
     });
-  }
-
-  void _errorMessage(String? message) {
-    try {
-      ShowSnackBar.ErrorSnackBar(context, message!);
-    } catch (e) {
-      print(e);
-    }
   }
 }

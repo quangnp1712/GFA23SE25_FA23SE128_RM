@@ -120,7 +120,7 @@ class LogoutPopup extends StatelessWidget {
                     child: Text(
                       "ĐĂNG xuất".toUpperCase(),
                       style: const TextStyle(
-                          fontSize: 24,
+                          fontSize: 22,
                           color: Color(0xffC4C4C4),
                           fontWeight: FontWeight.w700),
                     ),

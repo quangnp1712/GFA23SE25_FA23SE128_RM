@@ -23,3 +23,10 @@ final autoCompleteUrl =
 // common variable
 final connectionTimeOut = int.parse(dotenv.env["CONNECTION_TIMEOUT"]!);
 final customer = "${dotenv.env["CUSTOMER"]}";
+final staff = "${dotenv.env["STAFF"]}";
+
+// Schedule API
+final schedulesListUrl =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["POST_SCHEDULE_LIST"]}";
+final scheduleListUrl =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_SCHEDULE_LIST"]}";

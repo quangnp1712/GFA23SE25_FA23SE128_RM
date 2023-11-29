@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "realmen_customer_application",
+            "cwd": "realmen_customer_application",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "realmen_customer_application (profile mode)",
+            "cwd": "realmen_customer_application",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "realmen_customer_application (release mode)",
+            "cwd": "realmen_customer_application",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "realmen_staff_application",
+            "cwd": "realmen_staff_application",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "realmen_staff_application (profile mode)",
+            "cwd": "realmen_staff_application",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "realmen_staff_application (release mode)",
+            "cwd": "realmen_staff_application",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -370,17 +371,30 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                       // width: double.infinity,
                                       child: Column(
                                         children: [
-                                          Image.asset(
-                                            image,
-                                            // width: double.infinity,
-                                            // height: double.infinity,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                1.2,
-
-                                            height: 140,
-                                            fit: BoxFit.cover,
+                                          FutureBuilder(
+                                            future: getImageFB(
+                                                branchesForCity![index]),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<Widget>
+                                                    snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.done) {
+                                                if (snapshot.hasData) {
+                                                  return snapshot
+                                                      .data!; // Return the widget when the future is complete
+                                                } else {
+                                                  return Container(
+                                                      height:
+                                                          140); // Handle the case when the future completes with an error
+                                                }
+                                              } else {
+                                                return const SizedBox(
+                                                    height: 140,
+                                                    child: Center(
+                                                        child:
+                                                            CircularProgressIndicator())); // Show a loading indicator while the future is in progress
+                                              }
+                                            },
                                           ),
                                           const SizedBox(width: 5),
                                           ListTile(
@@ -575,20 +589,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
             });
           }
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
-    }
-  }
-
-  void _errorMessage(String? message) {
-    try {
-      ShowSnackBar.ErrorSnackBar(context, message!);
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -623,7 +629,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           branchesForCity;
         });
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
     }
@@ -648,10 +654,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
             focusNode.unfocus();
           });
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
     }
@@ -689,10 +695,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
             branchesForCity;
           });
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
     }
@@ -724,4 +730,33 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
 
   LocationService locationService = LocationService();
   Position? position;
+  final storage = FirebaseStorage.instance;
+  List<String> urlList = [
+    "barber1.jpg",
+    "barber2.jpg",
+    "barber3.jpg",
+  ];
+  Future<Widget> getImageFB(BranchModel branch) async {
+    try {
+      var reference = storage.ref('branch/${branch!.thumbnailUrl}');
+      return Image.network(
+        await reference.getDownloadURL(),
+        scale: 1,
+        width: MediaQuery.of(context).size.width / 1.2,
+        height: 140,
+        fit: BoxFit.cover,
+      );
+    } catch (e) {
+      final _random = new Random();
+      var randomUrl = _random.nextInt(urlList.length);
+      var reference = storage.ref('branch/${urlList[randomUrl]}');
+      return Image.network(
+        await reference.getDownloadURL(),
+        scale: 1,
+        width: MediaQuery.of(context).size.width / 1.2,
+        height: 140,
+        fit: BoxFit.cover,
+      );
+    }
+  }
 }

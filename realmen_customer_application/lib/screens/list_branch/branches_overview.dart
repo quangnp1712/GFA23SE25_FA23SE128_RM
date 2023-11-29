@@ -387,20 +387,12 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
             branchesByCityModel;
           });
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        print(e.toString());
         print("Error: $e");
       }
-    }
-  }
-
-  void _errorMessage(String? message) {
-    try {
-      ShowSnackBar.ErrorSnackBar(context, message!);
-    } catch (e) {
-      print(e);
     }
   }
 }

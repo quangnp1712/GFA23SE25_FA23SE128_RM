@@ -15,7 +15,7 @@ class _CardHistoryHairCutState extends State<CardHistoryHairCut> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 5, // Số lượng thẻ lịch sử cắt tóc
+      itemCount: 1, // Số lượng thẻ lịch sử cắt tóc
       itemBuilder: (context, index) {
         return Card(
           child: Column(
@@ -40,7 +40,7 @@ class _CardHistoryHairCutState extends State<CardHistoryHairCut> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Le Van Si",
+                                  "Cách Mạng Tháng 8",
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class _CardHistoryHairCutState extends State<CardHistoryHairCut> {
                                   children: [
                                     Text("20/10/2023"),
                                     SizedBox(width: 10),
-                                    Text("09:01"),
+                                    Text("09:00"),
                                   ],
                                 ),
                               ],
@@ -82,7 +82,7 @@ class _CardHistoryHairCutState extends State<CardHistoryHairCut> {
                                     const SizedBox(height: 10),
                                     const Text("PTTT: The"),
                                     const SizedBox(height: 10),
-                                    const Text("Tong Hoa Don: 355.000"),
+                                    const Text("Tong Hoa Don: 180,000"),
                                     const SizedBox(height: 25),
                                     ElevatedButton(
                                       onPressed: () => Get.toNamed(

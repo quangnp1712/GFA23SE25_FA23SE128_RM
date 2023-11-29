@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class BookingHaircutTemporary extends StatefulWidget {
@@ -178,7 +179,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               Container(
                 width: 200,
                 child: Text(
-                  stylist != null ? stylist : "",
+                  stylist != null ? stylist : "REALMEN sẽ chọn giúp anh",
                   textAlign: TextAlign.left,
                   maxLines: 1,
                   style: const TextStyle(
@@ -235,6 +236,30 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
+  double total = 0;
+  getTotal() {
+    for (var price in widget.service) {
+      if (price == 'Combo Cắt 9 bước') {
+        total += 100000;
+      } else if (price == 'Combo Massage Cao Cấp') {
+        total += 200000;
+      } else if (price == 'Cắt tóc tạo kiểu') {
+        total += 70000;
+      } else {
+        total += 50000;
+      }
+    }
+    setState(() {
+      total;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getTotal();
+  }
+
   Widget _buildService(dynamic service) {
     return Column(
       children: [
@@ -276,8 +301,15 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(service != null ? service[index].toString() : ""),
-                    const SizedBox(width: 140),
-                    const Text("250.000"),
+                    service[index].toString() == 'Combo Cắt 9 bước'
+                        ? Text(formatter.format(100000))
+                        : service[index].toString() == 'Combo Massage Cao Cấp'
+                            ? Text(formatter.format(200000))
+                            : service[index].toString() == 'Cắt tóc tạo kiểu'
+                                ? Text(formatter.format(70000))
+                                : service[index].toString() == 'Cắt tóc trẻ em'
+                                    ? Text(formatter.format(50000))
+                                    : Container(),
                   ],
                 ),
               );
@@ -288,13 +320,14 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
+  NumberFormat formatter = NumberFormat("#,##0");
   Widget _buildTotalMoney() {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: ListView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -307,7 +340,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               ),
               // SizedBox(width: 140),
               Text(
-                "200.000.000",
+                formatter.format(total),
                 style: TextStyle(
                   fontSize: 16,
                 ),

@@ -4,7 +4,7 @@ import 'package:realmen_staff_application/screens/history_booking/detail_history
 import 'package:realmen_staff_application/screens/history_booking/history_booking_screen.dart';
 import 'package:realmen_staff_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_staff_application/screens/login/login_phone_screen.dart';
-import 'package:realmen_staff_application/screens/login/register_screen.dart';
+
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_staff_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_staff_application/screens/splash/splash_screen.dart';
@@ -25,10 +25,6 @@ class RouteGenerator {
       GetPage(
         name: LoginOTPScreen.LoginOTPScreenRoute,
         page: () => const LoginOTPScreen(),
-      ),
-      GetPage(
-        name: RegisterScreen.RegisterScreenRoute,
-        page: () => const RegisterScreen(),
       ),
       GetPage(
           name: MainScreen.MainScreenRoute,

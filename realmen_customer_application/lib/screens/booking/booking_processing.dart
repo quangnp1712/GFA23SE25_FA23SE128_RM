@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class BookingProcessingScreen extends StatefulWidget {
@@ -127,13 +128,25 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Stylist: "),
+              Text(
+                "Stylist: ",
+                style: TextStyle(fontSize: 17),
+              ),
               SizedBox(height: 12),
-              Text("Skinner: "),
+              Text(
+                "Skinner: ",
+                style: TextStyle(fontSize: 17),
+              ),
               SizedBox(height: 12),
-              Text("PTTT: "),
+              Text(
+                "PTTT: ",
+                style: TextStyle(fontSize: 17),
+              ),
               SizedBox(height: 12),
-              Text("Barber Shop: "),
+              Text(
+                "Barber Shop: ",
+                style: TextStyle(fontSize: 17),
+              ),
             ],
           ),
           const SizedBox(
@@ -145,37 +158,37 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
               const Text(
                 " Le Anh Tuan",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
               ),
               const SizedBox(height: 12),
               const Text(
                 " Be Dep",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
               ),
               const SizedBox(height: 12),
               const Text(
                 " The",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
               ),
               const SizedBox(height: 12),
               Container(
-                width: 240,
+                width: 230,
                 child: const Text(
-                  "194 Le Van Si Le Van Si Le Van Si Le Van Si Le Van Si",
+                  "590 Cách Mạng Tháng 8, Phường 11, Quận 3, Hồ Chí Minh",
                   maxLines: 2,
                   style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17),
                 ),
               ),
             ],
@@ -213,17 +226,24 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
           child: ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5, // The number of items in the list
+            itemCount: serviceList.length, // The number of items in the list
             itemBuilder: (context, index) {
               // Return a Card widget for each item in the list
-              return const Padding(
+              return Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Massage Thư Giản"),
+                    Text(
+                      serviceList[index].name.toString(),
+                      style: TextStyle(fontSize: 17),
+                    ),
                     SizedBox(width: 140),
-                    Text("250.000"),
+                    Text(
+                      formatter.format(serviceList[index].price),
+                      style: TextStyle(fontSize: 17),
+                    ),
                   ],
                 ),
               );
@@ -236,22 +256,25 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
 
   Widget _buildTotalMoney() {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       child: ListView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Tổng Tiền:",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                 ),
               ),
               // SizedBox(width: 140),
-              Text("200.000.000"),
+              Text(
+                formatter.format(total),
+                style: TextStyle(fontSize: 17),
+              ),
             ],
           ),
           SizedBox(
@@ -263,11 +286,14 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
               Text(
                 "Tổng Giảm Giá:",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                 ),
               ),
               // SizedBox(width: 140),
-              Text("200.000.000"),
+              Text(
+                "0",
+                style: TextStyle(fontSize: 17),
+              ),
             ],
           ),
           SizedBox(
@@ -279,15 +305,15 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
               Text(
                 "Tổng Hóa Đơn:",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               // SizedBox(width: 140),
               Text(
-                "200.000.000",
+                formatter.format(total),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -383,4 +409,36 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
       ],
     );
   }
+
+  NumberFormat formatter = NumberFormat("#,##0");
+  double total = 0;
+  calTotal() {
+    for (var service in serviceList) {
+      total += service.price as double;
+    }
+    setState(() {
+      total;
+    });
+  }
+
+  List<ServiceList> serviceList = [
+    ServiceList(name: "Cắt tóc", price: 70000),
+    ServiceList(name: "Massage đầu", price: 50000),
+    ServiceList(name: "Cạo Mặt", price: 30000),
+    ServiceList(name: "Ráy tai", price: 30000),
+  ];
+  @override
+  void initState() {
+    super.initState();
+    calTotal();
+  }
+}
+
+class ServiceList {
+  String? name;
+  double? price;
+  ServiceList({
+    this.name,
+    this.price,
+  });
 }

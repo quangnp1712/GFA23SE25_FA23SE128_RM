@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -20,16 +22,11 @@ class branchShopNearYou extends StatefulWidget {
 }
 
 class _branchShopNearYouState extends State<branchShopNearYou> {
-  List nameShop = [
-    'Nguyen Xuan Soan',
-    'Hoang Sa',
-    'Tran Huu Nghia',
-    'Dien Bien Phu',
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return branchesForCity != null && branchesForCity != []
+    return branchesForCity != null &&
+            branchesForCity != [] &&
+            branchesForCity!.length > 0
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,13 +76,28 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                   topRight: Radius.circular(10),
                                   topLeft: Radius.circular(10),
                                 ),
-                                child: Image.asset(
-                                  // "assets/branchshop/${index + 1}.png",
-                                  "assets/images/admin.png",
-                                  height: 160,
-                                  width:
-                                      MediaQuery.of(context).size.width / 1.4,
-                                  fit: BoxFit.cover,
+                                child: FutureBuilder<Widget>(
+                                  future: getImageFB(branchesForCity![index]),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<Widget> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasData) {
+                                        return snapshot
+                                            .data!; // Return the widget when the future is complete
+                                      } else {
+                                        return Container(
+                                            height:
+                                                160); // Handle the case when the future completes with an error
+                                      }
+                                    } else {
+                                      return const SizedBox(
+                                          height: 160,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator())); // Show a loading indicator while the future is in progress
+                                    }
+                                  },
                                 ),
                               ),
                               Padding(
@@ -93,7 +105,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 3,
                                     ),
                                     Row(
@@ -126,7 +138,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                                       .withOpacity(0.9),
                                                 ),
                                               ),
-                                              WidgetSpan(
+                                              const WidgetSpan(
                                                 child: SizedBox(width: 4),
                                               ),
                                               TextSpan(
@@ -141,7 +153,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 3,
                                     ),
                                     Text(
@@ -157,7 +169,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                         color: Colors.white.withOpacity(0.6),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(
@@ -270,6 +282,8 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
   LocationService locationService = LocationService();
   Position? position;
   List<BranchModel>? branchesForCity;
+  final storage = FirebaseStorage.instance;
+  String? imageUrl;
 
   Future<void> getBranch() async {
     if (!_isDisposed) {
@@ -284,40 +298,63 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;
-          branchesForCity!.sort((a, b) {
-            if (a.distanceKilometer == null && b.distanceKilometer == null) {
-              return 0;
-            } else if (a.distanceKilometer == null) {
-              return 1;
-            } else if (b.distanceKilometer == null) {
-              return -1;
-            } else {
-              double distanceA = double.parse(
-                  a.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
-              double distanceB = double.parse(
-                  b.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
-              return distanceA.compareTo(distanceB);
-            }
-          });
+          if (branchesForCity!.length > 0) {
+            branchesForCity!.sort((a, b) {
+              if (a.distanceKilometer == null && b.distanceKilometer == null) {
+                return 0;
+              } else if (a.distanceKilometer == null) {
+                return 1;
+              } else if (b.distanceKilometer == null) {
+                return -1;
+              } else {
+                double distanceA = double.parse(
+                    a.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+                double distanceB = double.parse(
+                    b.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+                return distanceA.compareTo(distanceB);
+              }
+            });
 
-          setState(() {
-            branchesForCity;
-          });
+            setState(() {
+              branchesForCity;
+            });
+          }
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
+        // print(e.toString());
         print("Error: $e");
       }
     }
   }
 
-  void _errorMessage(String? message) {
+  List<String> urlList = [
+    "barber1.jpg",
+    "barber2.jpg",
+    "barber3.jpg",
+  ];
+  Future<Widget> getImageFB(BranchModel branch) async {
     try {
-      ShowSnackBar.ErrorSnackBar(context, message!);
+      var reference = storage.ref('branch/${branch!.thumbnailUrl}');
+      return Image.network(
+        await reference.getDownloadURL(),
+        height: 160,
+        scale: 1,
+        width: MediaQuery.of(context).size.width / 1.4,
+        fit: BoxFit.cover,
+      );
     } catch (e) {
-      print(e);
+      final _random = new Random();
+      var randomUrl = _random.nextInt(urlList.length);
+      var reference = storage.ref('branch/${urlList[randomUrl]}');
+      return Image.network(
+        await reference.getDownloadURL(),
+        height: 160,
+        scale: 1,
+        width: MediaQuery.of(context).size.width / 1.4,
+        fit: BoxFit.cover,
+      );
     }
   }
 }

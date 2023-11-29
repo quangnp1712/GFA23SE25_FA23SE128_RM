@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+
 class CategoryListModel {
   List<CategoryModel>? values;
 
@@ -36,9 +41,15 @@ class CategoryModel {
 class SubServiceModel {
   String? description;
   String? name;
+  List<ServiceDisplayListModel>? serviceDisplayList;
   List<BranchServiceModel>? branchServiceList;
 
-  SubServiceModel({this.description, this.name, this.branchServiceList});
+  SubServiceModel({
+    this.description,
+    this.name,
+    this.serviceDisplayList,
+    this.branchServiceList,
+  });
 
   factory SubServiceModel.fromJson(Map<String, dynamic> json) {
     return SubServiceModel(
@@ -47,6 +58,10 @@ class SubServiceModel {
       branchServiceList: (json['branchServiceList'] as List<dynamic>?)
           ?.map((item) => BranchServiceModel.fromJson(item))
           .toList(),
+      serviceDisplayList: (json['serviceDisplayList'] as List<dynamic>?)
+              ?.map((item) => ServiceDisplayListModel.fromJson(item))
+              .toList() ??
+          [],
     );
   }
 }
@@ -76,6 +91,23 @@ class BranchServiceModel {
       branchName: json['branchName'],
       thumbnailUrl: json['thumbnailUrl'],
       price: json['price'],
+    );
+  }
+}
+
+class ServiceDisplayListModel {
+  int? serviceDisplayId;
+  String? serviceDisplayUrl;
+
+  ServiceDisplayListModel({
+    this.serviceDisplayId,
+    this.serviceDisplayUrl,
+  });
+
+  factory ServiceDisplayListModel.fromJson(Map<String, dynamic> json) {
+    return ServiceDisplayListModel(
+      serviceDisplayId: json['serviceDisplayId'],
+      serviceDisplayUrl: json['serviceDisplayUrl'],
     );
   }
 }

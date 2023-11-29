@@ -143,12 +143,10 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                       borderRadius: BorderRadius.circular(24),
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: submitOtp
+                                      onPressed: submitOtp,
                                       // No API
                                       // () => Get.toNamed(
-                                      //     MainScreen.MainScreenRoute)
-
-                                      ,
+                                      //     MainScreen.MainScreenRoute),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -188,7 +186,9 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
   void submitOtp() async {
     String phone = await SharedPreferencesService.getPhone();
     String otp = otpController.text.toString();
-    LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
+    // LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
+    LoginOtpModel loginOtpModel =
+        LoginOtpModel(phone: "0917901488", passCode: "12345");
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginOtp(loginOtpModel);

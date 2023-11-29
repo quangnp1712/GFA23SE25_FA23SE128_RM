@@ -36,7 +36,11 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
           <div *ngIf="!isCollapsed">
             <img
               nz-image
-              [nzSrc]=" isCollapsed ? '../assets/icon/logo.png' : '../assets/icon/icon.png'"
+              [nzSrc]="
+                isCollapsed
+                  ? '../assets/icon/logo.png'
+                  : '../assets/icon/icon.png'
+              "
               heigth="50px"
               width="114px"
             />
@@ -51,19 +55,20 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
             <span nz-icon nzType="home"></span>
             <span>Tổng quan</span>
           </li>
-          <li nz-submenu nzTitle="Quản lý tài khoản" nzIcon="team">
+          <li nz-submenu nzTitle="Quản lý nhân viên" nzIcon="team">
             <ul>
               <li
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/account-management', 'account-list']"
               >
-                Danh sách tài khoản
+                Danh sách nhân viên
               </li>
               <li
                 nz-menu-item
                 [routerLink]="['/account-management', 'create-account']"
                 nzMatchRouter
+                *ngIf="role == 'SHOP_OWNER'"
               >
                 Tạo tài khoản
               </li>
@@ -105,6 +110,14 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
               </li>
             </ul>
           </li>
+          <!-- <li
+            nz-menu-item
+            [routerLink]="['/schedule-management', 'schedule']"
+            nzMatchRouter
+          >
+            <span nz-icon nzType="schedule"></span>
+            <span>Quản lý lịch nhân viên</span>
+          </li> -->
           <li nz-submenu nzTitle="Quản lý doanh thu" nzIcon="money-collect">
             <ul>
               <li nz-menu-item>Tổng doanh thu</li>
@@ -204,6 +217,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 export class HomepageLayoutComponent {
   constructor(private _router: Router) {}
   isCollapsed = false;
+  role = localStorage.getItem('role$')
   logout() {
     localStorage.clear();
     this._router.navigate(['/login']);

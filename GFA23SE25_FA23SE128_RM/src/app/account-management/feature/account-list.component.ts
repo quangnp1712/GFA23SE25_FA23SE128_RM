@@ -15,7 +15,10 @@ import { NzTableDefaultSettingDirective } from 'src/app/share/ui/directive/nz-ta
 import { RxLet } from '@rx-angular/template/let';
 import { MapRoleTypeNamePipe } from '../until/role.pipe';
 import { FormsModule } from '@angular/forms';
-import { roleTypeNameMapping } from 'src/app/share/data-access/api/enum/role.enum';
+import {
+  RoleType,
+  roleTypeNameMapping,
+} from 'src/app/share/data-access/api/enum/role.enum';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
 
@@ -37,7 +40,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
     MapRoleTypeNamePipe,
     FormsModule,
     NzSelectModule,
-    NzSelectChangeDirective
+    NzSelectChangeDirective,
   ],
   providers: [provideComponentStore(AccountStore), NzMessageService],
   template: `
@@ -71,7 +74,13 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
           Tạo tài khoản
         </button>
       </div>
-      <nz-select class="tw-w-[150px] tw-mt-5" nzPlaceHolder="Chọn chức vụ" (nzSelectChange)="onChangeLicense()" [(ngModel)]="aStore.pagingRequest.role">
+      <nz-select
+        *ngIf="role$ === roleType.SHOP_OWNER"
+        class="tw-w-[150px] tw-mt-5"
+        nzPlaceHolder="Chọn chức vụ"
+        (nzSelectChange)="onChangeLicense()"
+        [(ngModel)]="aStore.pagingRequest.role"
+      >
         <nz-option
           *ngFor="let option of roleTypeNameMapping"
           [nzValue]="option.value"
@@ -106,6 +115,8 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
                 <th>Địa chỉ</th>
                 <th>Số điện thoại</th>
                 <th>Giới tính</th>
+                <!-- <th>Ngày làm</th>
+                <th>Ca làm</th> -->
                 <th>Trạng thái</th>
                 <th>Chức vụ</th>
                 <th></th>
@@ -118,6 +129,14 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
                 <td>{{ data.address }}</td>
                 <td>{{ data.phone }}</td>
                 <td>{{ data.gender }}</td>
+                <!-- <ng-container *ngFor="let schedule of data.staff.scheduleList">
+                  <td>
+                    {{ schedule.workingDate ? schedule.workingDate : '' }}
+                  </td>
+
+                  <td>{{ schedule.shift ? schedule.shift : '' }}</td>
+                </ng-container> -->
+
                 <td>{{ data.status }}</td>
                 <td>{{ data.role | mapRoleTypeName }}</td>
                 <td class="tw-text-center">
@@ -139,6 +158,9 @@ export class AccountListComponent {
   constructor(public aStore: AccountStore) {}
 
   vm$ = this.aStore.state$;
+  role$ = localStorage.getItem('role$');
+  roleType = RoleType;
+
   onTableQueryParamsChange(params: NzTableQueryParams) {
     const { sort } = params;
     const currentSort = sort.find((item) => item.value !== null);
@@ -157,7 +179,7 @@ export class AccountListComponent {
     }
   }
 
-  onChangeLicense(){
+  onChangeLicense() {
     if (this.aStore.pagingRequest.current !== 1) {
       this.aStore.pagingRequest.current = 1;
     } else {

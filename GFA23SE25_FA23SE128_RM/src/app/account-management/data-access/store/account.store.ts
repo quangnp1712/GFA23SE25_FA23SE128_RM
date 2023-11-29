@@ -20,6 +20,7 @@ import { AccountApiService } from '../api/account.service';
 import { AccountAddApi, AccountPagingApi } from '../model/account-api.model';
 import { BranchNameApi } from 'src/app/share/data-access/model/branch-name.model';
 import { BranchAddressApi } from 'src/app/share/data-access/model/branch-address-api.model';
+import { RoleType } from 'src/app/share/data-access/api/enum/role.enum';
 
 export interface AccountState {
   acountPaging: Paging<AccountPagingApi.Response>;
@@ -64,7 +65,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     searches: '',
     sorter: '',
     orderDescending: false,
-    role: 'SHOP_OWNER',
+    role: RoleType.STAFF,
+    branchId: localStorage.getItem('branchId$')!
   };
 
   form = new FormGroup<AccountAddApi.RequestFormGroup>({
@@ -81,7 +83,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     professional: this._fb.control(''),
     branch: this._fb.control(-1),
     thumbnailUrl: this._fb.control('123'),
-    branchAddress: this._fb.control({value:'', disabled: true})
+    branchAddress: this._fb.control({value:'', disabled: true}),
+    numberStaffs: this._fb.control({value:null, disabled: true})
   });
 
   readonly getAccountPaging = this.effect<never>(
@@ -126,6 +129,7 @@ export class AccountStore extends ComponentStore<AccountState> {
           tap({
             next: (resp) => {
               this.form.controls.branchAddress.setValue(resp.value.address)
+              this.form.controls.numberStaffs.setValue(resp.value.numberStaffs)
             },
             finalize: () => this.updateLoading(false),
           }),

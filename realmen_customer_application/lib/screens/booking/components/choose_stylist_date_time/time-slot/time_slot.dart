@@ -353,7 +353,7 @@ class _TimeSlotState extends State<TimeSlot> {
         ),
         Center(
           child: Container(
-            width: 240.0,
+            width: 230.0,
             height: 220.0, // Limit height
 
             child: TimeSlotGrid(

@@ -256,7 +256,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                             children: [
                               Container(
                                 height: 40,
-                                width: 190,
+                                width: 192,
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
@@ -282,7 +282,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                               ),
                               Container(
                                 height: 40,
-                                width: 160,
+                                width: 158,
                                 padding: const EdgeInsets.only(left: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -430,7 +430,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                                     .toList())),
                                             trailing: Container(
                                               height: 40,
-                                              width: 90,
+                                              width: 85,
                                               decoration: const BoxDecoration(
                                                 color: Color(0xffE3E3E3),
                                                 borderRadius: BorderRadius.all(
@@ -442,6 +442,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                                   // Xử lý sự kiện khi nhấn nút đặt lịch
                                                 },
                                                 style: ElevatedButton.styleFrom(
+                                                  padding: EdgeInsets.all(0),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(

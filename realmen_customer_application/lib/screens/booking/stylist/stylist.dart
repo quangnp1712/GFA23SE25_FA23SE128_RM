@@ -9,6 +9,7 @@ import 'package:realmen_customer_application/screens/booking/components/on_off_s
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:sizer/sizer.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class StylistOptionBooking extends StatefulWidget {
   const StylistOptionBooking({super.key});
@@ -31,24 +32,76 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
             onStylistSelected: updateSelectedStylist),
 
         // 2
-        selectedBranch != null && selectedStylist != null
-            ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
-            : Container(),
 
+        TimelineTile(
+          // false la hien thanh
+
+          isLast: false,
+          beforeLineStyle: const LineStyle(color: Colors.black, thickness: 2),
+
+          // icon
+          indicatorStyle: IndicatorStyle(
+            color: Colors.transparent,
+            width: 35,
+            height: 40,
+            padding: const EdgeInsets.only(top: 4, bottom: 4, right: 5),
+            indicator: Image.asset('assets/images/logo-no-text.png'),
+            indicatorXY: 0.0,
+          ),
+
+          // content
+          endChild: selectedBranch != null && selectedStylist != null
+              ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
+              : Container(
+                  height: 150,
+                  padding: const EdgeInsets.only(top: 10, right: 15),
+                  constraints: const BoxConstraints(minHeight: 120),
+                  child: Text(
+                    "2. Chọn dịch vụ ",
+                    style: TextStyle(fontSize: 20),
+                  )),
+        ),
         // 3
-        selectedBranch != null &&
-                selectedStylist != null &&
-                selectedService != null
-            ? ChooseTimeSlot(
-                onDateSelected: updateSelectedDate,
-                onTimeSelected: updateSelectedTime,
-              )
-            : Container(),
 
+        TimelineTile(
+          // false la hien thanh
+
+          isLast: false,
+          beforeLineStyle: const LineStyle(color: Colors.black, thickness: 2),
+
+          // icon
+          indicatorStyle: IndicatorStyle(
+            color: Colors.transparent,
+            width: 35,
+            height: 40,
+            padding: const EdgeInsets.only(top: 4, bottom: 4, right: 5),
+            indicator: Image.asset('assets/images/logo-no-text.png'),
+            indicatorXY: 0.0,
+          ),
+
+          // content
+          endChild: selectedBranch != null &&
+                  selectedStylist != null &&
+                  selectedService != null &&
+                  selectedService != []
+              ? ChooseTimeSlot(
+                  onDateSelected: updateSelectedDate,
+                  onTimeSelected: updateSelectedTime,
+                )
+              : Container(
+                  height: 150,
+                  padding: const EdgeInsets.only(top: 10, right: 15),
+                  constraints: const BoxConstraints(minHeight: 120),
+                  child: Text(
+                    "3. Chọn ngày, giờ ",
+                    style: TextStyle(fontSize: 20),
+                  )),
+        ),
         // button Đặt Lịch
         selectedBranch != null &&
                 selectedStylist != null &&
-                selectedService != null
+                selectedService != null &&
+                selectedService != []
             ? Container(
                 width: 81.w,
                 margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -69,7 +122,8 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
                   onPressed: () {
                     if (selectedStylist == null) {
                       print("Xin chọn stylist");
-                    } else if (selectedService == null) {
+                    } else if (selectedService == null &&
+                        selectedService.length <= 0) {
                       print("Xin chọn dịch vụ");
                     } else if (selectedDate == null) {
                       print("Xin chọn ngày");

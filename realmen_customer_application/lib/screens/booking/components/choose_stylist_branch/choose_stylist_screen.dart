@@ -471,49 +471,62 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                       )
                     : Container(),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 200,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          selectedProvider.updateSelectedStylist(stylistData);
-                          Navigator.pop(context, stylistData);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          onPrimary: Colors.white,
-                          side: const BorderSide(
-                            width: 2.0,
-                            color: Colors.white,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              20.0,
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        // width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            selectedProvider.updateSelectedStylist(stylistData);
+                            Navigator.pop(context, stylistData);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            onPrimary: Colors.white,
+                            side: const BorderSide(
+                              width: 2.0,
+                              color: Colors.white,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                20.0,
+                              ),
                             ),
                           ),
+                          child: const Text(
+                            "Chọn",
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
-                        child: const Text("Chọn"),
                       ),
                     ),
-                    const SizedBox(width: 8.0),
+                    SizedBox(width: 20),
                     _selectedOption != 'Tất cả stylist'
-                        ? Container(
-                            width: 100,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Define the action for the "Xem thêm" button
-                              },
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.black,
-                                onPrimary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    20.0,
+                        ? Expanded(
+                            flex: 3,
+                            child: Container(
+                              // width: 100,
+
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Define the action for the "Xem thêm" button
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  onPrimary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      20.0,
+                                    ),
                                   ),
                                 ),
+                                child: const Text(
+                                  "Xem thêm",
+                                  style: TextStyle(color: Colors.black),
+                                ),
                               ),
-                              child: const Text("Xem thêm"),
                             ),
                           )
                         : Container(width: 100),

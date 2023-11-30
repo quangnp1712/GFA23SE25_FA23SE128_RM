@@ -143,19 +143,6 @@ class RouteGenerator {
                 });
           }),
       GetPage(
-          name: ChooseServiceBookingScreen.ChooseServiceBookingScreenRoute,
-          page: () {
-            return FutureBuilder(
-                future: SharedPreferencesService.checkJwtExpired(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data!) {
-                    return const LoginPhoneScreen();
-                  } else {
-                    return ChooseServiceBookingScreen();
-                  }
-                });
-          }),
-      GetPage(
           name: TestScreen.TestScreenRoute,
           page: () {
             return FutureBuilder(

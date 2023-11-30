@@ -333,8 +333,14 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                                     .done) {
                                                               if (snapshot
                                                                   .hasData) {
-                                                                return snapshot
-                                                                    .data!; // Return the widget when the future is complete
+                                                                return Container(
+                                                                  constraints:
+                                                                      BoxConstraints(
+                                                                          minHeight:
+                                                                              140),
+                                                                  child: snapshot
+                                                                      .data!,
+                                                                ); // Return the widget when the future is complete
                                                               } else {
                                                                 return Container(
                                                                     height:

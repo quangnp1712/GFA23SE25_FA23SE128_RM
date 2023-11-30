@@ -146,7 +146,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 ),
               ),
               Container(
-                width: 200,
+                width: 220,
                 child: Text(
                   branch != null ? branch : "",
                   maxLines: 3,
@@ -177,7 +177,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 ),
               ),
               Container(
-                width: 200,
+                width: 220,
                 child: Text(
                   stylist != null ? stylist : "REALMEN sẽ chọn giúp anh",
                   textAlign: TextAlign.left,
@@ -205,7 +205,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 ),
               ),
               Container(
-                width: 200,
+                // width: 220,
                 child: Row(
                   children: [
                     Text(
@@ -353,55 +353,37 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
   }
 
   Widget _buildButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Flexible(
-          flex: 1,
-          child: SizedBox(
-            height: 80,
+    return Container(
+      width: 81.w,
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xff302E2E),
+              Color(0xe6444141),
+              Color(0x8c484646),
+              Color(0x26444141),
+            ]),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
           ),
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
         ),
-        Flexible(
-          flex: 4,
-          fit: FlexFit.tight,
-          child: Container(
-            // margin: const EdgeInsets.only(top: 22),
-            // width: 70.w,
-            height: 40,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xff302E2E),
-                    Color(0xe6444141),
-                    Color(0xe6444141),
-                    Color(0x8c484646),
-                    // Color(0x26444141),
-                  ]),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-              child: const Text(
-                "Xác Nhận",
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
+        child: const Text(
+          "Xác Nhận",
+          style: TextStyle(
+              fontSize: 24, color: Colors.white, fontWeight: FontWeight.w700),
         ),
-      ],
+      ),
     );
   }
 }

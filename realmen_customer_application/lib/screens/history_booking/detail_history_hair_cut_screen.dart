@@ -154,7 +154,9 @@ class _DetailHistoryBookingScreenState
             children: <Widget>[
               const Text(
                 " Le Anh Tuan",
+                maxLines: 1,
                 style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 17),

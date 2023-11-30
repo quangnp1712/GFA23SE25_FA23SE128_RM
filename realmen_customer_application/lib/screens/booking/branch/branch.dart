@@ -30,26 +30,79 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
         ChooseBranchBooking(onBranchSelected: updateSelectedBranch),
 
         // 2
-        selectedBranch != null
-            ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
-            : Container(),
 
+        TimelineTile(
+          // false la hien thanh
+
+          isLast: false,
+          beforeLineStyle: const LineStyle(color: Colors.black, thickness: 2),
+
+          // icon
+          indicatorStyle: IndicatorStyle(
+            color: Colors.transparent,
+            width: 35,
+            height: 40,
+            padding: const EdgeInsets.only(top: 4, bottom: 4, right: 5),
+            indicator: Image.asset('assets/images/logo-no-text.png'),
+            indicatorXY: 0.0,
+          ),
+
+          // content
+          endChild: selectedBranch != null
+              ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
+              : Container(
+                  height: 150,
+                  padding: const EdgeInsets.only(top: 10, right: 15),
+                  constraints: const BoxConstraints(minHeight: 120),
+                  child: Text(
+                    "2. Chọn dịch vụ ",
+                    style: TextStyle(fontSize: 20),
+                  )),
+        ),
         // 3
-        selectedBranch != null && selectedService != null
-            ? ChooseStylistAndDateTimeBooking(
-                onDateSelected: updateSelectedDate,
-                onTimeSelected: updateSelectedTime,
-                onStylistSelected: updateSelectedStylist)
-            : Container(),
 
+        TimelineTile(
+          // false la hien thanh
+
+          isLast: false,
+          beforeLineStyle: const LineStyle(color: Colors.black, thickness: 2),
+
+          // icon
+          indicatorStyle: IndicatorStyle(
+            color: Colors.transparent,
+            width: 35,
+            height: 40,
+            padding: const EdgeInsets.only(top: 4, bottom: 4, right: 5),
+            indicator: Image.asset('assets/images/logo-no-text.png'),
+            indicatorXY: 0.0,
+          ),
+
+          // content
+          endChild: selectedBranch != null &&
+                  selectedService != null &&
+                  selectedService != []
+              ? ChooseStylistAndDateTimeBooking(
+                  onDateSelected: updateSelectedDate,
+                  onTimeSelected: updateSelectedTime,
+                  onStylistSelected: updateSelectedStylist)
+              : Container(
+                  height: 150,
+                  padding: const EdgeInsets.only(top: 10, right: 15),
+                  constraints: const BoxConstraints(minHeight: 120),
+                  child: Text(
+                    "3. Chọn stylist & ngày, giờ ",
+                    style: TextStyle(fontSize: 20),
+                  )),
+        ),
         // button Đặt Lịch
-        selectedService != null
+        selectedBranch != null &&
+                selectedService != null &&
+                selectedService != []
             ? Container(
                 width: 81.w,
                 margin: const EdgeInsets.symmetric(horizontal: 15),
                 padding: const EdgeInsets.all(0),
                 decoration: BoxDecoration(
-                  color: Colors.amber,
                   gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -63,26 +116,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (selectedBranch == null) {
-                      print("Xin chọn chi nhánh");
-                    } else if (selectedService == null) {
-                      print("Xin chọn dịch vụ");
-                    } else if (selectedDate == null) {
-                      print("Xin chọn ngày");
-                    } else if (selectedTime == null) {
-                      print("Xin chọn giờ");
-                    } else {
-                      Get.toNamed(
-                          BookingHaircutTemporary
-                              .BookingHaircutTemporaryScreenRoute,
-                          arguments: {
-                            'branch': selectedBranch,
-                            'service': selectedService,
-                            'stylist': selectedStylist,
-                            'date': selectedDate,
-                            'time': selectedTime,
-                          });
-                    }
+                    _onBooking();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black12,
@@ -208,4 +242,33 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     'saturday': 'Thứ bảy',
     'sunday': 'Chủ nhật'
   };
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _onBooking() {
+    if (selectedBranch == null) {
+      _errorMessage("Xin chọn chi nhánh");
+    } else if (selectedService == null) {
+      _errorMessage("Xin chọn dịch vụ");
+    } else if (selectedDate == null) {
+      _errorMessage("Xin chọn ngày");
+    } else if (selectedTime == null) {
+      _errorMessage("Xin chọn giờ");
+    } else {
+      Get.toNamed(BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
+          arguments: {
+            'branch': selectedBranch, // String name
+            'service': selectedService, // List <String> name
+            'stylist': selectedStylist, // String name
+            'date': selectedDate, // String
+            'time': selectedTime, // String
+          });
+    }
+  }
 }

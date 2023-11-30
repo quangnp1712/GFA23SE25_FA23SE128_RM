@@ -1,3 +1,5 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,16 +17,33 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.playIntegrity,
+  );
+
   await dotenv.load(fileName: ".env");
+  _FBSignAnonymous();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ChangeNotifierServices(),
       child: MyApp(),
     ),
   );
+}
+
+Future<void> _FBSignAnonymous() async {
+  try {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInAnonymously();
+    User? user = userCredential.user;
+    print('Đăng nhập ẩn danh thành công: ${user!.uid}');
+  } catch (e) {
+    print('Lỗi không xác định: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {

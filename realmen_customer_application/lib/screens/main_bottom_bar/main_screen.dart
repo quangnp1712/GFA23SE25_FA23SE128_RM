@@ -46,6 +46,11 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   pageChooser(int page) {
     try {
       switch (page) {

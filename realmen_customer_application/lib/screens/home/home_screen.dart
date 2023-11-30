@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -73,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Container(
                           height: 70,
-                          margin: const EdgeInsets.only(right: 25),
+                          margin: const EdgeInsets.only(right: 15),
                           padding: const EdgeInsets.only(left: 25),
                           decoration: const ShapeDecoration(
                             shape: CustomRoundedRectangleBorder(
@@ -125,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 20,
                               ),
                               SizedBox(
-                                width: 220,
+                                width: 235,
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -375,8 +377,9 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 // Logic
   @override
-  void initState() {
+  initState() {
     super.initState();
+
     getAccountInfo();
     time = getTimeOfDay();
   }

@@ -259,17 +259,28 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                             children: [
                               Container(
                                 height: 40,
-                                width: 190,
+                                width: 200,
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: const Color(0xff8E1D1D),
-                                    width: 0.5,
+                                    width: 1,
                                     style: BorderStyle.solid,
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(8),
                                   color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.grey.shade800, // Màu của bóng
+                                      offset: Offset(0,
+                                          2), // Độ dịch chuyển theo trục x và y
+                                      blurRadius: 2, // Bán kính làm mờ của bóng
+                                      spreadRadius:
+                                          0, // Bán kính lan rộng của bóng
+                                    ),
+                                  ],
                                 ),
                                 child: TextButton(
                                   style: const ButtonStyle(),
@@ -280,14 +291,17 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Icon(Icons.location_on),
-                                      Text("Tìm chi nhánh gần anh"),
+                                      Text(
+                                        "Tìm chi nhánh gần anh",
+                                        style: TextStyle(color: Colors.black87),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                               Container(
                                 height: 40,
-                                width: 160,
+                                width: 150,
                                 padding: const EdgeInsets.only(left: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -380,8 +394,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                               if (snapshot.connectionState ==
                                                   ConnectionState.done) {
                                                 if (snapshot.hasData) {
-                                                  return snapshot
-                                                      .data!; // Return the widget when the future is complete
+                                                  return Container(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            minHeight: 140),
+                                                    child: snapshot.data!,
+                                                  ); // Return the widget when the future is complete
                                                 } else {
                                                   return Container(
                                                       height:
@@ -398,7 +416,11 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                           ),
                                           const SizedBox(width: 5),
                                           ListTile(
-                                            title: Row(
+                                            title: Wrap(
+                                              spacing:
+                                                  8.0, // Khoảng cách giữa các widget con theo chiều ngang
+                                              runSpacing:
+                                                  4.0, // Khoảng cách giữa các dòng theo chiều dọc
                                               children: [
                                                 Text(utf8.decode(
                                                     branchesForCity![index]
@@ -406,7 +428,6 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                                         .toString()
                                                         .runes
                                                         .toList())),
-                                                const SizedBox(width: 8),
                                                 branchesForCity![index]
                                                             .distanceKilometer !=
                                                         null
@@ -429,7 +450,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                                                         0.9),
                                                               ),
                                                             ),
-                                                            WidgetSpan(
+                                                            const WidgetSpan(
                                                               child: SizedBox(
                                                                   width: 4),
                                                             ),
@@ -439,6 +460,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                                                     .distanceKilometer,
                                                                 style:
                                                                     TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
                                                                   color: Colors
                                                                       .black
                                                                       .withOpacity(
@@ -450,20 +474,36 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                                     : Container(),
                                               ],
                                             ),
-                                            subtitle: Text(utf8.decode(
-                                                branchesForCity![index]
-                                                    .address
-                                                    .toString()
-                                                    .runes
-                                                    .toList())),
+                                            subtitle: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: Text(utf8.decode(
+                                                  branchesForCity![index]
+                                                      .address
+                                                      .toString()
+                                                      .runes
+                                                      .toList())),
+                                            ),
                                             trailing: Container(
                                               height: 40,
-                                              width: 90,
-                                              decoration: const BoxDecoration(
+                                              width: 85,
+                                              decoration: BoxDecoration(
                                                 color: Color(0xffE3E3E3),
                                                 borderRadius: BorderRadius.all(
                                                   Radius.circular(4),
                                                 ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey
+                                                        .shade800, // Màu của bóng
+                                                    offset: Offset(0,
+                                                        2), // Độ dịch chuyển theo trục x và y
+                                                    blurRadius:
+                                                        2, // Bán kính làm mờ của bóng
+                                                    spreadRadius:
+                                                        0, // Bán kính lan rộng của bóng
+                                                  ),
+                                                ],
                                               ),
                                               child: ElevatedButton(
                                                 onPressed: () {
@@ -488,6 +528,8 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                                   // Xử lý sự kiện khi nhấn nút đặt lịch
                                                 },
                                                 style: ElevatedButton.styleFrom(
+                                                  padding:
+                                                      const EdgeInsets.all(0),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(

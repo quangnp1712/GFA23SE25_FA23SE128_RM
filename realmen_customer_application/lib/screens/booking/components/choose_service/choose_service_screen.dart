@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:sizer/sizer.dart';
+
+import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 
 class ChooseServiceBookingScreen extends StatefulWidget {
   @override
@@ -11,6 +12,9 @@ class ChooseServiceBookingScreen extends StatefulWidget {
       _ChooseServiceBookingScreenState();
   static const String ChooseServiceBookingScreenRoute =
       "/choose-service-booking-screen";
+  final selectedServices;
+
+  ChooseServiceBookingScreen({required this.selectedServices});
 }
 
 class _ChooseServiceBookingScreenState
@@ -20,9 +24,12 @@ class _ChooseServiceBookingScreenState
   @override
   void initState() {
     super.initState();
-    var selectedServicesProvider =
-        Provider.of<ChangeNotifierServices>(context, listen: false);
-    selectedServices = selectedServicesProvider.selectedServices;
+    // var selectedServicesProvider =
+    //     Provider.of<ChangeNotifierServices>(context, listen: false);
+    // selectedServices = selectedServicesProvider.selectedServices;
+    if (widget.selectedServices != null) {
+      selectedServices = widget.selectedServices;
+    }
   }
 
   bool _isDisposed = false;
@@ -41,6 +48,7 @@ class _ChooseServiceBookingScreenState
           selectedServices.remove(serviceName);
         }
       });
+      print(selectedServices);
     }
   }
 
@@ -125,6 +133,7 @@ class _ChooseServiceBookingScreenState
                             serviceLists: [
                               [
                                 SubServiceTile(
+                                  serviceList: selectedServices,
                                   title: 'Combo Cắt 9 bước',
                                   price: formatter.format(100000),
                                   image: 'assets/images/3.png',
@@ -134,6 +143,7 @@ class _ChooseServiceBookingScreenState
                                   },
                                 ),
                                 SubServiceTile(
+                                  serviceList: selectedServices,
                                   title: 'Combo Massage Cao Cấp',
                                   price: formatter.format(200000),
                                   image: 'assets/images/massage.jpg',
@@ -151,6 +161,7 @@ class _ChooseServiceBookingScreenState
                             serviceLists: [
                               [
                                 SubServiceTile(
+                                  serviceList: selectedServices,
                                   title: 'Cắt tóc tạo kiểu',
                                   price: formatter.format(70000),
                                   image: 'assets/images/image1.png',
@@ -160,6 +171,7 @@ class _ChooseServiceBookingScreenState
                                   },
                                 ),
                                 SubServiceTile(
+                                  serviceList: selectedServices,
                                   title: 'Cắt tóc trẻ em',
                                   price: formatter.format(50000),
                                   image: 'assets/images/5.jpg',
@@ -178,24 +190,38 @@ class _ChooseServiceBookingScreenState
                   ),
                 ),
                 Positioned(
-                  bottom: 16.0,
-                  left: 16.0,
-                  right: 16.0,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      selectedServicesProvider
-                          .updateSelectedServices(selectedServices);
-                      Navigator.pop(context, selectedServices);
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    child: Text(
-                      selectedServices.isEmpty
-                          ? 'Chọn dịch vụ'
-                          : 'Chọn ${selectedServices.length} dịch vụ',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                  bottom: 12.0,
+                  left: 20.0,
+                  right: 20.0,
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        selectedServicesProvider
+                            .updateSelectedServices(selectedServices);
+                        Navigator.pop(context, selectedServices);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8.0), // Độ bo tròn cho nút
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        selectedServices.isEmpty
+                            ? 'Chọn dịch vụ'.toUpperCase()
+                            : 'Chọn ${selectedServices.length} dịch vụ'
+                                .toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
                 ),
@@ -227,9 +253,23 @@ class ServiceCategoryTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(
               8.0), // Điều chỉnh khoảng cách xung quanh tiêu đề
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 4,
+            ),
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 8,
+                ),
+              ),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         for (var services in serviceLists)
@@ -261,13 +301,16 @@ class SubServiceTile extends StatefulWidget {
   final String price;
   final String image;
   final Function(bool) onSelect; // Hàm callback
+  final List<String> serviceList;
 
   SubServiceTile({
+    Key? key,
     required this.title,
     required this.price,
     required this.image,
     required this.onSelect,
-  });
+    required this.serviceList,
+  }) : super(key: key);
 
   @override
   State<SubServiceTile> createState() => _SubServiceTileState();
@@ -281,10 +324,11 @@ class _SubServiceTileState extends State<SubServiceTile> {
   void initState() {
     super.initState();
     // Khởi tạo trạng thái isSelected từ danh sách dịch vụ đã chọn
-    selectedServicesProvider =
-        Provider.of<ChangeNotifierServices>(context, listen: false);
-    isSelected =
-        selectedServicesProvider.selectedServices.contains(widget.title);
+    // selectedServicesProvider =
+    //     Provider.of<ChangeNotifierServices>(context, listen: false);
+    // isSelected =
+    //     selectedServicesProvider.selectedServices.contains(widget.title);
+    isSelected = widget.serviceList.contains(widget.title);
   }
 
   bool _isDisposed = false;
@@ -298,17 +342,27 @@ class _SubServiceTileState extends State<SubServiceTile> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(2.0),
       decoration: BoxDecoration(
         color: Colors.black,
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(widget.image,
-              width: double.infinity, height: 150, fit: BoxFit.cover),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(8),
+              topLeft: Radius.circular(8),
+            ),
+            child: Image.asset(
+              widget.image,
+              width: double.infinity,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
@@ -328,16 +382,20 @@ class _SubServiceTileState extends State<SubServiceTile> {
           ),
           Container(
             width: 400,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
             child: ElevatedButton(
               onPressed: () {
-                setState(() {
-                  isSelected = !isSelected;
-                });
-                widget.onSelect(isSelected);
+                _isSelected();
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
                   isSelected ? Colors.red : Colors.white,
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8.0), // Độ bo tròn cho nút
+                  ),
                 ),
               ),
               child: Text(
@@ -353,5 +411,12 @@ class _SubServiceTileState extends State<SubServiceTile> {
         ],
       ),
     );
+  }
+
+  _isSelected() {
+    setState(() {
+      isSelected = !isSelected;
+      widget.onSelect(isSelected);
+    });
   }
 }

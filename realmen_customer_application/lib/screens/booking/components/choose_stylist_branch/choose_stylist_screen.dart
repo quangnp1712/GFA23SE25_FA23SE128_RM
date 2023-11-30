@@ -235,7 +235,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                   children: [
                                     TextSpan(
                                       text: "Stylist: ",
-                                      style: GoogleFonts.ebGaramond(
+                                      style: GoogleFonts.quicksand(
                                         textStyle: const TextStyle(
                                             fontSize: 17,
                                             color: Colors.black,
@@ -249,7 +249,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                       //     .toString()
                                       //     .runes
                                       //     .toList()),
-                                      style: GoogleFonts.ebGaramond(
+                                      style: GoogleFonts.quicksand(
                                         textStyle: const TextStyle(
                                             fontSize: 18,
                                             color: Colors.black,
@@ -268,7 +268,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                 children: [
                                   TextSpan(
                                     text: "Chuyên môn: ",
-                                    style: GoogleFonts.ebGaramond(
+                                    style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 17,
                                           color: Colors.black,
@@ -279,7 +279,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                     text: stylistData['specialization']
                                         .join(', ')
                                         .toString(),
-                                    style: GoogleFonts.ebGaramond(
+                                    style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
@@ -299,7 +299,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                 children: [
                                   TextSpan(
                                     text: "Chi nhánh: ",
-                                    style: GoogleFonts.ebGaramond(
+                                    style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 17,
                                           color: Colors.black,
@@ -314,7 +314,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                     //     .toString()
                                     //     .runes
                                     //     .toList()),
-                                    style: GoogleFonts.ebGaramond(
+                                    style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                         fontSize: 18,
                                         color: Colors.black,
@@ -367,7 +367,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                         children: [
                                           TextSpan(
                                             text: "Chi nhánh:  ",
-                                            style: GoogleFonts.ebGaramond(
+                                            style: GoogleFonts.quicksand(
                                               textStyle: const TextStyle(
                                                   fontSize: 17,
                                                   color: Colors.black,
@@ -382,7 +382,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                             //     .toString()
                                             //     .runes
                                             //     .toList()),
-                                            style: GoogleFonts.ebGaramond(
+                                            style: GoogleFonts.quicksand(
                                               textStyle: const TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black,

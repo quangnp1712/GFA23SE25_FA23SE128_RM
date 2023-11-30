@@ -183,13 +183,13 @@ class _BookingScreenState extends State<BookingScreen>
                                 Tab(
                                   child: Text(
                                     'Theo chi nhánh',
-                                    style: GoogleFonts.ebGaramond(fontSize: 22),
+                                    style: GoogleFonts.quicksand(fontSize: 22),
                                   ),
                                 ),
                                 Tab(
                                   child: Text(
                                     'Theo thợ cắt tóc',
-                                    style: GoogleFonts.ebGaramond(fontSize: 22),
+                                    style: GoogleFonts.quicksand(fontSize: 22),
                                   ),
                                 ),
                               ],

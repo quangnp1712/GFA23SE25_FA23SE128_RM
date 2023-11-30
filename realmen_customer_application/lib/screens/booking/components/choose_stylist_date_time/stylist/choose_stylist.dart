@@ -311,7 +311,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                       children: [
                                         TextSpan(
                                           text: "Stylist: ",
-                                          style: GoogleFonts.ebGaramond(
+                                          style: GoogleFonts.quicksand(
                                             textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
@@ -325,7 +325,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                           //     .toString()
                                           //     .runes
                                           //     .toList()),
-                                          style: GoogleFonts.ebGaramond(
+                                          style: GoogleFonts.quicksand(
                                             textStyle: const TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.black,
@@ -352,7 +352,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                 children: [
                                   TextSpan(
                                     text: "Chuyên môn: ",
-                                    style: GoogleFonts.ebGaramond(
+                                    style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 17,
                                           color: Colors.black,
@@ -371,7 +371,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                     //         .runes
                                     //         .toList())
                                     //     : "",
-                                    style: GoogleFonts.ebGaramond(
+                                    style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,

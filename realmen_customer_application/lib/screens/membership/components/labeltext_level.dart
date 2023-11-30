@@ -45,19 +45,19 @@ class _LabelTextLevelState extends State<LabelTextLevel>
               Tab(
                 child: Text(
                   'Level 1',
-                  style: GoogleFonts.ebGaramond(fontSize: 22),
+                  style: GoogleFonts.quicksand(fontSize: 22),
                 ),
               ),
               Tab(
                 child: Text(
                   'Level 2',
-                  style: GoogleFonts.ebGaramond(fontSize: 22),
+                  style: GoogleFonts.quicksand(fontSize: 22),
                 ),
               ),
               Tab(
                 child: Text(
                   'Level 3',
-                  style: GoogleFonts.ebGaramond(fontSize: 22),
+                  style: GoogleFonts.quicksand(fontSize: 22),
                 ),
               ),
             ],

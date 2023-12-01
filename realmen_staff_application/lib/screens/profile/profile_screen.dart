@@ -217,6 +217,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         child: TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Icon(
+                                                  CommunityMaterialIcons
+                                                      .history,
+                                                  color: Colors.black,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "KHÁCH ĐÃ CHECK-OUT",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 82.w,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                                color: Color(0x4D444444),
+                                                width: 1.0),
+                                          ),
+                                        ),
+                                        child: TextButton(
                                           onPressed: () {
                                             // Get.toNamed(
                                             //     TestScreen.TestScreenRoute);

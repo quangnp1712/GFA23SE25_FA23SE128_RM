@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:realmen_staff_application/screens/history_booking/history_booking_screen.dart';
+import 'package:realmen_staff_application/screens/task/component/history_customer.dart';
 
 class BookingProcessingTab extends StatefulWidget {
   const BookingProcessingTab({super.key});
@@ -23,12 +26,12 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Đơn cắt:  Thứ 2, 27/11/2023  12:00",
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -46,11 +49,11 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                 ),
                 Container(
                   width: 200,
-                  child: Text(
-                    " Le Anh Tuan",
+                  child: const Text(
+                    " Le Anh Tuan  -  Lv 1",
                     maxLines: 2,
                     textAlign: TextAlign.left,
-                    style: const TextStyle(
+                    style: TextStyle(
                       overflow: TextOverflow.ellipsis,
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -60,7 +63,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -77,11 +80,11 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                 ),
                 Container(
                   width: 200,
-                  child: Text(
-                    "0917901487",
+                  child: const Text(
+                    "xxxxxx1487",
                     textAlign: TextAlign.left,
                     maxLines: 1,
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                         fontSize: 17,
@@ -90,11 +93,32 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Get.to(HistoryCustomerScreen());
+                },
+                child: const Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Xem lịch sử",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.blueAccent,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.solid),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            Text(
-              "Dich Vu: ",
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              "Dịch Vụ: ",
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
             ),
@@ -121,7 +145,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Cắt tóc",
                           style: TextStyle(fontSize: 20),
                         ),
@@ -133,7 +157,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                             // color: Color(0xff207A20),
                             color: isDone == false
                                 ? Colors.white
-                                : Color(0xff207A20),
+                                : const Color(0xff207A20),
                             border: Border.all(
                                 color: Colors.black54,
                                 style: BorderStyle.solid),
@@ -161,7 +185,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          constraints: BoxConstraints(minHeight: 100),
+                          constraints: const BoxConstraints(minHeight: 100),
                           child: Column(
                             children: [
                               Container(
@@ -191,12 +215,12 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(10)),
-                                      margin: EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(10),
                                       child: TextButton(
                                         onPressed: () {
                                           _pickImageFromCamera();
                                         },
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
                                             "Chụp ảnh",
                                             style: TextStyle(fontSize: 20),
@@ -215,14 +239,14 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(10)),
-                                      margin: EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(10),
                                       child: TextButton(
                                         onPressed: () {
                                           setState(() {
                                             isDone = true;
                                           });
                                         },
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
                                             "Xác nhận",
                                             style: TextStyle(fontSize: 20),
@@ -251,13 +275,13 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                     style: BorderStyle.solid,
                   ),
                   borderRadius: BorderRadius.circular(10)),
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: TextButton(
                 onPressed: () {},
                 child: Center(
                   child: Text(
                     "Hoàn Thành".toUpperCase(),
-                    style: TextStyle(color: Colors.white, fontSize: 25),
+                    style: const TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
               ),

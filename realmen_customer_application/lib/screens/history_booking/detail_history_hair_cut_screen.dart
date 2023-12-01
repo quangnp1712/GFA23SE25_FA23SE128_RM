@@ -126,6 +126,16 @@ class _DetailHistoryBookingScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                "Ngày: ",
+                style: TextStyle(fontSize: 17),
+              ),
+              SizedBox(height: 12),
+              Text(
+                "Giờ booking: ",
+                style: TextStyle(fontSize: 17),
+              ),
+              SizedBox(height: 12),
+              Text(
                 "Stylist: ",
                 style: TextStyle(fontSize: 17),
               ),
@@ -153,7 +163,23 @@ class _DetailHistoryBookingScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
-                " Le Anh Tuan",
+                "Thứ 6, 01/12/2023",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "12:30",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "Le Anh Tuan",
                 maxLines: 1,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
@@ -163,7 +189,7 @@ class _DetailHistoryBookingScreenState
               ),
               const SizedBox(height: 12),
               const Text(
-                " Be Dep",
+                "Be Dep",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -171,7 +197,7 @@ class _DetailHistoryBookingScreenState
               ),
               const SizedBox(height: 12),
               const Text(
-                " The",
+                "The",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -179,10 +205,10 @@ class _DetailHistoryBookingScreenState
               ),
               const SizedBox(height: 12),
               Container(
-                width: 230,
+                width: 220,
                 child: const Text(
                   "590 Cách Mạng Tháng 8, Phường 11, Quận 3, Hồ Chí Minh",
-                  maxLines: 2,
+                  maxLines: 3,
                   style: TextStyle(
                       overflow: TextOverflow.ellipsis,
                       color: Colors.black,

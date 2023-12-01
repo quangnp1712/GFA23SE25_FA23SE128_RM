@@ -90,16 +90,16 @@ class _TaskScreenState extends State<TaskScreen>
                                 tabs: [
                                   Tab(
                                     child: Text(
-                                      'ĐANG LÀM',
+                                      'ĐANG PHỤC VỤ',
                                       style:
-                                          GoogleFonts.ebGaramond(fontSize: 22),
+                                          GoogleFonts.quicksand(fontSize: 20),
                                     ),
                                   ),
                                   Tab(
                                     child: Text(
-                                      'ĐANG ĐỢI',
+                                      'ĐANG CHỜ',
                                       style:
-                                          GoogleFonts.ebGaramond(fontSize: 22),
+                                          GoogleFonts.quicksand(fontSize: 20),
                                     ),
                                   ),
                                 ],
@@ -112,7 +112,7 @@ class _TaskScreenState extends State<TaskScreen>
                                   controller: _tabController,
                                   children: [
                                     BookingProcessingTab(),
-                                    BookingWaitingTab()
+                                    BookingWaitingTab(),
                                   ],
                                 ),
                               ),

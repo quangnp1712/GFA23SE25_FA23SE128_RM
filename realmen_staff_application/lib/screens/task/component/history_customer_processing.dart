@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class HistoryCustomerScreen extends StatefulWidget {
-  const HistoryCustomerScreen({super.key});
+class HistoryCustomerProcessingScreen extends StatefulWidget {
+  const HistoryCustomerProcessingScreen({super.key});
 
   @override
-  State<HistoryCustomerScreen> createState() => _HistoryCustomerScreenState();
+  State<HistoryCustomerProcessingScreen> createState() =>
+      _HistoryCustomerProcessingScreenState();
+  static const String HistoryCustomerProcessingScreenRoute =
+      "/history-customer-processing-screen";
 }
 
-class _HistoryCustomerScreenState extends State<HistoryCustomerScreen> {
+class _HistoryCustomerProcessingScreenState
+    extends State<HistoryCustomerProcessingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

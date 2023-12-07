@@ -39,6 +39,9 @@ public interface AccountsAuthAPI {
                         @RequestParam(required = false, value = "searches") List<String> searches,
                         @RequestParam(required = false) Long branchId,
                         @RequestParam(required = false, value = "role", defaultValue = "STAFF") ERole role,
+                        @RequestParam(required = false, value = "iShowDistance", defaultValue = "false") Boolean isShowDistance,
+                        @RequestParam(required = false, value = "lat", defaultValue = "0") Double lat,
+                        @RequestParam(required = false, value = "lng", defaultValue = "0") Double lng,
                         @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
                         @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize,
                         @RequestParam(required = false, value = "sorter", defaultValue = "createdAt") String sorter);

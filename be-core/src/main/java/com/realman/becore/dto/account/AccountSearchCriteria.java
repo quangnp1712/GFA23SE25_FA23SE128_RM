@@ -8,8 +8,11 @@ import lombok.Builder;
 
 @Builder
 public record AccountSearchCriteria(
-                List<String> searches,
-                Long branchId,
-                ERole role) {
+        List<String> searches,
+        Long branchId,
+        Boolean isShowDistance,
+        Double lat,
+        Double lng,
+        ERole role) {
 
 }

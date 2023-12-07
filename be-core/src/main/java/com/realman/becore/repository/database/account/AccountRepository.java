@@ -31,7 +31,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.status AS status,
                 a.role AS role,
                 b.branchName AS branchName,
-                b.address AS branchAddress,
+                b.branchAddress AS branchAddress,
                 s.professional AS professional,
                 s.averageRating AS averageRating
             FROM AccountEntity a
@@ -93,7 +93,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.status AS status,
                 a.role AS role,
                 b.branchName AS branchName,
-                b.address AS branchAddress
+                b.branchAddress AS branchAddress
             FROM AccountEntity a
             INNER JOIN BranchEntity b ON b.branchId = a.branchId
             WHERE a.accountId = :accountId
@@ -114,7 +114,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.dob AS dob,
                 a.status AS status,
                 b.branchName AS branchName,
-                b.address AS branchAddress,
+                b.branchAddress AS branchAddress,
                 a.role AS role
             FROM AccountEntity a
             INNER JOIN BranchEntity b ON a.branchId = b.branchId

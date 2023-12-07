@@ -49,6 +49,9 @@ public class AccountsAuthController implements AccountsAuthAPI {
 
         @Override
         public PageImplResponse<AccountResponse> findAll(List<String> searches, Long branchId, ERole role,
+                        Boolean isShowDistance,
+                        Double lat,
+                        Double lng,
                         @Min(1) Integer current,
                         Integer pageSize,
                         String sorter) {
@@ -56,7 +59,8 @@ public class AccountsAuthController implements AccountsAuthAPI {
                 List<String> searchesCriteria = Objects.nonNull(searches) ? searches
                                 : new ArrayList<>();
                 AccountSearchCriteria criteria = AccountSearchCriteria.builder()
-                                .searches(searchesCriteria).branchId(branchId).role(role).build();
+                                .searches(searchesCriteria).branchId(branchId).role(role)
+                                .isShowDistance(isShowDistance).lat(lat).lng(lng).build();
                 Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
                 Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
                 return new PageImplResponse<>(

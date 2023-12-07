@@ -27,22 +27,16 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OTPCommandService {
-
     @NonNull
     private final OTPRepository otpRepository;
-
     @NonNull
     private final AccountQueryService accountQueryService;
-
     @NonNull
     private final OTPMapper otpMapper;
-
     @NonNull
     private final PasswordEncoder passwordEncoder;
-
     @NonNull
     private final JwtConfiguration jwtConfiguration;
-
     @NonNull
     private final TwilioUseCaseService twilioUseCaseService;
 
@@ -113,7 +107,7 @@ public class OTPCommandService {
         return LoginResponse.builder()
                 .accountId(account.accountId())
                 .staffId(Objects.nonNull(account.staff()) ? account.staff().staffId() : null)
-                .branchId(Objects.nonNull(account.branchId()) ? account.branchId() : null)
+                .branchId(Objects.nonNull(account.branch()) ? account.branch().branchId() : null)
                 .phone(account.phone())
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)

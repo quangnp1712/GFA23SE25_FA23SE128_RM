@@ -36,8 +36,8 @@ public class BranchController implements BranchAPI {
     }
 
     @Override
-    public ValueResponse<BranchResponse> findById(Long branchId) {
-        Branch dto = branchUseCaseService.findById(new BranchId(branchId));
+    public ValueResponse<BranchResponse> findById(Long branchId, Boolean isShowDistance, Double lat, Double lng) {
+        Branch dto = branchUseCaseService.findById(new BranchId(branchId), isShowDistance, lat, lng);
         LocalDateTime open = LocalDateTime.now().toLocalDate().atTime(dto.open());
         LocalDateTime close = LocalDateTime.now().toLocalDate().atTime(dto.close());
         BranchResponse response = branchModelMapper.toModel(dto, open, close);

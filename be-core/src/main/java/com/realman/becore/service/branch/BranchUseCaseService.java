@@ -41,8 +41,8 @@ public class BranchUseCaseService {
         branchCommandService.delete(branchId);
     }
 
-    public Branch findById(BranchId branchId) {
-        return branchQueryService.findById(branchId);
+    public Branch findById(BranchId branchId, Boolean isShowDistance, Double lat, Double lng) {
+        return branchQueryService.findById(branchId, lat, lng, isShowDistance);
     }
 
     public Page<Branch> findAll(BranchSearchCriteria criteria, PageRequestCustom pageRequestCustom) {

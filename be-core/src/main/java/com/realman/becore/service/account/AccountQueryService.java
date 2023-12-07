@@ -1,6 +1,7 @@
 package com.realman.becore.service.account;
 
 import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +10,13 @@ import com.realman.becore.dto.account.AccountId;
 import com.realman.becore.dto.account.AccountInfo;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.account.AccountSearchCriteria;
+import com.realman.becore.dto.branch.Branch;
+import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.account.AccountEntity;
 import com.realman.becore.repository.database.account.AccountRepository;
+import com.realman.becore.service.branch.BranchUseCaseService;
 import com.realman.becore.service.customer.CustomerUseCaseService;
 import com.realman.becore.service.staff.StaffUsecaseService;
 import com.realman.becore.util.response.PageRequestCustom;
@@ -31,6 +35,8 @@ public class AccountQueryService {
         private final CustomerUseCaseService customerUserCaseService;
         @NonNull
         private final StaffUsecaseService staffUsercaseService;
+        @NonNull
+        private final BranchUseCaseService branchUseCaseService;
 
         public Account findByPhone(String phone) {
                 AccountEntity entity = accountRepository
@@ -45,11 +51,13 @@ public class AccountQueryService {
                 return entity.isPresent();
         }
 
-        public Account findStaffAccount(AccountId accountId) {
+        public Account findStaffAccount(AccountId accountId, Boolean isShowDistance, Double lat, Double lng) {
                 AccountInfo info = accountRepository.findStaffAccount(accountId.value())
                                 .orElseThrow(ResourceNotFoundException::new);
                 Staff staff = staffUsercaseService.findByAccountId(accountId.value());
-                return accountMapper.fromInfo(info, staff);
+                Branch branch = branchUseCaseService
+                                .findById(new BranchId(info.getBranchId()), isShowDistance, lat, lng);
+                return accountMapper.fromInfo(info, staff, branch);
         }
 
         public Account findCustomerAccount(AccountId accountId) {
@@ -75,9 +83,12 @@ public class AccountQueryService {
                 Page<AccountInfo> infoList = accountRepository.findAll(criteria.searches(), criteria.role(),
                                 criteria.branchId(),
                                 pageRequestCustom.pageRequest());
+
                 return infoList.map(info -> {
+                        Branch branch = branchUseCaseService.findById(new BranchId(info.getBranchId()),
+                                        criteria.isShowDistance(), criteria.lat(), criteria.lng());
                         Staff staff = staffUsercaseService.findByAccountId(info.getAccountId());
-                        return accountMapper.fromInfo(info, staff);
+                        return accountMapper.fromInfo(info, staff, branch);
                 });
         }
 }

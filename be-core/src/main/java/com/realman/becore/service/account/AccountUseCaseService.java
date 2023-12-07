@@ -44,8 +44,8 @@ public class AccountUseCaseService {
         accountCommandService.save(account, branchId);
     }
 
-    public Account findStaffAccount(AccountId accountId) {
-        return accountQueryService.findStaffAccount(accountId);
+    public Account findStaffAccount(AccountId accountId, Boolean isShowDistance, Double lat, Double lng) {
+        return accountQueryService.findStaffAccount(accountId, isShowDistance, lat, lng);
     }
 
     public Account findCustomerAccount(AccountId accountId) {

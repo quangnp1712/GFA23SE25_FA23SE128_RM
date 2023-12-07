@@ -3,6 +3,8 @@ package com.realman.becore.dto.account;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+
+import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.repository.database.account.AccountEntity;
 
@@ -21,5 +23,6 @@ public interface AccountMapper {
     Account fromInfo(AccountInfo info);
 
     @Mapping(source = "info.accountId", target = "accountId")
-    Account fromInfo(AccountInfo info, Staff staff);
+    @Mapping(source = "branch", target = "branch")
+    Account fromInfo(AccountInfo info, Staff staff, Branch branch);
 }

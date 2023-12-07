@@ -37,12 +37,13 @@ public class BranchCommandService {
         private final BranchMapper branchMapper;
 
         public void save(Branch branch) {
-                GeometryResponse geo = geocodingUseCaseService.requestGeocoding(branch.address());
+                GeometryResponse geo = geocodingUseCaseService.requestGeocoding(branch.branchAddress());
                 Double lat = geo.results().stream().map(GeometryProperties::geometry).map(Geometry::location)
                                 .mapToDouble(Location::lat).findAny().orElse(0);
                 Double lng = geo.results().stream().map(GeometryProperties::geometry).map(Geometry::location)
-                        .mapToDouble(Location::lng).findAny().orElse(0);
-                List<AddressComponent> addressComponents = geo.results().stream().map(GeometryProperties::addressComponents)
+                                .mapToDouble(Location::lng).findAny().orElse(0);
+                List<AddressComponent> addressComponents = geo.results().stream()
+                                .map(GeometryProperties::addressComponents)
                                 .findAny().orElse(new ArrayList<>());
                 String city = addressComponents.get(addressComponents.size() - 1).shortName();
                 BranchEntity entity = branchMapper.toEntity(branch, city, lat, lng);

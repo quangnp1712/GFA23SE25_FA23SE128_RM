@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class AccountAuthController  implements AccountAuthAPI{
+public class AccountAuthController implements AccountAuthAPI {
 
     @NonNull
     private final AccountUseCaseService accountUseCaseService;
@@ -23,9 +23,10 @@ public class AccountAuthController  implements AccountAuthAPI{
     private final AccountModelMapper accountModelMapper;
 
     @Override
-    public ValueResponse<AccountResponse> findStaffAccount(Long accountId) {
-        Account dto = accountUseCaseService.findStaffAccount(new AccountId(accountId));
-        AccountResponse response = accountModelMapper.toModel(dto); 
+    public ValueResponse<AccountResponse> findStaffAccount(Long accountId, Boolean isShowDistance, Double lat,
+            Double lng) {
+        Account dto = accountUseCaseService.findStaffAccount(new AccountId(accountId), isShowDistance, lat, lng);
+        AccountResponse response = accountModelMapper.toModel(dto);
         return new ValueResponse<AccountResponse>(response);
     }
 

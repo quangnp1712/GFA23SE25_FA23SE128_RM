@@ -27,14 +27,14 @@ public class ScheduleCommandService {
     private final StaffUsecaseService staffUsecaseService;
 
     public void save(Long accountId, List<Schedule> schedules) {
-        Staff staff = staffUsecaseService.findByAccountId(accountId);
+        Staff staff = staffUsecaseService.findByAccountId(accountId, false);
         List<ScheduleEntity> scheduleList = schedules.stream()
                 .map(schedule -> scheduleMapper.toEntity(schedule, staff.staffId(), EScheduleStatus.ONGOING)).toList();
         scheduleRepository.saveAll(scheduleList);
     }
 
     public void updateSchedule(Long accountId, List<Schedule> schedules) {
-        Staff staff = staffUsecaseService.findByAccountId(accountId);
+        Staff staff = staffUsecaseService.findByAccountId(accountId, false);
         List<ScheduleEntity> secheduleList = scheduleRepository.findByStaffId(staff.staffId());
         scheduleRepository.deleteAll(secheduleList);
         List<ScheduleEntity> updatedScheduleList = schedules.stream()

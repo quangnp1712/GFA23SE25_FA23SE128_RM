@@ -7,31 +7,35 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
+import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.branch.display.BranchDisplay;
 import com.realman.becore.dto.branch.service.BranchService;
 import com.realman.becore.repository.database.branch.BranchEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BranchMapper {
-    @Mapping(source = "lat", target = "lat")
-    @Mapping(source = "lng", target = "lng")
-    BranchEntity toEntity(Branch dto, String city, Double lat, Double lng);
+        @Mapping(source = "lat", target = "lat")
+        @Mapping(source = "lng", target = "lng")
+        BranchEntity toEntity(Branch dto, String city, Double lat, Double lng);
 
-    Branch toDto(BranchEntity entity, Double distance, List<BranchDisplay> branchDisplayList, 
-        List<BranchService> branchServiceList);
+        Branch toDto(BranchEntity entity, Double distance, List<BranchDisplay> branchDisplayList,
+                        List<BranchService> branchServiceList);
 
-    Branch toDto(BranchEntity entity, List<BranchDisplay> branchDisplayList, List<BranchService> branchServiceList);
+        Branch toDto(BranchEntity entity, List<BranchDisplay> branchDisplayList, List<BranchService> branchServiceList,
+                        List<Account> accountStaffList);
 
-    @Mapping(source = "distanceKilometer", target = "distanceKilometer")
-    Branch updateDto(Branch updateDto, String distanceKilometer);
+        Branch toDto(BranchEntity entity, List<BranchDisplay> branchDisplayList, List<BranchService> branchServiceList);
 
-    BranchGroupByCity toDto(BranchGroupByCityInfo info);
+        @Mapping(source = "distanceKilometer", target = "distanceKilometer")
+        Branch updateDto(Branch updateDto, String distanceKilometer);
 
-    BranchForAccount toDto(BranchInfo info);
+        BranchGroupByCity toDto(BranchGroupByCityInfo info);
 
-    @Mapping(target = "branchId", ignore = true)
-    @Mapping(target = "lat", ignore = true)
-    @Mapping(target = "lng", ignore = true)
-    void updateEntity(@MappingTarget BranchEntity entity, Branch dto);
+        BranchForAccount toDto(BranchInfo info);
+
+        @Mapping(target = "branchId", ignore = true)
+        @Mapping(target = "lat", ignore = true)
+        @Mapping(target = "lng", ignore = true)
+        void updateEntity(@MappingTarget BranchEntity entity, Branch dto);
 
 }

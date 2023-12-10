@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import com.realman.becore.dto.branch.BranchInfo;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.schedule.Schedule;
 import com.realman.becore.repository.database.staff.StaffEntity;
@@ -18,4 +19,6 @@ public interface StaffMapper {
     StaffEntity toEntity(Staff dto, EProfessional professional);
 
     Staff toDto(StaffEntity entity, List<Schedule> scheduleList);
+
+    Staff fromBranchInfo(BranchInfo branchInfo, List<Schedule> scheduleList);
 }

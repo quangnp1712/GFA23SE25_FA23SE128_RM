@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.realman.becore.dto.account.Account;
+import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchForAccount;
 import com.realman.becore.dto.branch.BranchGroupByCity;
@@ -26,12 +29,16 @@ import com.realman.becore.dto.goong.distance.DistanceRequest;
 import com.realman.becore.dto.goong.distance.DistanceResponse;
 import com.realman.becore.dto.goong.distance.ElementList;
 import com.realman.becore.dto.goong.distance.Elements;
+import com.realman.becore.dto.schedule.Schedule;
+import com.realman.becore.dto.staff.Staff;
+import com.realman.becore.dto.staff.StaffMapper;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.branch.BranchEntity;
 import com.realman.becore.repository.database.branch.BranchRepository;
 import com.realman.becore.service.branch.display.BranchDisplayQueryService;
 import com.realman.becore.service.branch.service.BranchServiceUseCaseService;
 import com.realman.becore.service.goong.distance.DistanceUseCaseService;
+import com.realman.becore.service.schedule.ScheduleUseCaseService;
 import com.realman.becore.util.CustomPagination;
 import com.realman.becore.util.response.PageRequestCustom;
 
@@ -50,14 +57,28 @@ public class BranchQueryService {
         @NonNull
         private final BranchServiceUseCaseService branchServiceUseCaseService;
         @NonNull
+        private final ScheduleUseCaseService scheduleUseCaseService;
+        @NonNull
         private final BranchMapper branchMapper;
+        @NonNull
+        private final AccountMapper accountMapper;
+        @NonNull
+        private final StaffMapper staffMapper;
 
         public Branch findById(BranchId branchId, Double originLat, Double originLng, Boolean isShowDistance) {
-                BranchEntity entity = branchRepository.findById(branchId.value())
-                                .orElseThrow(ResourceNotFoundException::new);
+                List<BranchInfo> branchInfos = branchRepository.findBranchInfoById(branchId.value());
+                List<Account> accountStaffList = new ArrayList<>();
                 List<BranchDisplay> branchDisplayList = branchDisplayQueryService.findAll(branchId.value());
                 List<BranchService> branchServiceList = branchServiceUseCaseService.findAllByBranchId(branchId.value());
-                Branch branch = branchMapper.toDto(entity, branchDisplayList, branchServiceList);
+                for (BranchInfo branchInfo : branchInfos) {
+                        List<Schedule> scheduleList = scheduleUseCaseService.findById(branchInfo.getStaffId());
+                        Staff staff = staffMapper.fromBranchInfo(branchInfo, scheduleList);
+                        Account account = accountMapper.fromBranchInfo(branchInfo, staff);
+                        accountStaffList.add(account);
+                }
+                BranchEntity entity = branchRepository.findById(branchId.value())
+                                .orElseThrow(ResourceNotFoundException::new);
+                Branch branch = branchMapper.toDto(entity, branchDisplayList, branchServiceList, accountStaffList);
                 if (isShowDistance) {
                         DistanceRequest request = DistanceRequest.of(originLat,
                                         originLng, entity.getLat(), entity.getLat());

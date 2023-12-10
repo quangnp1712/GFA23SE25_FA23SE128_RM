@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -70,11 +71,14 @@ public class BranchQueryService {
                 List<Account> accountStaffList = new ArrayList<>();
                 List<BranchDisplay> branchDisplayList = branchDisplayQueryService.findAll(branchId.value());
                 List<BranchService> branchServiceList = branchServiceUseCaseService.findAllByBranchId(branchId.value());
-                for (BranchInfo branchInfo : branchInfos) {
-                        List<Schedule> scheduleList = scheduleUseCaseService.findById(branchInfo.getStaffId());
-                        Staff staff = staffMapper.fromBranchInfo(branchInfo, scheduleList);
-                        Account account = accountMapper.fromBranchInfo(branchInfo, staff);
-                        accountStaffList.add(account);
+                if (branchInfos.stream().anyMatch(info -> Objects.nonNull(info.getStaffId()))) {
+                        for (BranchInfo branchInfo : branchInfos) {
+                                List<Schedule> scheduleList = scheduleUseCaseService
+                                                .findById(branchInfo.getStaffId());
+                                Staff staff = staffMapper.fromBranchInfo(branchInfo, scheduleList);
+                                Account account = accountMapper.fromBranchInfo(branchInfo, staff);
+                                accountStaffList.add(account);
+                        }
                 }
                 BranchEntity entity = branchRepository.findById(branchId.value())
                                 .orElseThrow(ResourceNotFoundException::new);

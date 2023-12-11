@@ -35,6 +35,7 @@ public interface AccountsAuthAPI {
                         @RequestParam(required = true, value = "branchId") Long branchId);
 
         @GetMapping
+        @PreAuthorize("hasAuthority('account:view')")
         PageImplResponse<AccountResponse> findAll(
                         @RequestParam(required = false, value = "searches") List<String> searches,
                         @RequestParam(required = false) Long branchId,

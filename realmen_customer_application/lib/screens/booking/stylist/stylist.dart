@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/service_booking_choose.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_branch/stylist_branch.dart';
@@ -51,7 +52,9 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
 
           // content
           endChild: selectedBranch != null && selectedStylist != null
-              ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
+              ? ChooseServiceBooking(
+                  onServiceSelected: updateSelectedService,
+                  branchServiceList: selectedBranch.branchServiceList!)
               : Container(
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
@@ -216,7 +219,7 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
 
   @override
   bool get wantKeepAlive => true;
-  dynamic selectedBranch;
+  BranchModel selectedBranch = new BranchModel();
   dynamic selectedService;
   dynamic selectedStylist;
   dynamic selectedDate;

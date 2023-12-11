@@ -35,7 +35,7 @@ class AccountService extends IAccountService {
       final responseBody = response.body;
       if (statusCode == 200) {
         final accountInfo =
-            AccountInfoModel.fromJson(json.decode(responseBody));
+            AccountInfoModel.fromJson(json.decode(responseBody)['value']);
         return {
           'statusCode': statusCode,
           'data': accountInfo,

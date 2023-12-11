@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_if_null_operators
+
+import 'dart:convert';
+
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -69,9 +73,11 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
                     if (selectedBranch != null) {
                       if (!_isDisposed) {
                         setState(() {
-                          hasSelectedServices = selectedBranch.isNotEmpty;
-                          buttonText = hasSelectedServices
-                              ? selectedBranch
+                          buttonText = selectedBranch.address != null
+                              ? utf8.decode(selectedBranch.address
+                                  .toString()
+                                  .runes
+                                  .toList())
                               : 'Xem tất cả danh sách dịch vụ';
                           widget.onBranchSelected(selectedBranch);
                         });

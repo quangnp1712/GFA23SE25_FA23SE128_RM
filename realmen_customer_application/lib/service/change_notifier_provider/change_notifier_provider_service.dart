@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 
 class ChangeNotifierServices extends ChangeNotifier {
   List<String> _selectedServices = [];
@@ -6,7 +7,7 @@ class ChangeNotifierServices extends ChangeNotifier {
   dynamic _selectedStylist;
 
   List<String> get selectedServices => _selectedServices;
-  String get selectedBranch => _selectedBranch;
+  BranchModel get selectedBranch => _selectedBranch;
   dynamic get selectedStylist => _selectedStylist;
 
   void updateSelectedServices(List<String> services) {
@@ -14,7 +15,7 @@ class ChangeNotifierServices extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedBranch(dynamic branch) {
+  void updateSelectedBranch(BranchModel? branch) {
     _selectedBranch = branch;
     notifyListeners();
   }

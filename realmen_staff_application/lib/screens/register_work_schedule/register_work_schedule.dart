@@ -86,7 +86,7 @@ class _RegisterWorkScheduleScreenState
                             //     DateTime.now().day -
                             //         DateTime.now().weekday +
                             //         1),
-                            maxDate: maxDateSfCalendar,
+                            // maxDate: maxDateSfCalendar,
                             // DateTime(
                             //     DateTime.now().year,
                             //     DateTime.now().month,

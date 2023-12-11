@@ -148,7 +148,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               Container(
                 width: 220,
                 child: Text(
-                  branch != null ? branch : "",
+                  branch != null ? branch.address : "",
                   maxLines: 3,
                   textAlign: TextAlign.left,
                   style: const TextStyle(

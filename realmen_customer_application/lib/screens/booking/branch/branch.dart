@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/branch_booking_choose.dart';
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
@@ -48,8 +49,11 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
           ),
 
           // content
-          endChild: selectedBranch != null
-              ? ChooseServiceBooking(onServiceSelected: updateSelectedService)
+          endChild: selectedBranch != null &&
+                  selectedBranch!.branchServiceList != null
+              ? ChooseServiceBooking(
+                  onServiceSelected: updateSelectedService,
+                  branchServiceList: selectedBranch!.branchServiceList!)
               : Container(
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
@@ -79,12 +83,13 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
 
           // content
           endChild: selectedBranch != null &&
-                  selectedService != null &&
-                  selectedService != []
+                  // selectedService != null &&
+                  !selectedService.isEmpty
               ? ChooseStylistAndDateTimeBooking(
                   onDateSelected: updateSelectedDate,
                   onTimeSelected: updateSelectedTime,
-                  onStylistSelected: updateSelectedStylist)
+                  onStylistSelected: updateSelectedStylist,
+                  accountStaffList: selectedBranch.accountStaffList!)
               : Container(
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
@@ -149,8 +154,8 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
 
   @override
   bool get wantKeepAlive => true;
-  dynamic selectedBranch;
-  dynamic selectedService;
+  BranchModel selectedBranch = BranchModel();
+  List<String> selectedService = [];
   dynamic selectedStylist;
   dynamic selectedDate;
   dynamic selectedTime;
@@ -159,7 +164,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     if (!_isDisposed) {
       setState(() {
         selectedBranch = branch;
-        print(selectedBranch);
+        print("------- $selectedBranch");
       });
     }
   }
@@ -212,6 +217,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     super.initState();
     getDate();
     print(selectedDate);
+    print(selectedService);
   }
 
   getDate() {
@@ -254,7 +260,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   _onBooking() {
     if (selectedBranch == null) {
       _errorMessage("Xin chọn chi nhánh");
-    } else if (selectedService == null) {
+    } else if (selectedService == null && selectedService == []) {
       _errorMessage("Xin chọn dịch vụ");
     } else if (selectedDate == null) {
       _errorMessage("Xin chọn ngày");

@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
@@ -12,11 +13,13 @@ class ChooseStylistAndDateTimeBooking extends StatefulWidget {
   final void Function(dynamic stylist) onStylistSelected;
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
+  final List<AccountInfoModel>? accountStaffList;
   const ChooseStylistAndDateTimeBooking({
     super.key,
     required this.onStylistSelected,
     required this.onDateSelected,
     required this.onTimeSelected,
+    this.accountStaffList,
   });
 
   @override
@@ -53,53 +56,6 @@ class _ChooseStylistAndDateTimeBookingState
               padding: const EdgeInsets.all(0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Yêu Cầu Tư Vấn",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 50),
-                      OnOffSwitch(
-                        initialValue: isSwitched1,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitched1 = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  isSwitched1
-                      ? const Text(
-                          "Anh cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
-                          style: TextStyle(fontSize: 14),
-                        )
-                      : const Text(
-                          "Anh không cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
-                          style: TextStyle(fontSize: 14),
-                        ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

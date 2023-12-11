@@ -96,6 +96,7 @@ class CategoryServices implements ICategoryService {
     int pageSize = 5;
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
+      // v1/services
       Uri uri = Uri.parse(
           "$getServices?current=$current&sorter=$sorter&pageSize=$pageSize");
       final client = http.Client();

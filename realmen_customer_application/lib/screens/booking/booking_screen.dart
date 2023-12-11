@@ -200,6 +200,7 @@ class _BookingScreenState extends State<BookingScreen>
                               height: 500,
                               child: TabBarView(
                                 controller: _tabController,
+                                physics: NeverScrollableScrollPhysics(),
                                 children: [
                                   BranchOptionBooking(),
                                   StylistOptionBooking(),

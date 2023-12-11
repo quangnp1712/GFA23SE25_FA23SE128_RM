@@ -1,4 +1,9 @@
+// ignore_for_file: unnecessary_null_in_if_null_operators
+
 import 'dart:core';
+
+import 'package:realmen_customer_application/models/account/staff_model.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 
 class AccountInfoModel {
   int? accountId;
@@ -11,8 +16,9 @@ class AccountInfoModel {
   String? dob;
   String? gender;
   String? status;
-  String? branchName;
-  String? branchAddress;
+  BranchModel? branch;
+  StaffModel? staff;
+
   String? itimacyLevel;
   String? professional;
   int? average;
@@ -29,8 +35,8 @@ class AccountInfoModel {
     this.dob,
     this.gender,
     this.status,
-    this.branchName,
-    this.branchAddress,
+    this.branch,
+    this.staff,
     this.itimacyLevel,
     this.professional,
     this.average,
@@ -39,22 +45,26 @@ class AccountInfoModel {
 
   factory AccountInfoModel.fromJson(Map<String, dynamic> json) {
     return AccountInfoModel(
-      accountId: json['value']['accountId'],
-      branchId: json['value']['branchId'],
-      thumbnailUrl: json['value']['thumbnailUrl'],
-      firstName: json['value']['firstName'],
-      lastName: json['value']['lastName'],
-      phone: json['value']['phone'],
-      address: json['value']['address'],
-      dob: json['value']['dob'],
-      gender: json['value']['gender'],
-      status: json['value']['status'],
-      branchName: json['value']['branchName'],
-      branchAddress: json['value']['branchAddress'],
-      itimacyLevel: json['value']['itimacyLevel'],
-      professional: json['value']['professional'],
-      average: json['value']['average'],
-      role: json['value']['role'],
+      accountId: json['accountId'],
+      branchId: json['branchId'],
+      thumbnailUrl: json['thumbnailUrl'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      phone: json['phone'],
+      address: json['address'],
+      dob: json['dob'],
+      gender: json['gender'],
+      status: json['status'],
+      branch: json['branch'] != null && json['branch'] != []
+          ? BranchModel.fromJson(json['branch'])
+          : null,
+      staff: json['staff'] != null && json['staff'] != []
+          ? StaffModel.fromJson(json['staff'])
+          : null,
+      itimacyLevel: json['itimacyLevel'],
+      professional: json['professional'],
+      average: json['average'],
+      role: json['role'],
     );
   }
 }

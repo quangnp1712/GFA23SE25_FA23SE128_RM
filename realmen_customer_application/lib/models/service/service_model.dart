@@ -16,9 +16,8 @@ class ServiceModel {
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
     return ServiceModel(
       content: (json['content'] as List<dynamic>?)
-              ?.map((item) => ServiceContent.fromJson(item))
-              .toList() ??
-          [],
+          ?.map((item) => ServiceContent.fromJson(item as Map<String, dynamic>))
+          .toList(),
       totalElements: json['totalElements'],
       totalPages: json['totalPages'],
       pageSize: json['pageSize'],
@@ -29,12 +28,14 @@ class ServiceModel {
 
 class ServiceContent {
   String? description;
+  int? serviceId;
   String? name;
   List<ServiceDisplay>? serviceDisplayList;
   List<BranchService>? branchServiceList;
 
   ServiceContent({
     this.description,
+    this.serviceId,
     this.name,
     this.serviceDisplayList,
     this.branchServiceList,
@@ -44,14 +45,17 @@ class ServiceContent {
     return ServiceContent(
       description: json['description'],
       name: json['name'],
-      serviceDisplayList: (json['serviceDisplayList'] as List<dynamic>?)
+      serviceId: json['serviceId'],
+      serviceDisplayList: json['serviceDisplayList'] != null
+          ? (json['serviceDisplayList'] as List<dynamic>?)
               ?.map((display) => ServiceDisplay.fromJson(display))
-              .toList() ??
-          [],
-      branchServiceList: (json['branchServiceList'] as List<dynamic>?)
+              .toList()
+          : null,
+      branchServiceList: json['branchServiceList'] != null
+          ? (json['branchServiceList'] as List<dynamic>?)
               ?.map((branch) => BranchService.fromJson(branch))
-              .toList() ??
-          [],
+              .toList()
+          : null,
     );
   }
 }
@@ -96,8 +100,8 @@ class BranchService {
       branchId: json['branchId'] as int,
       serviceName: json['serviceName'] as String,
       branchName: json['branchName'] as String,
-      thumbnailUrl: json['thumbnailUrl'] as String,
-      price: json['price'] as int,
+      thumbnailUrl: json['thumbnailUrl'],
+      price: json['price'] != null ? json['price'] as int : null,
     );
   }
 }

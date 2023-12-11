@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/choose_service_screen.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
@@ -9,9 +12,11 @@ import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseServiceBooking extends StatefulWidget {
   final void Function(dynamic service) onServiceSelected;
-  ChooseServiceBooking({
+  final List<BranchServiceModel> branchServiceList;
+  const ChooseServiceBooking({
     super.key,
     required this.onServiceSelected,
+    required this.branchServiceList,
   });
 
   @override
@@ -55,7 +60,8 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChooseServiceBookingScreen(
-                          selectedServices: _servicesList),
+                          selectedServices: _servicesList,
+                          branchServiceList: widget.branchServiceList),
                     ),
                   );
 
@@ -161,7 +167,7 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
-            service,
+            utf8.decode(service.toString().runes.toList()),
             style: TextStyle(fontSize: 12, color: Colors.black),
           ),
         );

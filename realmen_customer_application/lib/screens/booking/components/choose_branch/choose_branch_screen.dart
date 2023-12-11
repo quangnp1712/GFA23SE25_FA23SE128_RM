@@ -507,25 +507,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                               ),
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  if (!_isDisposed) {
-                                                    setState(() {
-                                                      selectedBranch =
-                                                          utf8.decode(
-                                                              branchesForCity![
-                                                                      index]
-                                                                  .address
-                                                                  .toString()
-                                                                  .runes
-                                                                  .toList());
-                                                    });
-                                                  }
-                                                  ;
-                                                  selectedProvider
-                                                      .updateSelectedBranch(
-                                                          selectedBranch);
-                                                  Navigator.pop(
-                                                      context, selectedBranch);
-                                                  // Xử lý sự kiện khi nhấn nút đặt lịch
+                                                  getBranchById(
+                                                      branchesForCity![index]
+                                                          .branchId!,
+                                                      selectedProvider);
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   padding:
@@ -767,8 +752,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   BranchModel branchModel = BranchModel();
   BranchesModel branchesModel = BranchesModel();
 
-  BranchModel selectedAddress = BranchModel();
-  String selectedBranch = "";
+  BranchModel selectedBranch = BranchModel();
 
   LocationService locationService = LocationService();
   Position? position;
@@ -799,6 +783,31 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         height: 140,
         fit: BoxFit.cover,
       );
+    }
+  }
+
+// Button "Chọn" call API get branch by ID
+  Future<void> getBranchById(
+      int? branchId, ChangeNotifierServices selectedProvider) async {
+    if (!_isDisposed && mounted) {
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getBranchId(branchId!);
+        if (result['statusCode'] == 200) {
+          selectedBranch = result['data'] as BranchModel;
+
+          setState(() {
+            selectedBranch;
+            selectedProvider.updateSelectedBranch(selectedBranch);
+            Navigator.pop(context, selectedBranch);
+          });
+        } else {
+          print("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
     }
   }
 }

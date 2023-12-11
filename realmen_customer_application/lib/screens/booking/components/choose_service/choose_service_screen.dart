@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
@@ -13,14 +16,16 @@ class ChooseServiceBookingScreen extends StatefulWidget {
   static const String ChooseServiceBookingScreenRoute =
       "/choose-service-booking-screen";
   final selectedServices;
+  final List<BranchServiceModel> branchServiceList;
 
-  ChooseServiceBookingScreen({required this.selectedServices});
+  ChooseServiceBookingScreen(
+      {required this.selectedServices, required this.branchServiceList});
 }
 
 class _ChooseServiceBookingScreenState
     extends State<ChooseServiceBookingScreen> {
   List<String> selectedServices = [];
-
+  List<SubServiceTile> serviceLists = [];
   @override
   void initState() {
     super.initState();
@@ -29,6 +34,16 @@ class _ChooseServiceBookingScreenState
     // selectedServices = selectedServicesProvider.selectedServices;
     if (widget.selectedServices != null) {
       selectedServices = widget.selectedServices;
+    }
+    for (var element in widget.branchServiceList) {
+      SubServiceTile subServiceTile = SubServiceTile(
+        selectedServices: selectedServices,
+        onSelect: (bool isSelected) {
+          updateSelectedServiceCount(isSelected, element.serviceName!);
+        },
+        branchService: element,
+      );
+      serviceLists.add(subServiceTile);
     }
   }
 
@@ -131,57 +146,46 @@ class _ChooseServiceBookingScreenState
                           ServiceCategoryTile(
                             title: 'RealMen Combo',
                             serviceLists: [
-                              [
-                                SubServiceTile(
-                                  serviceList: selectedServices,
-                                  title: 'Combo Cắt 9 bước',
-                                  price: formatter.format(100000),
-                                  image: 'assets/images/3.png',
-                                  onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(
-                                        isSelected, 'Combo Cắt 9 bước');
-                                  },
-                                ),
-                                SubServiceTile(
-                                  serviceList: selectedServices,
-                                  title: 'Combo Massage Cao Cấp',
-                                  price: formatter.format(200000),
-                                  image: 'assets/images/massage.jpg',
-                                  onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(
-                                        isSelected, 'Combo Massage Cao Cấp');
-                                  },
-                                ),
-                              ],
+                              SubServiceTile(
+                                selectedServices: selectedServices,
+                                title: 'Combo Cắt 9 bước',
+                                price: formatter.format(100000),
+                                image: 'assets/images/3.png',
+                                onSelect: (bool isSelected) {
+                                  updateSelectedServiceCount(
+                                      isSelected, 'Combo Cắt 9 bước');
+                                },
+                              ),
+                              SubServiceTile(
+                                selectedServices: selectedServices,
+                                title: 'Combo Massage Cao Cấp',
+                                price: formatter.format(200000),
+                                image: 'assets/images/massage.jpg',
+                                onSelect: (bool isSelected) {
+                                  updateSelectedServiceCount(
+                                      isSelected, 'Combo Massage Cao Cấp');
+                                },
+                              ),
                             ],
                             isGridView: false,
                           ),
                           ServiceCategoryTile(
                             title: 'Cắt tóc',
-                            serviceLists: [
-                              [
-                                SubServiceTile(
-                                  serviceList: selectedServices,
-                                  title: 'Cắt tóc tạo kiểu',
-                                  price: formatter.format(70000),
-                                  image: 'assets/images/image1.png',
-                                  onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(
-                                        isSelected, 'Cắt tóc tạo kiểu');
-                                  },
-                                ),
-                                SubServiceTile(
-                                  serviceList: selectedServices,
-                                  title: 'Cắt tóc trẻ em',
-                                  price: formatter.format(50000),
-                                  image: 'assets/images/5.jpg',
-                                  onSelect: (bool isSelected) {
-                                    updateSelectedServiceCount(
-                                        isSelected, 'Cắt tóc trẻ em');
-                                  },
-                                ),
-                              ],
-                            ],
+                            serviceLists: serviceLists
+                            // [
+                            //   SubServiceTile(
+                            //     serviceList: selectedServices,
+                            //     title: 'Cắt tóc tạo kiểu',
+                            //     price: formatter.format(70000),
+                            //     image: 'assets/images/image1.png',
+                            //     onSelect: (bool isSelected) {
+                            //       updateSelectedServiceCount(
+                            //           isSelected, 'Cắt tóc tạo kiểu');
+                            //     },
+                            //   ),
+
+                            // ],
+                            ,
                             isGridView: true,
                           ),
                         ],
@@ -236,7 +240,7 @@ class _ChooseServiceBookingScreenState
 
 class ServiceCategoryTile extends StatelessWidget {
   final String title;
-  final List<List<SubServiceTile>> serviceLists;
+  final List<SubServiceTile> serviceLists;
   final bool isGridView;
 
   ServiceCategoryTile({
@@ -272,44 +276,45 @@ class ServiceCategoryTile extends StatelessWidget {
             ),
           ),
         ),
-        for (var services in serviceLists)
-          isGridView
-              ? GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Thay đổi giá trị này nếu cần
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
-                    childAspectRatio: 2 / 3.3,
-                  ),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: services.length,
-                  itemBuilder: (context, index) {
-                    return services[index];
-                  },
-                )
-              : Column(
-                  children: services,
+        isGridView
+            ? GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Thay đổi giá trị này nếu cần
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  childAspectRatio: 2 / 3.4,
                 ),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: serviceLists.length,
+                itemBuilder: (context, index) {
+                  return serviceLists[index];
+                },
+              )
+            : Column(
+                children: serviceLists,
+              ),
       ],
     );
   }
 }
 
 class SubServiceTile extends StatefulWidget {
-  final String title;
-  final String price;
-  final String image;
+  final String? title;
+  final String? price;
+  final String? image;
   final Function(bool) onSelect; // Hàm callback
-  final List<String> serviceList;
+  final List<String> selectedServices;
+  final BranchServiceModel? branchService;
 
   SubServiceTile({
     Key? key,
-    required this.title,
-    required this.price,
-    required this.image,
+    this.title,
+    this.price,
+    this.image,
     required this.onSelect,
-    required this.serviceList,
+    required this.selectedServices,
+    this.branchService,
   }) : super(key: key);
 
   @override
@@ -328,7 +333,12 @@ class _SubServiceTileState extends State<SubServiceTile> {
     //     Provider.of<ChangeNotifierServices>(context, listen: false);
     // isSelected =
     //     selectedServicesProvider.selectedServices.contains(widget.title);
-    isSelected = widget.serviceList.contains(widget.title);
+    if (widget.title != null) {
+      isSelected = widget.selectedServices.contains(widget.title);
+    } else {
+      isSelected =
+          widget.selectedServices.contains(widget.branchService!.serviceName);
+    }
   }
 
   bool _isDisposed = false;
@@ -357,7 +367,10 @@ class _SubServiceTileState extends State<SubServiceTile> {
               topLeft: Radius.circular(8),
             ),
             child: Image.asset(
-              widget.image,
+              // widget.image != null
+              //     ? widget.image!
+              //     : widget.branchService!.thumbnailUrl!,
+              'assets/images/massage.jpg',
               width: double.infinity,
               height: 150,
               fit: BoxFit.cover,
@@ -369,12 +382,19 @@ class _SubServiceTileState extends State<SubServiceTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.title,
+                  widget.title != null
+                      ? widget.title!
+                      : utf8.decode(widget.branchService!.serviceName
+                          .toString()
+                          .runes
+                          .toList()),
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 SizedBox(height: 5),
                 Text(
-                  ' ${widget.price} VNĐ',
+                  widget.price != null
+                      ? ' ${widget.price} VNĐ'
+                      : ' ${widget.branchService!.price} VNĐ',
                   style: TextStyle(color: Colors.white),
                 ),
               ],

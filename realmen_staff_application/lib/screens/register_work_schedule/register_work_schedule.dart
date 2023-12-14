@@ -314,8 +314,8 @@ class _RegisterWorkScheduleScreenState
     ScheduleService scheduleService = ScheduleService();
 
     try {
-      int accountId = await SharedPreferencesService.getAccountId();
-      var result = await scheduleService.getSchedule(accountId);
+      int staffId = await SharedPreferencesService.getStaffId();
+      var result = await scheduleService.getSchedule(staffId);
       if (result['statusCode'] == 200) {
         schedulesModel = result['data'] as SchedulesModel;
         for (var schedule in schedulesModel!.scheduleModel!) {

@@ -86,11 +86,11 @@ class ScheduleService extends IScheduleService {
   }
 
   @override
-  Future getSchedule(int accountId) async {
+  Future getSchedule(int staffId) async {
     try {
       SchedulesModel schedulesModel = SchedulesModel();
       ScheduleModel scheduleModel = ScheduleModel();
-      Uri uri = Uri.parse("$scheduleListUrl/$accountId");
+      Uri uri = Uri.parse("$scheduleListUrl/$staffId");
       final client = http.Client();
       final String jwtToken = await SharedPreferencesService.getJwt();
 

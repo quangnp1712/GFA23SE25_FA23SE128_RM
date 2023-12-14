@@ -85,7 +85,7 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                         ),
                         Container(
                           // width: 80.w,
-                          height: 69.w,
+                          height: 75.h,
                           key: _globalKey,
                           child: SfCalendar(
                             controller: calendarController,
@@ -138,8 +138,8 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
     ScheduleService scheduleService = ScheduleService();
 
     try {
-      int accountId = await SharedPreferencesService.getAccountId();
-      var result = await scheduleService.getSchedule(accountId);
+      int staffId = await SharedPreferencesService.getStaffId();
+      var result = await scheduleService.getSchedule(staffId);
       if (result['statusCode'] == 200) {
         schedulesModel = result['data'] as SchedulesModel;
         for (var schedule in schedulesModel!.scheduleModel!) {

@@ -79,7 +79,9 @@ class SharedPreferencesService {
       loginOtpResponseModel.phone!,
       loginOtpResponseModel.jwtToken!,
       loginOtpResponseModel.role!,
-      loginOtpResponseModel.accountId!.toString()
+      loginOtpResponseModel.accountId!.toString(),
+      loginOtpResponseModel.staffId!.toString(),
+      loginOtpResponseModel.branchId?.toString() ?? "",
     ]);
   }
 
@@ -93,7 +95,9 @@ class SharedPreferencesService {
         "phone": result[0],
         "jwtToken": result[1],
         "role": result[2],
-        "accountId": result[3]
+        "accountId": result[3],
+        "staffId": result[4],
+        "branchId": result[5],
       };
       return resultMap;
     } else {
@@ -105,9 +109,21 @@ class SharedPreferencesService {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     List<String>? result = sharedPreferences.getStringList("accountInfo");
-    if (result != null && result.length >= 4) {
+    if (result != null && result.length >= 6) {
       int accountId = int.parse(result[3]);
       return accountId;
+    } else {
+      throw Exception("Failed to get account ID from SharedPreferences");
+    }
+  }
+
+  static Future<int> getStaffId() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    List<String>? result = sharedPreferences.getStringList("accountInfo");
+    if (result != null && result.length >= 6) {
+      int staffId = int.parse(result[4]);
+      return staffId;
     } else {
       throw Exception("Failed to get account ID from SharedPreferences");
     }

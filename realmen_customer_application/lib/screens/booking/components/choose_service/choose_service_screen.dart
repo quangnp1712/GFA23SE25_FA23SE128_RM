@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
+import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
+import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
@@ -25,7 +27,7 @@ class ChooseServiceBookingScreen extends StatefulWidget {
 class _ChooseServiceBookingScreenState
     extends State<ChooseServiceBookingScreen> {
   List<String> selectedServices = [];
-  List<SubServiceTile> serviceLists = [];
+
   @override
   void initState() {
     super.initState();
@@ -35,16 +37,8 @@ class _ChooseServiceBookingScreenState
     if (widget.selectedServices != null) {
       selectedServices = widget.selectedServices;
     }
-    for (var element in widget.branchServiceList) {
-      SubServiceTile subServiceTile = SubServiceTile(
-        selectedServices: selectedServices,
-        onSelect: (bool isSelected) {
-          updateSelectedServiceCount(isSelected, element.serviceName!);
-        },
-        branchService: element,
-      );
-      serviceLists.add(subServiceTile);
-    }
+
+    getServices();
   }
 
   bool _isDisposed = false;
@@ -55,7 +49,7 @@ class _ChooseServiceBookingScreenState
   }
 
   void updateSelectedServiceCount(bool isSelected, String serviceName) {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
       setState(() {
         if (isSelected) {
           selectedServices.add(serviceName);
@@ -64,6 +58,59 @@ class _ChooseServiceBookingScreenState
         }
       });
       print(selectedServices);
+    }
+  }
+
+  List<ServiceCategoryTile> serviceCategoryTileList = [];
+
+  Future getServices() async {
+    if (!_isDisposed && mounted) {
+      serviceCategoryTileList = [];
+      CategoryServices categoryServices = CategoryServices();
+      try {
+        final result = await categoryServices.getCategoryServiceList();
+        if (result['statusCode'] == 200) {
+          final List<CategoryModel> categoryList = result['data'].values;
+
+          for (var caterogy in categoryList) {
+            List<SubServiceModel> serviceList = [];
+            if (caterogy.serviceList != null) {
+// lấy branchservice so sánh vs service trong category
+              List<SubServiceTile> serviceLists = [];
+              for (var branchService in widget.branchServiceList) {
+                bool check = caterogy.serviceList!.any(
+                    (service) => service.serviceId! == branchService.serviceId);
+                if (caterogy.serviceList!.any((service) =>
+                        service.serviceId! == branchService.serviceId) ==
+                    true) {
+                  SubServiceTile subServiceTile = SubServiceTile(
+                    selectedServices: selectedServices,
+                    onSelect: (bool isSelected) {
+                      updateSelectedServiceCount(
+                          isSelected, branchService.serviceName!);
+                    },
+                    branchService: branchService,
+                  );
+                  serviceLists.add(subServiceTile);
+                }
+              }
+              if (serviceLists.length > 0) {
+                serviceCategoryTileList.add(ServiceCategoryTile(
+                    title: caterogy.title!,
+                    serviceLists: serviceLists,
+                    isGridView: true));
+              }
+            }
+          }
+          setState(() {
+            serviceCategoryTileList;
+          });
+        } else {
+          print("${result['statusCode']}  ${result['error']}");
+        }
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 
@@ -169,25 +216,24 @@ class _ChooseServiceBookingScreenState
                             ],
                             isGridView: false,
                           ),
-                          ServiceCategoryTile(
-                            title: 'Cắt tóc',
-                            serviceLists: serviceLists
-                            // [
-                            //   SubServiceTile(
-                            //     serviceList: selectedServices,
-                            //     title: 'Cắt tóc tạo kiểu',
-                            //     price: formatter.format(70000),
-                            //     image: 'assets/images/image1.png',
-                            //     onSelect: (bool isSelected) {
-                            //       updateSelectedServiceCount(
-                            //           isSelected, 'Cắt tóc tạo kiểu');
-                            //     },
-                            //   ),
-
-                            // ],
-                            ,
-                            isGridView: true,
-                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: serviceCategoryTileList.length,
+                              itemBuilder: (context, index) {
+                                return ServiceCategoryTile(
+                                  title: utf8
+                                      .decode(serviceCategoryTileList[index]
+                                          .title
+                                          .toString()
+                                          .runes
+                                          .toList())
+                                      .toUpperCase(),
+                                  serviceLists: serviceCategoryTileList[index]
+                                      .serviceLists,
+                                  isGridView: true,
+                                );
+                              }),
                         ],
                       ),
                     ),

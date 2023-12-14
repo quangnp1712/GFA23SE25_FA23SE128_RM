@@ -3,12 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 
 import '../stylist_date_time_booking_choose.dart';
 
 class ChooseStylist extends StatefulWidget {
   final void Function(dynamic stylist) onStylistSelected;
-  ChooseStylist({super.key, required this.onStylistSelected});
+  final List<AccountInfoModel>? accountStaffList;
+  ChooseStylist({
+    super.key,
+    required this.onStylistSelected,
+    this.accountStaffList,
+  });
 
   @override
   State<ChooseStylist> createState() => _ChooseStylistState();
@@ -28,8 +34,11 @@ class _ChooseStylistState extends State<ChooseStylist> {
           ),
           const SizedBox(width: 10),
           Text(
-            _selectedStylist.id != null
-                ? _selectedStylist.name!
+            _selectedStylist.accountId != null
+                ? utf8.decode(
+                    ("${_selectedStylist.firstName!.substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1)} ${_selectedStylist.lastName!}")
+                        .runes
+                        .toList())
                 : "Chọn Stylist",
             style: const TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
@@ -50,9 +59,9 @@ class _ChooseStylistState extends State<ChooseStylist> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        if (_selectedStylist.id != null) {
+                        if (_selectedStylist.accountId != null) {
                           isDefaultSelected = true;
-                          _selectedStylist = StylistModel();
+                          _selectedStylist = AccountInfoModel();
                           widget.onStylistSelected("Random");
                         } else {
                           isDefaultSelected = true;
@@ -156,16 +165,16 @@ class _ChooseStylistState extends State<ChooseStylist> {
                       ),
                     ),
                   ),
-                  stylists != null
+                  widget.accountStaffList != null
                       ? SizedBox(
                           width: 245,
                           height: 142,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               padding: const EdgeInsets.only(left: 0),
-                              itemCount: stylists.length,
+                              itemCount: widget.accountStaffList!.length,
                               itemBuilder: (context, index) {
-                                final stylist = stylists[index];
+                                final stylist = widget.accountStaffList![index];
                                 final isSelected = stylist == _selectedStylist;
 
                                 return GestureDetector(
@@ -222,7 +231,11 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                                     radius: 20,
                                                     child: ClipOval(
                                                       child: Image.asset(
-                                                        stylist.avatar!,
+                                                        stylist.thumbnailUrl !=
+                                                                null
+                                                            ? stylist
+                                                                .thumbnailUrl!
+                                                            : "assets/images/s4.jpg",
                                                         scale: 1,
                                                         fit: BoxFit.cover,
                                                         width: 70,
@@ -264,7 +277,10 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                             constraints: const BoxConstraints(
                                                 maxWidth: 76),
                                             child: Text(
-                                              stylist.name!,
+                                              utf8.decode(
+                                                  ("${stylist.firstName!.substring(stylist.firstName!.lastIndexOf(" ") + 1)} ${stylist.lastName!}")
+                                                      .runes
+                                                      .toList()),
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
@@ -285,7 +301,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                       : Container(),
                 ],
               ),
-              _selectedStylist != null && _selectedStylist.id != null
+              _selectedStylist != null && _selectedStylist.accountId != null
                   ? Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -319,7 +335,11 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                           ),
                                         ),
                                         TextSpan(
-                                          text: _selectedStylist!.name,
+                                          text: utf8.decode(
+                                              ("${_selectedStylist.firstName!} ${_selectedStylist.lastName!}")
+                                                  .toString()
+                                                  .runes
+                                                  .toList()),
                                           //  "Cắt",
                                           // utf8.decode(_selectedStylist!.name
                                           //     .toString()
@@ -351,7 +371,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: "Chuyên môn: ",
+                                    text: "Đánh giá: ",
                                     style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 17,
@@ -360,17 +380,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: _selectedStylist!.specialties!
-                                        .join(', ')
-                                        .toString(),
-                                    //  _selectedStylist!.specialties != null
-                                    //     ? utf8.decode(_selectedStylist!
-                                    //         .specialties!
-                                    //         .join(', ')
-                                    //         .toString()
-                                    //         .runes
-                                    //         .toList())
-                                    //     : "",
+                                    text: "",
                                     style: GoogleFonts.quicksand(
                                       textStyle: const TextStyle(
                                           fontSize: 18,
@@ -381,32 +391,34 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                 ],
                               ),
                             ),
-                            _selectedStylist.images != null
-                                ? SizedBox(
-                                    height: 120,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            _selectedStylist.images!.length,
-                                        itemBuilder: (context, index) {
-                                          return Row(
-                                            children: [
-                                              Container(
-                                                width: 105,
-                                                height: 75,
-                                                margin: const EdgeInsets.only(
-                                                    left: 0, right: 5),
-                                                child: Image.asset(
-                                                  _selectedStylist
-                                                      .images![index],
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }),
-                                  )
-                                : Container(),
+
+                            // Hình ảnh sản phẩm cắt
+                            // _selectedStylist.images != null
+                            //     ? SizedBox(
+                            //         height: 120,
+                            //         child: ListView.builder(
+                            //             scrollDirection: Axis.horizontal,
+                            //             itemCount:
+                            //                 _selectedStylist.images!.length,
+                            //             itemBuilder: (context, index) {
+                            //               return Row(
+                            //                 children: [
+                            //                   Container(
+                            //                     width: 105,
+                            //                     height: 75,
+                            //                     margin: const EdgeInsets.only(
+                            //                         left: 0, right: 5),
+                            //                     child: Image.asset(
+                            //                       _selectedStylist
+                            //                           .images![index],
+                            //                       fit: BoxFit.cover,
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               );
+                            //             }),
+                            //       )
+                            //     : Container(),
                           ],
                         ),
                       ),
@@ -419,17 +431,20 @@ class _ChooseStylistState extends State<ChooseStylist> {
     );
   }
 
-  StylistModel _selectedStylist = StylistModel();
+  AccountInfoModel _selectedStylist = AccountInfoModel();
   bool isDefaultSelected = true;
-  void _onStylistSelected(StylistModel stylist) {
+  void _onStylistSelected(AccountInfoModel stylist) {
     setState(() {
-      if (stylist.id == _selectedStylist.id) {
-        _selectedStylist = StylistModel();
+      if (stylist.accountId == _selectedStylist.accountId) {
+        _selectedStylist = AccountInfoModel();
         isDefaultSelected = true;
         widget.onStylistSelected("random");
       } else {
         _selectedStylist = stylist;
-        widget.onStylistSelected(_selectedStylist.name);
+        String name = _selectedStylist.firstName!
+                .substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1) +
+            _selectedStylist.lastName!;
+        widget.onStylistSelected(utf8.decode(name.toString().runes.toList()));
         isDefaultSelected = false;
       }
     });
@@ -438,75 +453,5 @@ class _ChooseStylistState extends State<ChooseStylist> {
   @override
   void initState() {
     super.initState();
-    stylists;
   }
-
-  final List<StylistModel> stylists = [
-    StylistModel(
-      id: 1,
-      name: 'Phương Quang',
-      avatar: 'assets/images/s1.jpg',
-      specialties: ['Cắt', 'Uốn', 'Nhuộm'],
-      images: [
-        'assets/images/3.png',
-        'assets/images/5.jpg',
-        'assets/images/image1.png',
-        'assets/images/image2.png',
-      ],
-    ),
-    StylistModel(
-      id: 2,
-      name: 'Anh Tuấn',
-      avatar: 'assets/images/s2.jpg',
-      specialties: ['Cắt', 'Uốn'],
-      images: [
-        'assets/images/3.png',
-        'assets/images/image2.png',
-        'assets/images/image1.png',
-        'assets/images/5.jpg',
-        'assets/images/image2.png',
-      ],
-    ),
-    StylistModel(
-      id: 3,
-      name: 'Quang Minh',
-      avatar: 'assets/images/s3.jpg',
-      specialties: ['Cắt', 'Nhuộm'],
-      images: [
-        'assets/images/5.jpg',
-        'assets/images/image1.png',
-        'assets/images/3.png',
-        'assets/images/image2.png',
-        'assets/images/5.jpg',
-      ],
-    ),
-    StylistModel(
-      id: 4,
-      name: 'Anh Quân',
-      avatar: 'assets/images/s4.jpg',
-      specialties: ['Cắt', 'Uốn', 'Nhuộm'],
-      images: [
-        'assets/images/image1.png',
-        'assets/images/image2.png',
-        'assets/images/5.jpg',
-        'assets/images/3.png',
-        'assets/images/image2.png',
-      ],
-    ),
-  ];
-}
-
-class StylistModel {
-  int? id;
-  String? name;
-  String? avatar;
-  List<String>? specialties;
-  List<String>? images;
-  StylistModel({
-    this.id,
-    this.name,
-    this.avatar,
-    this.specialties,
-    this.images,
-  });
 }

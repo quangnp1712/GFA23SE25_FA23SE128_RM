@@ -39,7 +39,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
         });
       } else {
         // Xử lý lỗi nếu cần
-        print(result['error']);
+        print(result['status'] + result['error']);
       }
     } catch (e) {
       print(e.toString());

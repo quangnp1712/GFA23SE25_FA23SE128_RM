@@ -44,7 +44,7 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
           Container(
             child: ElevatedButton(
               onPressed: () async {
-                if (!_isDisposed) {
+                if (!_isDisposed && mounted) {
                   // List<String>? selectedServices = await Navigator.push(
                   //   context,
                   //   MaterialPageRoute(

@@ -45,7 +45,9 @@ class _ChooseStylistAndDateTimeBookingState
           const SizedBox(
             height: 10,
           ),
-          ChooseStylist(onStylistSelected: widget.onStylistSelected),
+          ChooseStylist(
+              onStylistSelected: widget.onStylistSelected,
+              accountStaffList: widget.accountStaffList),
           const SizedBox(height: 10),
           ChooseDateAndTimeSlot(
               onDateSelected: widget.onDateSelected,

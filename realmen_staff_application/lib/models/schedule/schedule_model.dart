@@ -1,11 +1,11 @@
 class SchedulesModel {
-  List<ScheduleModel>? scheduleModel;
+  List<ScheduleModel>? scheduleModelList;
 
-  SchedulesModel({this.scheduleModel});
+  SchedulesModel({this.scheduleModelList});
 
   factory SchedulesModel.fromJson(Map<String, dynamic> json) {
     return SchedulesModel(
-      scheduleModel: json['values'] != null
+      scheduleModelList: json['values'] != null
           ? (json['values'] as List)
               ?.map((e) => ScheduleModel.fromJson(e))
               ?.toList()
@@ -14,7 +14,7 @@ class SchedulesModel {
   }
 
   List<Map<String, dynamic>> toJson() {
-    return scheduleModel!.map((schedule) => schedule.toJson()).toList();
+    return scheduleModelList!.map((schedule) => schedule.toJson()).toList();
   }
 }
 

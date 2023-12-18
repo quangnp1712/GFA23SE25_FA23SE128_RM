@@ -9,10 +9,13 @@ import '../stylist_date_time_booking_choose.dart';
 
 class ChooseStylist extends StatefulWidget {
   final void Function(dynamic stylist) onStylistSelected;
+  final void Function(AccountInfoModel? stylistSelected) updateSelectedStylist;
   final List<AccountInfoModel>? accountStaffList;
+
   ChooseStylist({
     super.key,
     required this.onStylistSelected,
+    required this.updateSelectedStylist,
     this.accountStaffList,
   });
 
@@ -62,7 +65,9 @@ class _ChooseStylistState extends State<ChooseStylist> {
                         if (_selectedStylist.accountId != null) {
                           isDefaultSelected = true;
                           _selectedStylist = AccountInfoModel();
-                          widget.onStylistSelected("Random");
+
+                          widget.onStylistSelected("random");
+                          widget.updateSelectedStylist(null);
                         } else {
                           isDefaultSelected = true;
                         }
@@ -439,12 +444,14 @@ class _ChooseStylistState extends State<ChooseStylist> {
         _selectedStylist = AccountInfoModel();
         isDefaultSelected = true;
         widget.onStylistSelected("random");
+        widget.updateSelectedStylist(null);
       } else {
         _selectedStylist = stylist;
         String name = _selectedStylist.firstName!
                 .substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1) +
             _selectedStylist.lastName!;
         widget.onStylistSelected(utf8.decode(name.toString().runes.toList()));
+        widget.updateSelectedStylist(_selectedStylist);
         isDefaultSelected = false;
       }
     });

@@ -173,7 +173,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     if (!_isDisposed) {
       setState(() {
         selectedStylist = stylist;
-        print(selectedStylist);
+        print("selectedStylist: $selectedStylist");
       });
     }
   }
@@ -189,8 +189,8 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
 
   void updateSelectedDate(dynamic date) {
     if (!_isDisposed) {
+      selectedDate = date;
       setState(() {
-        selectedDate = date;
         print(selectedDate);
       });
     }
@@ -215,7 +215,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   @override
   void initState() {
     super.initState();
-    getDate();
+    // getDate();
     print(selectedDate);
     print(selectedService);
   }

@@ -142,7 +142,7 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
       var result = await scheduleService.getSchedule(staffId);
       if (result['statusCode'] == 200) {
         schedulesModel = result['data'] as SchedulesModel;
-        for (var schedule in schedulesModel!.scheduleModel!) {
+        for (var schedule in schedulesModel!.scheduleModelList!) {
           Appointment? newAppointment;
           DateTime dateSchedule =
               DateTime.parse(schedule.workingDate.toString());

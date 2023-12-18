@@ -259,7 +259,7 @@ class _RegisterWorkScheduleScreenState
 
   _registerSchedule() async {
     SchedulesModel schedulesModel = SchedulesModel();
-    schedulesModel.scheduleModel = <ScheduleModel>[];
+    schedulesModel.scheduleModelList = <ScheduleModel>[];
     ScheduleService scheduleService = ScheduleService();
 
     if (_dataSource != null) {
@@ -272,7 +272,7 @@ class _RegisterWorkScheduleScreenState
         }
         var workingDate = DateFormat('yyyy-MM-dd').format(data.startTime);
         if (shiftId != null && workingDate != null) {
-          schedulesModel.scheduleModel!
+          schedulesModel.scheduleModelList!
               .add(ScheduleModel(shiftId: shiftId, workingDate: workingDate));
         }
       }
@@ -318,7 +318,7 @@ class _RegisterWorkScheduleScreenState
       var result = await scheduleService.getSchedule(staffId);
       if (result['statusCode'] == 200) {
         schedulesModel = result['data'] as SchedulesModel;
-        for (var schedule in schedulesModel!.scheduleModel!) {
+        for (var schedule in schedulesModel!.scheduleModelList!) {
           Appointment? newAppointment;
           DateTime dateSchedule =
               DateTime.parse(schedule.workingDate.toString());

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -47,11 +49,13 @@ class _ChooseStylistAndDateTimeBookingState
           ),
           ChooseStylist(
               onStylistSelected: widget.onStylistSelected,
-              accountStaffList: widget.accountStaffList),
-          const SizedBox(height: 10),
+              accountStaffList: widget.accountStaffList,
+              updateSelectedStylist: updateSelectedStylist),
           ChooseDateAndTimeSlot(
               onDateSelected: widget.onDateSelected,
-              onTimeSelected: widget.onTimeSelected),
+              onTimeSelected: widget.onTimeSelected,
+              stylistSelected: stylistSelected,
+              isChangeStylist: isChangeStylist),
           const SizedBox(height: 20),
           Container(
             child: Padding(
@@ -121,4 +125,27 @@ class _ChooseStylistAndDateTimeBookingState
   bool isActived = false;
   bool isSwitched1 = true;
   bool isSwitched2 = true;
+
+// Lấy staff cho time slot
+  AccountInfoModel? stylistSelected = AccountInfoModel();
+  @override
+  void initState() {
+    super.initState();
+    stylistSelected;
+  }
+
+  @override
+  void didUpdateWidget(ChooseStylistAndDateTimeBooking oldWidget) {
+    isChangeStylist = false;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  bool isChangeStylist = false;
+  void updateSelectedStylist(AccountInfoModel? stylistSelected) {
+    setState(() {
+      this.stylistSelected = stylistSelected;
+      isChangeStylist = true;
+      print(isChangeStylist);
+    });
+  }
 }

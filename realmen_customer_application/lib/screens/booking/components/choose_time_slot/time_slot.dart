@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -32,7 +33,9 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
           ),
           ChooseDateAndTimeSlot(
               onDateSelected: widget.onDateSelected,
-              onTimeSelected: widget.onTimeSelected),
+              onTimeSelected: widget.onTimeSelected,
+              stylistSelected: stylistSelected!,
+              isChangeStylist: isChangeStylist),
           const SizedBox(
             height: 20,
           ),
@@ -151,4 +154,7 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
   bool isActived = false;
   bool isSwitched1 = true;
   bool isSwitched2 = true;
+
+  AccountInfoModel? stylistSelected;
+  bool isChangeStylist = false;
 }

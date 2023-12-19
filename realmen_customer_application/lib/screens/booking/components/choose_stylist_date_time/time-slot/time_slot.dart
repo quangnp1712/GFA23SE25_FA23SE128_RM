@@ -220,6 +220,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
               dateSeleted: dateSeleted,
               isCurrentDate: isCurrentDate,
               onTimeSelected: widget.onTimeSelected,
+              onDateSelected: widget.onDateSelected,
               stylistSelected: widget.stylistSelected),
         ),
       ],
@@ -363,11 +364,13 @@ class TimeSlot extends StatefulWidget {
       {super.key,
       required this.dateSeleted,
       required this.onTimeSelected,
+      required this.onDateSelected,
       required this.isCurrentDate,
       required this.stylistSelected});
   final Map<String, dynamic>? dateSeleted;
   final bool isCurrentDate;
   final void Function(dynamic time) onTimeSelected;
+  final void Function(dynamic time) onDateSelected;
   final AccountInfoModel? stylistSelected;
 
   @override
@@ -452,9 +455,11 @@ class _TimeSlotState extends State<TimeSlot> {
         // Deselect the time slot if it's already selected
         _selectedTimeSlot = '';
         widget.onTimeSelected(_selectedTimeSlot);
+        widget.onDateSelected(widget.dateSeleted!['date']);
       } else {
         _selectedTimeSlot = timeSlot;
         widget.onTimeSelected(_selectedTimeSlot);
+        widget.onDateSelected(widget.dateSeleted!['date']);
       }
     });
   }

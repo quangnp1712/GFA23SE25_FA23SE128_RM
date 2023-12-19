@@ -31,10 +31,8 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
         ChooseBranchBooking(onBranchSelected: updateSelectedBranch),
 
         // 2
-
         TimelineTile(
           // false la hien thanh
-
           isLast: false,
           beforeLineStyle: const LineStyle(color: Colors.black, thickness: 2),
 
@@ -49,11 +47,36 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
           ),
 
           // content
-          endChild: selectedBranch != null &&
-                  selectedBranch!.branchServiceList != null
-              ? ChooseServiceBooking(
-                  onServiceSelected: updateSelectedService,
-                  branchServiceList: selectedBranch!.branchServiceList!)
+          endChild: selectedBranch.branchId != null
+              ? (selectedBranch.branchServiceList != null &&
+                      selectedBranch.branchServiceList!.length > 0
+                  ? ChooseServiceBooking(
+                      onServiceSelected: updateSelectedService,
+                      branchServiceList: selectedBranch!.branchServiceList!)
+                  : Container(
+                      height: 150,
+                      padding: const EdgeInsets.only(top: 10, right: 15),
+                      constraints: const BoxConstraints(minHeight: 120),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "2. Chọn dịch vụ ",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: Text("Chi nhánh hiện chưa có dịch vụ."),
+                          ),
+                          Center(
+                            child: Text(
+                                "Quý khách hành vui lòng chọn Chi nhánh khác!"),
+                          ),
+                        ],
+                      ),
+                    ))
               : Container(
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
@@ -63,11 +86,10 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                     style: TextStyle(fontSize: 20),
                   )),
         ),
-        // 3
 
+        // 3
         TimelineTile(
           // false la hien thanh
-
           isLast: false,
           beforeLineStyle: const LineStyle(color: Colors.black, thickness: 2),
 
@@ -82,9 +104,11 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
           ),
 
           // content
-          endChild: selectedBranch != null &&
+          endChild: selectedBranch.branchId != null &&
                   // selectedService != null &&
-                  !selectedService.isEmpty
+                  selectedService.isNotEmpty &&
+                  selectedBranch.branchServiceList != null &&
+                  selectedBranch.branchServiceList!.isNotEmpty
               ? ChooseStylistAndDateTimeBooking(
                   onDateSelected: updateSelectedDate,
                   onTimeSelected: updateSelectedTime,
@@ -160,15 +184,18 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   dynamic selectedDate;
   dynamic selectedTime;
 
+// BranchModel branch
   void updateSelectedBranch(dynamic branch) {
     if (!_isDisposed) {
       setState(() {
         selectedBranch = branch;
+        selectedService = [];
         print("------- $selectedBranch");
       });
     }
   }
 
+// String stylist
   void updateSelectedStylist(dynamic stylist) {
     if (!_isDisposed) {
       setState(() {
@@ -178,6 +205,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     }
   }
 
+// List String service
   void updateSelectedService(dynamic service) {
     if (!_isDisposed) {
       setState(() {
@@ -187,10 +215,11 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     }
   }
 
+// Map<String, dynamic> date
   void updateSelectedDate(dynamic date) {
     if (!_isDisposed) {
-      selectedDate = date;
       setState(() {
+        selectedDate = date;
         print(selectedDate);
       });
     }

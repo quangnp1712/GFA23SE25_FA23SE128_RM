@@ -141,6 +141,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                           const SizedBox(
                             height: 30,
                           ),
+                          // search autocomplete
                           SizedBox(
                             // width: 80.w,
                             // height: 50,
@@ -158,7 +159,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                   if (cityController == "Thành Phố/Tỉnh") {
                                     final value = await BranchService()
                                         .getSearchBranches(
-                                            textEditingValue.text, 10);
+                                            textEditingValue.text, 5);
                                     if (value['statusCode'] == 200) {
                                       try {
                                         options = (await value)['data']

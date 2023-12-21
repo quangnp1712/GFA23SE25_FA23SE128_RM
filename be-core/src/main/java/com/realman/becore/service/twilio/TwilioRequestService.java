@@ -1,20 +1,57 @@
 package com.realman.becore.service.twilio;
 
 import org.springframework.stereotype.Service;
-
-import com.realman.becore.util.TwilioProperties;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
+import com.realman.becore.util.TwilioUtil;
 
 @Service
 public class TwilioRequestService {
+
     public void sendOTP(String phone, String otp) {
-        phone = "+84" + phone.substring(1);
-        Twilio.init(TwilioProperties.ACCOUNT_SID, TwilioProperties.AUTH_TOKEN);
-        StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append("Mật khẩu đăng nhập của quí khách là: ").append(otp);
-        Message.creator(new PhoneNumber(phone), new PhoneNumber(TwilioProperties.TWILIO_PHONE_NUMBER),
-                messageBuilder.toString()).create();
+        TwilioUtil.initTwilio();
+        String sendOTPMessage = sendOTPMessage(otp);
+        TwilioUtil.sendMessage(phone, sendOTPMessage);
+    }
+
+    public void acceptBooking(String phone, String bookingCode) {
+        TwilioUtil.initTwilio();
+        String acceptBookingMessage = acceptBookingMessage(bookingCode);
+        TwilioUtil.sendMessage(phone, acceptBookingMessage);
+    }
+
+    public void denyBooking(String phone, String bookingCode) {
+        TwilioUtil.initTwilio();
+        String denyBooking = denyBookingMessage(bookingCode);
+        TwilioUtil.sendMessage(phone, denyBooking);
+    }
+
+    private String sendOTPMessage(String otp) {
+        return messageBuilder().append("Mật khẩu đăng nhập của quí khách là: ")
+                .append(otp).toString();
+    }
+
+    private String acceptBookingMessage(String bookingCode) {
+        return messageBuilder()
+                .append("Lịch hẹn làm tóc của bạn có mã")
+                .append(" ")
+                .append(bookingCode)
+                .append(" ")
+                .append("đã được xác nhận.")
+                .append("Vui lòng kiểm tra thông tin trên app")
+                .toString();
+    }
+
+    private String denyBookingMessage(String bookingCode) {
+        return messageBuilder()
+                .append("Lịch hẹn làm tóc của bạn có mã")
+                .append(" ")
+                .append(bookingCode)
+                .append(" ")
+                .append("đã bị từ chối.")
+                .append("Vui lòng kiểm tra thông tin trên app")
+                .toString();
+    }
+
+    private StringBuilder messageBuilder() {
+        return new StringBuilder();
     }
 }

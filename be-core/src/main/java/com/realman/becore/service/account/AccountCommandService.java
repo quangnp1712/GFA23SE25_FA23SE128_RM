@@ -60,7 +60,7 @@ public class AccountCommandService {
                 AccountEntity entity = accountMapper.toEntity(account);
                 AccountEntity savedEntity = accountRepository.save(entity);
                 customerCommandService.save(savedEntity.getAccountId());
-                otpCommandService.save(new AccountPhone(account.phone()));
+                // otpCommandService.save(new AccountPhone(account.phone()));
         }
 
         public void save(Account account, BranchId branchId) {

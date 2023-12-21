@@ -17,7 +17,7 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
     @Query("""
             SELECT
                 s.serviceId AS serviceId,
-                s.name AS name,
+                s.serviceName AS serviceName,
                 s.serviceDescription AS description,
                 b.branchId AS branchId,
                 b.branchName AS branchName,
@@ -39,7 +39,7 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
     @Query("""
             SELECT
                 s.serviceId AS serviceId,
-                s.name AS name
+                s.serviceName AS serviceName
             FROM ShopServiceEntity s
             """)
     List<ShopServiceInfo> findAllServiceField();

@@ -15,7 +15,7 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
                SELECT
                     s.serviceId AS serviceId,
                     b.branchId AS branchId,
-                    s.name AS serviceName,
+                    s.serviceName AS serviceName,
                     b.branchName AS branchName,
                     b.branchThumbnailUrl AS branchThumbnailUrl,
                     bs.price AS price
@@ -31,7 +31,7 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
                     bs.branchServiceId AS branchServiceId,
                     s.serviceId AS serviceId,
                     b.branchId AS branchId,
-                    s.name AS serviceName,
+                    s.serviceName AS serviceName,
                     b.branchName AS branchName,
                     b.branchThumbnailUrl AS branchThumbnailUrl,
                     bs.price AS price
@@ -47,7 +47,7 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
                     bs.branchServiceId AS branchServiceId,
                     s.serviceId AS serviceId,
                     b.branchId AS branchId,
-                    s.name AS serviceName,
+                    s.serviceName AS serviceName,
                     b.branchName AS branchName,
                     b.branchThumbnailUrl AS branchThumbnailUrl,
                     bs.price AS price

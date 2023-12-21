@@ -9,14 +9,13 @@ import lombok.Builder;
 
 @Builder
 public record ShopService(
-    Long serviceId,
-    Long categoryId,
-    String name,
-    String serviceDescription,
-    Integer duration,
-    EServiceStatus status,
-    List<ServiceDisplay> serviceDisplayList,
-    List<BranchService> branchServiceList
-) {
-    
+        Long serviceId,
+        Long categoryId,
+        String serviceName,
+        String serviceDescription,
+        Integer duration,
+        EServiceStatus status,
+        List<ServiceDisplay> serviceDisplayList,
+        List<BranchService> branchServiceList) {
+
 }

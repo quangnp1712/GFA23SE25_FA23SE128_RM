@@ -27,7 +27,7 @@ public interface ShopServicesAPI {
     @GetMapping
     PageImplResponse<ShopServiceResponse> findAll(
             @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
-            @RequestParam(required = false, value = "sorter", defaultValue = "name") String sorter,
+            @RequestParam(required = false, value = "sorter", defaultValue = "serviceName") String sorter,
             @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);
 
     @GetMapping("/field")

@@ -1,14 +1,10 @@
-package com.realman.becore.dto.booking.service;
+package com.realman.becore.controller.api.booking.service.models;
 
+import com.realman.becore.dto.enums.EBookingServiceStatus;
 import java.time.Duration;
 import java.time.LocalTime;
 
-import com.realman.becore.dto.enums.EBookingServiceStatus;
-
-import lombok.Builder;
-
-@Builder
-public record BookingService(
+public record BookingServiceResponse(
         Long bookingServiceId,
         Long bookingId,
         Long serviceId,
@@ -22,7 +18,14 @@ public record BookingService(
         LocalTime endTime,
         LocalTime actualEndTime,
         Duration duration,
+        String durationText,
         EBookingServiceStatus bookingServiceStatus,
         Boolean allowUpdate) {
-
+    public String durationText() {
+        StringBuilder builder = new StringBuilder();
+        return builder.append(duration.toHours()).append(":")
+                .append(duration.toMinutes()).append(":")
+                .append(duration.toSeconds())
+                .toString();
+    }
 }

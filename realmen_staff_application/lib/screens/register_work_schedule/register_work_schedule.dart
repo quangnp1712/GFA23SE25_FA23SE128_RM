@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_staff_application/models/schedule/schedule_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
@@ -244,14 +245,24 @@ class _RegisterWorkScheduleScreenState
     }
 
     /// Navigates to the appointment editor page on mobile
-    showDialog<Widget>(
-        context: context,
-        builder: (BuildContext context) => AppointmentEditorRWS(
-            _selectedAppointment, // null
-            targetElement,
-            selectedDate,
-            _dataSource,
-            _specialTimeRegions)).then((dynamic value) => setState(() {}));
+
+    // Dialog
+
+    // showDialog<Widget>(
+    //     context: context,
+    //     builder: (BuildContext context) => AppointmentEditorRWS(
+    //         _selectedAppointment, // null
+    //         targetElement,
+    //         selectedDate,
+    //         _dataSource,
+    //         _specialTimeRegions)).then((dynamic value) => setState(() {}));
+
+    Get.to(() => AppointmentEditorRWS(
+        _selectedAppointment, // null
+        targetElement,
+        selectedDate,
+        _dataSource,
+        _specialTimeRegions));
   }
 
   final List<TimeRegion> _specialTimeRegions = <TimeRegion>[];

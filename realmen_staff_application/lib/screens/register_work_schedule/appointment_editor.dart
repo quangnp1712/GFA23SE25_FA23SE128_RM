@@ -1,3 +1,4 @@
+import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +56,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
 
   void _updateAppointmentProperties() {
     // kết thúc = không bao giờ
-    _endRule = _EndRule.never;
+    _endRule = _EndRule.count;
 
     // lặp lại mỗi = 1 Ngày / Tuần / Tháng
     _count = 1;
@@ -566,7 +567,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 30),
-                      height: 30,
+                      height: 40,
                       child: Row(
                         children: [
                           Text(
@@ -582,24 +583,25 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(7),
                             child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                border: Border.all(
-                                    color: const Color(0xffC4C4C4),
-                                    width: 1,
-                                    style: BorderStyle.solid),
-                              ),
+                              // decoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(7),
+                              //   border: Border.all(
+                              //       color: const Color(0xffC4C4C4),
+                              //       width: 1,
+                              //       style: BorderStyle.solid),
+                              // ),
                               child: Row(
                                 children: [
-                                  SizedBox(
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.1),
+                                    ),
                                     width: 15.w,
-                                    // height: 40,
                                     child: TextField(
                                       controller: repeatEveryController,
                                       keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9]')),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
                                       ],
                                       cursorColor: Colors.black,
                                       cursorWidth: 1,
@@ -607,6 +609,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                           height: 1.17,
                                           fontSize: 20,
                                           color: Colors.black),
+                                      textAlign: TextAlign.center,
                                       decoration: const InputDecoration(
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -622,23 +625,61 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                             left: 15,
                                             right: 15),
                                       ),
+                                      onChanged: (value) {
+                                        if (value != null && value.isNotEmpty) {
+                                          repeatEveryController.text =
+                                              value.toString();
+                                          if (repeatEveryController.text ==
+                                              '0') {
+                                            setState(() {
+                                              repeatEveryController.text = '1';
+                                              _recurrenceProperties!.interval =
+                                                  int.parse(
+                                                      repeatEveryController.text
+                                                          .toString());
+                                            });
+                                          } else if (int.parse(value) >= 999) {
+                                            setState(() {
+                                              repeatEveryController.text =
+                                                  '999';
+                                              _recurrenceProperties!.interval =
+                                                  int.parse(
+                                                      repeatEveryController.text
+                                                          .toString());
+                                            });
+                                          }
+                                        }
+                                      },
+                                      onTapOutside: (event) {
+                                        if (repeatEveryController
+                                            .text.isEmpty) {
+                                          repeatEveryController.text = '1';
+                                        }
+                                        setState(() {
+                                          repeatEveryController.text;
+                                          _recurrenceProperties!.interval =
+                                              int.parse(repeatEveryController
+                                                  .text
+                                                  .toString());
+                                        });
+                                      },
                                     ),
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
-                                      border: Border.symmetric(
-                                        vertical: BorderSide(
-                                            color: Color(0xffC4C4C4),
-                                            style: BorderStyle.solid,
-                                            width: 1),
-                                      ),
+                                      border: Border.all(
+                                          // vertical: BorderSide(
+                                          color: const Color(0xffC4C4C4),
+                                          style: BorderStyle.solid,
+                                          width: 1),
+                                      // ),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.add,
                                         color: Colors.black,
                                       ),
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 0, horizontal: 10.0),
                                       iconSize: 32.0,
                                       color: Theme.of(context).primaryColor,
@@ -646,7 +687,11 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                         int count = int.parse(
                                             repeatEveryController.text
                                                 .toString());
-                                        count = count + 1;
+                                        if (count >= 999) {
+                                          count = 999;
+                                        } else {
+                                          count = count + 1;
+                                        }
                                         repeatEveryController =
                                             TextEditingController(
                                                 text: count.toString());
@@ -660,33 +705,64 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                       },
                                     ),
                                   ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.remove,
-                                      color: Colors.black,
+                                  Container(
+                                    decoration: const ShapeDecoration(
+                                      shape: CustomRoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(7),
+                                          bottomRight: Radius.circular(7),
+                                        ),
+                                        // leftSide: BorderSide.none,
+                                        topRightCornerSide: BorderSide(
+                                          width: 1,
+                                          color: Color(0xffC4C4C4),
+                                        ),
+                                        bottomRightCornerSide: BorderSide(
+                                          width: 1,
+                                          color: Color(0xffC4C4C4),
+                                        ),
+                                        bottomSide: BorderSide(
+                                          width: 1,
+                                          color: Color(0xffC4C4C4),
+                                        ),
+                                        topSide: BorderSide(
+                                          width: 1,
+                                          color: Color(0xffC4C4C4),
+                                        ),
+                                        rightSide: BorderSide(
+                                          width: 1,
+                                          color: Color(0xffC4C4C4),
+                                        ),
+                                      ),
                                     ),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 0, horizontal: 10.0),
-                                    iconSize: 32.0,
-                                    color: Theme.of(context).primaryColor,
-                                    onPressed: () {
-                                      int count = int.parse(
-                                          repeatEveryController.text
-                                              .toString());
-                                      if (count > 1) {
-                                        count = count - 1;
-                                      } else {
-                                        count = 1;
-                                      }
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: Colors.black,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 0, horizontal: 10.0),
+                                      iconSize: 32.0,
+                                      color: Theme.of(context).primaryColor,
+                                      onPressed: () {
+                                        int count = int.parse(
+                                            repeatEveryController.text
+                                                .toString());
+                                        if (count > 1) {
+                                          count = count - 1;
+                                        } else {
+                                          count = 1;
+                                        }
 
-                                      repeatEveryController =
-                                          TextEditingController(
-                                              text: count.toString());
+                                        repeatEveryController =
+                                            TextEditingController(
+                                                text: count.toString());
 
-                                      setState(() {
-                                        repeatEveryController;
-                                      });
-                                    },
+                                        setState(() {
+                                          repeatEveryController;
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -701,7 +777,8 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                 : repeatController == 'Hằng tuần'
                                     ? "Tuần"
                                     : "Tháng",
-                            style: TextStyle(color: Colors.black, fontSize: 18),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 18),
                           ),
                         ],
                       ),
@@ -837,7 +914,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                 width: 80.w,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  padding: EdgeInsets.only(left: 0),
+                                  padding: const EdgeInsets.only(left: 0),
                                   itemCount: _weekDay.length,
                                   itemBuilder: (context, index) {
                                     final isSelected = isSeletedDayofWeek
@@ -869,7 +946,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                       ),
                                       child: Text(
                                         _weekDay[index]['key'],
-                                        style: TextStyle(fontSize: 16),
+                                        style: const TextStyle(fontSize: 16),
                                       ),
                                     );
                                   },
@@ -921,7 +998,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                       width: 80.w,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.only(left: 0),
+                        padding: const EdgeInsets.only(left: 0),
                         itemCount: _weekDay.length,
                         itemBuilder: (context, index) {
                           final isSelected =
@@ -949,7 +1026,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                             ),
                             child: Text(
                               _weekDay[index]['key'],
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
                           );
                         },
@@ -996,14 +1073,103 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                         children: [
                           RadioListTile<_EndRule>(
                             contentPadding: const EdgeInsets.only(left: 7),
-                            title: const Text('Không kết thúc'),
-                            value: _EndRule.never,
+                            title: Row(
+                              children: <Widget>[
+                                const Text('Sau'),
+                                Container(
+                                  height: 40,
+                                  width: 60,
+                                  padding: const EdgeInsets.only(
+                                      left: 5, bottom: 10),
+                                  margin: const EdgeInsets.only(left: 5),
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                  child: TextField(
+                                    readOnly: _endRule != _EndRule.count,
+                                    controller: _countController,
+                                    // TextEditingController.fromValue(
+                                    //     TextEditingValue(
+                                    //   text: _count.toString(),
+                                    //   // selection: TextSelection.collapsed(
+                                    //   //     offset: _count.toString().length),
+                                    // )),
+                                    // cursorColor: widget.model.backgroundColor,
+                                    onTap: () {
+                                      setState(() {
+                                        _endRule = _EndRule.count;
+                                      });
+                                    },
+                                    onChanged: (String value) async {
+                                      if (value != null && value.isNotEmpty) {
+                                        _count = int.parse(value);
+                                        _countController.text =
+                                            value.toString();
+                                        if (_count == 0) {
+                                          _count = 1;
+                                          setState(() {
+                                            _countController.text = '1';
+                                          });
+                                        } else if (_count! >= 999) {
+                                          setState(() {
+                                            _count = 999;
+                                            _countController.text = '999';
+                                          });
+                                        }
+                                      } else if (value.isEmpty ||
+                                          value == null) {
+                                        _count = 1;
+                                      }
+                                      setState(() {
+                                        _endRule = _EndRule.count;
+                                        _recurrenceProperties!.recurrenceRange =
+                                            RecurrenceRange.count;
+                                        _recurrenceProperties!.recurrenceCount =
+                                            _count!;
+                                      });
+                                    },
+                                    onTapOutside: (event) {
+                                      if (_countController.text.isEmpty) {
+                                        _countController.text = '1';
+                                        _count = 1;
+                                      }
+                                      setState(() {
+                                        _endRule = _EndRule.count;
+                                      });
+                                    },
+
+                                    keyboardType: TextInputType.number,
+                                    // ignore: always_specify_types
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                                Container(
+                                  width: 10,
+                                ),
+                                const Text('lần'),
+                              ],
+                            ),
+                            value: _EndRule.count,
                             groupValue: _endRule,
                             activeColor: Colors.blueAccent,
                             onChanged: (_EndRule? value) {
                               setState(() {
-                                _endRule = _EndRule.never;
-                                _rangeNoEndDate();
+                                _endRule = value;
+                                _recurrenceProperties!.recurrenceRange =
+                                    RecurrenceRange.count;
+                                _recurrenceProperties!.recurrenceCount =
+                                    _count!;
                               });
                             },
                           ),
@@ -1019,7 +1185,8 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                 const Text('Cho đến'),
                                 Container(
                                   margin: const EdgeInsets.only(left: 5),
-                                  width: 110,
+                                  constraints:
+                                      const BoxConstraints(minWidth: 110),
                                   height: 40,
                                   decoration: BoxDecoration(
                                     color: Colors.grey.withOpacity(0.1),
@@ -1052,13 +1219,15 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                       primaryColor: Colors
                                                           .blueAccent, // Màu chính của DatePicker
                                                       // Màu phụ của DatePicker
-                                                      colorScheme:
-                                                          ColorScheme.light(
-                                                              primary: Colors
-                                                                  .blueAccent), // Bổ sung cho màu chính
-                                                      buttonTheme: ButtonThemeData(
-                                                          textTheme: ButtonTextTheme
-                                                              .primary), // Thiết lập cho nút
+                                                      colorScheme: const ColorScheme
+                                                          .light(
+                                                          primary: Colors
+                                                              .blueAccent), // Bổ sung cho màu chính
+                                                      buttonTheme:
+                                                          const ButtonThemeData(
+                                                              textTheme:
+                                                                  ButtonTextTheme
+                                                                      .primary), // Thiết lập cho nút
                                                     ),
                                                     child: child!,
                                                   );
@@ -1071,19 +1240,20 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                           _recurrenceProperties!
                                                   .recurrenceRange =
                                               RecurrenceRange.endDate;
-                                          _selectedDate = DateTime(
-                                              pickedDate.year,
-                                              pickedDate.month,
-                                              pickedDate.day);
+                                          if (pickedDate != null) {
+                                            _selectedDate = DateTime(
+                                                pickedDate.year,
+                                                pickedDate.month,
+                                                pickedDate.day);
+                                          }
                                           _recurrenceProperties!.endDate =
                                               _selectedDate;
                                         });
                                       },
                                       shape: const CircleBorder(),
                                       child: Text(
-                                        DateFormat('MM/dd/yyyy')
-                                            .format(_selectedDate),
-                                        style: TextStyle(
+                                        formatDate(_selectedDate),
+                                        style: const TextStyle(
                                             fontSize: 13,
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400),
@@ -1099,7 +1269,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                             onChanged: (_EndRule? value) {
                               setState(() {
                                 _endRule = value;
-                                // _rangeEndDate();
+                                _rangeEndDate();
                               });
                             },
                           ),
@@ -1108,94 +1278,18 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                             height: 1.0,
                             thickness: 1,
                           ),
-                          SizedBox(
-                            height: 40,
-                            child: RadioListTile<_EndRule>(
-                              contentPadding: const EdgeInsets.only(left: 7),
-                              title: Row(
-                                children: <Widget>[
-                                  const Text('Sau'),
-                                  Container(
-                                    height: 40,
-                                    width: 60,
-                                    padding: const EdgeInsets.only(
-                                        left: 5, bottom: 10),
-                                    margin: const EdgeInsets.only(left: 5),
-                                    alignment: Alignment.topCenter,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                    child: TextField(
-                                      readOnly: _endRule != _EndRule.count,
-                                      controller:
-                                          TextEditingController.fromValue(
-                                              TextEditingValue(
-                                                  text: _count.toString(),
-                                                  selection:
-                                                      TextSelection.collapsed(
-                                                          offset: _count
-                                                              .toString()
-                                                              .length))),
-                                      // cursorColor: widget.model.backgroundColor,
-                                      onTap: () {
-                                        setState(() {
-                                          _endRule = _EndRule.count;
-                                        });
-                                      },
-                                      onChanged: (String value) async {
-                                        if (value != null && value.isNotEmpty) {
-                                          _count = int.parse(value);
-                                          if (_count == 0) {
-                                            _count = 1;
-                                          } else if (_count! >= 999) {
-                                            setState(() {
-                                              _count = 999;
-                                            });
-                                          }
-                                        } else if (value.isEmpty ||
-                                            value == null) {
-                                          _count = 1;
-                                        }
-                                        _endRule = _EndRule.count;
-                                        _recurrenceProperties!.recurrenceRange =
-                                            RecurrenceRange.count;
-                                        _recurrenceProperties!.recurrenceCount =
-                                            _count!;
-                                      },
-                                      keyboardType: TextInputType.number,
-                                      // ignore: always_specify_types
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                      textAlign: TextAlign.center,
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 10,
-                                  ),
-                                  const Text('lần'),
-                                ],
-                              ),
-                              value: _EndRule.count,
-                              groupValue: _endRule,
-                              activeColor: Colors.blueAccent,
-                              onChanged: (_EndRule? value) {
-                                setState(() {
-                                  _endRule = value;
-                                  _recurrenceProperties!.recurrenceRange =
-                                      RecurrenceRange.count;
-                                  _recurrenceProperties!.recurrenceCount =
-                                      _count!;
-                                });
-                              },
-                            ),
+                          RadioListTile<_EndRule>(
+                            contentPadding: const EdgeInsets.only(left: 7),
+                            title: const Text('Không kết thúc'),
+                            value: _EndRule.never,
+                            groupValue: _endRule,
+                            activeColor: Colors.blueAccent,
+                            onChanged: (_EndRule? value) {
+                              setState(() {
+                                _endRule = _EndRule.never;
+                                _rangeNoEndDate();
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -1293,6 +1387,12 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
     });
   }
 
+  String formatDate(DateTime _selectedDate) {
+    String day = DateFormat('EEEE').format(_selectedDate);
+    day = formatDay(day);
+    return "$day, ${DateFormat('dd/MM/yyyy').format(_selectedDate)}";
+  }
+
   String formatDay(String day) {
     return dayNames[day.toLowerCase()] ?? day;
   }
@@ -1353,6 +1453,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
 
   // số lần lặp lại
   int? _count;
+  TextEditingController _countController = TextEditingController(text: '1');
 
   // rule daily week month
   late RecurrenceType _recurrenceType;
@@ -1395,17 +1496,13 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
 
   void _rangeEndDate() {
     _recurrenceProperties!.recurrenceRange = RecurrenceRange.endDate;
-    _selectedDate = _recurrenceProperties!.endDate ??
-        _startDate.add(const Duration(days: 30));
+    _selectedDate = _recurrenceProperties!.endDate ?? _selectedDate;
     _recurrenceProperties!.endDate = _selectedDate;
-  }
 
-  void _rangeCount() {
-    _recurrenceProperties!.recurrenceRange = RecurrenceRange.count;
-    _count = _recurrenceProperties!.recurrenceCount == 0
-        ? 1
-        : _recurrenceProperties!.recurrenceCount;
-    _recurrenceProperties!.recurrenceCount = _count!;
+    setState(() {
+      _recurrenceProperties;
+      _selectedDate;
+    });
   }
 
   void _updateRecurrenceProperties(String repeatController) {
@@ -1416,13 +1513,17 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
       _recurrenceProperties = RecurrenceProperties(startDate: _startDate);
       _recurrenceProperties!.recurrenceType = RecurrenceType.daily;
       _recurrenceProperties!.interval = 1;
-      _recurrenceProperties!.recurrenceRange = RecurrenceRange.noEndDate;
+      _recurrenceProperties!.recurrenceRange = RecurrenceRange.count;
+      _selectedDate = _recurrenceProperties!.endDate ??
+          _startDate.add(const Duration(days: 7));
       _rule = _SelectRule.everyDay;
     } else if (repeatController.toString() == 'Hằng tuần') {
       _recurrenceProperties = RecurrenceProperties(startDate: _startDate);
       _recurrenceProperties!.recurrenceType = RecurrenceType.weekly;
       _recurrenceProperties!.interval = 1;
-      _recurrenceProperties!.recurrenceRange = RecurrenceRange.noEndDate;
+      _recurrenceProperties!.recurrenceRange = RecurrenceRange.count;
+      _selectedDate = _recurrenceProperties!.endDate ??
+          _startDate.add(const Duration(days: 30));
       _recurrenceProperties!.weekDays = _startDate.weekday == 1
           ? <WeekDays>[WeekDays.monday]
           : _startDate.weekday == 2
@@ -1437,14 +1538,16 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                               ? <WeekDays>[WeekDays.saturday]
                               : <WeekDays>[WeekDays.sunday];
       _rule = _SelectRule.everyWeek;
-    } else if (repeatController.toString() == 'Hằng tuần') {
+    } else if (repeatController.toString() == 'Hằng tháng') {
       _recurrenceProperties = RecurrenceProperties(startDate: _startDate);
       _recurrenceProperties!.recurrenceType = RecurrenceType.monthly;
       _recurrenceProperties!.interval = 1;
-      _recurrenceProperties!.recurrenceRange = RecurrenceRange.noEndDate;
+      _recurrenceProperties!.recurrenceRange = RecurrenceRange.count;
       _recurrenceProperties!.dayOfMonth =
           widget.selectedAppointment!.startTime.day;
       _rule = _SelectRule.everyMonth;
+      _selectedDate = _recurrenceProperties!.endDate ??
+          _startDate.add(const Duration(days: 365));
     }
   }
 }

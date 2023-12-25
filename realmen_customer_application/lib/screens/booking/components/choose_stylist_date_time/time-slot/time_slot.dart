@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,208 +25,236 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
 class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Container(
-            padding:
-                const EdgeInsets.only(left: 10, right: 0, top: 5, bottom: 5),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1,
-                style: BorderStyle.solid,
-              ),
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.white,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(0, 1.5),
-                  blurRadius: 1,
-                  spreadRadius: 0,
-                ),
-              ],
-            ),
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: const Icon(
-                        Icons.calendar_today,
-                        color: Colors.black,
-                        size: 24,
-                      ),
+    return listDate!.length > 0
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Container(
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 0, top: 5, bottom: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                      style: BorderStyle.solid,
                     ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 1.5),
+                        blurRadius: 1,
+                        spreadRadius: 0,
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          isExpanded: true,
-                          alignment: Alignment.center,
-                          value: dateController,
-                          items: listDate != null
-                              ? listDate
-                                  ?.asMap()
-                                  .entries
-                                  .map(
-                                    (item) => DropdownMenuItem(
-                                      value: item.value['id'],
-                                      child: Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 5, bottom: 5, left: 0),
-                                        // width: 220,
-                                        // height: 40,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  margin: const EdgeInsets.only(
-                                                      left: 10.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      item.value['date']
-                                                          as String,
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: Colors.black),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            item.value['type'] == "Ngày thường"
-                                                ? Container(
-                                                    width: 100,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 5,
-                                                        vertical: 5),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Color(0xff207A20),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        "Ngày thường",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(
-                                                    width: 100,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 5,
-                                                        vertical: 5),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Color(0xff964444),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        "Cuối tuần",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList()
-                              : [],
-                          onChanged: (value) {
-                            setState(() {
-                              dateController = value as String?;
-
-                              dateSeleted = listDate!
-                                  .where(
-                                      (date) => date['id'] == value.toString())
-                                  .toList()
-                                  .first;
-                              print("onchange: $dateSeleted");
-                              type = dateSeleted!['type'].toString();
-                              type == "Thứ bảy" || type == "Chủ nhật"
-                                  ? type = "Cuối tuần"
-                                  : type = "Ngày thường";
-                              isCurrentDate =
-                                  _isCurrentDate(dateSeleted!['date']);
-                              widget.onDateSelected(dateSeleted);
-                            });
-
-                            timeSlotKey.currentState?.rebuildTimeslot();
-                          },
-                          dropdownStyleData: DropdownStyleData(
-                            maxHeight: 200,
-                            width: 325,
-                            padding: const EdgeInsets.all(0),
-                            decoration: BoxDecoration(
-                              // borderRadius: BorderRadius.circular(14),
-                              color: Colors.grey.shade200,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            child: const Icon(
+                              Icons.calendar_today,
+                              color: Colors.black,
+                              size: 24,
                             ),
-                            offset: const Offset(-35, -6),
-                            scrollbarTheme: ScrollbarThemeData(
-                              // radius: const Radius.circular(40),
-                              // thickness: MaterialStateProperty.all(6),
-                              thumbVisibility: MaterialStateProperty.all(true),
-                            ),
-                          ),
-                          menuItemStyleData: const MenuItemStyleData(
-                            height: 40,
-                            padding: EdgeInsets.only(left: 35, right: 24),
-                          ),
-                          buttonStyleData: const ButtonStyleData(
-                            padding: EdgeInsets.all(0),
                           ),
                         ),
-                      ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                isExpanded: true,
+                                alignment: Alignment.center,
+                                value: dateController,
+                                items: listDate != null
+                                    ? listDate
+                                        ?.asMap()
+                                        .entries
+                                        .map(
+                                          (item) => DropdownMenuItem(
+                                            value: item.value['id'],
+                                            child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5, bottom: 5, left: 0),
+                                              // width: 220,
+                                              // height: 40,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .only(left: 10.0),
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                            item.value['date']
+                                                                as String,
+                                                            style: const TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  item.value['type'] ==
+                                                          "Ngày thường"
+                                                      ? Container(
+                                                          width: 100,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal: 5,
+                                                                  vertical: 5),
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Color(
+                                                                0xff207A20),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Text(
+                                                              "Ngày thường",
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          width: 100,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal: 5,
+                                                                  vertical: 5),
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Color(
+                                                                0xff964444),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Text(
+                                                              "Cuối tuần",
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList()
+                                    : [],
+                                onChanged: (value) {
+                                  setState(() {
+                                    dateController = value as String?;
+
+                                    dateSeleted = listDate!
+                                        .where((date) =>
+                                            date['id'] == value.toString())
+                                        .toList()
+                                        .first;
+                                    print("onchange: $dateSeleted");
+                                    type = dateSeleted!['type'].toString();
+                                    type == "Thứ bảy" || type == "Chủ nhật"
+                                        ? type = "Cuối tuần"
+                                        : type = "Ngày thường";
+                                    isCurrentDate =
+                                        _isCurrentDate(dateSeleted!['date']);
+                                    widget.onDateSelected(dateSeleted);
+                                  });
+
+                                  timeSlotKey.currentState?.rebuildTimeslot();
+                                },
+                                dropdownStyleData: DropdownStyleData(
+                                  maxHeight: 200,
+                                  width: 325,
+                                  padding: const EdgeInsets.all(0),
+                                  decoration: BoxDecoration(
+                                    // borderRadius: BorderRadius.circular(14),
+                                    color: Colors.grey.shade200,
+                                  ),
+                                  offset: const Offset(-35, -6),
+                                  scrollbarTheme: ScrollbarThemeData(
+                                    // radius: const Radius.circular(40),
+                                    // thickness: MaterialStateProperty.all(6),
+                                    thumbVisibility:
+                                        MaterialStateProperty.all(true),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 35, right: 24),
+                                ),
+                                buttonStyleData: const ButtonStyleData(
+                                  padding: EdgeInsets.all(0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 200,
-          child: TimeSlot(
-              key: timeSlotKey,
-              dateSeleted: dateSeleted,
-              isCurrentDate: isCurrentDate,
-              onTimeSelected: widget.onTimeSelected,
-              onDateSelected: widget.onDateSelected,
-              stylistSelected: widget.stylistSelected),
-        ),
-      ],
-    );
+              const SizedBox(height: 10),
+              Container(
+                height: 200,
+                child: TimeSlot(
+                    key: timeSlotKey,
+                    dateSeleted: dateSeleted,
+                    isCurrentDate: isCurrentDate,
+                    onTimeSelected: widget.onTimeSelected,
+                    onDateSelected: widget.onDateSelected,
+                    stylistSelected: widget.stylistSelected),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Text(
+                    "Thợ cắt ${utf8.decode(("${widget.stylistSelected!.firstName!.substring(widget.stylistSelected!.firstName!.lastIndexOf(" ") + 1)} ${widget.stylistSelected!.lastName!}").runes.toList())} hiện chưa có lịch làm!"),
+              ),
+              Center(
+                child: Text("Anh vui lòng chọn thợ cắt khác"),
+              )
+            ],
+          );
   }
 
   // Logic
@@ -252,15 +282,18 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
     getDate();
     if (widget.isChangeStylist) {
-      dateController = listDate?.first['id'].toString();
-      dateSeleted = listDate?.first;
-      print("didUpdateWidget: $dateController");
-      type = listDate!.first['type'].toString();
-      timeSlotKey.currentState?.rebuildTimeslot();
-      setState(() {
-        widget.isChangeStylist = false;
-        isCurrentDate = _isCurrentDate(dateSeleted!['date']);
-      });
+      if (listDate!.isNotEmpty) {
+        dateController = listDate?.first['id'].toString();
+        dateSeleted = listDate?.first;
+        print("didUpdateWidget: $dateController");
+        type = listDate!.first['type'].toString();
+        timeSlotKey.currentState?.rebuildTimeslot();
+        setState(() {
+          widget.isChangeStylist = false;
+          isCurrentDate = _isCurrentDate(dateSeleted!['date']);
+        });
+      }
+
       build(context);
     }
     print("didUpdateWidget: $dateSeleted");

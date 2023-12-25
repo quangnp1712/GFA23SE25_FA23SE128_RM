@@ -15,8 +15,8 @@ class ChooseStylistAndDateTimeBooking extends StatefulWidget {
   final void Function(dynamic stylist) onStylistSelected;
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
-  final List<AccountInfoModel>? accountStaffList;
-  const ChooseStylistAndDateTimeBooking({
+  List<AccountInfoModel>? accountStaffList;
+  ChooseStylistAndDateTimeBooking({
     super.key,
     required this.onStylistSelected,
     required this.onDateSelected,
@@ -132,11 +132,44 @@ class _ChooseStylistAndDateTimeBookingState
   void initState() {
     super.initState();
     stylistSelected;
+    _validateWorkDateStylist();
+  }
+
+  _validateWorkDateStylist() {
+    if (widget.accountStaffList != null) {
+      widget.accountStaffList = widget.accountStaffList!.where((staff) {
+        DateTime now = DateTime.now();
+        List<dynamic> listDate = [];
+        if (staff.staff!.scheduleList == null ||
+            staff.staff!.scheduleList!.isEmpty) {
+          return false;
+        } else {
+          staff.staff!.scheduleList!.asMap().entries.map((schedule) {
+            if (DateTime.parse(schedule.value.workingDate!) ==
+                    DateTime(now.year, now.month, now.day, 0) ||
+                (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
+                    DateTime.parse(schedule.value.workingDate!)
+                        .isBefore(now.add(Duration(days: 4))))) {
+              listDate.add(schedule.value);
+            }
+          }).toList();
+          if (listDate.isNotEmpty) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }).toList();
+      setState(() {
+        widget.accountStaffList;
+      });
+    }
   }
 
   @override
   void didUpdateWidget(ChooseStylistAndDateTimeBooking oldWidget) {
     isChangeStylist = false;
+    _validateWorkDateStylist();
     super.didUpdateWidget(oldWidget);
   }
 

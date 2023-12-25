@@ -322,55 +322,41 @@ class _ChooseStylistState extends State<ChooseStylist> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                            RichText(
+                              text: TextSpan(
                                 children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "Stylist: ",
-                                          style: GoogleFonts.quicksand(
-                                            textStyle: const TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: utf8.decode(
-                                              ("${_selectedStylist.firstName!} ${_selectedStylist.lastName!}")
-                                                  .toString()
-                                                  .runes
-                                                  .toList()),
-                                          //  "Cắt",
-                                          // utf8.decode(_selectedStylist!.name
-                                          //     .toString()
-                                          //     .runes
-                                          //     .toList()),
-                                          style: GoogleFonts.quicksand(
-                                            textStyle: const TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ],
+                                  TextSpan(
+                                    text: "Stylist: ",
+                                    style: GoogleFonts.quicksand(
+                                      textStyle: const TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400),
                                     ),
                                   ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: const Text(
-                                      "Xem thêm",
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                      ),
+                                  TextSpan(
+                                    text: utf8.decode(
+                                        ("${_selectedStylist.firstName!} ${_selectedStylist.lastName!}")
+                                            .toString()
+                                            .runes
+                                            .toList()),
+                                    //  "Cắt",
+                                    // utf8.decode(_selectedStylist!.name
+                                    //     .toString()
+                                    //     .runes
+                                    //     .toList()),
+                                    style: GoogleFonts.quicksand(
+                                      textStyle: const TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ],
                               ),
+                            ),
+                            SizedBox(
+                              height: 10,
                             ),
                             RichText(
                               text: TextSpan(
@@ -395,6 +381,24 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                   ),
                                 ],
                               ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Xem thêm",
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  style: ButtonStyle(
+                                      padding: MaterialStatePropertyAll(
+                                          EdgeInsets.zero)),
+                                ),
+                              ],
                             ),
 
                             // Hình ảnh sản phẩm cắt

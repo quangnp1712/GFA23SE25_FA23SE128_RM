@@ -375,6 +375,45 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                           const SizedBox(
                             height: 30,
                           ),
+
+                          SizedBox(
+                            height: 100,
+                            width: 200,
+                            child: FutureBuilder(
+                              future: yourAsyncFunctionToGetBranches(
+                                  branchesForCity),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const SizedBox(
+                                      height: 140,
+                                      width: 140,
+                                      child: Center(
+                                          child:
+                                              CircularProgressIndicator())); // Hiển thị tiến trình đang tải
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Hiển thị thông báo lỗi nếu có lỗi xảy ra
+                                } else if (snapshot.hasData) {
+                                  List<BranchModel> branches = snapshot
+                                      .data!; // Lấy danh sách chi nhánh từ dữ liệu snapshot
+                                  return ListView.builder(
+                                    itemCount: branches.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        // Hiển thị thông tin của từng chi nhánh ở đây
+                                        child:
+                                            Text(branches[index].branchName!),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return Text(
+                                      'No data'); // Hiển thị thông báo nếu không có dữ liệu
+                                }
+                              },
+                            ),
+                          ),
                           branchesForCity != null
                               ? ListView.builder(
                                   shrinkWrap: true,
@@ -583,7 +622,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
 
   String image = "assets/images/branch1.png";
   BranchesModel? branchesByCityModel = BranchesModel();
-  List<BranchModel>? branchesForCity;
+  List<BranchModel>? branchesForCity = [];
   String? cityController;
   List<String> cities = [];
   Future<void> getBranchesByCity() async {
@@ -809,6 +848,20 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         print(e.toString());
         print("Error: $e");
       }
+    }
+  }
+
+  Future<List<BranchModel>> yourAsyncFunctionToGetBranches(
+      List<BranchModel>? branchesForCity) async {
+    if (branchesForCity!.isNotEmpty) {
+      List<BranchModel> awaitBranch = await branchesForCity!;
+      if (awaitBranch.isNotEmpty) {
+        return awaitBranch;
+      } else {
+        return [];
+      }
+    } else {
+      return [];
     }
   }
 }

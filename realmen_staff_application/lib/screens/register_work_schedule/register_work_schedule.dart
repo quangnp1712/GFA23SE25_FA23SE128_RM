@@ -231,6 +231,12 @@ class _RegisterWorkScheduleScreenState
       if (appointment is Appointment) {
         _selectedAppointment = appointment;
       }
+      Get.to(() => AppointmentEditorRWS(
+          _selectedAppointment, // null
+          targetElement,
+          selectedDate,
+          _dataSource,
+          _specialTimeRegions));
     } else {
 // tạo mới
 
@@ -242,6 +248,15 @@ class _RegisterWorkScheduleScreenState
         subject: '(No title)',
       );
       _selectedAppointment = newAppointment;
+      if (!_dataSource.appointments.any((element) =>
+          (element.startTime as DateTime).isAtSameMomentAs(selectedDate))) {
+        Get.to(() => AppointmentEditorRWS(
+            _selectedAppointment, // null
+            targetElement,
+            selectedDate,
+            _dataSource,
+            _specialTimeRegions));
+      }
     }
 
     /// Navigates to the appointment editor page on mobile
@@ -256,13 +271,6 @@ class _RegisterWorkScheduleScreenState
     //         selectedDate,
     //         _dataSource,
     //         _specialTimeRegions)).then((dynamic value) => setState(() {}));
-
-    Get.to(() => AppointmentEditorRWS(
-        _selectedAppointment, // null
-        targetElement,
-        selectedDate,
-        _dataSource,
-        _specialTimeRegions));
   }
 
   final List<TimeRegion> _specialTimeRegions = <TimeRegion>[];

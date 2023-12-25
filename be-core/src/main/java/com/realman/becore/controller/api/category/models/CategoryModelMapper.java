@@ -8,8 +8,4 @@ import com.realman.becore.dto.category.Category;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CategoryModelMapper {
     CategoryResponse toModel(Category dto);
-
-    CategoryFieldResponse toFieldModel(Category dto);
-
-    Category toDto(CategoryRequest model);
 }

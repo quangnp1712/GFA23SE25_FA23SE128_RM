@@ -15,6 +15,12 @@ public interface BookingServiceInfo {
 
     void setStaffId(Long staffId);
 
+    void setCategoryId(Long categoryId);
+
+    void setCategoryName(String categoryName);
+
+    void setPriority(Integer priority);
+
     void setServicePrice(Long serviceId);
 
     void setServiceName(String serviceName);
@@ -44,6 +50,12 @@ public interface BookingServiceInfo {
     Long getServiceId();
 
     Long getStaffId();
+
+    Long getCategoryId();
+
+    String getCategoryName();
+
+    Integer getPriority();
 
     Long getServicePrice();
 

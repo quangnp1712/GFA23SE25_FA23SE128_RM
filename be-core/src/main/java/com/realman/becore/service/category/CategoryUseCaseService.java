@@ -19,8 +19,8 @@ public class CategoryUseCaseService {
     private final CategoryQueryService categoryQueryService;
 
     @Transactional
-    public void save(Category category) {
-        categoryCommandService.save(category);
+    public void saveDefault() {
+        categoryCommandService.saveDefault();
     }
 
     public Category findById(Long categoryId) {

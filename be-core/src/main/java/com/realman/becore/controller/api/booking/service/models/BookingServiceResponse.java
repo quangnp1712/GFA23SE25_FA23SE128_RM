@@ -3,6 +3,7 @@ package com.realman.becore.controller.api.booking.service.models;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public record BookingServiceResponse(
         Long bookingServiceId,
@@ -23,9 +24,12 @@ public record BookingServiceResponse(
         Boolean allowUpdate) {
     public String durationText() {
         StringBuilder builder = new StringBuilder();
-        return builder.append(duration.toHours()).append(":")
-                .append(duration.toMinutes()).append(":")
-                .append(duration.toSeconds())
-                .toString();
+        if (Objects.nonNull(duration)) {
+            return builder.append(duration.toHours()).append(":")
+                    .append(duration.toMinutes()).append(":")
+                    .append(duration.toSeconds())
+                    .toString();
+        }
+        return builder.append(0).toString();
     }
 }

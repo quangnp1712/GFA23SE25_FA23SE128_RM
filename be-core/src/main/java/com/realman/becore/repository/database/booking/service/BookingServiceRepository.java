@@ -17,6 +17,9 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 bs.bookingId AS bookingId,
                 ss.serviceId AS serviceId,
                 s.staffId AS staffId,
+                c.categoryId AS categoryId,
+                c.categoryName AS categoryName,
+                c.priority AS priority,
                 brs.price AS servicePrice,
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
@@ -31,9 +34,10 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             INNER JOIN StaffEntity s ON bs.staffId = bs.staffId
             INNER JOIN AccountEntity a ON a.accountId = s.accountId
             INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
+            INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
             INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId
             WHERE bs.bookingId = :bookingId
-            ORDER BY duration
+            ORDER BY priority ASC
             """)
     List<BookingServiceInfo> findInfoByBookingId(Long bookingId);
 
@@ -43,6 +47,9 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 bs.bookingId AS bookingId,
                 ss.serviceId AS serviceId,
                 s.staffId AS staffId,
+                c.categoryId AS categoryId,
+                c.categoryName AS categoryName,
+                c.priority AS priority,
                 brs.price AS servicePrice,
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
@@ -58,7 +65,9 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             INNER JOIN StaffEntity s ON s.staffId = bs.staffId
             INNER JOIN AccountEntity a ON a.accountId = s.accountId
             INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
+            INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
             INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId
+            ORDER BY priority ASC
             """)
     List<BookingServiceInfo> findAllInfo(Long accountId);
 
@@ -68,6 +77,9 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 bs.bookingId AS bookingId,
                 ss.serviceId AS serviceId,
                 s.staffId AS staffId,
+                c.categoryId AS categoryId,
+                c.categoryName AS categoryName,
+                c.priority AS priority,
                 brs.price AS servicePrice,
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
@@ -83,6 +95,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             INNER JOIN StaffEntity s ON s.staffId = bs.staffId
             INNER JOIN AccountEntity a ON a.accountId = s.accountId
             INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
+            INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
             INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId
             WHERE bs.bookingServiceId = :bookingServiceId
             """)

@@ -161,6 +161,7 @@ class _RegisterWorkScheduleScreenState
 
   _RegisterWorkScheduleScreenState();
   _AppointmentDataSource _dataSource = _AppointmentDataSource(<Appointment>[]);
+  List<Appointment> _appointmentSoucre = [];
   final GlobalKey _globalKey = GlobalKey();
   Appointment? _selectedAppointment;
   final CalendarController calendarController = CalendarController();
@@ -289,24 +290,47 @@ class _RegisterWorkScheduleScreenState
         } else if (data.subject == "CA TỐI") {
           shiftId = 2;
         }
-        var workingDate = DateFormat('yyyy-MM-dd').format(data.startTime);
-        if (shiftId != null && workingDate != null) {
-          schedulesModel.scheduleModelList!
-              .add(ScheduleModel(shiftId: shiftId, workingDate: workingDate));
+        if (!_appointmentSoucre.contains(data)) {
+          if (data.appointmentType == AppointmentType.normal) {
+            var workingDate = DateFormat('yyyy-MM-dd').format(data.startTime);
+            if (shiftId != null && workingDate != null) {
+              schedulesModel.scheduleModelList!.add(
+                  ScheduleModel(shiftId: shiftId, workingDate: workingDate));
+            }
+          } else if (data.appointmentType != AppointmentType.normal &&
+              data.recurrenceRule != null) {
+            if (shiftId != null) {
+              List<DateTime> recurrentDate =
+                  SfCalendar.getRecurrenceDateTimeCollection(
+                      data.recurrenceRule, data.startTime);
+              List<String> recurrentDateList = recurrentDate
+                  .map((date) =>
+                      DateFormat('yyyy-MM-dd').format(date).toString())
+                  .toList();
+              recurrentDateList.forEach((element) {
+                schedulesModel.scheduleModelList!
+                    .add(ScheduleModel(shiftId: shiftId, workingDate: element));
+              });
+            }
+          }
         }
       }
-      try {
-        int accountId = await SharedPreferencesService.getAccountId();
-        var result =
-            await scheduleService.postSchedule(accountId, schedulesModel);
-        if (result['statusCode'] == 200) {
-          _successMessage("Đăng ký thành công");
-        } else {
-          _errorMessage("Đăng ký thất bại");
+      if (schedulesModel.scheduleModelList!.isNotEmpty) {
+        try {
+          int accountId = await SharedPreferencesService.getAccountId();
+          var result =
+              await scheduleService.postSchedule(accountId, schedulesModel);
+          if (result['statusCode'] == 200) {
+            _successMessage("Đăng ký thành công");
+          } else {
+            _errorMessage("Đăng ký thất bại");
+          }
+        } catch (e) {
+          _errorMessage(e.toString());
+          print("Error: $e");
         }
-      } catch (e) {
-        _errorMessage(e.toString());
-        print("Error: $e");
+      } else {
+        _errorMessage("Vui lòng đăng ký ca làm");
       }
     }
   }
@@ -409,6 +433,7 @@ class _RegisterWorkScheduleScreenState
                 CalendarDataSourceAction.add, <Appointment>[newAppointment!]);
           });
         }
+        _appointmentSoucre = List.from(_dataSource.source);
       } else {
         print("$result['statusCode'] : $result['error']");
         return appointments;

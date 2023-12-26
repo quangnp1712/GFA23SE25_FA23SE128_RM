@@ -220,7 +220,9 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
       // delete
       if (!isNightSelected && !isMorningSelected) {
         if (widget.selectedAppointment!.subject == '(No title)') {
-          Get.back();
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         } else if (widget.selectedAppointment!.appointmentType ==
             AppointmentType.normal) {
           widget._dataSource.appointments!.removeAt(widget
@@ -228,7 +230,9 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
               .indexOf(widget.selectedAppointment));
           widget._dataSource.notifyListeners(CalendarDataSourceAction.remove,
               <Appointment>[widget.selectedAppointment!]);
-          Navigator.pop(context);
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         } else {
           if (widget.selectedAppointment!.recurrenceId != null) {
             widget._dataSource.appointments!.remove(widget.selectedAppointment);
@@ -251,7 +255,9 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
           widget._dataSource.appointments!.add(parentAppointment);
           widget._dataSource.notifyListeners(
               CalendarDataSourceAction.add, <Appointment>[parentAppointment]);
-          Get.back();
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         }
       }
 
@@ -259,7 +265,9 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
       else if (widget.selectedAppointment!.subject == '(No title)') {
         if (widget._dataSource!.appointments!.any((element) =>
             (element.startTime as DateTime).isAtSameMomentAs(_startDate))) {
-          Get.back();
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         } else {
           final Appointment newAppointment = Appointment(
             startTime: _startDate,
@@ -309,12 +317,17 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
               // ));
             }
           }
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         }
       } else if (widget.selectedAppointment!.appointmentType !=
           AppointmentType.normal) {
         if (widget._dataSource!.appointments!.any((element) =>
             (element.startTime as DateTime).isAtSameMomentAs(_startDate))) {
-          Get.back();
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         } else {
           if (workShift == null) {
             if (widget.selectedAppointment!.subject == "CA SÁNG") {
@@ -346,7 +359,11 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
       else {
         if (widget._dataSource!.appointments!.any((element) =>
             (element.startTime as DateTime).isAtSameMomentAs(_startDate))) {
-          Get.back();
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Future.delayed(const Duration(milliseconds: 200), () {
+              Get.back();
+            });
+          });
         } else {
           // update xóa cũ tạo lại cái mới thế vào
           if (widget._dataSource.appointments!
@@ -419,14 +436,12 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
               // ));
             }
           }
+          Future.delayed(const Duration(milliseconds: 200), () {
+            Get.back();
+          });
         }
       }
     }
-
-    Future.delayed(const Duration(milliseconds: 200), () {
-      // When task is over, close the dialog
-      Navigator.pop(context);
-    });
   }
 
   Widget _getAppointmentEditor(

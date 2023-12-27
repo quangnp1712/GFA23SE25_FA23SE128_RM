@@ -24,6 +24,11 @@ class AccountInfoModel {
   int? average;
   String? role;
 
+  int? totalElements;
+  int? totalPages;
+  int? pageSize;
+  int? current;
+
   AccountInfoModel({
     this.accountId,
     this.branchId,
@@ -41,6 +46,10 @@ class AccountInfoModel {
     this.professional,
     this.average,
     this.role,
+    this.totalElements,
+    this.totalPages,
+    this.pageSize,
+    this.current,
   });
 
   factory AccountInfoModel.fromJson(Map<String, dynamic> json) {
@@ -65,6 +74,10 @@ class AccountInfoModel {
       professional: json['professional'],
       average: json['average'],
       role: json['role'],
+      totalElements: json['totalElements'],
+      totalPages: json['totalPages'],
+      pageSize: json['pageSize'],
+      current: json['current'],
     );
   }
 }

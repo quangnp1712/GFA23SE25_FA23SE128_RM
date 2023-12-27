@@ -9,6 +9,7 @@ final loginOtpUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["LOGIN_OTP"]}";
 final registerUrl =
     "${dotenv.env["DOMAIN"]}/${dotenv.env["REGISTER_CUSTOMER"]}";
 final accountInfoUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_ACCOUNT"]}";
+final getStaffUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_STAFF"]}";
 
 //  BRANCH API
 final getBranchesUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_BRANCHES"]}";

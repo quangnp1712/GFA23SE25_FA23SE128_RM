@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -170,8 +174,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                             ],
                           ),
                         ),
-                        buildStylistList(stylistHistoryData, _selectedOption,
-                            selectedProvider),
+                        buildStylistList(
+                            staffList, _selectedOption, selectedProvider),
                       ],
                     ),
                   ),
@@ -184,7 +188,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     );
   }
 
-  Widget buildStylistList(List<Map<String, dynamic>> stylistDataList,
+  Widget buildStylistList(List<AccountInfoModel> stylistDataList,
       String _selectedOption, var selectedProvider) {
     return Column(
       children: stylistDataList.map((stylistData) {
@@ -206,6 +210,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // anh avatar
                     Container(
                       width: 80,
                       height: 80,
@@ -213,7 +218,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                         radius: 30,
                         child: ClipOval(
                           child: Image.asset(
-                            stylistData['avatar']!,
+                            // stylistData.thumbnailUrl!,
+                            'assets/images/s1.jpg',
                             scale: 1,
                             fit: BoxFit.cover,
                             width: 80,
@@ -223,12 +229,14 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                       ),
                     ),
                     const SizedBox(width: 10.0),
+
                     Expanded(
                       child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            // tên stylist
                             Container(
                               child: RichText(
                                 text: TextSpan(
@@ -243,12 +251,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: stylistData['name'],
-                                      //  "Cắt",
-                                      // utf8.decode(_selectedStylist!.name
-                                      //     .toString()
-                                      //     .runes
-                                      //     .toList()),
+                                      text:
+                                          "${utf8.decode(stylistData.firstName.toString().runes.toList())} ${utf8.decode(stylistData.lastName.toString().runes.toList())}",
                                       style: GoogleFonts.quicksand(
                                         textStyle: const TextStyle(
                                             fontSize: 18,
@@ -260,73 +264,51 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Chuyên môn: ",
-                                    style: GoogleFonts.quicksand(
-                                      textStyle: const TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: stylistData['specialization']
-                                        .join(', ')
-                                        .toString(),
-                                    style: GoogleFonts.quicksand(
-                                      textStyle: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            RichText(
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Chi nhánh: ",
-                                    style: GoogleFonts.quicksand(
-                                      textStyle: const TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: stylistData['branch'],
 
-                                    //  "Cắt",
-                                    // utf8.decode(_selectedStylist!.name
-                                    //     .toString()
-                                    //     .runes
-                                    //     .toList()),
-                                    style: GoogleFonts.quicksand(
-                                      textStyle: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
+                            //  rate
+                            stylistData.staff!.averageRating != null
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 5,
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: "Đánh giá: ",
+                                              style: GoogleFonts.quicksand(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 17,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: stylistData
+                                                  .staff!.averageRating!
+                                                  .toString(),
+                                              style: GoogleFonts.quicksand(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+
                             SizedBox(
-                              height: 5,
+                              height: 10,
                             ),
                           ],
                         ),
@@ -334,9 +316,12 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                     ),
                   ],
                 ),
-                _selectedOption != 'Tất cả stylist'
+                stylistData.branch != null
                     ? Column(
                         children: [
+                          SizedBox(
+                            height: 10,
+                          ),
                           const Divider(
                             color: Colors.black,
                             thickness: 1.0,
@@ -352,16 +337,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Lịch Sử Cắt",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
                                     RichText(
-                                      maxLines: 3,
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       text: TextSpan(
                                         children: [
@@ -375,13 +352,43 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: stylistData['branch'],
+                                            text: utf8.decode(stylistData
+                                                .branch!.branchName
+                                                .toString()
+                                                .runes
+                                                .toList()),
+                                            style: GoogleFonts.quicksand(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
 
-                                            //  "Cắt",
-                                            // utf8.decode(_selectedStylist!.name
-                                            //     .toString()
-                                            //     .runes
-                                            //     .toList()),
+                                    const SizedBox(height: 10),
+                                    RichText(
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Địa chỉ:  ",
+                                            style: GoogleFonts.quicksand(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: utf8.decode(stylistData
+                                                .branch!.address
+                                                .toString()
+                                                .runes
+                                                .toList()),
                                             style: GoogleFonts.quicksand(
                                               textStyle: const TextStyle(
                                                   fontSize: 18,
@@ -400,76 +407,146 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                             ],
                           ),
                           const SizedBox(height: 5),
-                          stylistData['services'] != null
-                              ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Dịch Vụ:",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    const SizedBox(width: 8.0),
-                                    ...List.generate(
-                                      stylistData['services'].length,
-                                      (index) => Container(
-                                        margin: const EdgeInsets.only(
-                                            right:
-                                                8.0), // Khoảng cách giữa các border
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Color(0xff888888),
-                                            width:
-                                                1.0, // Độ rộng của đường viền
-                                          ),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 6.0,
-                                          vertical: 3.0,
-                                        ),
-                                        child: Text(
-                                            stylistData['services'][index]),
-                                      ),
-                                    ).toList(),
-                                  ],
-                                )
-                              : Container(),
-                          const SizedBox(height: 10),
                         ],
                       )
                     : Container(),
-                stylistData['images'] != null
-                    ? SizedBox(
-                        height: 120,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            ...List.generate(
-                                stylistData['images'].length,
-                                (index) => Row(
-                                      children: [
-                                        Container(
-                                          width: 105,
-                                          height: 75,
-                                          margin: const EdgeInsets.only(
-                                              left: 0, right: 5),
-                                          child: Image.asset(
-                                            stylistData['images'][index],
-                                            width: 105.0,
-                                            height: 105.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                          ],
-                        ),
-                      )
-                    : Container(),
+                // _selectedOption != 'Tất cả stylist'
+                //     ? Column(
+                //         children: [
+                //           const Divider(
+                //             color: Colors.black,
+                //             thickness: 1.0,
+                //             height: 16.0,
+                //           ),
+                //           const SizedBox(
+                //             height: 5,
+                //           ),
+                //           Row(
+                //             children: [
+                //               Expanded(
+                //                 child: Column(
+                //                   crossAxisAlignment: CrossAxisAlignment.start,
+                //                   mainAxisAlignment: MainAxisAlignment.start,
+                //                   children: [
+                //                     const Text(
+                //                       "Lịch Sử Cắt",
+                //                       style: TextStyle(
+                //                         fontSize: 18,
+                //                         fontWeight: FontWeight.bold,
+                //                       ),
+                //                     ),
+                //                     const SizedBox(height: 10),
+                //                     RichText(
+                //                       maxLines: 3,
+                //                       overflow: TextOverflow.ellipsis,
+                //                       text: TextSpan(
+                //                         children: [
+                //                           TextSpan(
+                //                             text: "Chi nhánh:  ",
+                //                             style: GoogleFonts.quicksand(
+                //                               textStyle: const TextStyle(
+                //                                   fontSize: 17,
+                //                                   color: Colors.black,
+                //                                   fontWeight: FontWeight.w400),
+                //                             ),
+                //                           ),
+                //                           TextSpan(
+                //                             text: stylistData['branch'],
+
+                //                             //  "Cắt",
+                //                             // utf8.decode(_selectedStylist!.name
+                //                             //     .toString()
+                //                             //     .runes
+                //                             //     .toList()),
+                //                             style: GoogleFonts.quicksand(
+                //                               textStyle: const TextStyle(
+                //                                   fontSize: 18,
+                //                                   color: Colors.black,
+                //                                   fontWeight: FontWeight.w400),
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ),
+                //                     const SizedBox(height: 5),
+                //                     // Các phần khác của Widget Column
+                //                   ],
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //           const SizedBox(height: 5),
+                //           stylistData['services'] != null
+                //               ? Row(
+                //                   crossAxisAlignment: CrossAxisAlignment.start,
+                //                   children: [
+                //                     const Text(
+                //                       "Dịch Vụ:",
+                //                       style: TextStyle(
+                //                           fontSize: 17,
+                //                           color: Colors.black,
+                //                           fontWeight: FontWeight.w400),
+                //                     ),
+                //                     const SizedBox(width: 8.0),
+                //                     ...List.generate(
+                //                       stylistData['services'].length,
+                //                       (index) => Container(
+                //                         margin: const EdgeInsets.only(
+                //                             right:
+                //                                 8.0), // Khoảng cách giữa các border
+                //                         decoration: BoxDecoration(
+                //                           border: Border.all(
+                //                             color: Color(0xff888888),
+                //                             width:
+                //                                 1.0, // Độ rộng của đường viền
+                //                           ),
+                //                           borderRadius: const BorderRadius.all(
+                //                               Radius.circular(4.0)),
+                //                         ),
+                //                         padding: const EdgeInsets.symmetric(
+                //                           horizontal: 6.0,
+                //                           vertical: 3.0,
+                //                         ),
+                //                         child: Text(
+                //                             stylistData['services'][index]),
+                //                       ),
+                //                     ).toList(),
+                //                   ],
+                //                 )
+                //               : Container(),
+                //           const SizedBox(height: 10),
+                //         ],
+                //       )
+                //     : Container(),
+                // stylistData['images'] != null
+                //     ? SizedBox(
+                //         height: 120,
+                //         child: ListView(
+                //           scrollDirection: Axis.horizontal,
+                //           children: [
+                //             ...List.generate(
+                //                 stylistData['images'].length,
+                //                 (index) => Row(
+                //                       children: [
+                //                         Container(
+                //                           width: 105,
+                //                           height: 75,
+                //                           margin: const EdgeInsets.only(
+                //                               left: 0, right: 5),
+                //                           child: Image.asset(
+                //                             stylistData['images'][index],
+                //                             width: 105.0,
+                //                             height: 105.0,
+                //                             fit: BoxFit.cover,
+                //                           ),
+                //                         ),
+                //                       ],
+                //                     )),
+                //           ],
+                //         ),
+                //       )
+                //     : Container(),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -544,12 +621,13 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   @override
   void initState() {
     super.initState();
+    getStaff();
   }
 
   String _selectedOption = 'Stylist theo lịch sử cắt'; // Giá trị mặc định
 
   // Sample stylist history data
-  List<Map<String, dynamic>> stylistHistoryData = [
+  List<Map<String, dynamic>> stylistHistoryDat = [
     {
       'avatar': 'assets/images/s1.jpg',
       'name': 'Anh Tuấn',
@@ -605,4 +683,34 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     },
     // Add more stylist history data as needed
   ];
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  List<AccountInfoModel> staffList = [];
+
+  Future<void> getStaff() async {
+    if (!_isDisposed && mounted) {
+      try {
+        AccountService accountService = AccountService();
+        staffList = [];
+        final result = await accountService.getStaff(10);
+        if (result['statusCode'] == 200) {
+          staffList = result['data'] as List<AccountInfoModel>;
+          setState(() {
+            staffList;
+          });
+        } else {
+          print("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
 }

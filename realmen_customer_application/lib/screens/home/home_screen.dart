@@ -15,7 +15,7 @@ import 'package:realmen_customer_application/screens/home/components/top_barber.
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
 import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/service/account/account_info_service.dart';
+import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';

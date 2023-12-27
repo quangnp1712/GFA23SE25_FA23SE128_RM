@@ -626,7 +626,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   String? cityController;
   List<String> cities = [];
   Future<void> getBranchesByCity() async {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
       try {
         BranchService branchService = BranchService();
         final result = await branchService.getBranchesByCity();

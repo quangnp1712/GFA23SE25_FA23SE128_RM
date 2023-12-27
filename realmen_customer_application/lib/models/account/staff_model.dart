@@ -2,12 +2,14 @@
 
 class StaffModel {
   int? staffId;
+  int? accountId;
   double? averageRating;
   List<ScheduleModel>? scheduleList;
   String? professional;
 
   StaffModel({
     this.staffId,
+    this.accountId,
     this.averageRating,
     this.scheduleList,
     this.professional,
@@ -15,6 +17,7 @@ class StaffModel {
 
   factory StaffModel.fromJson(Map<String, dynamic> json) {
     return StaffModel(
+      accountId: json['accountId'],
       staffId: json['staffId'] ?? null,
       averageRating: json['averageRating'] ?? null,
       scheduleList: json['scheduleList'] != null && json['scheduleList'] != []

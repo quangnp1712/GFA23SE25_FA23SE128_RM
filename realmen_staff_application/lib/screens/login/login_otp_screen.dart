@@ -188,7 +188,9 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     String otp = otpController.text.toString();
     // LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
     LoginOtpModel loginOtpModel =
-        LoginOtpModel(phone: "0917901486", passCode: "12345");
+        LoginOtpModel(phone: phone, passCode: "12345");
+    // LoginOtpModel loginOtpModel =
+    //     LoginOtpModel(phone: "0917901486", passCode: "12345");
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginOtp(loginOtpModel);

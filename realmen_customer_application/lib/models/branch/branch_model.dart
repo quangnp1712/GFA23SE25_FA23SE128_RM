@@ -30,8 +30,8 @@ class BranchesValuesModel {
   });
   factory BranchesValuesModel.fromJson(Map<String, dynamic> json) {
     return BranchesValuesModel(
-      city: json['city'] ?? null,
-      branch: json['branch'] ?? null,
+      city: json['city'],
+      branch: json['branch'],
       branchList: json['branchList'] != null && json['branchList'] != []
           ? (json['branchList'] as List)
               .map((e) => BranchModel.fromJson(e))
@@ -56,34 +56,41 @@ class BranchModel {
   List<BranchServiceModel>? branchServiceList;
   List<AccountInfoModel>? accountStaffList;
   String? distanceKilometer;
+  double? lat;
+  double? lng;
+  bool? distance;
 
-  BranchModel(
-      {this.branchId,
-      this.shopOwnerId,
-      this.branchName,
-      this.thumbnailUrl,
-      this.phone,
-      this.address,
-      this.status,
-      this.numberStaffs,
-      this.open,
-      this.close,
-      this.branchDisplayList,
-      this.branchServiceList,
-      this.accountStaffList,
-      this.distanceKilometer});
+  BranchModel({
+    this.branchId,
+    this.shopOwnerId,
+    this.branchName,
+    this.thumbnailUrl,
+    this.phone,
+    this.address,
+    this.status,
+    this.numberStaffs,
+    this.open,
+    this.close,
+    this.branchDisplayList,
+    this.branchServiceList,
+    this.accountStaffList,
+    this.distanceKilometer,
+    this.lat,
+    this.lng,
+    this.distance,
+  });
 
   factory BranchModel.fromJson(Map<String, dynamic> json) {
     return BranchModel(
-      branchId: json['branchId'] ?? null,
-      shopOwnerId: json['shopOwnerId'] ?? null,
-      branchName: json['branchName'] ?? null,
-      phone: json['phone'] ?? null,
-      address: json['address'] ?? null,
-      status: json['status'] ?? null,
-      numberStaffs: json['numberStaffs'] ?? null,
-      open: json['open'] ?? null,
-      close: json['close'] ?? null,
+      branchId: json['branchId'],
+      shopOwnerId: json['shopOwnerId'],
+      branchName: json['branchName'],
+      phone: json['phone'],
+      address: json['address'],
+      status: json['status'],
+      numberStaffs: json['numberStaffs'],
+      open: json['open'],
+      close: json['close'],
       branchDisplayList: json['branchDisplayList'] != null
           ? (json['branchDisplayList'] as List)
               .map((e) => BranchDisplayListUrl.fromJson(e))
@@ -99,7 +106,10 @@ class BranchModel {
               .map((e) => AccountInfoModel.fromJson(e))
               .toList()
           : null,
-      distanceKilometer: json['distanceKilometer'] ?? null,
+      distanceKilometer: json['distanceKilometer'],
+      lat: json['lat'],
+      lng: json['lng'],
+      distance: json['distance'],
     );
   }
 }
@@ -178,13 +188,20 @@ class BranchServiceModel {
 
 class BranchDisplayListUrl {
   String? url;
+  int? branchDisplayId;
+  int? branchId;
+
   BranchDisplayListUrl({
     this.url,
+    this.branchDisplayId,
+    this.branchId,
   });
 
   factory BranchDisplayListUrl.fromJson(Map<String, dynamic> json) {
     return BranchDisplayListUrl(
       url: json['url'],
+      branchDisplayId: json['branchDisplayId'],
+      branchId: json['branchId'],
     );
   }
 }

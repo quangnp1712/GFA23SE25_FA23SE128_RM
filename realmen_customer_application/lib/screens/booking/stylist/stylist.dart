@@ -51,10 +51,36 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
           ),
 
           // content
-          endChild: selectedBranch != null && selectedStylist != null
-              ? ChooseServiceBooking(
-                  onServiceSelected: updateSelectedService,
-                  branchServiceList: selectedBranch.branchServiceList!)
+          endChild: selectedBranch.branchId != null
+              ? (selectedBranch.branchServiceList != null &&
+                      selectedBranch.branchServiceList!.length > 0
+                  ? ChooseServiceBooking(
+                      onServiceSelected: updateSelectedService,
+                      branchServiceList: selectedBranch!.branchServiceList!)
+                  : Container(
+                      height: 150,
+                      padding: const EdgeInsets.only(top: 10, right: 15),
+                      constraints: const BoxConstraints(minHeight: 120),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "2. Chọn dịch vụ ",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: Text("Chi nhánh hiện chưa có dịch vụ."),
+                          ),
+                          Center(
+                            child: Text(
+                                "Quý khách hành vui lòng chọn Stylist khác!"),
+                          ),
+                        ],
+                      ),
+                    ))
               : Container(
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),

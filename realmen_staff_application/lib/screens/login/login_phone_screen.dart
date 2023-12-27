@@ -225,7 +225,7 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
 
   // // No API
   void submitPhone() async {
-    String phone = "0917901486";
+    String phone = phoneController.text.toString();
     Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
     try {
       await SharedPreferencesService.savePhone(phone);

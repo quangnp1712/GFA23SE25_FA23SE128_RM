@@ -12,7 +12,7 @@ import 'package:realmen_customer_application/screens/message/success_screen.dart
 import 'package:realmen_customer_application/screens/other/test.dart';
 
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
-import 'package:realmen_customer_application/service/account/account_info_service.dart';
+import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {

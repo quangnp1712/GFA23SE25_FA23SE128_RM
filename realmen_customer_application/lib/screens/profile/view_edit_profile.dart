@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/models/autocomplete/autocomplete_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/service/account/account_info_service.dart';
+import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
 import 'package:sizer/sizer.dart';

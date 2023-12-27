@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_branch/choose_stylist_screen.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
@@ -70,13 +73,17 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                     );
                     if (selectedStylist != null) {
                       setState(() {
-                        hasSelectedServices = selectedStylist.isNotEmpty;
-                        buttonText = hasSelectedServices
-                            ? selectedStylist['name']
+                        buttonText = selectedStylist.accountId != null
+                            ? utf8.decode(
+                                ("${selectedStylist.firstName!.substring(selectedStylist.firstName!.lastIndexOf(" ") + 1)} ${selectedStylist.lastName!}")
+                                    .toString()
+                                    .runes
+                                    .toList())
                             : 'Xem stylist';
                         stylistData = selectedStylist;
-                        widget.onStylistSelected(stylistData['name']);
-                        widget.onBranchSelected(stylistData['branch']);
+                        widget.onStylistSelected(stylistData);
+                        // ignore: unnecessary_null_in_if_null_operators
+                        widget.onBranchSelected(stylistData.branch ?? null);
                       });
                     }
                   }
@@ -139,7 +146,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                 ),
               ),
             ),
-            stylistData != null && stylistData['name'] != null
+            stylistData.accountId != null
                 ? Container(
                     margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -165,7 +172,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                   radius: 30,
                                   child: ClipOval(
                                     child: Image.asset(
-                                      stylistData['avatar'],
+                                      'assets/images/s1.jpg',
                                       scale: 1,
                                       fit: BoxFit.cover,
                                       width: 80,
@@ -197,12 +204,8 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: stylistData['name'],
-                                                //  "Cắt",
-                                                // utf8.decode(_selectedStylist!.name
-                                                //     .toString()
-                                                //     .runes
-                                                //     .toList()),
+                                                text:
+                                                    "${utf8.decode(stylistData.firstName.toString().runes.toList())} ${utf8.decode(stylistData.lastName.toString().runes.toList())}",
                                                 style: GoogleFonts.ebGaramond(
                                                   textStyle: const TextStyle(
                                                       fontSize: 18,
@@ -218,38 +221,38 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "Chuyên môn: ",
-                                              style: GoogleFonts.ebGaramond(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  stylistData['specialization']
-                                                      .join(', ')
-                                                      .toString(),
-                                              style: GoogleFonts.ebGaramond(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
+                                      // RichText(
+                                      //   text: TextSpan(
+                                      //     children: [
+                                      //       TextSpan(
+                                      //         text: "Chuyên môn: ",
+                                      //         style: GoogleFonts.ebGaramond(
+                                      //           textStyle: const TextStyle(
+                                      //               fontSize: 17,
+                                      //               color: Colors.black,
+                                      //               fontWeight:
+                                      //                   FontWeight.w400),
+                                      //         ),
+                                      //       ),
+                                      //       TextSpan(
+                                      //         text:
+                                      //             stylistData['specialization']
+                                      //                 .join(', ')
+                                      //                 .toString(),
+                                      //         style: GoogleFonts.ebGaramond(
+                                      //           textStyle: const TextStyle(
+                                      //               fontSize: 18,
+                                      //               color: Colors.black,
+                                      //               fontWeight:
+                                      //                   FontWeight.w500),
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(
+                                      //   height: 5,
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -261,7 +264,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                     ),
                   )
                 : Container(),
-            stylistData != null && stylistData['name'] != null
+            stylistData.branch != null
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -315,12 +318,12 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                                 text: TextSpan(
                                                   children: [
                                                     TextSpan(
-                                                      text: "Nguyễn Văn Tăng",
-                                                      //  "Cắt",
-                                                      // utf8.decode(_selectedStylist!.name
-                                                      //     .toString()
-                                                      //     .runes
-                                                      //     .toList()),
+                                                      text: utf8.decode(
+                                                          stylistData.branch!
+                                                              .branchName
+                                                              .toString()
+                                                              .runes
+                                                              .toList()),
                                                       style: GoogleFonts
                                                           .ebGaramond(
                                                         textStyle:
@@ -346,7 +349,12 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                               text: TextSpan(
                                                 children: [
                                                   TextSpan(
-                                                    text: stylistData['branch'],
+                                                    text: utf8.decode(
+                                                        stylistData
+                                                            .branch!.address
+                                                            .toString()
+                                                            .runes
+                                                            .toList()),
 
                                                     //  "Cắt",
                                                     // utf8.decode(_selectedStylist!.name
@@ -406,5 +414,5 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
   String buttonText = 'Xem stylist';
   ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();
   bool hasSelectedServices = false;
-  var stylistData;
+  AccountInfoModel stylistData = AccountInfoModel();
 }

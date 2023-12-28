@@ -8,7 +8,7 @@ import 'package:realmen_customer_application/models/account/account_info_model.d
 import '../stylist_date_time_booking_choose.dart';
 
 class ChooseStylist extends StatefulWidget {
-  final void Function(dynamic stylist) onStylistSelected;
+  final void Function(AccountInfoModel? stylist) onStylistSelected;
   final void Function(AccountInfoModel? stylistSelected) updateSelectedStylist;
   final List<AccountInfoModel>? accountStaffList;
 
@@ -66,7 +66,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                           isDefaultSelected = true;
                           _selectedStylist = AccountInfoModel();
 
-                          widget.onStylistSelected("random");
+                          widget.onStylistSelected(null);
                           widget.updateSelectedStylist(null);
                         } else {
                           isDefaultSelected = true;
@@ -447,14 +447,14 @@ class _ChooseStylistState extends State<ChooseStylist> {
       if (stylist.accountId == _selectedStylist.accountId) {
         _selectedStylist = AccountInfoModel();
         isDefaultSelected = true;
-        widget.onStylistSelected("random");
+        widget.onStylistSelected(null);
         widget.updateSelectedStylist(null);
       } else {
         _selectedStylist = stylist;
         String name = _selectedStylist.firstName!
                 .substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1) +
             _selectedStylist.lastName!;
-        widget.onStylistSelected(utf8.decode(name.toString().runes.toList()));
+        widget.onStylistSelected(_selectedStylist);
         widget.updateSelectedStylist(_selectedStylist);
         isDefaultSelected = false;
       }

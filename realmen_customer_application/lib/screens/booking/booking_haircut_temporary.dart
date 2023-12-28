@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:sizer/sizer.dart';
 
 class BookingHaircutTemporary extends StatefulWidget {
@@ -9,7 +12,7 @@ class BookingHaircutTemporary extends StatefulWidget {
   Map<String, dynamic> params = Get.arguments;
 
   dynamic branch = Get.arguments['branch'];
-  dynamic service = Get.arguments['service']; //List<String>
+  List<BranchServiceModel> service = Get.arguments['service']; //List<String>
   dynamic stylist = Get.arguments['stylist'];
   dynamic date = Get.arguments['date'];
   dynamic time = Get.arguments['time'];
@@ -148,7 +151,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               Container(
                 width: 220,
                 child: Text(
-                  branch != null ? branch.address : "",
+                  utf8.decode(branch.address.toString().runes.toList()),
                   maxLines: 3,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
@@ -179,7 +182,12 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               Container(
                 width: 220,
                 child: Text(
-                  stylist != null ? stylist : "REALMEN sẽ chọn giúp anh",
+                  stylist != null && stylist.accountId != null
+                      ? utf8.decode(("${stylist.firstName} ${stylist.lastName}")
+                          .toString()
+                          .runes
+                          .toList())
+                      : "REALMEN sẽ chọn giúp anh",
                   textAlign: TextAlign.left,
                   maxLines: 1,
                   style: const TextStyle(
@@ -236,19 +244,13 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
-  double total = 0;
+  int total = 0;
   getTotal() {
-    for (var price in widget.service) {
-      if (price == 'Combo Cắt 9 bước') {
-        total += 100000;
-      } else if (price == 'Combo Massage Cao Cấp') {
-        total += 200000;
-      } else if (price == 'Cắt tóc tạo kiểu') {
-        total += 70000;
-      } else {
-        total += 50000;
-      }
-    }
+    widget.service.forEach(
+      (element) {
+        total += element.price!;
+      },
+    );
     setState(() {
       total;
     });
@@ -260,7 +262,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     getTotal();
   }
 
-  Widget _buildService(dynamic service) {
+  Widget _buildService(List<BranchServiceModel> service) {
     return Column(
       children: [
         const Padding(
@@ -288,7 +290,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           child: ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: service != null && service.length > 0
+            itemCount: service != []
                 ? service.length
                 : 1, // The number of items in the list
             itemBuilder: (context, index) {
@@ -300,16 +302,14 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(service != null ? service[index].toString() : ""),
-                    service[index].toString() == 'Combo Cắt 9 bước'
-                        ? Text(formatter.format(100000))
-                        : service[index].toString() == 'Combo Massage Cao Cấp'
-                            ? Text(formatter.format(200000))
-                            : service[index].toString() == 'Cắt tóc tạo kiểu'
-                                ? Text(formatter.format(70000))
-                                : service[index].toString() == 'Cắt tóc trẻ em'
-                                    ? Text(formatter.format(50000))
-                                    : Container(),
+                    Text(service != []
+                        ? utf8.decode(service[index]
+                            .serviceName
+                            .toString()
+                            .runes
+                            .toList())
+                        : ""),
+                    Text(formatter.format(service[index].price)),
                   ],
                 ),
               );

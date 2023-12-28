@@ -11,12 +11,14 @@ import 'package:realmen_customer_application/service/change_notifier_provider/ch
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseServiceBooking extends StatefulWidget {
-  final void Function(dynamic service) onServiceSelected;
+  final void Function(List<BranchServiceModel> service) onServiceSelected;
   final List<BranchServiceModel> branchServiceList;
-  const ChooseServiceBooking({
+  bool? isUpdateBranch;
+  ChooseServiceBooking({
     super.key,
     required this.onServiceSelected,
     required this.branchServiceList,
+    this.isUpdateBranch,
   });
 
   @override
@@ -24,7 +26,7 @@ class ChooseServiceBooking extends StatefulWidget {
 }
 
 class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
-  List<String>? servicesList = [];
+  List<BranchServiceModel>? servicesList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +57,16 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
                   //     ),
                   //   ),
                   // );
-                  List<String> _servicesList = List<String>.from(servicesList!);
-                  List<String>? selectedServices = await Navigator.push(
+                  List<BranchServiceModel> _servicesList =
+                      List<BranchServiceModel>.from(servicesList!);
+                  List<BranchServiceModel>? selectedServices =
+                      await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChooseServiceBookingScreen(
-                          selectedServices: _servicesList,
-                          branchServiceList: widget.branchServiceList),
+                        selectedServices: _servicesList,
+                        branchServiceList: widget.branchServiceList,
+                      ),
                     ),
                   );
 
@@ -154,7 +159,7 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
     super.dispose();
   }
 
-  _getTextContainers(List<String> selectedServices) {
+  _getTextContainers(List<BranchServiceModel> selectedServices) {
 // Update your UI or perform other actions with selectedServices
     hasSelectedServices = selectedServices.isNotEmpty;
     if (hasSelectedServices) {
@@ -167,7 +172,7 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
-            utf8.decode(service.toString().runes.toList()),
+            utf8.decode(service.serviceName.toString().runes.toList()),
             style: TextStyle(fontSize: 12, color: Colors.black),
           ),
         );
@@ -177,5 +182,17 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
     buttonText = hasSelectedServices
         ? 'Đã chọn ${selectedServices.length} dịch vụ'
         : 'Xem tất cả danh sách dịch vụ';
+  }
+
+  @override
+  void didUpdateWidget(ChooseServiceBooking oldWidget) {
+    setState(() {
+      if (widget.isUpdateBranch == true) {
+        servicesList = [];
+        _getTextContainers(servicesList!);
+      }
+    });
+
+    super.didUpdateWidget(oldWidget);
   }
 }

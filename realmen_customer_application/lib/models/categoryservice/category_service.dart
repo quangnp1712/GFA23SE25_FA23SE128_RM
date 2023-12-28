@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 
 class CategoryListModel {
@@ -19,35 +20,39 @@ class CategoryListModel {
 }
 
 class CategoryModel {
-  String? description;
   int? categoryId;
-  String? title;
-  List<SubServiceModel>? serviceList;
+  String? name;
+  String? categoryType;
+  List<ServiceList>? serviceList;
 
-  CategoryModel(
-      {this.description, this.categoryId, this.title, this.serviceList});
+  CategoryModel({
+    this.categoryId,
+    this.name,
+    this.categoryType,
+    this.serviceList,
+  });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      description: json['description'],
       categoryId: json['categoryId'],
-      title: json['title'],
+      name: json['name'],
+      categoryType: json['categoryType'],
       serviceList: (json['serviceList'] as List<dynamic>?)
-          ?.map((item) => SubServiceModel.fromJson(item))
+          ?.map((item) => ServiceList.fromJson(item))
           .toList(),
     );
   }
 }
 
-class SubServiceModel {
+class ServiceList {
+  String? name;
   String? description;
   int? serviceId;
-  String? name;
 
   List<ServiceDisplayListModel>? serviceDisplayList;
   List<BranchServiceModel>? branchServiceList;
 
-  SubServiceModel({
+  ServiceList({
     this.description,
     this.serviceId,
     this.name,
@@ -55,8 +60,8 @@ class SubServiceModel {
     this.branchServiceList,
   });
 
-  factory SubServiceModel.fromJson(Map<String, dynamic> json) {
-    return SubServiceModel(
+  factory ServiceList.fromJson(Map<String, dynamic> json) {
+    return ServiceList(
       description: json['description'],
       serviceId: json['serviceId'],
       name: json['name'],

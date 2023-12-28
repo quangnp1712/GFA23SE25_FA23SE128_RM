@@ -7,8 +7,15 @@ import 'package:timeline_tile/timeline_tile.dart';
 class ChooseTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
-  ChooseTimeSlot(
-      {super.key, required this.onDateSelected, required this.onTimeSelected});
+  final AccountInfoModel? selectedStylist;
+  final bool? isChangeStylist;
+  ChooseTimeSlot({
+    super.key,
+    required this.onDateSelected,
+    required this.onTimeSelected,
+    this.selectedStylist,
+    this.isChangeStylist,
+  });
 
   @override
   State<ChooseTimeSlot> createState() => _ChooseTimeSlotState();
@@ -34,8 +41,8 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
           ChooseDateAndTimeSlot(
               onDateSelected: widget.onDateSelected,
               onTimeSelected: widget.onTimeSelected,
-              stylistSelected: stylistSelected!,
-              isChangeStylist: isChangeStylist),
+              stylistSelected: widget.selectedStylist,
+              isChangeStylist: widget.isChangeStylist),
           const SizedBox(
             height: 20,
           ),
@@ -44,53 +51,6 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
               padding: const EdgeInsets.all(0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Yêu Cầu Tư Vấn",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 50),
-                      OnOffSwitch(
-                        initialValue: isSwitched1,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitched1 = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  isSwitched1
-                      ? const Text(
-                          "Anh cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
-                          style: TextStyle(fontSize: 14),
-                        )
-                      : const Text(
-                          "Anh không cho phép các em giới thiệu về chương trình khuyến mãi, dịch vụ tốt nhất dành cho anh.",
-                          style: TextStyle(fontSize: 14),
-                        ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

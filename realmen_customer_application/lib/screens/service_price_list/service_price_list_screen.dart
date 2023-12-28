@@ -256,8 +256,8 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                           ),
                                           child: Text(
                                             utf8
-                                                .decode(category
-                                                        ?.title?.codeUnits ??
+                                                .decode(category?.categoryType
+                                                        ?.codeUnits ??
                                                     Uint8List(0))
                                                 .toUpperCase(),
                                             style: TextStyle(
@@ -440,7 +440,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
     "2.png",
     "3.png",
   ];
-  Future<Widget> getImageFB(SubServiceModel service) async {
+  Future<Widget> getImageFB(ServiceList service) async {
     try {
       if (service.serviceDisplayList != null &&
           service.serviceDisplayList!.length > 0) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/branch_booking_choose.dart';
@@ -52,7 +53,8 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                       selectedBranch.branchServiceList!.length > 0
                   ? ChooseServiceBooking(
                       onServiceSelected: updateSelectedService,
-                      branchServiceList: selectedBranch!.branchServiceList!)
+                      branchServiceList: selectedBranch.branchServiceList!,
+                      isUpdateBranch: isUpdateBranch)
                   : Container(
                       height: 150,
                       padding: const EdgeInsets.only(top: 10, right: 15),
@@ -179,10 +181,11 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   @override
   bool get wantKeepAlive => true;
   BranchModel selectedBranch = BranchModel();
-  List<String> selectedService = [];
-  dynamic selectedStylist;
+  List<BranchServiceModel> selectedService = [];
+  AccountInfoModel? selectedStylist;
   dynamic selectedDate;
   dynamic selectedTime;
+  bool isUpdateBranch = false;
 
 // BranchModel branch
   void updateSelectedBranch(dynamic branch) {
@@ -190,26 +193,30 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
       setState(() {
         selectedBranch = branch;
         selectedService = [];
-        print("------- $selectedBranch");
+        isUpdateBranch = true;
       });
     }
   }
 
 // String stylist
-  void updateSelectedStylist(dynamic stylist) {
+  void updateSelectedStylist(AccountInfoModel? stylist) {
     if (!_isDisposed) {
       setState(() {
-        selectedStylist = stylist;
-        print("selectedStylist: $selectedStylist");
+        if (stylist != null) {
+          selectedStylist = stylist;
+        } else {
+          selectedStylist = null;
+        }
       });
     }
   }
 
 // List String service
-  void updateSelectedService(dynamic service) {
+  void updateSelectedService(List<BranchServiceModel> service) {
     if (!_isDisposed) {
       setState(() {
         selectedService = service;
+        isUpdateBranch = false;
         print(selectedService);
       });
     }
@@ -287,9 +294,9 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   }
 
   _onBooking() {
-    if (selectedBranch == null) {
+    if (selectedBranch.branchId == null) {
       _errorMessage("Xin chọn chi nhánh");
-    } else if (selectedService == null && selectedService == []) {
+    } else if (selectedService == []) {
       _errorMessage("Xin chọn dịch vụ");
     } else if (selectedDate == null) {
       _errorMessage("Xin chọn ngày");

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/service_booking_choose.dart';
@@ -56,7 +57,8 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
                       selectedBranch.branchServiceList!.length > 0
                   ? ChooseServiceBooking(
                       onServiceSelected: updateSelectedService,
-                      branchServiceList: selectedBranch!.branchServiceList!)
+                      branchServiceList: selectedBranch!.branchServiceList!,
+                      isUpdateBranch: isChangeStylist)
                   : Container(
                       height: 150,
                       padding: const EdgeInsets.only(top: 10, right: 15),
@@ -109,13 +111,14 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
           ),
 
           // content
-          endChild: selectedBranch != null &&
-                  selectedStylist != null &&
-                  selectedService != null &&
-                  selectedService != []
+          endChild: selectedBranch.branchId != null &&
+                  selectedService.isNotEmpty &&
+                  selectedBranch.branchServiceList != null &&
+                  selectedBranch.branchServiceList!.isNotEmpty
               ? ChooseTimeSlot(
                   onDateSelected: updateSelectedDate,
                   onTimeSelected: updateSelectedTime,
+                  selectedStylist: selectedStylist,
                 )
               : Container(
                   height: 150,
@@ -127,8 +130,8 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
                   )),
         ),
         // button Đặt Lịch
-        selectedBranch != null &&
-                selectedStylist != null &&
+        selectedBranch.branchId != null &&
+                selectedStylist.accountId != null &&
                 selectedService != null &&
                 selectedService != []
             ? Container(
@@ -149,27 +152,7 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (selectedStylist == null) {
-                      print("Xin chọn stylist");
-                    } else if (selectedService == null &&
-                        selectedService.length <= 0) {
-                      print("Xin chọn dịch vụ");
-                    } else if (selectedDate == null) {
-                      print("Xin chọn ngày");
-                    } else if (selectedTime == null) {
-                      print("Xin chọn giờ");
-                    } else {
-                      Get.toNamed(
-                          BookingHaircutTemporary
-                              .BookingHaircutTemporaryScreenRoute,
-                          arguments: {
-                            'branch': selectedBranch,
-                            'service': selectedService,
-                            'stylist': selectedStylist,
-                            'date': selectedDate,
-                            'time': selectedTime,
-                          });
-                    }
+                    _onBooking();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black12,
@@ -245,12 +228,13 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
 
   @override
   bool get wantKeepAlive => true;
-  BranchModel selectedBranch = new BranchModel();
-  dynamic selectedService;
-  dynamic selectedStylist;
+  BranchModel selectedBranch = BranchModel();
+  List<BranchServiceModel> selectedService = [];
+  AccountInfoModel selectedStylist = AccountInfoModel();
   dynamic selectedDate;
   dynamic selectedTime;
 
+  bool isChangeStylist = false;
   void updateSelectedBranch(dynamic branch) {
     setState(() {
       selectedBranch = branch;
@@ -261,13 +245,15 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
   void updateSelectedStylist(dynamic stylist) {
     setState(() {
       selectedStylist = stylist;
-      print(selectedStylist);
+      selectedService = [];
+      isChangeStylist = true;
     });
   }
 
-  void updateSelectedService(dynamic service) {
+  void updateSelectedService(List<BranchServiceModel> service) {
     setState(() {
       selectedService = service;
+      isChangeStylist = false;
       print(selectedService);
     });
   }
@@ -284,5 +270,36 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
       selectedTime = time;
       print(selectedTime);
     });
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _onBooking() {
+    if (selectedBranch.branchId == null) {
+      _errorMessage("Xin chọn lại Stylist");
+    } else if (selectedStylist.accountId == null) {
+      _errorMessage("Xin chọn lại Stylist");
+    } else if (selectedService == []) {
+      _errorMessage("Xin chọn dịch vụ");
+    } else if (selectedDate == null) {
+      _errorMessage("Xin chọn ngày");
+    } else if (selectedTime == null) {
+      _errorMessage("Xin chọn giờ");
+    } else {
+      Get.toNamed(BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
+          arguments: {
+            'branch': selectedBranch, // String name
+            'service': selectedService, // List <String> name
+            'stylist': selectedStylist, // String name
+            'date': selectedDate, // String
+            'time': selectedTime, // String
+          });
+    }
   }
 }

@@ -9,14 +9,14 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
   final AccountInfoModel? stylistSelected;
-  bool isChangeStylist;
+  bool? isChangeStylist;
 
   ChooseDateAndTimeSlot(
       {super.key,
       required this.onDateSelected,
       required this.onTimeSelected,
       required this.stylistSelected,
-      required this.isChangeStylist});
+      this.isChangeStylist});
 
   @override
   State<ChooseDateAndTimeSlot> createState() => _ChooseDateAndTimeSlotState();
@@ -281,7 +281,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   @override
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
     getDate();
-    if (widget.isChangeStylist) {
+    if (widget.isChangeStylist != null) {
       if (listDate!.isNotEmpty) {
         dateController = listDate?.first['id'].toString();
         dateSeleted = listDate?.first;
@@ -331,22 +331,23 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
               (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
                   DateTime.parse(schedule.value.workingDate!)
                       .isBefore(now.add(Duration(days: 4))))) {
-            if (!listDate!.any((date) =>
-                date['date'] ==
-                formatDate(
-                    DateTime.parse(schedule.value.workingDate!))['date'])) {
-              listDate?.add({
-                'id': schedule.key.toString(),
-                'date': formatDate(
-                    DateTime.parse(schedule.value.workingDate!))['date'],
-                'type': formatDate(
-                    DateTime.parse(schedule.value.workingDate!))['type'],
-                'start': schedule.value.start,
-                'end': schedule.value.end
-              });
-            }
+            // if (!listDate!.any((date) =>
+            //     date['date'] ==
+            //     formatDate(
+            //         DateTime.parse(schedule.value.workingDate!))['date'])) {
+            listDate?.add({
+              'id': schedule.key.toString(),
+              'date': formatDate(
+                  DateTime.parse(schedule.value.workingDate!))['date'],
+              'type': formatDate(
+                  DateTime.parse(schedule.value.workingDate!))['type'],
+              'start': schedule.value.start,
+              'end': schedule.value.end
+            });
+            // }
           }
         }).toList();
+        listDate;
       } on Exception catch (e) {
         listDate?.add({
           'date': formatDate(now.add(Duration(days: 1)))['date'],
@@ -577,10 +578,13 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
       itemBuilder: (BuildContext context, int index) {
         final timeSlot = timeSlots[index];
         final isSelected = timeSlot == widget.selectedTimeSlot;
-        bool isSelectable; // kiểm tra được chọn hay không
+
+        // kiểm tra được chọn hay không
+        // TRUE chọn
+        bool isSelectable;
         isSelectable = checkTimeSlotSelected(timeSlot);
         if (widget.isCurrentDate) {
-          isSelectable = timeSlot.compareTo(currentTime) >= 0;
+          isSelectable = timeSlot.compareTo(currentTime) >= 0 && isSelectable;
         } else {
           isSelectable;
         }

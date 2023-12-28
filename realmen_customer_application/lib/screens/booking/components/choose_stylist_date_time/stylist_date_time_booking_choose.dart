@@ -12,7 +12,7 @@ import 'package:realmen_customer_application/screens/booking/components/on_off_s
 import 'stylist/choose_stylist.dart';
 
 class ChooseStylistAndDateTimeBooking extends StatefulWidget {
-  final void Function(dynamic stylist) onStylistSelected;
+  final void Function(AccountInfoModel? stylist) onStylistSelected;
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
   List<AccountInfoModel>? accountStaffList;
@@ -52,10 +52,10 @@ class _ChooseStylistAndDateTimeBookingState
               accountStaffList: widget.accountStaffList,
               updateSelectedStylist: updateSelectedStylist),
           ChooseDateAndTimeSlot(
-              onDateSelected: widget.onDateSelected,
-              onTimeSelected: widget.onTimeSelected,
-              stylistSelected: stylistSelected,
-              isChangeStylist: isChangeStylist),
+            onDateSelected: widget.onDateSelected,
+            onTimeSelected: widget.onTimeSelected,
+            stylistSelected: stylistSelected,
+          ),
           const SizedBox(height: 20),
           Container(
             child: Padding(

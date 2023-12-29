@@ -59,53 +59,51 @@ class _CardHistoryHairCutState extends State<CardHistoryHairCut> {
                         ),
                       ],
                     ),
-                    Container(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/images/admin.png",
-                            height: 170,
-                            width: 140,
-                            fit: BoxFit.cover,
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("Stylist: Le Anh Tuan"),
-                                    const SizedBox(height: 10),
-                                    const Text("Skinner: Be Dep"),
-                                    const SizedBox(height: 10),
-                                    const Text("PTTT: The"),
-                                    const SizedBox(height: 10),
-                                    const Text("Tong Hoa Don: 180,000"),
-                                    const SizedBox(height: 25),
-                                    ElevatedButton(
-                                      onPressed: () => Get.toNamed(
-                                          DetailHistoryBookingScreen
-                                              .DetailHistoryBookingScreenRoute),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.black,
-                                      ),
-                                      child: const Text(
-                                        'Xem chi tiết ->',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          "assets/images/admin.png",
+                          height: 170,
+                          width: 140,
+                          fit: BoxFit.cover,
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Stylist: Le Anh Tuan"),
+                                  const SizedBox(height: 10),
+                                  const Text("Skinner: Be Dep"),
+                                  const SizedBox(height: 10),
+                                  const Text("PTTT: The"),
+                                  const SizedBox(height: 10),
+                                  const Text("Tong Hoa Don: 180,000"),
+                                  const SizedBox(height: 25),
+                                  ElevatedButton(
+                                    onPressed: () => Get.toNamed(
+                                        DetailHistoryBookingScreen
+                                            .DetailHistoryBookingScreenRoute),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                    ),
+                                    child: const Text(
+                                      'Xem chi tiết ->',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),

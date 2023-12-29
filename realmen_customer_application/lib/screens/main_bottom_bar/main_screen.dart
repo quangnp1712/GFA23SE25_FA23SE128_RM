@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +24,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int bottomIndex = 0;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   late final HomeScreen homeScreen;
   late final ServicePriceListScreen servicePriceListScreen;

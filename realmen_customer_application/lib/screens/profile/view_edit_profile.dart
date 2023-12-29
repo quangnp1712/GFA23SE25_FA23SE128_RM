@@ -1,14 +1,15 @@
+// ignore_for_file: constant_identifier_names, sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print
+
 import 'dart:convert';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/models/autocomplete/autocomplete_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account/account_service.dart';
-import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -78,7 +79,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         child: Center(
                                           child: Text(
                                             "thông tin tài khoản".toUpperCase(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.w700,
                                               fontSize: 24,
                                             ),
@@ -148,7 +149,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Họ và Tên đệm",
                                         style: TextStyle(
                                             fontSize: 22,
@@ -205,7 +206,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Tên",
                                         style: TextStyle(
                                             fontSize: 22,
@@ -262,7 +263,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Số điện thoại",
                                         style: TextStyle(
                                             fontSize: 22,
@@ -319,7 +320,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Ngày tháng năm sinh ",
                                         style: TextStyle(
                                             fontSize: 22,
@@ -384,7 +385,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Giới tính ",
                                         style: TextStyle(
                                             fontSize: 22,
@@ -442,7 +443,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Địa chỉ",
                                         style: TextStyle(
                                             fontSize: 22,
@@ -678,14 +679,17 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
   }
 
   final AutocompleteService autocompleteService = AutocompleteService();
+
+  // ignore: unused_field, prefer_final_fields
   late Iterable<String> _lastOptions = <String>[];
+
   AutocompleteModel? autocompleteModel = AutocompleteModel();
   AccountInfoModel? accountInfo = AccountInfoModel();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingValue addressValue = TextEditingValue();
+  TextEditingValue addressValue = const TextEditingValue();
   TextEditingController dobController = TextEditingController();
   List<String> genders = ['NAM', 'NỮ'];
   String? genderController = 'NAM';
@@ -693,6 +697,8 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
   final storage = FirebaseStorage.instance;
   String avatarDefault =
       "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
+
+  // ignore: unused_field
   String? _searchingWithQuery;
   Iterable<PredictionModel>? options;
 
@@ -718,14 +724,14 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
           avatarUrl;
           firstNameController.text = accountInfo!.firstName ?? '';
           firstNameController.text =
-              utf8.decode(firstNameController.text!.runes.toList());
+              utf8.decode(firstNameController.text.runes.toList());
           lastNameController.text = accountInfo!.lastName ?? '';
           lastNameController.text =
-              utf8.decode(lastNameController.text!.runes.toList());
+              utf8.decode(lastNameController.text.runes.toList());
           phoneController.text = accountInfo!.phone ?? '';
           addressController.text = accountInfo!.address ?? '';
           addressController.text =
-              utf8.decode(addressController.text!.runes.toList());
+              utf8.decode(addressController.text.runes.toList());
           addressValue = TextEditingValue(
             text: accountInfo!.address ?? '',
           );

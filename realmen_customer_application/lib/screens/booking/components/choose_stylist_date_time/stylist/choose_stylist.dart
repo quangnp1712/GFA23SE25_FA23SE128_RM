@@ -1,18 +1,17 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
-
-import '../stylist_date_time_booking_choose.dart';
 
 class ChooseStylist extends StatefulWidget {
   final void Function(AccountInfoModel? stylist) onStylistSelected;
   final void Function(AccountInfoModel? stylistSelected) updateSelectedStylist;
   final List<AccountInfoModel>? accountStaffList;
 
-  ChooseStylist({
+  const ChooseStylist({
     super.key,
     required this.onStylistSelected,
     required this.updateSelectedStylist,
@@ -306,7 +305,8 @@ class _ChooseStylistState extends State<ChooseStylist> {
                       : Container(),
                 ],
               ),
-              _selectedStylist != null && _selectedStylist.accountId != null
+              _selectedStylist.accountId != null &&
+                      _selectedStylist.accountId != null
                   ? Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -355,7 +355,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             RichText(
@@ -387,6 +387,9 @@ class _ChooseStylistState extends State<ChooseStylist> {
                               children: [
                                 TextButton(
                                   onPressed: () {},
+                                  style: const ButtonStyle(
+                                      padding: MaterialStatePropertyAll(
+                                          EdgeInsets.zero)),
                                   child: const Text(
                                     "Xem thêm",
                                     textAlign: TextAlign.end,
@@ -394,9 +397,6 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                       decoration: TextDecoration.underline,
                                     ),
                                   ),
-                                  style: ButtonStyle(
-                                      padding: MaterialStatePropertyAll(
-                                          EdgeInsets.zero)),
                                 ),
                               ],
                             ),
@@ -451,9 +451,10 @@ class _ChooseStylistState extends State<ChooseStylist> {
         widget.updateSelectedStylist(null);
       } else {
         _selectedStylist = stylist;
-        String name = _selectedStylist.firstName!
-                .substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1) +
-            _selectedStylist.lastName!;
+        //Lấy tên 2 chữ
+        // String name = _selectedStylist.firstName!
+        //         .substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1) +
+        //     _selectedStylist.lastName!;
         widget.onStylistSelected(_selectedStylist);
         widget.updateSelectedStylist(_selectedStylist);
         isDefaultSelected = false;

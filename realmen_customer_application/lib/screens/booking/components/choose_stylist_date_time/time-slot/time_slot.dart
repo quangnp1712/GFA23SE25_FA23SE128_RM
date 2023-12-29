@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, avoid_print, unused_local_variable, avoid_unnecessary_containers, library_private_types_in_public_api
+
 import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -25,7 +27,7 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
 class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   @override
   Widget build(BuildContext context) {
-    return listDate!.length > 0
+    return listDate!.isNotEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -229,7 +231,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                 ),
               ),
               const SizedBox(height: 10),
-              Container(
+              SizedBox(
                 height: 200,
                 child: TimeSlot(
                     key: timeSlotKey,
@@ -243,14 +245,14 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
           )
         : Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Center(
                 child: Text(
                     "Thợ cắt ${utf8.decode(("${widget.stylistSelected!.firstName!.substring(widget.stylistSelected!.firstName!.lastIndexOf(" ") + 1)} ${widget.stylistSelected!.lastName!}").runes.toList())} hiện chưa có lịch làm!"),
               ),
-              Center(
+              const Center(
                 child: Text("Anh vui lòng chọn thợ cắt khác"),
               )
             ],
@@ -264,13 +266,14 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     getDate();
 
     setState(() {
-      dateController = listDate?.first?['id'].toString();
+      dateController = listDate?.first['id'].toString();
       dateSeleted = listDate?.first;
       type = listDate!.first['type'].toString();
     });
     // widget.onDateSelected(dateController);
   }
 
+  // ignore: unused_field
   bool _isDisposed = false;
   @override
   void dispose() {
@@ -302,7 +305,6 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 
   GlobalKey<_TimeSlotState> timeSlotKey = GlobalKey();
   bool isCurrentDate = true;
-  int _index = 0;
   bool isActived = false;
   String? dateController;
   Map<String, dynamic>? dateSeleted;
@@ -330,7 +332,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                   DateTime(now.year, now.month, now.day, 0) ||
               (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
                   DateTime.parse(schedule.value.workingDate!)
-                      .isBefore(now.add(Duration(days: 4))))) {
+                      .isBefore(now.add(const Duration(days: 4))))) {
             // if (!listDate!.any((date) =>
             //     date['date'] ==
             //     formatDate(
@@ -350,8 +352,8 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
         listDate;
       } on Exception catch (e) {
         listDate?.add({
-          'date': formatDate(now.add(Duration(days: 1)))['date'],
-          'type': formatDate(now.add(Duration(days: 1)))['type'],
+          'date': formatDate(now.add(const Duration(days: 1)))['date'],
+          'type': formatDate(now.add(const Duration(days: 1)))['type'],
         });
         print(e.toString());
       }
@@ -370,7 +372,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 
   bool _isCurrentDate(dynamic dateSelected) {
     DateTime now = DateTime.now();
-    String? dateNow = formatDate(now.add(Duration(days: 0)))['date'];
+    String? dateNow = formatDate(now.add(const Duration(days: 0)))['date'];
     if (dateSelected.toString() == dateNow) {
       return true;
     } else {
@@ -394,7 +396,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 }
 
 class TimeSlot extends StatefulWidget {
-  TimeSlot(
+  const TimeSlot(
       {super.key,
       required this.dateSeleted,
       required this.onTimeSelected,
@@ -457,8 +459,8 @@ class _TimeSlotState extends State<TimeSlot> {
                 style: TextStyle(fontSize: 20),
               ),
               Text(
-                _selectedTimeSlot ?? "",
-                style: TextStyle(fontSize: 23),
+                _selectedTimeSlot,
+                style: const TextStyle(fontSize: 23),
               ),
             ],
           ),
@@ -467,7 +469,7 @@ class _TimeSlotState extends State<TimeSlot> {
           width: 5,
         ),
         Center(
-          child: Container(
+          child: SizedBox(
             width: 230.0,
             height: 220.0, // Limit height
 
@@ -542,14 +544,13 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
         }
       } else {
         for (int i = 0; i < timeSlots.length; i++) {
-          final timeSlot = timeSlots[i];
           scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
         }
       }
 
-      if (scrollListIndex != null) {
-        final _scrollIndex = scrollListIndex.first;
-        scrollToIndex(_scrollIndex);
+      if (scrollListIndex.isNotEmpty) {
+        final scrollIndex = scrollListIndex.first;
+        scrollToIndex(scrollIndex);
       }
     });
   }
@@ -624,6 +625,7 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
       } else {
         return true;
       }
+      // ignore: unused_catch_clause
     } on Exception catch (e) {
       return false;
     }
@@ -634,7 +636,7 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
 
   void scrollToIndex(int index) {
     scrollController.animateTo((index / 3).floor() * 99,
-        duration: Duration(milliseconds: 1), curve: Curves.easeIn);
+        duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
   }
 
   List<String> generateTimeSlots() {
@@ -657,8 +659,9 @@ class TimeSlotCard extends StatefulWidget {
   final bool isSelectable;
   final void Function(String timeSlot) onSelected;
 
-  TimeSlotCard(
-      {required this.timeSlot,
+  const TimeSlotCard(
+      {super.key,
+      required this.timeSlot,
       required this.isSelected,
       required this.isSelectable,
       required this.onSelected,

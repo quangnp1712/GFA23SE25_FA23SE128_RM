@@ -1,14 +1,11 @@
+// ignore_for_file: must_be_immutable, no_leading_underscores_for_local_identifiers
+
 import 'dart:convert';
 
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
-import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/choose_service_screen.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseServiceBooking extends StatefulWidget {
   final void Function(List<BranchServiceModel> service) onServiceSelected;
@@ -43,89 +40,85 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
           const SizedBox(
             height: 10,
           ),
-          Container(
-            child: ElevatedButton(
-              onPressed: () async {
-                if (!_isDisposed && mounted) {
-                  // List<String>? selectedServices = await Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ChangeNotifierProvider<
-                  //         ChangeNotifierServices>.value(
-                  //       value: selectedServicesProvider,
-                  //       child: ChooseServiceBookingScreen(),
-                  //     ),
-                  //   ),
-                  // );
-                  List<BranchServiceModel> _servicesList =
-                      List<BranchServiceModel>.from(servicesList!);
-                  List<BranchServiceModel>? selectedServices =
-                      await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChooseServiceBookingScreen(
-                        selectedServices: _servicesList,
-                        branchServiceList: widget.branchServiceList,
-                      ),
+          ElevatedButton(
+            onPressed: () async {
+              if (!_isDisposed && mounted) {
+                // List<String>? selectedServices = await Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => ChangeNotifierProvider<
+                //         ChangeNotifierServices>.value(
+                //       value: selectedServicesProvider,
+                //       child: ChooseServiceBookingScreen(),
+                //     ),
+                //   ),
+                // );
+                List<BranchServiceModel> _servicesList =
+                    List<BranchServiceModel>.from(servicesList!);
+                List<BranchServiceModel>? selectedServices =
+                    await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChooseServiceBookingScreen(
+                      selectedServices: _servicesList,
+                      branchServiceList: widget.branchServiceList,
                     ),
-                  );
-
-                  // Handle the selected services here
-                  if (selectedServices != null) {
-                    setState(() {
-                      _getTextContainers(selectedServices);
-                      servicesList = selectedServices;
-                    });
-                    widget.onServiceSelected(selectedServices);
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.grey,
-                  side: const BorderSide(color: Colors.grey),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
                   ),
-                  padding: const EdgeInsets.only(right: 0, left: 10)),
-              child: Container(
-                // color: Colors.amber,
-                padding: const EdgeInsets.all(0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      child: Row(
-                        children: [
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Icon(
-                              Icons.cut,
-                              color: Colors.black,
-                              size: 24,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                buttonText,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(Icons.arrow_right, color: Colors.black))
-                  ],
+                );
+
+                // Handle the selected services here
+                if (selectedServices != null) {
+                  setState(() {
+                    _getTextContainers(selectedServices);
+                    servicesList = selectedServices;
+                  });
+                  widget.onServiceSelected(selectedServices);
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.grey,
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: Colors.grey),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
+                padding: const EdgeInsets.only(right: 0, left: 10)),
+            child: Container(
+              // color: Colors.amber,
+              padding: const EdgeInsets.all(0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          Icons.cut,
+                          color: Colors.black,
+                          size: 24,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            buttonText,
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.arrow_right, color: Colors.black))
+                ],
               ),
             ),
           ),
@@ -150,7 +143,6 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
     hasSelectedServices = textContainers.isNotEmpty;
   }
 
-  int _index = 0;
   bool isActived = false;
   bool _isDisposed = false;
   @override
@@ -173,7 +165,7 @@ class _ChooseServiceBookingState extends State<ChooseServiceBooking> {
           ),
           child: Text(
             utf8.decode(service.serviceName.toString().runes.toList()),
-            style: TextStyle(fontSize: 12, color: Colors.black),
+            style: const TextStyle(fontSize: 12, color: Colors.black),
           ),
         );
       }).toList();

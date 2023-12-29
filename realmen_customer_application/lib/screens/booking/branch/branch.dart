@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -5,10 +7,8 @@ import 'package:realmen_customer_application/models/account/account_info_model.d
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/branch_booking_choose.dart';
-import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_service/service_booking_choose.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/stylist_date_time_booking_choose.dart';
-import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -50,7 +50,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
           // content
           endChild: selectedBranch.branchId != null
               ? (selectedBranch.branchServiceList != null &&
-                      selectedBranch.branchServiceList!.length > 0
+                      selectedBranch.branchServiceList!.isNotEmpty
                   ? ChooseServiceBooking(
                       onServiceSelected: updateSelectedService,
                       branchServiceList: selectedBranch.branchServiceList!,
@@ -59,14 +59,14 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                       height: 150,
                       padding: const EdgeInsets.only(top: 10, right: 15),
                       constraints: const BoxConstraints(minHeight: 120),
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "2. Chọn dịch vụ ",
                             style: TextStyle(fontSize: 20),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 10,
                           ),
                           Center(
@@ -83,7 +83,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
                   constraints: const BoxConstraints(minHeight: 120),
-                  child: Text(
+                  child: const Text(
                     "2. Chọn dịch vụ ",
                     style: TextStyle(fontSize: 20),
                   )),
@@ -120,15 +120,13 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
                   constraints: const BoxConstraints(minHeight: 120),
-                  child: Text(
+                  child: const Text(
                     "3. Chọn stylist & ngày, giờ ",
                     style: TextStyle(fontSize: 20),
                   )),
         ),
         // button Đặt Lịch
-        selectedBranch != null &&
-                selectedService != null &&
-                selectedService != []
+        selectedBranch.branchId != null && selectedService != []
             ? Container(
                 width: 81.w,
                 margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -150,8 +148,8 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                     _onBooking();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.black12,
-                    onPrimary: Colors.black,
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.black12,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -260,7 +258,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     DateTime now = DateTime.now();
     if (!_isDisposed) {
       setState(() {
-        selectedDate = formatDate(now.add(Duration(days: 0)));
+        selectedDate = formatDate(now.add(const Duration(days: 0)));
       });
     }
   }

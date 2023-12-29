@@ -1,9 +1,9 @@
-import 'package:community_material_icon/community_material_icon.dart';
+// ignore_for_file: must_be_immutable, constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/booking/branch/branch.dart';
 import 'package:realmen_customer_application/screens/booking/stylist/stylist.dart';
-import 'package:realmen_customer_application/screens/membership/components/labeltext_level.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -48,7 +48,7 @@ class _BookingScreenState extends State<BookingScreen>
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white),
                   child: ListView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       Container(
                         color: Colors.transparent,
@@ -95,7 +95,7 @@ class _BookingScreenState extends State<BookingScreen>
                             width: 360,
                             height: 180,
                           ),
-                          Container(
+                          SizedBox(
                             height: 180,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,14 +194,14 @@ class _BookingScreenState extends State<BookingScreen>
                                 ),
                               ],
                             ),
-                            Container(
+                            SizedBox(
                               // color: Colors.amber,
                               width: 400,
                               height: 500,
                               child: TabBarView(
                                 controller: _tabController,
-                                physics: NeverScrollableScrollPhysics(),
-                                children: [
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: const [
                                   BranchOptionBooking(),
                                   StylistOptionBooking(),
                                 ],
@@ -228,10 +228,8 @@ class _BookingScreenState extends State<BookingScreen>
     _tabController = TabController(length: 2, vsync: this);
   }
 
-  bool _isDisposed = false;
   @override
   void dispose() {
-    _isDisposed = true;
     _tabController.dispose();
     super.dispose();
   }

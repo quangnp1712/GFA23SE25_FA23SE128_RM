@@ -1,19 +1,22 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:realmen_customer_application/firebase_options.dart';
-import 'firebase_options.dart';
-import 'package:realmen_customer_application/router/router.dart';
-
-import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'package:realmen_customer_application/firebase_options.dart';
+import 'package:realmen_customer_application/router/router.dart';
+import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
+
 import 'service/change_notifier_provider/change_notifier_provider_service.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,11 +33,12 @@ Future<void> main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ChangeNotifierServices(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
+// ignore: non_constant_identifier_names
 Future<void> _FBSignAnonymous() async {
   try {
     UserCredential userCredential =

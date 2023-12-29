@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/booking_processing.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/choose_branch_screen.dart';
-import 'package:realmen_customer_application/screens/booking/components/choose_service/choose_service_screen.dart';
+
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_branch/choose_stylist_screen.dart';
 import 'package:realmen_customer_application/screens/history_booking/detail_history_hair_cut_screen.dart';
 import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
@@ -13,7 +13,6 @@ import 'package:realmen_customer_application/screens/login/login_otp_screen.dart
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
-import 'package:realmen_customer_application/screens/other/test.dart';
 
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
@@ -143,19 +142,6 @@ class RouteGenerator {
                 });
           }),
       GetPage(
-          name: TestScreen.TestScreenRoute,
-          page: () {
-            return FutureBuilder(
-                future: SharedPreferencesService.checkJwtExpired(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data!) {
-                    return const LoginPhoneScreen();
-                  } else {
-                    return TestScreen();
-                  }
-                });
-          }),
-      GetPage(
           name: ChooseStylistScreen.ChooseStylistScreenRoute,
           page: () {
             return FutureBuilder(
@@ -164,7 +150,7 @@ class RouteGenerator {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
                   } else {
-                    return ChooseStylistScreen();
+                    return const ChooseStylistScreen();
                   }
                 });
           }),

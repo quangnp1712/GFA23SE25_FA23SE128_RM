@@ -1,6 +1,7 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -72,7 +73,7 @@ class _DetailHistoryBookingScreenState
                                     child: Center(
                                       child: Text(
                                         "chi tiết hóa đơn".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -116,13 +117,13 @@ class _DetailHistoryBookingScreenState
   }
 
   Widget _buildInfoUser() {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
+    return const Padding(
+      padding: EdgeInsets.all(12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -156,29 +157,29 @@ class _DetailHistoryBookingScreenState
               ),
             ],
           ),
-          const SizedBox(
+          SizedBox(
             width: 30,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
+              Text(
                 "Thứ 6, 01/12/2023",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 17),
               ),
-              const SizedBox(height: 12),
-              const Text(
+              SizedBox(height: 12),
+              Text(
                 "12:30",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 17),
               ),
-              const SizedBox(height: 12),
-              const Text(
+              SizedBox(height: 12),
+              Text(
                 "Le Anh Tuan",
                 maxLines: 1,
                 style: TextStyle(
@@ -187,26 +188,26 @@ class _DetailHistoryBookingScreenState
                     fontWeight: FontWeight.w500,
                     fontSize: 17),
               ),
-              const SizedBox(height: 12),
-              const Text(
+              SizedBox(height: 12),
+              Text(
                 "Be Dep",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 17),
               ),
-              const SizedBox(height: 12),
-              const Text(
+              SizedBox(height: 12),
+              Text(
                 "The",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 17),
               ),
-              const SizedBox(height: 12),
-              Container(
+              SizedBox(height: 12),
+              SizedBox(
                 width: 220,
-                child: const Text(
+                child: Text(
                   "590 Cách Mạng Tháng 8, Phường 11, Quận 3, Hồ Chí Minh",
                   maxLines: 3,
                   style: TextStyle(
@@ -238,7 +239,7 @@ class _DetailHistoryBookingScreenState
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black,
+                  backgroundColor: Colors.black,
                 ),
                 child: const Text(
                   "Đặt lại dịch vụ",
@@ -256,34 +257,31 @@ class _DetailHistoryBookingScreenState
             thickness: 1,
           ),
         ),
-        Container(
-          // padding: EdgeInsets.all(12.0),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: serviceList.length, // The number of items in the list
-            itemBuilder: (context, index) {
-              // Return a Card widget for each item in the list
-              return Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      serviceList[index].name.toString(),
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    SizedBox(width: 140),
-                    Text(
-                      formatter.format(serviceList[index].price),
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: serviceList.length, // The number of items in the list
+          itemBuilder: (context, index) {
+            // Return a Card widget for each item in the list
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    serviceList[index].name.toString(),
+                    style: const TextStyle(fontSize: 17),
+                  ),
+                  const SizedBox(width: 140),
+                  Text(
+                    formatter.format(serviceList[index].price),
+                    style: const TextStyle(fontSize: 17),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
@@ -291,7 +289,7 @@ class _DetailHistoryBookingScreenState
 
   Widget _buildTotalMoney() {
     return Padding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: ListView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -299,7 +297,7 @@ class _DetailHistoryBookingScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Tổng Tiền:",
                 style: TextStyle(
                   fontSize: 17,
@@ -308,14 +306,14 @@ class _DetailHistoryBookingScreenState
               // SizedBox(width: 140),
               Text(
                 formatter.format(total),
-                style: TextStyle(fontSize: 17),
+                style: const TextStyle(fontSize: 17),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -331,13 +329,13 @@ class _DetailHistoryBookingScreenState
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 7,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Tổng Hóa Đơn:",
                 style: TextStyle(
                   fontSize: 17,
@@ -347,14 +345,14 @@ class _DetailHistoryBookingScreenState
               // SizedBox(width: 140),
               Text(
                 formatter.format(total),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 7,
           ),
         ],

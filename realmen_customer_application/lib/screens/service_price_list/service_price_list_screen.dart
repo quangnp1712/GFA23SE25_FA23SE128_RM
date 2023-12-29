@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print, avoid_unnecessary_containers, use_build_context_synchronously
+
 import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -103,7 +105,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                     child: Center(
                                       child: Text(
                                         "bảng dịch vụ".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -238,7 +240,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
                                         Container(
@@ -260,7 +262,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                         ?.codeUnits ??
                                                     Uint8List(0))
                                                 .toUpperCase(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 20,
                                             ),
@@ -335,7 +337,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                                   .hasData) {
                                                                 return Container(
                                                                   constraints:
-                                                                      BoxConstraints(
+                                                                      const BoxConstraints(
                                                                           minHeight:
                                                                               140),
                                                                   child: snapshot
@@ -380,7 +382,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                                         Container(
                                                                       child:
                                                                           Text(
-                                                                        utf8.decode(service?.name?.codeUnits ??
+                                                                        utf8.decode(service.name?.codeUnits ??
                                                                             Uint8List(0)),
                                                                         maxLines:
                                                                             2, // Số dòng tối đa
@@ -443,7 +445,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
   Future<Widget> getImageFB(ServiceList service) async {
     try {
       if (service.serviceDisplayList != null &&
-          service.serviceDisplayList!.length > 0) {
+          service.serviceDisplayList!.isNotEmpty) {
         final String serviceDisplayUrl =
             service.serviceDisplayList![0].serviceDisplayUrl.toString();
         var reference = storage.ref('service/$serviceDisplayUrl');
@@ -454,11 +456,12 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
           height: 140,
           width: MediaQuery.of(context).size.width / 1.0,
         );
-      } else
+      } else {
         return Container();
+      }
     } catch (e) {
-      final _random = new Random();
-      var randomUrl = _random.nextInt(urlList.length);
+      final random = Random();
+      var randomUrl = random.nextInt(urlList.length);
       var reference = storage.ref('service/${urlList[randomUrl]}');
       return Image.network(
         await reference.getDownloadURL(),

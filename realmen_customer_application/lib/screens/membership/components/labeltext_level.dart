@@ -1,8 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/screens/membership/components/detaillevel_membership.dart';
 
 class LabelTextLevel extends StatefulWidget {
+  const LabelTextLevel({super.key});
+
   @override
   _LabelTextLevelState createState() => _LabelTextLevelState();
 }
@@ -63,15 +67,15 @@ class _LabelTextLevelState extends State<LabelTextLevel>
             ],
           ),
           const SizedBox(height: 1),
-          Container(
+          SizedBox(
             width: 400,
             height: 400,
             child: TabBarView(
               controller: _tabController,
-              children: [
-                const Center(child: DetailLevelMembership()),
-                const Center(child: DetailLevelMembership()),
-                const Center(child: DetailLevelMembership()),
+              children: const [
+                Center(child: DetailLevelMembership()),
+                Center(child: DetailLevelMembership()),
+                Center(child: DetailLevelMembership()),
               ],
             ),
           ),

@@ -1,5 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:realmen_customer_application/models/login_register/login_otp_model.dart';
@@ -47,7 +49,7 @@ class SharedPreferencesService {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     String? result = sharedPreferences.getString("passCode")!;
-    if (result != null) {
+    if (result.isNotEmpty) {
       return result;
     } else {
       throw Exception("Failed to get phone number from SharedPreferences");
@@ -176,7 +178,6 @@ class SharedPreferencesService {
       return result;
     } else {
       return false;
-      throw Exception("Failed to get phone number from SharedPreferences");
     }
   }
 

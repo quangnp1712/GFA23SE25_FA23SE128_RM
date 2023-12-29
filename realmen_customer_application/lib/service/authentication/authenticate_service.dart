@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -260,11 +262,16 @@ class AuthenticateService extends IAuthenticateService {
   @override
   Future<bool> isLogin() async {
     try {
+      // ignore: non_constant_identifier_names
       final SAccountInfo = await SharedPreferencesService.getAccountInfo();
       String? jwtToken;
-      if (SAccountInfo != null) {
+      if (SAccountInfo.isNotEmpty) {
         jwtToken = SAccountInfo["jwtToken"].toString();
-        return true;
+        if (jwtToken.isNotEmpty) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -278,7 +285,7 @@ class AuthenticateService extends IAuthenticateService {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     await sharedPreferences.clear();
-    Get.to(() => LoginPhoneScreen());
+    Get.to(() => const LoginPhoneScreen());
     return;
   }
 }

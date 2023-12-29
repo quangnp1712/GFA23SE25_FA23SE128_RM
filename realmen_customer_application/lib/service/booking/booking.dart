@@ -1,6 +1,7 @@
+// ignore_for_file: unused_catch_clause
+
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -165,7 +166,7 @@ class BookingService implements IBookingService {
   @override
   Future postBooking(BookingModel booking) async {
     try {
-      Uri uri = Uri.parse("$bookingUrl");
+      Uri uri = Uri.parse(bookingUrl);
       final client = http.Client();
       final String jwtToken = await SharedPreferencesService.getJwt();
       final response = await client

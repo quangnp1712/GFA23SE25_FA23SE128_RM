@@ -1,16 +1,14 @@
+// ignore_for_file: library_private_types_in_public_api, constant_identifier_names, avoid_print, prefer_typing_uninitialized_variables
+
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
-import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 
 class ChooseServiceBookingScreen extends StatefulWidget {
   @override
@@ -21,7 +19,8 @@ class ChooseServiceBookingScreen extends StatefulWidget {
   final List<BranchServiceModel> selectedServices;
   final List<BranchServiceModel> branchServiceList;
 
-  ChooseServiceBookingScreen({
+  const ChooseServiceBookingScreen({
+    super.key,
     required this.selectedServices,
     required this.branchServiceList,
   });
@@ -37,7 +36,7 @@ class _ChooseServiceBookingScreenState
     // var selectedServicesProvider =
     //     Provider.of<ChangeNotifierServices>(context, listen: false);
     // selectedServices = selectedServicesProvider.selectedServices;
-    if (widget.selectedServices != null) {
+    if (widget.selectedServices.isNotEmpty && widget.selectedServices != []) {
       selectedServices = widget.selectedServices;
     }
 
@@ -88,11 +87,11 @@ class _ChooseServiceBookingScreenState
                         service.serviceId! == branchService.serviceId) ==
                     true) {
                   String? description;
-                  caterogy.serviceList!.forEach((service) {
+                  for (var service in caterogy.serviceList!) {
                     if (service.serviceId == branchService.serviceId) {
                       description = service.description;
                     }
-                  });
+                  }
                   SubServiceTile subServiceTile = SubServiceTile(
                     selectedServices: selectedServices,
                     onSelect: (bool isSelected) {
@@ -112,7 +111,7 @@ class _ChooseServiceBookingScreenState
               } else {
                 title = 'Dịch vụ khác';
               }
-              if (serviceLists.length > 0) {
+              if (serviceLists.isNotEmpty) {
                 serviceCategoryTileList.add(ServiceCategoryTile(
                     title: title,
                     serviceLists: serviceLists,
@@ -134,7 +133,7 @@ class _ChooseServiceBookingScreenState
 
   @override
   Widget build(BuildContext context) {
-    var selectedServicesProvider = Provider.of<ChangeNotifierServices>(context);
+    // ignore: unused_local_variable
     NumberFormat formatter = NumberFormat("#,##0");
     return Scaffold(
       body: Stack(
@@ -189,7 +188,7 @@ class _ChooseServiceBookingScreenState
                                     child: Center(
                                       child: Text(
                                         "chọn dịch vụ".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -204,7 +203,7 @@ class _ChooseServiceBookingScreenState
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               "Dịch vụ đã chọn: ${selectedServices.length}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -283,7 +282,7 @@ class _ChooseServiceBookingScreenState
                             ? 'Chọn dịch vụ'.toUpperCase()
                             : 'Chọn ${selectedServices.length} dịch vụ'
                                 .toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,
                             fontWeight: FontWeight.w700),
@@ -305,7 +304,8 @@ class ServiceCategoryTile extends StatelessWidget {
   final List<SubServiceTile> serviceLists;
   final bool isGridView;
 
-  ServiceCategoryTile({
+  const ServiceCategoryTile({
+    super.key,
     required this.title,
     required this.serviceLists,
     required this.isGridView,
@@ -334,7 +334,7 @@ class ServiceCategoryTile extends StatelessWidget {
             ),
             child: Text(
               title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -347,7 +347,7 @@ class ServiceCategoryTile extends StatelessWidget {
                   childAspectRatio: 2 / 4.2, // width : height
                 ),
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: serviceLists.length,
                 itemBuilder: (context, index) {
                   return serviceLists[index];
@@ -370,7 +370,7 @@ class SubServiceTile extends StatefulWidget {
   final BranchServiceModel? branchService;
   final String? description;
 
-  SubServiceTile({
+  const SubServiceTile({
     Key? key,
     this.title,
     this.price,
@@ -392,30 +392,32 @@ class _SubServiceTileState extends State<SubServiceTile> {
   @override
   void initState() {
     super.initState();
+
     // Khởi tạo trạng thái isSelected từ danh sách dịch vụ đã chọn
     // selectedServicesProvider =
     //     Provider.of<ChangeNotifierServices>(context, listen: false);
     // isSelected =
     //     selectedServicesProvider.selectedServices.contains(widget.title);
-    if (widget.title != null) {
-      isSelected = widget.selectedServices.contains(widget.title);
-    } else {
-      isSelected = widget.selectedServices.contains(widget.branchService);
-    }
+
+    // if (widget.title != null) {
+    //   isSelected = widget.selectedServices.contains(widget.title);
+    // } else {
+    //   isSelected = widget.selectedServices.contains(widget.branchService);
+    // }
+
+    isSelected = widget.selectedServices.contains(widget.branchService);
   }
 
-  bool _isDisposed = false;
   @override
   void dispose() {
-    _isDisposed = true;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(2.0),
+      margin: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(2.0),
       decoration: BoxDecoration(
         color: Colors.black,
         border: Border.all(color: Colors.grey),
@@ -444,7 +446,7 @@ class _SubServiceTileState extends State<SubServiceTile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   height: 60,
                   child: Text(
                     widget.title != null
@@ -454,14 +456,14 @@ class _SubServiceTileState extends State<SubServiceTile> {
                             .runes
                             .toList()),
                     textAlign: TextAlign.start,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 5),
-                Container(
+                const SizedBox(height: 5),
+                SizedBox(
                   height: 60,
                   child: Text(
                     widget.description == null
@@ -469,18 +471,18 @@ class _SubServiceTileState extends State<SubServiceTile> {
                         : utf8.decode(
                             widget.description!.toString().runes.toList()),
                     textAlign: TextAlign.start,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,
                     ),
                   ),
                 ),
-                SizedBox(height: 7),
+                const SizedBox(height: 7),
                 Text(
                   widget.price != null
                       ? ' ${widget.price!} VNĐ'
                       : ' ${formatter.format(widget.branchService!.price)} VNĐ',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.bold),

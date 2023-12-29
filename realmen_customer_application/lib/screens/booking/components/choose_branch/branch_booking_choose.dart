@@ -12,7 +12,7 @@ import 'package:realmen_customer_application/service/change_notifier_provider/ch
 
 class ChooseBranchBooking extends StatefulWidget {
   final void Function(dynamic branch) onBranchSelected;
-  ChooseBranchBooking({
+  const ChooseBranchBooking({
     super.key,
     required this.onBranchSelected,
   });
@@ -56,90 +56,86 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (!_isDisposed) {
-                    var selectedBranch = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider<
-                            ChangeNotifierServices>.value(
-                          value: selectedServicesProvider,
-                          child: ChooseBranchesScreen(),
-                        ),
+            ElevatedButton(
+              onPressed: () async {
+                if (!_isDisposed) {
+                  var selectedBranch = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChangeNotifierProvider<ChangeNotifierServices>.value(
+                        value: selectedServicesProvider,
+                        child: ChooseBranchesScreen(),
                       ),
-                    );
-                    if (selectedBranch != null) {
-                      if (!_isDisposed) {
-                        setState(() {
-                          buttonText = selectedBranch.address != null
-                              ? utf8.decode(selectedBranch.address
-                                  .toString()
-                                  .runes
-                                  .toList())
-                              : 'Xem tất cả danh sách dịch vụ';
-                          widget.onBranchSelected(selectedBranch);
-                        });
-                      }
+                    ),
+                  );
+                  if (selectedBranch != null) {
+                    if (!_isDisposed) {
+                      setState(() {
+                        buttonText = selectedBranch.address != null
+                            ? utf8.decode(selectedBranch.address
+                                .toString()
+                                .runes
+                                .toList())
+                            : 'Xem tất cả danh sách dịch vụ';
+                        widget.onBranchSelected(selectedBranch);
+                      });
                     }
                   }
+                }
 
-                  // Get.toNamed(ChooseBranchesScreen.ChooseBranchesScreenRoute);
-                },
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.grey,
-                    side: const BorderSide(color: Colors.grey),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    padding: const EdgeInsets.only(right: 0, left: 10)),
-                child: Container(
-                  // color: Colors.amber,
-                  padding: const EdgeInsets.all(0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        child: ClipRRect(
-                          child: Container(
-                            child: Row(
-                              children: [
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Icon(
-                                    CommunityMaterialIcons.storefront,
-                                    color: Colors.black,
-                                    size: 24,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: ClipRRect(
-                                    child: Container(
-                                      margin: const EdgeInsets.only(left: 10.0),
-                                      child: Text(
-                                        buttonText,
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                // Get.toNamed(ChooseBranchesScreen.ChooseBranchesScreenRoute);
+              },
+              style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.grey,
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(color: Colors.grey),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  padding: const EdgeInsets.only(right: 0, left: 10)),
+              child: Container(
+                // color: Colors.amber,
+                padding: const EdgeInsets.all(0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(
+                      child: ClipRRect(
+                        child: Row(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Icon(
+                                CommunityMaterialIcons.storefront,
+                                color: Colors.black,
+                                size: 24,
+                              ),
                             ),
-                          ),
+                            Flexible(
+                              child: ClipRRect(
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 10.0),
+                                  child: Text(
+                                    buttonText,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(Icons.arrow_right, color: Colors.black))
-                    ],
-                  ),
+                    ),
+                    const Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(Icons.arrow_right, color: Colors.black))
+                  ],
                 ),
               ),
             ),
@@ -155,7 +151,6 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
     super.initState();
   }
 
-  int _index = 0;
   bool isActived = true;
   String buttonText = 'Xem tất cả chi nhánh REALMEN';
   ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();

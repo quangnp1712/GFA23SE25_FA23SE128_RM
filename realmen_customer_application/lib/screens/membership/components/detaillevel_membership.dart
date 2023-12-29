@@ -31,6 +31,7 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
+                // ignore: unnecessary_brace_in_string_interps
                 'Tổng trị giá điểm < : ${totalPoints}',
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
@@ -67,19 +68,17 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                             ),
                           ],
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                offer.description, //Thông tin về ưu đãi
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              offer.description, //Thông tin về ưu đãi
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 20,

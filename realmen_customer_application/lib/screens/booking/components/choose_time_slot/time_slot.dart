@@ -1,15 +1,16 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class ChooseTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
   final AccountInfoModel? selectedStylist;
   final bool? isChangeStylist;
-  ChooseTimeSlot({
+  const ChooseTimeSlot({
     super.key,
     required this.onDateSelected,
     required this.onTimeSelected,
@@ -87,7 +88,7 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   isSwitched2
@@ -99,7 +100,7 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
                           "Anh không cho phép các em chụp hình lưu lại kiểu tóc.",
                           style: TextStyle(fontSize: 14),
                         ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                 ],

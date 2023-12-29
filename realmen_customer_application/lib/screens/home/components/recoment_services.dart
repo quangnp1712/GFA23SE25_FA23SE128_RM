@@ -1,14 +1,15 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
 import 'package:realmen_customer_application/models/service/service_model.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
 
 class RecomendServices extends StatefulWidget {
-  RecomendServices({super.key});
+  const RecomendServices({super.key});
 
   @override
   State<RecomendServices> createState() => _RecomendServicesState();
@@ -31,6 +32,7 @@ class _RecomendServicesState extends State<RecomendServices> {
         scrollDirection: Axis.horizontal,
         itemCount: serviceList!.length > 5 ? 5 : serviceList?.length,
         itemBuilder: (context, index) {
+          // ignore: unnecessary_null_comparison
           return serviceList![index] != null
               ? InkWell(
                   onTap: () {},
@@ -90,6 +92,7 @@ class _RecomendServicesState extends State<RecomendServices> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
+                                  // ignore: unnecessary_null_comparison
                                   serviceList![index].name! != null
                                       ? utf8.decode(serviceList![index]
                                           .name!
@@ -167,7 +170,7 @@ class _RecomendServicesState extends State<RecomendServices> {
   Future<Widget> getImageFB(ServiceContent service) async {
     try {
       if (service.serviceDisplayList != null &&
-          service.serviceDisplayList!.length > 0) {
+          service.serviceDisplayList!.isNotEmpty) {
         final String serviceDisplayUrl =
             service.serviceDisplayList![0].serviceDisplayUrl.toString();
         var reference = storage.ref('service/$serviceDisplayUrl');
@@ -178,11 +181,12 @@ class _RecomendServicesState extends State<RecomendServices> {
           width: MediaQuery.of(context).size.width / 1.4,
           fit: BoxFit.cover,
         );
-      } else
+      } else {
         return Container();
+      }
     } catch (e) {
-      final _random = new Random();
-      var randomUrl = _random.nextInt(urlList.length);
+      final random = Random();
+      var randomUrl = random.nextInt(urlList.length);
       var reference = storage.ref('service/${urlList[randomUrl]}');
       return Image.network(
         await reference.getDownloadURL(),

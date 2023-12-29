@@ -1,15 +1,15 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
+
 import 'dart:convert';
 
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/screens/other/test.dart';
 
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_customer_application/service/account/account_service.dart';
@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Center(
                               child: Text(
                                 name ?? '',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black),
@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Center(
                               child: Text(
                                 phone ?? "",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black),
@@ -311,56 +311,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         child: TextButton(
-                                          onPressed: () {
-                                            Get.toNamed(
-                                                TestScreen.TestScreenRoute);
-                                          },
-                                          style: TextButton.styleFrom(
-                                            padding:
-                                                const EdgeInsets.only(left: 0),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Icon(
-                                                  CommunityMaterialIcons
-                                                      .storefront,
-                                                  color: Colors.black,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10.0),
-                                                child: const Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "TEST",
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.red),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 82.w,
-                                        height: 40,
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                                color: Color(0x4D444444),
-                                                width: 1.0),
-                                          ),
-                                        ),
-                                        child: TextButton(
                                           style: TextButton.styleFrom(
                                             padding:
                                                 const EdgeInsets.only(left: 0),
@@ -501,7 +451,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             top: Radius.circular(20),
           ),
         ),
-        builder: (context) => LogoutPopup(),
+        builder: (context) => const LogoutPopup(),
       );
     }
   }

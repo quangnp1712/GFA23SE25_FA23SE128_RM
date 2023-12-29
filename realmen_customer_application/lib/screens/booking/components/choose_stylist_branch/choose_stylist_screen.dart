@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers, avoid_print
+
 import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -193,7 +195,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     return Column(
       children: stylistDataList.map((stylistData) {
         return Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.black,
@@ -211,7 +213,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // anh avatar
-                    Container(
+                    SizedBox(
                       width: 80,
                       height: 80,
                       child: CircleAvatar(
@@ -231,87 +233,80 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                     const SizedBox(width: 10.0),
 
                     Expanded(
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            // tên stylist
-                            Container(
-                              child: RichText(
-                                text: TextSpan(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // tên stylist
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Stylist: ",
+                                  style: GoogleFonts.quicksand(
+                                    textStyle: const TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      "${utf8.decode(stylistData.firstName.toString().runes.toList())} ${utf8.decode(stylistData.lastName.toString().runes.toList())}",
+                                  style: GoogleFonts.quicksand(
+                                    textStyle: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          //  rate
+                          stylistData.staff!.averageRating != null
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    TextSpan(
-                                      text: "Stylist: ",
-                                      style: GoogleFonts.quicksand(
-                                        textStyle: const TextStyle(
-                                            fontSize: 17,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
-                                      ),
+                                    const SizedBox(
+                                      height: 5,
                                     ),
-                                    TextSpan(
-                                      text:
-                                          "${utf8.decode(stylistData.firstName.toString().runes.toList())} ${utf8.decode(stylistData.lastName.toString().runes.toList())}",
-                                      style: GoogleFonts.quicksand(
-                                        textStyle: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Đánh giá: ",
+                                            style: GoogleFonts.quicksand(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: stylistData
+                                                .staff!.averageRating!
+                                                .toString(),
+                                            style: GoogleFonts.quicksand(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                            ),
+                                )
+                              : Container(),
 
-                            //  rate
-                            stylistData.staff!.averageRating != null
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "Đánh giá: ",
-                                              style: GoogleFonts.quicksand(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: stylistData
-                                                  .staff!.averageRating!
-                                                  .toString(),
-                                              style: GoogleFonts.quicksand(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -319,7 +314,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                 stylistData.branch != null
                     ? Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           const Divider(
@@ -552,34 +547,31 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                   children: [
                     Expanded(
                       flex: 6,
-                      child: Container(
-                        // width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            selectedProvider.updateSelectedStylist(stylistData);
-                            Navigator.pop(context, stylistData);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.black,
-                            onPrimary: Colors.white,
-                            side: const BorderSide(
-                              width: 2.0,
-                              color: Colors.white,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                20.0,
-                              ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          selectedProvider.updateSelectedStylist(stylistData);
+                          Navigator.pop(context, stylistData);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.black,
+                          side: const BorderSide(
+                            width: 2.0,
+                            color: Colors.white,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              20.0,
                             ),
                           ),
-                          child: const Text(
-                            "Chọn",
-                            style: TextStyle(fontSize: 20),
-                          ),
+                        ),
+                        child: const Text(
+                          "Chọn",
+                          style: TextStyle(fontSize: 20),
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     _selectedOption != 'Tất cả stylist'
                         ? Expanded(
                             flex: 3,
@@ -591,8 +583,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                   // Define the action for the "Xem thêm" button
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  onPrimary: Colors.white,
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                       20.0,

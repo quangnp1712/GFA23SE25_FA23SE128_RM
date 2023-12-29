@@ -1,8 +1,10 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:sizer/sizer.dart';
@@ -81,7 +83,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                                     child: Center(
                                       child: Text(
                                         "hóa đơn lịch đặt".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -139,16 +141,16 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              const SizedBox(
                 width: 130,
-                child: const Text(
+                child: Text(
                   "Salon: ",
                   style: TextStyle(
                     fontSize: 15,
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 220,
                 child: Text(
                   utf8.decode(branch.address.toString().runes.toList()),
@@ -164,22 +166,22 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
+              const SizedBox(
                 width: 130,
-                child: const Text(
+                child: Text(
                   "Stylist: ",
                   style: TextStyle(
                     fontSize: 15,
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 220,
                 child: Text(
                   stylist != null && stylist.accountId != null
@@ -199,43 +201,40 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
+              const SizedBox(
                 width: 130,
-                child: const Text(
+                child: Text(
                   "Ngày và giờ hẹn: ",
                   style: TextStyle(
                     fontSize: 15,
                   ),
                 ),
               ),
-              Container(
-                // width: 220,
-                child: Row(
-                  children: [
-                    Text(
-                      date != null ? date : " ",
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17),
-                    ),
-                    // const SizedBox(width: 5),
-                    Text(
-                      time != null ? ",  $time" : "",
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
+              Row(
+                children: [
+                  Text(
+                    date ?? " ",
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
-                        fontSize: 17,
-                      ),
+                        fontSize: 17),
+                  ),
+                  // const SizedBox(width: 5),
+                  Text(
+                    time != null ? ",  $time" : "",
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -246,11 +245,9 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
 
   int total = 0;
   getTotal() {
-    widget.service.forEach(
-      (element) {
-        total += element.price!;
-      },
-    );
+    for (var element in widget.service) {
+      total += element.price!;
+    }
     setState(() {
       total;
     });
@@ -285,36 +282,30 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             thickness: 1,
           ),
         ),
-        Container(
-          // padding: EdgeInsets.all(12.0),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: service != []
-                ? service.length
-                : 1, // The number of items in the list
-            itemBuilder: (context, index) {
-              // Return a Card widget for each item in the list
-              return Padding(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 10, right: 20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(service != []
-                        ? utf8.decode(service[index]
-                            .serviceName
-                            .toString()
-                            .runes
-                            .toList())
-                        : ""),
-                    Text(formatter.format(service[index].price)),
-                  ],
-                ),
-              );
-            },
-          ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: service != []
+              ? service.length
+              : 1, // The number of items in the list
+          itemBuilder: (context, index) {
+            // Return a Card widget for each item in the list
+            return Padding(
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 10, right: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(service != []
+                      ? utf8.decode(
+                          service[index].serviceName.toString().runes.toList())
+                      : ""),
+                  Text(formatter.format(service[index].price)),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
@@ -331,7 +322,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Tổng Tiền:",
                 style: TextStyle(
                   fontSize: 16,
@@ -341,7 +332,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               // SizedBox(width: 140),
               Text(
                 formatter.format(total),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),

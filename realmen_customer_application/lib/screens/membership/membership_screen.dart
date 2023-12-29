@@ -1,7 +1,8 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/membership/components/cardcredit_customer.dart';
@@ -74,7 +75,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                                   child: Center(
                                     child: Text(
                                       "realmen member".toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 24,
                                       ),
@@ -108,10 +109,10 @@ class _MembershipScreenState extends State<MembershipScreen> {
                             decoration:
                                 const BoxDecoration(color: Colors.transparent),
                             padding: const EdgeInsets.all(10.0),
-                            child: Center(child: const CardCreditCustomer()),
+                            child: const Center(child: CardCreditCustomer()),
                           ),
                           const SizedBox(height: 5),
-                          LabelTextLevel(),
+                          const LabelTextLevel(),
                         ],
                       ),
                     ],

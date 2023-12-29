@@ -109,6 +109,7 @@ class _CardCreditCustomerState extends State<CardCreditCustomer> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
+                          // ignore: deprecated_member_use
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           progressColor: Colors.white,
                         ),

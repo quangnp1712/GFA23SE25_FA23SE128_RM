@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class BookingModel {
   // To json
   String? appointmentDate;

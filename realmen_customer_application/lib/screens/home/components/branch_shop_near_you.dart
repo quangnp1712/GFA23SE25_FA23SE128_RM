@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, camel_case_types, use_build_context_synchronously, avoid_unnecessary_containers, avoid_print
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -5,10 +7,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
-import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
-import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:realmen_customer_application/service/location/location_service.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
@@ -26,7 +25,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
   Widget build(BuildContext context) {
     return branchesForCity != null &&
             branchesForCity != [] &&
-            branchesForCity!.length > 0
+            branchesForCity!.isNotEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +199,8 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                             widget.callback(2);
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            primary: const Color(0xffE3E3E3),
+                                            backgroundColor:
+                                                const Color(0xffE3E3E3),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -298,7 +298,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;
-          if (branchesForCity!.length > 0) {
+          if (branchesForCity!.isNotEmpty) {
             branchesForCity!.sort((a, b) {
               if (a.distanceKilometer == null && b.distanceKilometer == null) {
                 return 0;
@@ -336,7 +336,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
   ];
   Future<Widget> getImageFB(BranchModel branch) async {
     try {
-      var reference = storage.ref('branch/${branch!.thumbnailUrl}');
+      var reference = storage.ref('branch/${branch.thumbnailUrl}');
       return Image.network(
         await reference.getDownloadURL(),
         height: 160,
@@ -345,8 +345,8 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
         fit: BoxFit.cover,
       );
     } catch (e) {
-      final _random = new Random();
-      var randomUrl = _random.nextInt(urlList.length);
+      final random = Random();
+      var randomUrl = random.nextInt(urlList.length);
       var reference = storage.ref('branch/${urlList[randomUrl]}');
       return Image.network(
         await reference.getDownloadURL(),

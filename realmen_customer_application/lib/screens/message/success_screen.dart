@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -32,7 +34,7 @@ class ShowSnackBar {
               width: 10,
             ),
             Text(
-              message! ?? "Null",
+              message,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -77,7 +79,7 @@ class ShowSnackBar {
             SizedBox(
               width: 72.w,
               child: Text(
-                message! ?? "Null",
+                message,
                 maxLines: 1,
                 style: const TextStyle(
                   overflow: TextOverflow.ellipsis,

@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 
 class CategoryListModel {

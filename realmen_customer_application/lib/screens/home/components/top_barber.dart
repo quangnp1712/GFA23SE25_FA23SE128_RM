@@ -1,10 +1,12 @@
+// ignore_for_file: camel_case_types, avoid_unnecessary_containers
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class barberTop extends StatefulWidget {
   // const barberTop({super.key});
 
-  barberTop({super.key});
+  const barberTop({super.key});
 
   @override
   State<barberTop> createState() => _barberTopState();
@@ -101,13 +103,13 @@ class _barberTopState extends State<barberTop> {
                                                   Colors.black.withOpacity(0.6),
                                             ),
                                             children: [
-                                              WidgetSpan(
+                                              const WidgetSpan(
                                                 child: Icon(
                                                   Icons.star,
                                                   color: Color(0xff323232),
                                                 ),
                                               ),
-                                              WidgetSpan(
+                                              const WidgetSpan(
                                                 child: SizedBox(width: 4),
                                               ),
                                               TextSpan(
@@ -126,13 +128,13 @@ class _barberTopState extends State<barberTop> {
                                                   Colors.black.withOpacity(0.6),
                                             ),
                                             children: [
-                                              WidgetSpan(
+                                              const WidgetSpan(
                                                 child: Icon(
                                                   Icons.location_on,
                                                   color: Color(0xff323232),
                                                 ),
                                               ),
-                                              WidgetSpan(
+                                              const WidgetSpan(
                                                 child: SizedBox(width: 4),
                                               ),
                                               TextSpan(
@@ -200,6 +202,7 @@ class _barberTopState extends State<barberTop> {
     super.initState();
   }
 
+  // ignore: unused_field
   bool _isDisposed = false;
   @override
   void dispose() {
@@ -210,7 +213,7 @@ class _barberTopState extends State<barberTop> {
   final storage = FirebaseStorage.instance;
   Future<Widget> getImageFB(String url) async {
     try {
-      if (url != null && url != '') {
+      if (url != '') {
         var reference = storage.ref('stylist/$url');
         return Image.network(
           await reference.getDownloadURL(),
@@ -219,10 +222,11 @@ class _barberTopState extends State<barberTop> {
           width: 200,
           fit: BoxFit.cover,
         );
-      } else
+      } else {
         return Container(
           height: 200,
         );
+      }
     } catch (e) {
       return Container(
         height: 200,

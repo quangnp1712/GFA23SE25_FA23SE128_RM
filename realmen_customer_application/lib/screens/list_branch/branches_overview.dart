@@ -1,13 +1,11 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/list_branch/list_branches.dart';
-import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -75,7 +73,7 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                                   child: Center(
                                     child: Text(
                                       "hệ thống chi nhánh".toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 24,
                                       ),
@@ -104,7 +102,7 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                               height: 180,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
+                              child: const Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,

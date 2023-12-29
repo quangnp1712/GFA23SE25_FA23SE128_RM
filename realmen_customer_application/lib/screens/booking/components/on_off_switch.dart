@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -31,22 +33,22 @@ class _OnOffSwitchState extends State<OnOffSwitch> {
       borderRadius: 30.0,
       padding: 2.0,
       activeToggleColor: Colors.white,
-      inactiveToggleColor: Color(0xFF2F363D),
+      inactiveToggleColor: const Color(0xFF2F363D),
       activeSwitchBorder: Border.all(
         color: Colors.black,
         width: 2.0,
       ),
       inactiveSwitchBorder: Border.all(
-        color: Color(0xFFD1D5DA),
+        color: const Color(0xFFD1D5DA),
         width: 2.0,
       ),
       activeColor: Colors.black,
       inactiveColor: Colors.white,
-      activeIcon: Icon(
+      activeIcon: const Icon(
         CommunityMaterialIcons.check_bold,
         color: Colors.black,
       ),
-      inactiveIcon: Icon(
+      inactiveIcon: const Icon(
         Icons.close,
         color: Colors.white,
       ),

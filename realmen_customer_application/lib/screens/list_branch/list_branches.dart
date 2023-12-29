@@ -1,11 +1,10 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
+
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
-import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -76,7 +75,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     child: Center(
                                       child: Text(
                                         "hệ thống chi nhánh".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -105,7 +104,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                 height: 180,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
+                                child: const Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -144,7 +143,6 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                 // initialValue: null,
                                 optionsBuilder: (textEditingValue) async {
                                   if (!_isDisposed) {
-                                    _searchingWithQuery = textEditingValue.text;
                                     if (textEditingValue.text.isEmpty ||
                                         textEditingValue.text == '') {
                                       return const Iterable.empty();
@@ -186,7 +184,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                   setState(() {
                                     branchesForCity = [];
                                     (branchesForCity as List<BranchModel>)
-                                        ?.add(address);
+                                        .add(address);
                                     focusScopeNode.unfocus();
                                     isSearching = true;
                                   });
@@ -305,8 +303,8 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     ),
                                     alignment: Alignment.center,
                                     value: cityController,
-                                    items: cities != null && cities.length != 0
-                                        ? cities!
+                                    items: cities.isNotEmpty
+                                        ? cities
                                             .map((city) =>
                                                 DropdownMenuItem<String>(
                                                   value: city,
@@ -361,120 +359,113 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: branchesForCity?.length,
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                      // height: 210,
-                                      // width: double.infinity,
-                                      child: Column(
-                                        children: [
-                                          Image.asset(
-                                            image,
-                                            // width: double.infinity,
-                                            // height: double.infinity,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                1.2,
+                                    return Column(
+                                      children: [
+                                        Image.asset(
+                                          image,
+                                          // width: double.infinity,
+                                          // height: double.infinity,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.2,
 
-                                            height: 140,
-                                            fit: BoxFit.cover,
-                                          ),
-                                          ListTile(
-                                            title: Row(
-                                              children: [
-                                                Text(
-                                                  utf8.decode(
-                                                      branchesForCity![index]
-                                                          .branchName
-                                                          .toString()
-                                                          .runes
-                                                          .toList()),
-                                                ),
-                                                Text.rich(
-                                                  TextSpan(
-                                                    style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: Colors.black
-                                                          .withOpacity(0.6),
-                                                    ),
-                                                    children: [
-                                                      WidgetSpan(
-                                                        child: Icon(
-                                                          Icons.location_on,
-                                                          color: Colors.black
-                                                              .withOpacity(0.9),
-                                                        ),
-                                                      ),
-                                                      WidgetSpan(
-                                                        child:
-                                                            SizedBox(width: 4),
-                                                      ),
-                                                      TextSpan(
-                                                          text: branchesForCity![
-                                                                  index]
-                                                              .distanceKilometer,
-                                                          style: TextStyle(
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.8),
-                                                          )),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            subtitle: Text(utf8.decode(
-                                                branchesForCity![index]
-                                                    .address
-                                                    .toString()
-                                                    .runes
-                                                    .toList())),
-                                            trailing: Container(
-                                              height: 40,
-                                              width: 85,
-                                              decoration: const BoxDecoration(
-                                                color: Color(0xffE3E3E3),
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(4),
-                                                ),
+                                          height: 140,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        ListTile(
+                                          title: Row(
+                                            children: [
+                                              Text(
+                                                utf8.decode(
+                                                    branchesForCity![index]
+                                                        .branchName
+                                                        .toString()
+                                                        .runes
+                                                        .toList()),
                                               ),
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  // Xử lý sự kiện khi nhấn nút đặt lịch
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  padding: EdgeInsets.all(0),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  shadowColor:
-                                                      Colors.transparent,
-                                                ),
-                                                child: const Text(
-                                                  'Đặt lịch',
+                                              Text.rich(
+                                                TextSpan(
                                                   style: TextStyle(
                                                     fontSize: 17,
-                                                    color: Colors.black,
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
                                                   ),
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Icon(
+                                                        Icons.location_on,
+                                                        color: Colors.black
+                                                            .withOpacity(0.9),
+                                                      ),
+                                                    ),
+                                                    const WidgetSpan(
+                                                      child: SizedBox(width: 4),
+                                                    ),
+                                                    TextSpan(
+                                                        text: branchesForCity![
+                                                                index]
+                                                            .distanceKilometer,
+                                                        style: TextStyle(
+                                                          color: Colors.black
+                                                              .withOpacity(0.8),
+                                                        )),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          subtitle: Text(utf8.decode(
+                                              branchesForCity![index]
+                                                  .address
+                                                  .toString()
+                                                  .runes
+                                                  .toList())),
+                                          trailing: Container(
+                                            height: 40,
+                                            width: 85,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xffE3E3E3),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(4),
+                                              ),
+                                            ),
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                // Xử lý sự kiện khi nhấn nút đặt lịch
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                shadowColor: Colors.transparent,
+                                              ),
+                                              child: const Text(
+                                                'Đặt lịch',
+                                                style: TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.black,
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          (index != branchesForCity!.length - 1)
-                                              ? const Divider(
-                                                  color: Color(0x73444444),
-                                                  height: 1,
-                                                  thickness: 1,
-                                                )
-                                              : const SizedBox.shrink(),
-                                        ],
-                                      ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        (index != branchesForCity!.length - 1)
+                                            ? const Divider(
+                                                color: Color(0x73444444),
+                                                height: 1,
+                                                thickness: 1,
+                                              )
+                                            : const SizedBox.shrink(),
+                                      ],
                                     );
                                   },
                                 )
@@ -620,14 +611,13 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                 isSearching = false;
               });
             },
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
           )
         : null;
   }
 
   String displayStringForOption(BranchModel branch) =>
       utf8.decode(branch.address!.runes.toList());
-  String? _searchingWithQuery;
   Iterable<BranchModel>? options;
   BranchModel branchModel = BranchModel();
   BranchesModel branchesModel = BranchesModel();

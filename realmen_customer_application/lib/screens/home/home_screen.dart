@@ -1,8 +1,8 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
+
 import 'dart:convert';
 
 import 'package:community_material_icon/community_material_icon.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,11 +14,9 @@ import 'package:realmen_customer_application/screens/home/components/recoment_se
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
 import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
-import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account/account_service.dart';
-import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:sizer/sizer.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -134,14 +132,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      " ${time != null ? "Chào buổi $time," : ""} ${name != null ? name : ''}",
+                                      " ${time != null ? "Chào buổi $time," : ""} ${name ?? ''}",
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20,
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       "Level 1",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -214,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(height: 5),
                                       Text(
                                         'Dịch vụ'.toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
                                         ),
@@ -253,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         child: SvgPicture.asset(
                                           'assets/icons/store-marker-outline.svg',
+                                          // ignore: deprecated_member_use
                                           color: const Color(0xff323232),
                                           height: 24,
                                         ),
@@ -261,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         'Chi nhánh'.toUpperCase(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
                                         ),
@@ -304,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            RecomendServices(),
+                            const RecomendServices(),
                             const SizedBox(
                               height: 30,
                             ),
@@ -318,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            barberTop(),
+                            const barberTop(),
                             const SizedBox(
                               height: 30,
                             ),
@@ -366,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 title.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                 ),

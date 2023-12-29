@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,10 +8,9 @@ import 'package:realmen_customer_application/models/autocomplete/autocomplete_mo
 import 'package:realmen_customer_application/models/login_register/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/service/authentication/authenticateService.dart';
+import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
 import 'package:sizer/sizer.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:core';
 
 class RegisterScreen extends StatefulWidget {
@@ -71,23 +72,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               SizedBox(
                                 height: 5.h,
                               ),
-                              Text(
+                              const Text(
                                 "ĐĂNG NHẬP",
                                 style: TextStyle(
                                   fontSize: 35,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xff444444),
+                                  color: Color(0xff444444),
                                 ),
                               ),
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Text(
+                              const Text(
                                 "Nhập thông tin",
                                 style: TextStyle(
                                   fontSize: 27,
                                   fontWeight: FontWeight.w400,
-                                  color: const Color(0xff444444),
+                                  color: Color(0xff444444),
                                 ),
                               ),
                               // Họ và tên
@@ -222,7 +223,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   initialValue: TextEditingValue(
                                       text: addressController.text),
                                   optionsBuilder: (textEditingValue) async {
-                                    _searchingWithQuery = textEditingValue.text;
                                     if (textEditingValue.text.isEmpty ||
                                         textEditingValue.text == '') {
                                       return const Iterable.empty();
@@ -428,7 +428,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? genderController = 'NAM';
   DateTime? dobSubmit;
 
-  String? _searchingWithQuery;
   AutocompleteModel? autocompleteModel = AutocompleteModel();
   Iterable<PredictionModel>? options;
   final AutocompleteService autocompleteService = AutocompleteService();
@@ -461,9 +460,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String gender = genderController.toString();
     String thumbnailUrl = "";
     String status = "ACTIVATED";
-    if (firstName == null || firstName == '') {
+    if (firstName == '') {
       _errorMessage("Xin nhập họ và tên đệm");
-    } else if (lastName == null || lastName == '') {
+    } else if (lastName == '') {
       _errorMessage("Xin nhập tên");
     } else if (lastName.contains(' ')) {
       _errorMessage("Tên chỉ chứa 1 từ");

@@ -1,10 +1,7 @@
-import 'dart:convert';
+// ignore_for_file: must_be_immutable, avoid_unnecessary_containers, avoid_print
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
@@ -98,7 +95,7 @@ class _ChooseStylistAndDateTimeBookingState
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   isSwitched2
@@ -110,7 +107,7 @@ class _ChooseStylistAndDateTimeBookingState
                           "Anh không cho phép các em chụp hình lưu lại kiểu tóc.",
                           style: TextStyle(fontSize: 14),
                         ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                 ],
@@ -149,7 +146,7 @@ class _ChooseStylistAndDateTimeBookingState
                     DateTime(now.year, now.month, now.day, 0) ||
                 (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
                     DateTime.parse(schedule.value.workingDate!)
-                        .isBefore(now.add(Duration(days: 4))))) {
+                        .isBefore(now.add(const Duration(days: 4))))) {
               listDate.add(schedule.value);
             }
           }).toList();

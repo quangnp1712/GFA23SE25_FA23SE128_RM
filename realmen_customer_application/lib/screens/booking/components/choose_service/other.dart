@@ -7,6 +7,7 @@ class OnOffSwitch extends StatefulWidget {
       {Key? key, required this.initialValue, required this.onChanged})
       : super(key: key);
   @override
+  // ignore: library_private_types_in_public_api
   _OnOffSwitchState createState() => _OnOffSwitchState();
 }
 

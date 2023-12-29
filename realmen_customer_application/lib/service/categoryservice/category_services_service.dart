@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -17,10 +19,9 @@ abstract class ICategoryService {
 class CategoryServices implements ICategoryService {
   @override
   Future getCategoryServiceList() async {
-    CategoryListModel categoryServiceModel = CategoryListModel();
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
-      Uri uri = Uri.parse("$getCategoryServicesUrl");
+      Uri uri = Uri.parse(getCategoryServicesUrl);
       final client = http.Client();
       final response = await client.get(
         uri,

@@ -16,7 +16,6 @@ import { BranchApi } from '../data-access/model/branch-api.model';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
-import { BranchStore } from '../data-access/store/branch.store';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
@@ -142,6 +141,23 @@ import { RouterLink } from '@angular/router';
                 class="tw-rounded-md tw-w-[70%]"
                 [formControl]="buStore.form.controls.numberStaffs"
               />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Dịch vụ</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
+              <nz-select
+                class="tw-w-[70%] "
+                [formControl]="buStore.form.controls.serviceArray"
+                nzMode="multiple"
+              >
+                <nz-option
+                  *ngFor="let option of vm.serviceData.values"
+                  [nzLabel]="option.name"
+                  [nzValue]="option.serviceId"
+                ></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 

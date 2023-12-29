@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormsModule,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -17,13 +11,10 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadChangeParam, NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { BranchApi } from '../data-access/model/branch-api.model';
-import { debounceTime, distinctUntilChanged, pipe } from 'rxjs';
-import { CommonApiService } from 'src/app/share/data-access/api/common.service';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { BranchApiService } from '../data-access/api/branch.service';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { BranchStore } from '../data-access/store/branch.store';
 import { provideComponentStore } from '@ngrx/component-store';
@@ -70,7 +61,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
             >
             <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
               <input
-                class="tw-rounded-md tw-w-[70%]"
+                class=" tw-w-[70%]"
                 nz-input
                 placeholder="Nhập tên tài khoản"
                 [formControl]="bStore.form.controls.branchName"
@@ -83,7 +74,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
             <nz-form-label class="tw-ml-3" nzRequired>Địa chỉ</nz-form-label>
             <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ">
               <input
-                class="tw-rounded-md tw-w-[70%]"
+                class=" tw-w-[70%]"
                 placeholder="Nhập địa chỉ"
                 [formControl]="bStore.form.controls.address"
                 nz-input
@@ -98,37 +89,40 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
             </nz-form-control>
           </nz-form-item>
 
+          <!-- thoi gian mo cua -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian mở cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
+            <nz-form-control nzErrorTip="Chọn thời gian mở cửa" class="tw-w-[70%]">
               <nz-time-picker
                 nzFormat="HH:mm"
-                class="tw-rounded-md tw-w-[100%]"
+                class=" tw-w-[100%]"
                 [formControl]="bStore.form.controls.open"
               ></nz-time-picker>
             </nz-form-control>
           </nz-form-item>
 
+          <!-- thoi gian dong cua -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian đóng cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
+            <nz-form-control nzErrorTip="Chọn thời gian đóng cửa" class="tw-w-[70%]">
               <nz-time-picker
                 nzFormat="HH:mm"
-                class="tw-rounded-md tw-w-[100%]"
+                class=" tw-w-[100%]"
                 [formControl]="bStore.form.controls.close"
               ></nz-time-picker>
             </nz-form-control>
           </nz-form-item>
 
+          <!-- so dien thoai -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Hotline</nz-form-label>
             <nz-form-control nzErrorTip="Vui lòng nhập số điện thoại">
               <input
-                class="tw-rounded-md tw-w-[70%]"
+                class=" tw-w-[70%]"
                 nz-input
                 appOnlyNumber
                 placeholder="Nhập số điện thoại"
@@ -136,7 +130,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
               />
             </nz-form-control>
           </nz-form-item>
-
+          <!-- so luong nhan vien -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Số lượng nhân viên</nz-form-label
@@ -145,12 +139,31 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
               <input
                 nz-input
                 appOnlyNumber
-                class="tw-rounded-md tw-w-[70%]"
+                class=" tw-w-[70%]"
                 [formControl]="bStore.form.controls.numberStaffs"
               />
             </nz-form-control>
           </nz-form-item>
 
+          <!-- dich vu -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Dịch vụ</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
+              <nz-select
+                class="tw-w-[70%] "
+                [formControl]="bStore.form.controls.serviceArray"
+                nzMode="multiple"
+              >
+                <nz-option
+                  *ngFor="let option of vm.serviceData.values"
+                  [nzLabel]="option.name"
+                  [nzValue]="option.serviceId"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- anh chi nhanh -->
           <nz-form-item nz-col nzSpan="24" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Ảnh chi nhánh</nz-form-label
@@ -176,7 +189,14 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary" (click)="bStore.form.reset()">Làm mới</button>
+        <button
+          nz-button
+          nzDanger
+          nzType="primary"
+          (click)="bStore.form.reset()"
+        >
+          Làm mới
+        </button>
         <button
           nz-button
           nzType="primary"
@@ -198,6 +218,9 @@ export class BranchComponent {
   addModel!: BranchApi.Request;
 
   addBranch() {
+    this.bStore.form.controls.serviceArray.value.forEach(value =>
+      this.bStore.form.controls.branchServiceList.value.push({serviceId: value, price: 0})
+      )
     this.addModel = this.bStore.form.getRawValue();
     this.bStore.addBranch({ model: this.addModel });
   }

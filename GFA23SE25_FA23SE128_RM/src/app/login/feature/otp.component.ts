@@ -121,16 +121,16 @@ export class OtpComponent implements OnInit {
           localStorage.setItem('token$', data.value.jwtToken);
           localStorage.setItem('accountId$', data.value.accountId);
           localStorage.setItem('role$', data.value.role);
-          if(data.value.branchId === null){
+          if (data.value.branchId === null) {
             localStorage.setItem('branchId$', '');
-
-          }
-           else localStorage.setItem('branchId$', data.value.branchId+'');
+          } else localStorage.setItem('branchId$', data.value.branchId + '');
           this._router.navigate(['/homepage']);
         } else this._nzMessageService.error('Bạn không có quyền truy cập.');
       },
       (error) => {
-        this._nzMessageService.error('Otp không đúng.');
+        if (error === 'AUTHENTICATION_FAIL') {
+          this._nzMessageService.error('Otp không đúng.');
+        }
       }
     );
   }

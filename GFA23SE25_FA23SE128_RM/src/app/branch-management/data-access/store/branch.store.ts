@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ComponentStore } from '@ngrx/component-store';
+import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
 import { BranchApi, BranchPagingApi } from '../model/branch-api.model';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
 import { BranchApiService } from '../api/branch.service';
@@ -18,11 +18,13 @@ import { CommonApiService } from 'src/app/share/data-access/api/common.service';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
+import { ServiceDataApi } from 'src/app/service-management/data-access/model/service-api.model';
 
 export interface BranchState {
   branchPaging: Paging<BranchPagingApi.Response>;
   loadingCount: number;
   addressData: string[];
+  serviceData: ServiceDataApi.Response;
 }
 
 const initialState: BranchState = {
@@ -35,10 +37,14 @@ const initialState: BranchState = {
   },
   loadingCount: 0,
   addressData: [],
+  serviceData: { values: [] },
 };
 
 @Injectable()
-export class BranchStore extends ComponentStore<BranchState> {
+export class BranchStore
+  extends ComponentStore<BranchState>
+  implements OnStoreInit
+{
   constructor(
     private _bApiSvc: BranchApiService,
     private _cApiSvc: CommonApiService,
@@ -46,6 +52,9 @@ export class BranchStore extends ComponentStore<BranchState> {
     private _nzMessageService: NzMessageService
   ) {
     super(initialState);
+  }
+  ngrxOnStoreInit() {
+    this.#getService();
   }
 
   addressData!: AutocompleteApi.Response;
@@ -75,6 +84,7 @@ export class BranchStore extends ComponentStore<BranchState> {
     branchDisplayList: this._fb.control([]),
     branchServiceList: this._fb.control([]),
     thumbnailUrl: this._fb.control('123', trimRequired),
+    serviceArray: this._fb.control([]),
   });
 
   readonly getBranchPaging = this.effect<never>(
@@ -129,6 +139,23 @@ export class BranchStore extends ComponentStore<BranchState> {
             },
             error: () =>
               this._nzMessageService.error('Đăng ký chi nhánh thất bại.'),
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  readonly #getService = this.effect<never>(
+    pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(() =>
+        this._bApiSvc.serviceDataGet().pipe(
+          tap({
+            next: (resp) => {
+              this.patchState({ serviceData: resp });
+            },
             finalize: () => this.updateLoading(false),
           }),
           catchError(() => EMPTY)

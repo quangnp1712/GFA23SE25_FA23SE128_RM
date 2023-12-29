@@ -18,5 +18,10 @@ const SERVICE_MANAGEMENT_ROUTES: Route[] = [
     loadComponent: () =>
       import('./feature/service.component').then((m) => m.ServiceComponent),
   },
+  {
+    path: ':serviceId',
+    loadComponent: () =>
+      import('./feature/service-update.component').then((m) => m.ServiceUpdateComponent),
+  },
 ];
 export default SERVICE_MANAGEMENT_ROUTES;

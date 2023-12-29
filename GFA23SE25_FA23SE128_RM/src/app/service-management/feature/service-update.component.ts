@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
   FormsModule,
-  NonNullableFormBuilder,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -13,10 +10,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ServiceStore } from '../data-access/store/service.store';
@@ -25,7 +20,7 @@ import { RxLet } from '@rx-angular/template/let';
 import { ServiceAddApi } from '../data-access/model/service-api.model';
 
 @Component({
-  selector: 'app-service',
+  selector: 'app-service-update',
   standalone: true,
   imports: [
     CommonModule,
@@ -46,7 +41,7 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý dịch vụ</nz-breadcrumb-item>
-      <nz-breadcrumb-item>Tạo dịch vụ</nz-breadcrumb-item>
+      <nz-breadcrumb-item>Chỉnh sửa dịch vụ</nz-breadcrumb-item>
     </nz-breadcrumb>
     <nz-divider></nz-divider>
     <div *rxLet="vm$ as vm">
@@ -118,8 +113,11 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceComponent {
+export class ServiceUpdateComponent implements OnInit {
   constructor(public sStore: ServiceStore){}
+  ngOnInit(): void {
+    this.sStore.getServiceData()
+  }
 
   vm$ = this.sStore.state$
   form = this.sStore.form

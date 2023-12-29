@@ -15,10 +15,12 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
 import { SignInApi } from '../data-access/model/sign-in-api.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SignInApiService } from '../data-access/api/sign-in.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
+  providers: [NzMessageService],
   imports: [
     CommonModule,
     NzImageModule,
@@ -84,7 +86,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private _fb: NonNullableFormBuilder,
     private _siSvc: SignInApiService,
-    private _router: Router
+    private _router: Router,
+    private _nzMessageService: NzMessageService,
   ) {}
   validateForm!: FormGroup<SignInApi.RequestFormGroup>;
   model: SignInApi.Request = {value : ""}
@@ -97,9 +100,10 @@ export class SignInComponent implements OnInit {
     //   .getOtp(this.model)
     //   .subscribe(
     //     (data) => {
+    //       this._router.navigate(["/otp"])
     //       localStorage.setItem('phone', this.validateForm.controls.value.getRawValue())
     //     },
-    //     (error) => {}
+    //     (error) => {this._nzMessageService.error('Số điện thoại chưa được đăng kí.');}
     //   );
   }
 

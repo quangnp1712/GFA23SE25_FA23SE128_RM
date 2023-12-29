@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
-import { CategoryAddApi, CategoryDataGet, ServiceAddApi, ServicePagingApi } from '../model/service-api.model';
+import { CategoryAddApi, CategoryDataGet, ServiceAddApi, ServiceGetApi, ServicePagingApi } from '../model/service-api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,15 +23,15 @@ export class ServiceApiService {
 
   private REST_API_SERVER = 'http://localhost:8080';
 
-  public addCategory(model: CategoryAddApi.Request) {
-    const url = `${this.REST_API_SERVER}/v1/category`;
-    return this._http
-      .post<any>(url, model, this.httpOptions)
-      .pipe(catchError(this.handleError));
-  }
+  // public addCategory(model: CategoryAddApi.Request) {
+  //   const url = `${this.REST_API_SERVER}/v1/category`;
+  //   return this._http
+  //     .post<any>(url, model, this.httpOptions)
+  //     .pipe(catchError(this.handleError));
+  // }
 
   public CategoryDataGet() {
-    const url = `${this.REST_API_SERVER}/v1/category/fields`;
+    const url = `${this.REST_API_SERVER}/v1/category`;
     return this._http
       .get<CategoryDataGet.Response>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
@@ -51,6 +51,19 @@ export class ServiceApiService {
       .pipe(catchError(this.handleError));
   }
 
+  public getService(id: number) {
+    const url = `${this.REST_API_SERVER}/v1/service/${id}`;
+    return this._http
+      .get<ServiceGetApi.Response>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  // public updateBranch(id: number, model: BranchUpdateApi.Request) {
+  //   const url = `${this.REST_API_SERVER}/v1/branch/${id}`;
+  //   return this._http
+  //     .put<any>(url, model, this.httpOptions)
+  //     .pipe(catchError(this.handleError));
+  // }
   // public getBranch(id: number) {
   //   const url = `${this.REST_API_SERVER}/v1/branch/${id}`;
   //   return this._http

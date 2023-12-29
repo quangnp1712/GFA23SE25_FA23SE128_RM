@@ -68,14 +68,6 @@ import { RxLet } from '@rx-angular/template/let';
           Tạo dịch vụ
         </button>
       </div>
-      <div class="tw-text-center tw-mt-4 tw-mr-3">
-        <button nz-button nzType="primary" (click)="onAddCategory()">
-          Tạo loại dịch vụ
-        </button>
-      </div>
-      <div class="tw-text-center tw-mt-4">
-        <button nz-button nzType="primary">Xem loại dịch vụ</button>
-      </div>
       <!-- </div> -->
       <div nz-col nzSpan="24" class="tw-mt-5">
         <ng-container *rxLet="vm$ as vm">
@@ -102,13 +94,24 @@ import { RxLet } from '@rx-angular/template/let';
                 <th>STT</th>
                 <th>Tên dịch vụ</th>
                 <th>Mô tả</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let data of vm.servicePaging.content; index as i">
-                <td>{{ i+1 }}</td>
+                <td>{{ i + 1 }}</td>
                 <td>{{ data.name }}</td>
                 <td>{{ data.description }}</td>
+                <td class="tw-text-center">
+                  <button
+                    nz-button
+                    nzType="primary"
+                    [routerLink]="['/service-management', data.serviceId]"
+                    nzSize="small"
+                  >
+                    Edit
+                  </button>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -137,25 +140,25 @@ export class ServiceListComponent {
     console.log();
   }
 
-  onAddCategory() {
-    const modalRef = this._nzModalSvc.create({
-      nzTitle: 'Tạo loại dịch vụ',
-      nzContent: CategoryAddComponent,
-    });
-    const form = this._fb.group<CategoryAddApi.RequestFormGroup>({
-      description: this._fb.control('', trimRequired),
-      title: this._fb.control('', trimRequired),
-    });
-    modalRef.componentInstance!.form = form;
-    modalRef
-      .componentInstance!.clickSubmit.pipe(
-        tap(() => {
-          this.sStore.addCategory({
-            model: CategoryAddApi.mapModel(form),
-            modalRef: modalRef,
-          });
-        })
-      )
-      .subscribe();
-  }
+  // onAddCategory() {
+  //   const modalRef = this._nzModalSvc.create({
+  //     nzTitle: 'Tạo loại dịch vụ',
+  //     nzContent: CategoryAddComponent,
+  //   });
+  //   const form = this._fb.group<CategoryAddApi.RequestFormGroup>({
+  //     description: this._fb.control('', trimRequired),
+  //     title: this._fb.control('', trimRequired),
+  //   });
+  //   modalRef.componentInstance!.form = form;
+  //   modalRef
+  //     .componentInstance!.clickSubmit.pipe(
+  //       tap(() => {
+  //         this.sStore.addCategory({
+  //           model: CategoryAddApi.mapModel(form),
+  //           modalRef: modalRef,
+  //         });
+  //       })
+  //     )
+  //     .subscribe();
+  // }
 }

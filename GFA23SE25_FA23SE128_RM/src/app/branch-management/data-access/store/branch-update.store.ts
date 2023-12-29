@@ -18,15 +18,18 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { ActivatedRoute } from '@angular/router';
+import { ServiceDataApi } from 'src/app/service-management/data-access/model/service-api.model';
 
 export interface BranchUpdateState {
   loadingCount: number;
   addressData: string[];
+  serviceData: ServiceDataApi.Response;
 }
 
 const initialState: BranchUpdateState = {
   loadingCount: 0,
   addressData: [],
+  serviceData: { values: [] },
 };
 
 @Injectable()
@@ -41,6 +44,7 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
     super(initialState);
   }
   ngrxOnStoreInit() {
+    this.#getService()
   };
 
 
@@ -65,6 +69,7 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
     branchServiceList: this._fb.control([]),
     branchId: this._fb.control(-1),
     thumbnailUrl: this._fb.control('123'),
+    serviceArray: this._fb.control([])
   });
 
   readonly getBranchData = this.effect<never>(
@@ -84,6 +89,9 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
               this.form.controls.open.setValue(resp.value.open+'Z')
               this.form.controls.close.setValue(resp.value.close+'Z')
               this.form.controls.branchId.setValue(resp.value.branchId)
+              resp.value.branchServiceList.forEach(data => {
+                this.form.controls.serviceArray.value.push(data.serviceId)
+              })
 
             },
             finalize: () => this.updateLoading(false),
@@ -135,6 +143,22 @@ export class BranchUpdateStore extends ComponentStore<BranchUpdateState> impleme
     )
   );
 
+  readonly #getService = this.effect<never>(
+    pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(() =>
+        this._bApiSvc.serviceDataGet().pipe(
+          tap({
+            next: (resp) => {
+              this.patchState({ serviceData: resp });
+            },
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
 
   readonly updateLoading = this.updater((s, isAdd: boolean) => ({
     ...s,

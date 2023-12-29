@@ -24,24 +24,32 @@ export namespace CategoryDataGet {
   export interface Response {
     values: {
       categoryId: number;
-      title: string;
+      name: string | null;
+      categoryType: string;
+      serviceList: string | null;
     }[];
   }
 }
 
 export namespace ServiceAddApi {
   export interface Request {
-    description: string;
     name: string;
+    description: string;
     categoryId: number;
+    serviceDisplayList: serviceDisplayList;
     duration: number;
   }
+
+  export type serviceDisplayList = {
+    serviceDisplayUrl: string;
+  }[];
 
   export type RequestFormGroup = {
     description: FormControl<string>;
     name: FormControl<string>;
     categoryId: FormControl<number | null>;
     duration: FormControl<number>;
+    serviceDisplayList: FormControl<serviceDisplayList>;
   };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
@@ -51,6 +59,7 @@ export namespace ServiceAddApi {
       categoryId: formValue.categoryId!,
       duration: formValue.duration,
       name: formValue.name,
+      serviceDisplayList: formValue.serviceDisplayList,
     };
   }
 }
@@ -65,9 +74,10 @@ export namespace ServicePagingApi {
   }
 
   export interface Response {
-        description: string;
-        name: string;
-        branchServiceList: branchServiceList;
+    description: string;
+    name: string;
+    branchServiceList: branchServiceList;
+    serviceId: number;
   }
 
   export type branchServiceList = {
@@ -78,4 +88,56 @@ export namespace ServicePagingApi {
     thumbnailUrl: string;
     price: number;
   }[];
+}
+
+export namespace ServiceDataApi {
+  export interface Response {
+    values: {
+      name: string;
+      serviceId: number;
+    }[];
+  }
+}
+
+export namespace ServiceUpdateApi {
+  export interface Request {
+    name: string;
+    description: string;
+    categoryId: number;
+    serviceDisplayList: serviceDisplayList;
+    duration: number;
+  }
+
+  export type serviceDisplayList = {
+    serviceDisplayUrl: string;
+  }[];
+
+  export type RequestFormGroup = {
+    description: FormControl<string>;
+    name: FormControl<string>;
+    categoryId: FormControl<number | null>;
+    duration: FormControl<number>;
+    serviceDisplayList: FormControl<serviceDisplayList>;
+  };
+
+  export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
+    const formValue = frm.getRawValue();
+    return {
+      description: formValue.description,
+      categoryId: formValue.categoryId!,
+      duration: formValue.duration,
+      name: formValue.name,
+      serviceDisplayList: formValue.serviceDisplayList,
+    };
+  }
+}
+
+export namespace ServiceGetApi {
+  export interface Response {
+    value: {
+      name: string;
+      description: string;
+      serviceId: 0;
+    };
+  }
 }

@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
-import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,38 +23,41 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     _navigateToLogin();
-
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
+  // @override
+  // void didUpdateWidget(SplashScreen oldWidget) {
+  //   _navigateToLogin();
+  //   super.didUpdateWidget(oldWidget);
+  // }
+
+  bool _isDisposed = false;
   @override
   void dispose() {
+    _isDisposed = true;
     super.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
   }
 
   Future<void> _navigateToLogin() async {
-    final authenticateService = AuthenticateService();
-    await Future.delayed(const Duration(milliseconds: 2000));
-
-    try {
-      final result = await authenticateService.isLogin();
-      if (result == true) {
-        Get.toNamed(MainScreen.MainScreenRoute);
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const MainScreen()),
-        // );
-      } else {
+    // final authenticateService = AuthenticateService();
+    if (!_isDisposed && mounted) {
+      await Future.delayed(const Duration(milliseconds: 2000));
+      try {
+        final result = await SharedPreferencesService.checkJwtExpired();
+        if (result == false) {
+          Get.toNamed(MainScreen.MainScreenRoute);
+        } else {
+          Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+        }
+      } catch (e) {
+        print(e);
         Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const LoginPhoneScreen()),
-        // );
       }
-    } catch (e) {
-      print(e);
+    } else {
+      Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
     }
   }
 

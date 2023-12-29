@@ -286,6 +286,5 @@ class AuthenticateService extends IAuthenticateService {
         await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     Get.to(() => const LoginPhoneScreen());
-    return;
   }
 }

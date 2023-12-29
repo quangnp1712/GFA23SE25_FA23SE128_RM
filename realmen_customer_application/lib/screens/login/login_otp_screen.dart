@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/login_register/login_otp_model.dart';
+import 'package:realmen_customer_application/models/login_register/login_phone_model.dart';
+import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
@@ -76,7 +78,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                         ),
                         child: SingleChildScrollView(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Column(
                                 children: <Widget>[
@@ -125,47 +127,108 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                     controller: otpController,
                                   ),
                                   SizedBox(
-                                    height: 2.5.h,
+                                    height: 0.5.h,
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 22),
-                                    width: 70.w,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            Color(0xff302E2E),
-                                            Color(0xe6444141),
-                                            Color(0x8c484646),
-                                            Color(0x26444141),
-                                          ]),
-                                      borderRadius: BorderRadius.circular(24),
+                                  TextButton(
+                                    onPressed: resendOtp,
+                                    child: const Center(
+                                      child: Text(
+                                        "Gửi lại mã OTP",
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          fontSize: 18,
+                                        ),
+                                      ),
                                     ),
-                                    child: ElevatedButton(
-                                      onPressed: submitOtp
-                                      // No API
-                                      // () => Get.toNamed(
-                                      //     MainScreen.MainScreenRoute)
-
-                                      ,
-                                      style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        // margin: const EdgeInsets.only(top: 22),
+                                        width: 24.w,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: const Color(0xffC4C4C4),
+                                              width: 1,
+                                              style: BorderStyle.solid),
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            padding: const EdgeInsets.only(
+                                                left: 1, right: 1),
+                                            backgroundColor: Colors.transparent,
+                                            shadowColor: Colors.transparent,
+                                          ),
+                                          child: Text(
+                                            "quay lại".toUpperCase(),
+                                            style: const TextStyle(
+                                                letterSpacing: 0.5,
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      Container(
+                                        // margin: const EdgeInsets.only(top: 24),
+                                        width: 50.w,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                Color(0xff302E2E),
+                                                Color(0xe6444141),
+                                                Color(0x8c484646),
+                                                Color(0x26444141),
+                                              ]),
                                           borderRadius:
                                               BorderRadius.circular(24),
                                         ),
-                                        backgroundColor: Colors.transparent,
-                                        shadowColor: Colors.transparent,
+                                        child: ElevatedButton(
+                                          onPressed: submitOtp
+                                          // No API
+                                          // () => Get.toNamed(
+                                          //     MainScreen.MainScreenRoute)
+
+                                          ,
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                            backgroundColor: Colors.transparent,
+                                            shadowColor: Colors.transparent,
+                                          ),
+                                          child: const Text(
+                                            "ĐĂNG NHẬP",
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                color: Color(0xffC4C4C4),
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
                                       ),
-                                      child: const Text(
-                                        "ĐĂNG NHẬP",
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: Color(0xffC4C4C4),
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
+                                    ],
                                   ),
                                 ],
                               )
@@ -191,27 +254,33 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     String otp = otpController.text.toString();
     LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
     AuthenticateService authenticateService = AuthenticateService();
-    try {
-      var result = await authenticateService.loginOtp(loginOtpModel);
-      if (result != null && result['statusCode'] == 200) {
-        try {
-          if (result['data'].loginOtpResponseModel.jwtToken != null) {
-            _successMessage("Đăng nhập thành công");
-            // Navigator.pushNamed(context, MainScreen.MainScreenRoute);
-            Get.toNamed(MainScreen.MainScreenRoute);
-          } else {
-            _errorMessage("Lỗi đăng nhập");
+    if (otp.length <= 5) {
+      try {
+        var result = await authenticateService.loginOtp(loginOtpModel);
+        if (result != null && result['statusCode'] == 200) {
+          try {
+            if (result['data'].loginOtpResponseModel.jwtToken != null) {
+              _successMessage("Đăng nhập thành công");
+              // Navigator.pushNamed(context, MainScreen.MainScreenRoute);
+              Get.toNamed(MainScreen.MainScreenRoute);
+            } else {
+              _errorMessage("Lỗi đăng nhập");
+            }
+          } catch (e) {
+            _errorMessage("Sai mã OTP");
           }
-        } catch (e) {
+        } else if (result['statusCode'] == 500) {
+          _errorMessage("${result['error']}");
+        } else {
           _errorMessage("Sai mã OTP");
+          print("$result['statusCode'] : $result['error']");
         }
-      } else {
-        _errorMessage("Sai mã OTP");
-        print("$result['statusCode'] : $result['error']");
+      } catch (e) {
+        _errorMessage("Lỗi đăng nhập");
+        print("Error: $e");
       }
-    } catch (e) {
-      _errorMessage("Lỗi đăng nhập");
-      print("Error: $e");
+    } else {
+      _errorMessage("Xin nhập đúng mã OTP");
     }
   }
 
@@ -229,5 +298,32 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void resendOtp() async {
+    setState(() {
+      otpController = TextEditingController();
+    });
+
+    // String phone = await SharedPreferencesService.getPhone();
+    // LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+    // AuthenticateService authenticateService = AuthenticateService();
+    // if (phone.isNotEmpty && phone != '') {
+    //   try {
+    //     var result = await authenticateService.loginPhone(loginPhoneModel);
+    //     if (result['statusCode'] == 200) {
+    //       _successMessage("Gửi lại mã OTP thành công");
+    //     } else if (result['statusCode'] == 500) {
+    //       _errorMessage("${result['error']}");
+    //     } else {
+    //       _errorMessage("Gửi lại mã OTP thất bại");
+    //     }
+    //   } catch (e) {
+    //     _errorMessage("Gửi lại mã OTP thất bại");
+    //   }
+    // } else {
+    //   _errorMessage("Gửi lại mã OTP thất bại");
+    //   Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+    // }
   }
 }

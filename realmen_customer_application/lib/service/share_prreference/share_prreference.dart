@@ -69,7 +69,7 @@ class SharedPreferencesService {
     if (result != null) {
       return result;
     } else {
-      throw Exception("Failed to get phone number from SharedPreferences");
+      return '';
     }
   }
 
@@ -132,7 +132,9 @@ class SharedPreferencesService {
   //   return false;
   // }
 
-// kiểm tra hết hạn hay chưa / false là chưa còn tiếp tục
+// kiểm tra hết hạn hay chưa
+// false là chưa hết hạn
+// true là hết hạn
   static Future<bool> checkJwtExpired() async {
     try {
       final SharedPreferences sharedPreferences =
@@ -146,6 +148,7 @@ class SharedPreferencesService {
         } else {
           AuthenticateService authenticateService = AuthenticateService();
           authenticateService.logout();
+          // return null
         }
       } else {
         print("Failed to get jwtToken from SharedPreferences");

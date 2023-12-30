@@ -86,7 +86,7 @@ class AccountService extends IAccountService {
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }
@@ -178,7 +178,7 @@ class AccountService extends IAccountService {
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }

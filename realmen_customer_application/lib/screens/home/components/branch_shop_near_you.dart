@@ -11,6 +11,7 @@ import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:realmen_customer_application/service/location/location_service.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class branchShopNearYou extends StatefulWidget {
   branchShopNearYou(this.callback, {super.key});
@@ -41,10 +42,15 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                 ),
               ),
               SizedBox(
-                height: 310,
-                child: ListView.builder(
+                height: 331,
+                child: GridView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                  ),
                   itemCount:
                       branchesForCity!.length > 5 ? 5 : branchesForCity!.length,
                   itemBuilder: (context, index) {
@@ -75,28 +81,20 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                   topRight: Radius.circular(10),
                                   topLeft: Radius.circular(10),
                                 ),
-                                child: FutureBuilder<Widget>(
-                                  future: getImageFB(branchesForCity![index]),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<Widget> snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      if (snapshot.hasData) {
-                                        return snapshot
-                                            .data!; // Return the widget when the future is complete
-                                      } else {
-                                        return Container(
-                                            height:
-                                                160); // Handle the case when the future completes with an error
-                                      }
-                                    } else {
-                                      return const SizedBox(
-                                          height: 160,
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator())); // Show a loading indicator while the future is in progress
-                                    }
-                                  },
+                                child: CachedNetworkImage(
+                                  imageUrl: branchesForCity![index]
+                                      .branchDisplayList![0]
+                                      .url!,
+                                  height: 160,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.4,
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                      value: progress.progress,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -107,50 +105,54 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                     const SizedBox(
                                       height: 3,
                                     ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          utf8.decode(branchesForCity![index]
-                                              .branchName
-                                              .toString()
-                                              .runes
-                                              .toList()),
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text.rich(
-                                          TextSpan(
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              color:
-                                                  Colors.black.withOpacity(0.6),
+                                    SizedBox(
+                                      height: 50,
+                                      child: Wrap(
+                                        children: [
+                                          Text(
+                                            utf8.decode(branchesForCity![index]
+                                                .branchName
+                                                .toString()
+                                                .runes
+                                                .toList()),
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
                                             ),
-                                            children: [
-                                              WidgetSpan(
-                                                child: Icon(
-                                                  Icons.location_on,
-                                                  color: Colors.white
-                                                      .withOpacity(0.9),
-                                                ),
-                                              ),
-                                              const WidgetSpan(
-                                                child: SizedBox(width: 4),
-                                              ),
-                                              TextSpan(
-                                                  text: branchesForCity![index]
-                                                      .distanceKilometer,
-                                                  style: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.8),
-                                                  )),
-                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          const SizedBox(width: 8),
+                                          Text.rich(
+                                            TextSpan(
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
+                                              ),
+                                              children: [
+                                                WidgetSpan(
+                                                  child: Icon(
+                                                    Icons.location_on,
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                  ),
+                                                ),
+                                                const WidgetSpan(
+                                                  child: SizedBox(width: 4),
+                                                ),
+                                                TextSpan(
+                                                    text:
+                                                        branchesForCity![index]
+                                                            .distanceKilometer,
+                                                    style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.8),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 3,
@@ -177,7 +179,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                       children: [
                                         Container(
                                           height: 40,
-                                          padding: const EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -286,7 +288,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
   String? imageUrl;
 
   Future<void> getBranch() async {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
       final locationPermission =
           await SharedPreferencesService.getLocationPermission();
       if (!locationPermission) {
@@ -314,6 +316,19 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                 return distanceA.compareTo(distanceB);
               }
             });
+            for (BranchModel branch in branchesForCity!) {
+              try {
+                var reference = storage.ref('branch/${branch.thumbnailUrl}');
+                branch.branchDisplayList![0].url =
+                    await reference.getDownloadURL();
+              } catch (e) {
+                final random = Random();
+                var randomUrl = random.nextInt(urlList.length);
+                var reference = storage.ref('branch/${urlList[randomUrl]}');
+                branch.branchDisplayList![0].url =
+                    await reference.getDownloadURL();
+              }
+            }
 
             setState(() {
               branchesForCity;
@@ -334,27 +349,4 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
     "barber2.jpg",
     "barber3.jpg",
   ];
-  Future<Widget> getImageFB(BranchModel branch) async {
-    try {
-      var reference = storage.ref('branch/${branch.thumbnailUrl}');
-      return Image.network(
-        await reference.getDownloadURL(),
-        height: 160,
-        scale: 1,
-        width: MediaQuery.of(context).size.width / 1.4,
-        fit: BoxFit.cover,
-      );
-    } catch (e) {
-      final random = Random();
-      var randomUrl = random.nextInt(urlList.length);
-      var reference = storage.ref('branch/${urlList[randomUrl]}');
-      return Image.network(
-        await reference.getDownloadURL(),
-        height: 160,
-        scale: 1,
-        width: MediaQuery.of(context).size.width / 1.4,
-        fit: BoxFit.cover,
-      );
-    }
-  }
 }

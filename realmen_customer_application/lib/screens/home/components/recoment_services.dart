@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/models/service/service_model.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class RecomendServices extends StatefulWidget {
   const RecomendServices({super.key});
@@ -16,24 +17,21 @@ class RecomendServices extends StatefulWidget {
 }
 
 class _RecomendServicesState extends State<RecomendServices> {
-  List nameService = [
-    'Cắt tóc',
-    'Dưỡng tóc',
-    'Massage loại 1',
-    'Massage loại 2',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 230,
-      child: ListView.builder(
+      child: GridView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          mainAxisSpacing: 4.0,
+          crossAxisSpacing: 4.0,
+        ),
         itemCount: serviceList!.length > 5 ? 5 : serviceList?.length,
         itemBuilder: (context, index) {
-          // ignore: unnecessary_null_comparison
-          return serviceList![index] != null
+          return serviceList![index].serviceId != null
               ? InkWell(
                   onTap: () {},
                   child: Container(
@@ -58,33 +56,25 @@ class _RecomendServicesState extends State<RecomendServices> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              topLeft: Radius.circular(10),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: serviceList![index]
+                                  .serviceDisplayList![0]
+                                  .serviceDisplayUrl!,
+                              height: 160,
+                              width: MediaQuery.of(context).size.width / 1.4,
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: CircularProgressIndicator(
+                                  value: progress.progress,
+                                ),
                               ),
-                              child: FutureBuilder<Widget>(
-                                future: getImageFB(serviceList![index]),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<Widget> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    if (snapshot.hasData) {
-                                      return snapshot
-                                          .data!; // Return the widget when the future is complete
-                                    } else {
-                                      return Container(
-                                          height:
-                                              140); // Handle the case when the future completes with an error
-                                    }
-                                  } else {
-                                    return const SizedBox(
-                                        height: 140,
-                                        child: Center(
-                                            child:
-                                                CircularProgressIndicator())); // Show a loading indicator while the future is in progress
-                                  }
-                                },
-                              )),
+                            ),
+                          ),
                           SizedBox(
                             height: 56,
                             child: Column(
@@ -126,75 +116,64 @@ class _RecomendServicesState extends State<RecomendServices> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getService();
-  }
-
   bool _isDisposed = false;
-  @override
-  void dispose() {
-    _isDisposed = true;
-    super.dispose();
-  }
-
   ServiceModel? serviceModel = ServiceModel();
   List<ServiceContent>? serviceList = [];
-  Future<void> getService() async {
-    if (!_isDisposed) {
-      try {
-        CategoryServices categoryServices = CategoryServices();
-        final result = await categoryServices.getServiceList();
-        if (result['statusCode'] == 200) {
-          serviceModel = result['data'] as ServiceModel;
-          serviceList = serviceModel!.content;
-          setState(() {
-            serviceList;
-          });
-        } else {
-          print("$result['statusCode'] : $result['error']");
-        }
-      } on Exception catch (e) {
-        print("Error: $e");
-      }
-    }
-  }
-
   final storage = FirebaseStorage.instance;
   List<String> urlList = [
     "1.jpg",
     "2.png",
     "3.png",
   ];
-  Future<Widget> getImageFB(ServiceContent service) async {
-    try {
-      if (service.serviceDisplayList != null &&
-          service.serviceDisplayList!.isNotEmpty) {
-        final String serviceDisplayUrl =
-            service.serviceDisplayList![0].serviceDisplayUrl.toString();
-        var reference = storage.ref('service/$serviceDisplayUrl');
-        return Image.network(
-          await reference.getDownloadURL(),
-          scale: 1,
-          height: 160,
-          width: MediaQuery.of(context).size.width / 1.4,
-          fit: BoxFit.cover,
-        );
-      } else {
-        return Container();
+
+  @override
+  void initState() {
+    super.initState();
+    getService();
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  Future<void> getService() async {
+    if (!_isDisposed && mounted) {
+      try {
+        CategoryServices categoryServices = CategoryServices();
+        final result = await categoryServices.getServiceList();
+        if (result['statusCode'] == 200) {
+          serviceModel = result['data'] as ServiceModel;
+          serviceList = serviceModel!.content;
+          //  Lấy Url image
+          for (var service in serviceList!) {
+            try {
+              if (service.serviceDisplayList != null &&
+                  service.serviceDisplayList!.isNotEmpty) {
+                final String serviceDisplayUrl =
+                    service.serviceDisplayList![0].serviceDisplayUrl.toString();
+                var reference = storage.ref('service/$serviceDisplayUrl');
+                service.serviceDisplayList![0].serviceDisplayUrl =
+                    await reference.getDownloadURL();
+              }
+            } catch (e) {
+              final random = Random();
+              var randomUrl = random.nextInt(urlList.length);
+              var reference = storage.ref('service/${urlList[randomUrl]}');
+              service.serviceDisplayList![0].serviceDisplayUrl =
+                  await reference.getDownloadURL();
+            }
+          }
+          setState(() {
+            serviceList;
+          });
+        } else {
+          print("$result");
+        }
+      } on Exception catch (e) {
+        print("Error: $e");
       }
-    } catch (e) {
-      final random = Random();
-      var randomUrl = random.nextInt(urlList.length);
-      var reference = storage.ref('service/${urlList[randomUrl]}');
-      return Image.network(
-        await reference.getDownloadURL(),
-        scale: 1,
-        height: 160,
-        width: MediaQuery.of(context).size.width / 1.4,
-        fit: BoxFit.cover,
-      );
     }
   }
 }

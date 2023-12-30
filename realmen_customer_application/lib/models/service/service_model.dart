@@ -61,10 +61,10 @@ class ServiceContent {
 }
 
 class ServiceDisplay {
-  final int? serviceDisplayId;
-  final String? serviceDisplayUrl;
+  int? serviceDisplayId;
+  String? serviceDisplayUrl;
 
-  const ServiceDisplay({
+  ServiceDisplay({
     this.serviceDisplayId,
     this.serviceDisplayUrl,
   });
@@ -78,14 +78,14 @@ class ServiceDisplay {
 }
 
 class BranchService {
-  final int? serviceId;
-  final int? branchId;
-  final String? serviceName;
-  final String? branchName;
-  final String? thumbnailUrl;
-  final int? price;
+  int? serviceId;
+  int? branchId;
+  String? serviceName;
+  String? branchName;
+  String? thumbnailUrl;
+  int? price;
 
-  const BranchService({
+  BranchService({
     this.serviceId,
     this.branchId,
     this.serviceName,

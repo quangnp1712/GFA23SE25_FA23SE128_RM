@@ -80,20 +80,21 @@ class CategoryServices implements ICategoryService {
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Socket error',
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }
 
+  // Home: Recoment service
   @override
   Future getServiceList() async {
     int current = 1;
-    String sorter = "name";
+    String sorter = "serviceName";
     int pageSize = 5;
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
@@ -158,12 +159,12 @@ class CategoryServices implements ICategoryService {
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Socket error',
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }

@@ -254,7 +254,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     String otp = otpController.text.toString();
     LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
     AuthenticateService authenticateService = AuthenticateService();
-    if (otp.length <= 5) {
+    if (otp.length == 5) {
       try {
         var result = await authenticateService.loginOtp(loginOtpModel);
         if (result != null && result['statusCode'] == 200) {

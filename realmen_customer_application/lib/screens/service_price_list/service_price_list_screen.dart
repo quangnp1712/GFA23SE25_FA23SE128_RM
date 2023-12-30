@@ -26,25 +26,74 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
   @override
   void initState() {
     super.initState();
-    // Gọi API để lấy danh sách category và dịch vụ
     _fetchCategoryServiceList();
   }
 
   Future<void> _fetchCategoryServiceList() async {
-    try {
-      final categoryService = CategoryServices();
-      final result = await categoryService.getCategoryServiceList();
+    if (!_isDisposed && mounted) {
+      try {
+        final categoryService = CategoryServices();
+        final result = await categoryService.getCategoryServiceList();
 
-      if (result['statusCode'] == 200) {
-        setState(() {
-          categories = result['data'].values;
-        });
-      } else {
-        // Xử lý lỗi nếu cần
-        print(result['status'] + result['error']);
+        if (result['statusCode'] == 200) {
+          setState(() {
+            categories = result['data'].values;
+          });
+        } else {
+          // Xử lý lỗi nếu cần
+          print(result['status'] + result['error']);
+        }
+      } catch (e) {
+        print(e.toString());
       }
-    } catch (e) {
-      print(e.toString());
+    }
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  final storage = FirebaseStorage.instance;
+  List<String> urlList = [
+    "1.jpg",
+    "2.png",
+    "3.png",
+  ];
+  Future<Widget> getImageFB(ServiceList service) async {
+    if (!_isDisposed && mounted) {
+      try {
+        if (service.serviceDisplayList != null &&
+            service.serviceDisplayList!.isNotEmpty) {
+          final String serviceDisplayUrl =
+              service.serviceDisplayList![0].serviceDisplayUrl.toString();
+          var reference = storage.ref('service/$serviceDisplayUrl');
+          return Image.network(
+            await reference.getDownloadURL(),
+            scale: 1,
+            fit: BoxFit.cover,
+            height: 140,
+            width: MediaQuery.of(context).size.width / 1.0,
+          );
+        } else {
+          return Container();
+        }
+      } catch (e) {
+        final random = Random();
+        var randomUrl = random.nextInt(urlList.length);
+        var reference = storage.ref('service/${urlList[randomUrl]}');
+        return Image.network(
+          await reference.getDownloadURL(),
+          scale: 1,
+          fit: BoxFit.cover,
+          height: 140,
+          width: MediaQuery.of(context).size.width / 1.0,
+        );
+      }
+    } else {
+      return Container();
     }
   }
 
@@ -434,42 +483,5 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
         ],
       ),
     );
-  }
-
-  final storage = FirebaseStorage.instance;
-  List<String> urlList = [
-    "1.jpg",
-    "2.png",
-    "3.png",
-  ];
-  Future<Widget> getImageFB(ServiceList service) async {
-    try {
-      if (service.serviceDisplayList != null &&
-          service.serviceDisplayList!.isNotEmpty) {
-        final String serviceDisplayUrl =
-            service.serviceDisplayList![0].serviceDisplayUrl.toString();
-        var reference = storage.ref('service/$serviceDisplayUrl');
-        return Image.network(
-          await reference.getDownloadURL(),
-          scale: 1,
-          fit: BoxFit.cover,
-          height: 140,
-          width: MediaQuery.of(context).size.width / 1.0,
-        );
-      } else {
-        return Container();
-      }
-    } catch (e) {
-      final random = Random();
-      var randomUrl = random.nextInt(urlList.length);
-      var reference = storage.ref('service/${urlList[randomUrl]}');
-      return Image.network(
-        await reference.getDownloadURL(),
-        scale: 1,
-        fit: BoxFit.cover,
-        height: 140,
-        width: MediaQuery.of(context).size.width / 1.0,
-      );
-    }
   }
 }

@@ -72,7 +72,7 @@ class AccountInfoModel {
           : null,
       itimacyLevel: json['itimacyLevel'],
       professional: json['professional'],
-      average: json['average'],
+      average: json['average'] ?? 0,
       role: json['role'],
       totalElements: json['totalElements'],
       totalPages: json['totalPages'],

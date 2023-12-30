@@ -80,12 +80,12 @@ class BookingService implements IBookingService {
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Socket error',
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }
@@ -153,12 +153,12 @@ class BookingService implements IBookingService {
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Socket error',
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }
@@ -222,12 +222,12 @@ class BookingService implements IBookingService {
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Socket error',
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
         'statusCode': 500,
-        'error': e,
+        'error': 'Kiểm tra lại kết nối Internet',
       };
     }
   }

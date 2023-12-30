@@ -273,7 +273,8 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
     _focusNode.unfocus();
     // String phone = phoneController.text.toString();
     String phone = "0917901487";
-    Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+    // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+    Get.toNamed(RegisterScreen.RegisterScreenRoute);
     try {
       await SharedPreferencesService.savePhone(phone);
     } catch (e) {

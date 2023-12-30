@@ -42,26 +42,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              SafeArea(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      top: 5.h,
-                      // bottom: 10.h,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          width: 80.w,
-                          height: null,
-                          constraints: BoxConstraints(minHeight: 75.h),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Form(
-                            key: _formKey,
-                            autovalidateMode: AutovalidateMode.always,
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    top: 30,
+                    // bottom: 30,
+                    // bottom: 10.h,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 80.w,
+                        height: null,
+                        // constraints:
+                        //     BoxConstraints(minHeight: 75.h, maxHeight: 80.h),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.always,
+                          child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
@@ -107,8 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     cursorColor: Colors.black,
                                     cursorWidth: 1,
                                     focusNode: _focusNodefirstName,
-                                    onTapOutside: (event) =>
-                                        _focusNodefirstName.unfocus(),
+                                    // onTapOutside: (event) =>
+                                    //     _focusNodefirstName.unfocus(),
                                     onEditingComplete: () =>
                                         _focusNodefirstName.unfocus(),
                                     inputFormatters: [
@@ -185,8 +187,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     cursorColor: Colors.black,
                                     cursorWidth: 1,
                                     focusNode: _focusNodelastName,
-                                    onTapOutside: (event) =>
-                                        _focusNodelastName.unfocus(),
+                                    // onTapOutside: (event) =>
+                                    //     _focusNodelastName.unfocus(),
                                     onEditingComplete: () =>
                                         _focusNodelastName.unfocus(),
                                     inputFormatters: [
@@ -314,8 +316,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           controller: controller,
                                           focusNode: focusNode,
                                           onEditingComplete: onEditingComplete,
-                                          onTapOutside: (event) =>
-                                              focusNode.unfocus(),
+                                          // onTapOutside: (event) =>
+                                          //     focusNode.unfocus(),
                                           cursorColor: Colors.black,
                                           cursorWidth: 1,
                                           style: const TextStyle(
@@ -354,14 +356,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               color: Color(0xffC4C4C4),
                                             ),
                                           ),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Vui lòng không để trống địa chỉ của bạn';
-                                            }
-
-                                            return null; // Trả về null nếu không có lỗi
-                                          },
                                         );
                                       },
                                     ),
@@ -558,9 +552,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               )
             ],
           ),
@@ -676,5 +670,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     focusNode.dispose();
     _isDisposed = true;
     super.dispose();
+  }
+
+  // thay đôi height
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

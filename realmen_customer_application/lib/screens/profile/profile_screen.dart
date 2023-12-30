@@ -2,11 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/screens/history_booking/history_booking_screen.dart';
+import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/logout_popup.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
@@ -65,9 +68,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 120,
                             child: CircleAvatar(
                               child: ClipOval(
-                                child: Image.network(
-                                  avatarUrl ?? avatarDefault,
-                                  scale: 1.0,
+                                child: CachedNetworkImage(
+                                  imageUrl: avatarUrl ?? avatarDefault,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
                                   fit: BoxFit.cover,
                                   width: 120,
                                   height: 120,
@@ -121,7 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         child: TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            widget.callback(3);
+                                          },
                                           style: TextButton.styleFrom(
                                             padding:
                                                 const EdgeInsets.only(left: 0),
@@ -217,7 +223,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         child: TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Get.toNamed(HistoryBookingScreen
+                                                .HistoryBookingScreenRoute);
+                                          },
                                           style: TextButton.styleFrom(
                                             padding:
                                                 const EdgeInsets.only(left: 0),
@@ -240,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    "Lịch sử cắt tóc",
+                                                    "Lịch sử đặt lịch",
                                                     style: TextStyle(
                                                         fontSize: 15,
                                                         fontWeight:
@@ -264,7 +273,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         child: TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Get.toNamed(BranchesOverviewScreen
+                                                .BranchesOverviewScreenRoute);
+                                          },
                                           style: TextButton.styleFrom(
                                             padding:
                                                 const EdgeInsets.only(left: 0),
@@ -389,7 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "https://cdn.vectorstock.com/i/preview-1x/62/38/avatar-13-vector-42526238.jpg";
 
   Future<void> getAccountInfo() async {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
       try {
         AccountService accountService = AccountService();
         final result = await accountService.getAccountInfo();
@@ -409,21 +421,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
             var reference = storage.ref('avatar/default.png');
             avatarUrl = await reference.getDownloadURL();
           }
-          setState(() {
-            name =
-                "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
-            name = utf8.decode(name!.runes.toList());
-            phone = accountInfo!.phone ?? '';
-            avatarUrl;
-          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              name =
+                  "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
+              name = utf8.decode(name!.runes.toList());
+              phone = accountInfo!.phone ?? '';
+              avatarUrl;
+            });
+          }
         } else if (result['statusCode'] == 403) {
           Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-          _errorMessage("  Cần đăng nhập lại");
+          _errorMessage("Cần đăng nhập lại");
+        } else if (result['statusCode'] == 500) {
+          _errorMessage(result['error']);
         } else {
           print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
-        // _errorMessage(e.toString());
+        _errorMessage("Cần đăng nhập lại");
+        Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+
         print("Error: $e");
       }
     }

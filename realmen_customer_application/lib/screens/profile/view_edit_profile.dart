@@ -2,8 +2,10 @@
 
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/models/autocomplete/autocomplete_model.dart';
@@ -53,611 +55,583 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white),
-                          child: ListView(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.only(left: 7),
-                                child: Center(
-                                  child: Stack(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: 50,
-                                        child: IconButton(
-                                          alignment: Alignment.centerLeft,
-                                          color: Colors.black,
-                                          iconSize: 22,
-                                          icon: const Icon(
-                                              Icons.keyboard_arrow_left),
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                        child: Center(
-                                          child: Text(
-                                            "thông tin tài khoản".toUpperCase(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 24,
-                                            ),
+                          child: Form(
+                            key: _formKey,
+                            autovalidateMode: AutovalidateMode.always,
+                            child: ListView(
+                              children: <Widget>[
+                                Container(
+                                  padding: const EdgeInsets.only(left: 7),
+                                  child: Center(
+                                    child: Stack(
+                                      // mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 50,
+                                          child: IconButton(
+                                            alignment: Alignment.centerLeft,
+                                            color: Colors.black,
+                                            iconSize: 22,
+                                            icon: const Icon(
+                                                Icons.keyboard_arrow_left),
+                                            onPressed: () {
+                                              Get.back();
+                                            },
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              // Combo
-                              const SizedBox(
-                                height: 30,
-                              ),
-
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      SizedBox(
-                                        width: 120,
-                                        height: 120,
-                                        child: CircleAvatar(
-                                          child: ClipOval(
-                                            child: Image.network(
-                                              avatarUrl ?? avatarDefault,
-                                              scale: 1.0,
-                                              fit: BoxFit.cover,
-                                              width: 120,
-                                              height: 120,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: 5,
-                                        child: Container(
-                                          height: 35,
-                                          width: 35,
-                                          child: const CircleAvatar(
-                                            child: ClipOval(
-                                              child: Icon(
-                                                Icons.card_giftcard,
-                                                size: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                // color: Colors.amber,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Họ và Tên đệm",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        // height: 40,
-                                        child: TextField(
-                                          controller: firstNameController,
-                                          cursorColor: Colors.black,
-                                          cursorWidth: 1,
-                                          style: const TextStyle(
-                                              height: 1.17,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    // top: 10,
-                                                    // bottom: 20,
-                                                    left: 15,
-                                                    right: 15),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                // color: Colors.amber,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Tên",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        // height: 40,
-                                        child: TextField(
-                                          controller: lastNameController,
-                                          cursorColor: Colors.black,
-                                          cursorWidth: 1,
-                                          style: const TextStyle(
-                                              height: 1.17,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    // top: 10,
-                                                    // bottom: 20,
-                                                    left: 15,
-                                                    right: 15),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                // color: Colors.amber,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Số điện thoại",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        // height: 40,
-                                        child: TextField(
-                                          controller: phoneController,
-                                          cursorColor: Colors.black,
-                                          cursorWidth: 1,
-                                          style: const TextStyle(
-                                              height: 1.17,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    // top: 10,
-                                                    // bottom: 20,
-                                                    left: 15,
-                                                    right: 15),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                // color: Colors.amber,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Ngày tháng năm sinh ",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        // height: 40,
-                                        child: TextField(
-                                          controller: dobController,
-                                          readOnly: true,
-                                          cursorColor: Colors.black,
-                                          cursorWidth: 1,
-                                          style: const TextStyle(
-                                              height: 1.17,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    // top: 10,
-                                                    // bottom: 20,
-                                                    left: 15,
-                                                    right: 15),
-                                            hintText:
-                                                "Nhập Ngày sinh dd/mm/yyyy",
-                                            hintStyle: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w400,
-                                                color: Color(0xffC4C4C4)),
-                                          ),
-                                          onTap: _selectDate,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                // color: Colors.amber,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Giới tính ",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                      Container(
-                                        // margin: const EdgeInsets.only(top: 22),
-                                        width: 80.w,
-                                        // height: 40,
-                                        // padding: EdgeInsets.symmetric(horizontal: 15),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                          border: Border.all(
-                                              color: const Color(0xffC4C4C4)),
-                                        ),
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton<String>(
-                                              isExpanded: true,
-                                              iconSize: 20,
-                                              padding: const EdgeInsets.only(
-                                                  left: 15, right: 15),
-                                              value: genderController,
-                                              items: genders
-                                                  .map((item) =>
-                                                      DropdownMenuItem<String>(
-                                                        value: item,
-                                                        child: Text(item,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        20)),
-                                                      ))
-                                                  .toList(),
-                                              onChanged: (item) => setState(
-                                                  () =>
-                                                      genderController = item)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                // color: Colors.amber,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Địa chỉ",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        // height: 40,
-                                        child: TextField(
-                                          controller: addressController,
-                                          cursorColor: Colors.black,
-                                          cursorWidth: 1,
-                                          style: const TextStyle(
-                                              height: 1.17,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color(0xffC4C4C4)),
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    // top: 10,
-                                                    // bottom: 20,
-                                                    left: 15,
-                                                    right: 15),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        height: 50,
-                                        child: Autocomplete<PredictionModel>(
-                                          displayStringForOption:
-                                              displayStringForOption,
-                                          initialValue: TextEditingValue(
-                                              text: addressController.text),
-                                          optionsBuilder:
-                                              (textEditingValue) async {
-                                            _searchingWithQuery =
-                                                textEditingValue.text;
-                                            if (textEditingValue.text.isEmpty ||
-                                                textEditingValue.text == '') {
-                                              return const Iterable.empty();
-                                            }
-                                            final value =
-                                                await autocompleteService
-                                                    .getAutocomplete(
-                                                        textEditingValue.text);
-                                            if (value['statusCode'] == 200) {
-                                              autocompleteModel = value['data'];
-                                              options = value['data']
-                                                  ?.predictions!
-                                                  .where((element) => utf8
-                                                      .decode(element
-                                                          .description!.runes
-                                                          .toList())
-                                                      .toLowerCase()
-                                                      .contains(textEditingValue
-                                                          .text
-                                                          .toLowerCase()));
-
-                                              return Future.value(options);
-                                            }
-                                            return [];
-
-                                            // return autocompleteService
-                                            //     .getAutocomplete(
-                                            //         textEditingValue.text)
-                                            //     .then((value) {
-                                            //   if (value['data']
-                                            //       is AutocompleteModel) {
-                                            //     return value['data']
-                                            //         .predictions!
-                                            //         .where((element) => utf8
-                                            //             .decode(element
-                                            //                 .description!.runes
-                                            //                 .toList())
-                                            //             .toLowerCase()
-                                            //             .contains(
-                                            //                 textEditingValue
-                                            //                     .text
-                                            //                     .toLowerCase()));
-                                            //   } else {
-                                            //     return const Iterable.empty();
-                                            //   }
-                                            // });
-
-                                            // final resultAuto =
-                                            //     await autocompleteService
-                                            //         .getAutocomplete(
-                                            //             _searchingWithQuery!);
-                                            // final Iterable<String> options;
-                                            // if (resultAuto != null) {
-                                            //   if (resultAuto
-                                            //           .first['statusCode'] ==
-                                            //       200) {
-                                            //     options =
-                                            //         resultAuto.first['data'];
-                                            //     _lastOptions = options;
-                                            //     utf8.decode(
-                                            //         options.runes
-                                            //         .toList());
-                                            //     return options;
-                                            //   } else {
-                                            //     debugPrint(
-                                            //         resultAuto.first['error']);
-                                            //   }
-                                            // }
-                                            // return [];
-                                          },
-                                          onSelected: (address) {
-                                            debugPrint(
-                                                'You just selected $address');
-                                            addressController.text =
-                                                utf8.decode(address
-                                                    .description!.runes
-                                                    .toList());
-                                          },
-                                          fieldViewBuilder: (context,
-                                              controller,
-                                              focusNode,
-                                              onEditingComplete) {
-                                            return TextField(
-                                              // controller: addressController,
-                                              controller: controller,
-                                              focusNode: focusNode,
-                                              onEditingComplete:
-                                                  onEditingComplete,
-                                              cursorColor: Colors.black,
-                                              cursorWidth: 1,
+                                        SizedBox(
+                                          height: 50,
+                                          child: Center(
+                                            child: Text(
+                                              "thông tin tài khoản"
+                                                  .toUpperCase(),
                                               style: const TextStyle(
-                                                  height: 1.17,
-                                                  fontSize: 20,
-                                                  color: Colors.black),
-                                              decoration: InputDecoration(
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color(0xffC4C4C4)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color(0xffC4C4C4)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
-                                                ),
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        // top: 10,
-                                                        // bottom: 20,
-                                                        left: 15,
-                                                        right: 15),
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 24,
                                               ),
-                                            );
-                                          },
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                width: 70.w,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Color(0xff302E2E),
-                                        Color(0xe6444141),
-                                        Color(0x8c484646),
-                                        Color(0x26444141),
-                                      ]),
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24),
+                                      ],
                                     ),
-                                    backgroundColor: Colors.transparent,
-                                    shadowColor: Colors.transparent,
-                                  ),
-                                  child: const Text(
-                                    "HOÀN TẤT",
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        color: Color(0xffC4C4C4),
-                                        fontWeight: FontWeight.w700),
                                   ),
                                 ),
-                              ),
-                            ],
+                                // Combo
+                                const SizedBox(
+                                  height: 30,
+                                ),
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        SizedBox(
+                                          width: 120,
+                                          height: 120,
+                                          child: CircleAvatar(
+                                            child: ClipOval(
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    avatarUrl ?? avatarDefault,
+                                                placeholder: (context, url) =>
+                                                    const CircularProgressIndicator(),
+                                                fit: BoxFit.cover,
+                                                width: 120,
+                                                height: 120,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 0,
+                                          right: 5,
+                                          child: Container(
+                                            height: 35,
+                                            width: 35,
+                                            child: const CircleAvatar(
+                                              child: ClipOval(
+                                                child: Icon(
+                                                  Icons.camera_alt,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  // color: Colors.amber,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Họ và Tên đệm",
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          width: 80.w,
+                                          // height: 40,
+                                          child: TextFormField(
+                                            controller: firstNameController,
+                                            cursorColor: Colors.black,
+                                            cursorWidth: 1,
+                                            focusNode: _focusNodefirstName,
+                                            // onTapOutside: (event) =>
+                                            //     _focusNodefirstName.unfocus(),
+                                            onEditingComplete: () =>
+                                                _focusNodefirstName.unfocus(),
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .singleLineFormatter, // Đảm bảo chỉ nhập trên một dòng
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(
+                                                      r'[a-zA-Z\s]')), // Chỉ cho phép nhập chữ và khoảng trắng
+                                              TextInputFormatter.withFunction(
+                                                  (oldValue, newValue) {
+                                                if (newValue.text.isEmpty) {
+                                                  return newValue;
+                                                }
+                                                return TextEditingValue(
+                                                  text: newValue.text
+                                                      .replaceAllMapped(
+                                                          RegExp(r'\b\w'),
+                                                          (match) => match
+                                                              .group(0)!
+                                                              .toUpperCase()), // In hoa chữ cái đầu của từng từ
+                                                  selection: newValue.selection,
+                                                );
+                                              }),
+                                            ],
+                                            keyboardType: TextInputType.text,
+                                            style: const TextStyle(
+                                                height: 1.17,
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                            decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      // top: 10,
+                                                      // bottom: 20,
+                                                      left: 15,
+                                                      right: 15),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Vui lòng không để trống Họ và Tên đệm của bạn';
+                                              }
+
+                                              return null; // Trả về null nếu không có lỗi
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  // color: Colors.amber,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Tên",
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          width: 80.w,
+                                          // height: 40,
+                                          child: TextFormField(
+                                            controller: lastNameController,
+                                            cursorColor: Colors.black,
+                                            cursorWidth: 1,
+                                            focusNode: _focusNodelastName,
+                                            // onTapOutside: (event) =>
+                                            //     _focusNodelastName.unfocus(),
+                                            onEditingComplete: () =>
+                                                _focusNodelastName.unfocus(),
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .singleLineFormatter, // Đảm bảo chỉ nhập trên một dòng
+                                              TextInputFormatter.withFunction(
+                                                  (oldValue, newValue) {
+                                                if (newValue.text.isEmpty) {
+                                                  return newValue;
+                                                }
+                                                return TextEditingValue(
+                                                  text: newValue.text
+                                                      .replaceAllMapped(
+                                                          RegExp(r'\b\w'),
+                                                          (match) => match
+                                                              .group(0)!
+                                                              .toUpperCase()), // In hoa chữ cái đầu của từng từ
+                                                  selection: newValue.selection,
+                                                );
+                                              }),
+                                              FilteringTextInputFormatter.deny(
+                                                  RegExp(
+                                                      r'[\s]')), // Không cho phép khoảng trắng
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(
+                                                      r'[a-zA-Z]')), // Chỉ cho phép nhập chữ
+                                            ],
+                                            keyboardType: TextInputType
+                                                .text, // Hiển thị bàn phím là chữ
+
+                                            style: const TextStyle(
+                                                height: 1.17,
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                            decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      // top: 10,
+                                                      // bottom: 20,
+                                                      left: 15,
+                                                      right: 15),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Vui lòng không để trống Tên của bạn';
+                                              }
+
+                                              return null; // Trả về null nếu không có lỗi
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  // color: Colors.amber,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Số điện thoại",
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          width: 80.w,
+                                          // height: 40,
+                                          child: TextField(
+                                            controller: phoneController,
+                                            cursorColor: Colors.black,
+                                            cursorWidth: 1,
+                                            readOnly: true,
+                                            style: const TextStyle(
+                                                height: 1.17,
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                            decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      // top: 10,
+                                                      // bottom: 20,
+                                                      left: 15,
+                                                      right: 15),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  // color: Colors.amber,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Ngày tháng năm sinh ",
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          width: 80.w,
+                                          // height: 40,
+                                          child: TextField(
+                                            controller: dobController,
+                                            readOnly: true,
+                                            cursorColor: Colors.black,
+                                            cursorWidth: 1,
+                                            style: const TextStyle(
+                                                height: 1.17,
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                            decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      // top: 10,
+                                                      // bottom: 20,
+                                                      left: 15,
+                                                      right: 15),
+                                              hintText:
+                                                  "Nhập Ngày sinh dd/mm/yyyy",
+                                              hintStyle: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Color(0xffC4C4C4)),
+                                            ),
+                                            onTap: _selectDate,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  // color: Colors.amber,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Giới tính ",
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        Container(
+                                          // margin: const EdgeInsets.only(top: 22),
+                                          width: 80.w,
+                                          // height: 40,
+                                          // padding: EdgeInsets.symmetric(horizontal: 15),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                            border: Border.all(
+                                                color: const Color(0xffC4C4C4)),
+                                          ),
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton<String>(
+                                                isExpanded: true,
+                                                iconSize: 20,
+                                                padding: const EdgeInsets.only(
+                                                    left: 15, right: 15),
+                                                value: genderController,
+                                                items: genders
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value: item,
+                                                          child: Text(item,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          20)),
+                                                        ))
+                                                    .toList(),
+                                                onChanged: (item) => setState(
+                                                    () => genderController =
+                                                        item)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  // color: Colors.amber,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Địa chỉ",
+                                          style: TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          width: 80.w,
+                                          // height: 40,
+                                          child: TextField(
+                                            controller: addressController,
+                                            cursorColor: Colors.black,
+                                            cursorWidth: 1,
+                                            style: const TextStyle(
+                                                height: 1.17,
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                            decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color(0xffC4C4C4)),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      // top: 10,
+                                                      // bottom: 20,
+                                                      left: 15,
+                                                      right: 15),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  width: 70.w,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xff302E2E),
+                                          Color(0xe6444141),
+                                          Color(0x8c484646),
+                                          Color(0x26444141),
+                                        ]),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                    ),
+                                    child: const Text(
+                                      "HOÀN TẤT",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          color: Color(0xffC4C4C4),
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -682,7 +656,9 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
 
   // ignore: unused_field, prefer_final_fields
   late Iterable<String> _lastOptions = <String>[];
-
+  final _formKey = GlobalKey<FormState>();
+  final FocusNode _focusNodefirstName = FocusNode();
+  final FocusNode _focusNodelastName = FocusNode();
   AutocompleteModel? autocompleteModel = AutocompleteModel();
   AccountInfoModel? accountInfo = AccountInfoModel();
   TextEditingController firstNameController = TextEditingController();

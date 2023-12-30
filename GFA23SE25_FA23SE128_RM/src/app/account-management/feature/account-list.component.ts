@@ -140,7 +140,13 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
                 <td>{{ data.status }}</td>
                 <td>{{ data.role | mapRoleTypeName }}</td>
                 <td class="tw-text-center">
-                  <button nz-button nzType="primary" nzSize="small">
+                  <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="small"
+                    [routerLink]="['/account-management', data.accountId]"
+                    nzSize="small"
+                  >
                     Edit
                   </button>
                 </td>

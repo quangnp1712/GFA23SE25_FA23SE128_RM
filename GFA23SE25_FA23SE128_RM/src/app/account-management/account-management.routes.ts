@@ -20,5 +20,10 @@ const ACCOUNT_MANAGEMENT_ROUTES: Route[] = [
     loadComponent: () =>
       import('./feature/account.component').then((m) => m.AccountComponent),
   },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./feature/account-update.component').then((m) => m.AccountUpdateComponent),
+  },
 ];
 export default ACCOUNT_MANAGEMENT_ROUTES;

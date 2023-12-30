@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -17,7 +14,10 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ServiceStore } from '../data-access/store/service.store';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
-import { ServiceAddApi } from '../data-access/model/service-api.model';
+import {
+  ServiceAddApi,
+  ServiceUpdateApi,
+} from '../data-access/model/service-api.model';
 
 @Component({
   selector: 'app-service-update',
@@ -35,7 +35,7 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
     ReactiveFormsModule,
     NzSelectModule,
     NzUploadModule,
-    RxLet
+    RxLet,
   ],
   providers: [NzMessageService, provideComponentStore(ServiceStore)],
   template: `
@@ -64,29 +64,44 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
 
           <!-- loaij dichj vuj -->
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Loại dịch vụ</nz-form-label>
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Loại dịch vụ</nz-form-label
+            >
             <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
-              <nz-select class="tw-rounded-md tw-w-[70%]" [formControl]="form.controls.categoryId">
-            <nz-option *ngFor="let option of vm.categoryData.values" [nzLabel]="option.categoryType" [nzValue]="option.categoryId"></nz-option>
-            </nz-select>
+              <nz-select
+                class="tw-rounded-md tw-w-[70%]"
+                [formControl]="form.controls.categoryId"
+              >
+                <nz-option
+                  *ngFor="let option of vm.categoryData.values"
+                  [nzLabel]="option.categoryType"
+                  [nzValue]="option.categoryId"
+                ></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="12">
             <nz-form-label class="tw-ml-3">Mô tả dịch vụ</nz-form-label>
             <nz-form-control>
-            <textarea  class="tw-w-[70%]" rows="5" nz-input [formControl]="form.controls.description"></textarea>
+              <textarea
+                class="tw-w-[70%]"
+                rows="5"
+                nz-input
+                [formControl]="form.controls.description"
+              ></textarea>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Ảnh dịch vụ</nz-form-label>
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Ảnh dịch vụ</nz-form-label
+            >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
               <nz-upload
                 nzType="drag"
                 [nzMultiple]="true"
                 nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-
               >
                 <p class="ant-upload-drag-icon">
                   <span nz-icon nzType="inbox"></span>
@@ -103,9 +118,17 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary" (click)="form.reset()">Làm mới</button>
-        <button nz-button nzType="primary" class="tw-ml-4" (click)="addService()" [disabled]="form.invalid">
-          Tạo dịch vụ
+        <button nz-button nzDanger nzType="primary" (click)="form.reset()">
+          Làm mới
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          class="tw-ml-4"
+          (click)="updateService()"
+          [disabled]="form.invalid"
+        >
+          Cập nhật dịch vụ
         </button>
       </div>
     </div>
@@ -114,15 +137,18 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceUpdateComponent implements OnInit {
-  constructor(public sStore: ServiceStore){}
+  constructor(public sStore: ServiceStore) {}
   ngOnInit(): void {
-    this.sStore.getServiceData()
+    this.sStore.getServiceData();
   }
 
-  vm$ = this.sStore.state$
-  form = this.sStore.form
+  vm$ = this.sStore.state$;
+  form = this.sStore.form;
 
-  addService(){
-    this.sStore.addService({model: ServiceAddApi.mapModel(this.form)})
+  updateService() {
+    this.sStore.updateService({
+      id: this.sStore.id,
+      model: ServiceUpdateApi.mapModel(this.form),
+    });
   }
 }

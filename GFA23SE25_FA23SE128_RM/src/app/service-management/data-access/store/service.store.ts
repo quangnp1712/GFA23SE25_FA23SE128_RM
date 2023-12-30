@@ -172,6 +172,24 @@ export class ServiceStore
     )
   );
 
+  readonly updateService = this.effect<{id: number, model: ServiceUpdateApi.Request }>($params =>
+    $params.pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(({ id, model }) =>
+        this._sApiSvc.updateService(id, model).pipe(
+          tap({
+            next: resp => {
+              this._nzMessageService.success('Cập nhật dịch vụ thành công');
+            },
+            error: () => this._nzMessageService.error('Cập nhật dịch vụ thất bại.'),
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
   readonly updateLoading = this.updater((s, isAdd: boolean) => ({
     ...s,
     loadingCount: s.loadingCount + (isAdd ? 1 : -1),

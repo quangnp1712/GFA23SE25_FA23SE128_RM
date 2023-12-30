@@ -594,20 +594,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusScopeNode focusScopeNode = FocusScopeNode();
 
   Future<void> _selectDate() async {
-    DateTime? dob = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
+    if (!_isDisposed && mounted) {
+      DateTime? dob = await showDatePicker(
+        context: context,
+        initialDate: DateTime(2000),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+      );
 
-    if (dob != null) {
-      setState(() {
-        dobSubmit = dob;
-        dobController.text =
-            DateFormat('dd-MM-yyyy').format(dob).toString().split(" ")[0];
-      });
-      print(dobController.toString());
+      if (dob != null) {
+        if (!_isDisposed && mounted) {
+          setState(() {
+            dobSubmit = dob;
+            dobController.text =
+                DateFormat('dd-MM-yyyy').format(dob).toString().split(" ")[0];
+          });
+        }
+        print(dobController.toString());
+      }
     }
   }
 

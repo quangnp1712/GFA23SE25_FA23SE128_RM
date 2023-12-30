@@ -4,14 +4,16 @@ import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:convert';
 import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
-import 'dart:typed_data';
+
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ServicePriceListScreen extends StatefulWidget {
-  Function callback;
+  Function? callback;
   ServicePriceListScreen(this.callback, {super.key});
 
   @override
@@ -21,82 +23,6 @@ class ServicePriceListScreen extends StatefulWidget {
 }
 
 class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
-  List<CategoryModel>? categories;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchCategoryServiceList();
-  }
-
-  Future<void> _fetchCategoryServiceList() async {
-    if (!_isDisposed && mounted) {
-      try {
-        final categoryService = CategoryServices();
-        final result = await categoryService.getCategoryServiceList();
-
-        if (result['statusCode'] == 200) {
-          setState(() {
-            categories = result['data'].values;
-          });
-        } else {
-          // Xử lý lỗi nếu cần
-          print(result['status'] + result['error']);
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
-  bool _isDisposed = false;
-  @override
-  void dispose() {
-    _isDisposed = true;
-    super.dispose();
-  }
-
-  final storage = FirebaseStorage.instance;
-  List<String> urlList = [
-    "1.jpg",
-    "2.png",
-    "3.png",
-  ];
-  Future<Widget> getImageFB(ServiceList service) async {
-    if (!_isDisposed && mounted) {
-      try {
-        if (service.serviceDisplayList != null &&
-            service.serviceDisplayList!.isNotEmpty) {
-          final String serviceDisplayUrl =
-              service.serviceDisplayList![0].serviceDisplayUrl.toString();
-          var reference = storage.ref('service/$serviceDisplayUrl');
-          return Image.network(
-            await reference.getDownloadURL(),
-            scale: 1,
-            fit: BoxFit.cover,
-            height: 140,
-            width: MediaQuery.of(context).size.width / 1.0,
-          );
-        } else {
-          return Container();
-        }
-      } catch (e) {
-        final random = Random();
-        var randomUrl = random.nextInt(urlList.length);
-        var reference = storage.ref('service/${urlList[randomUrl]}');
-        return Image.network(
-          await reference.getDownloadURL(),
-          scale: 1,
-          fit: BoxFit.cover,
-          height: 140,
-          width: MediaQuery.of(context).size.width / 1.0,
-        );
-      }
-    } else {
-      return Container();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,7 +71,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                       icon:
                                           const Icon(Icons.keyboard_arrow_left),
                                       onPressed: () {
-                                        widget.callback(0);
+                                        widget.callback!(0);
                                       },
                                     ),
                                   ),
@@ -274,205 +200,206 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                         // const SizedBox(
                         //   height: 20,
                         // ),
-// chỉ xử lý code API từ đây trở xuống
-                        // chỉ xử lý API từ đây xuống
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: ListView.builder(
-                            itemCount: categories?.length ?? 0,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, categoryIndex) {
-                              final category = categories?[categoryIndex];
-                              return category?.serviceList != null
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 15,
-                                            vertical: 4,
-                                          ),
-                                          decoration: const BoxDecoration(
-                                            border: Border(
-                                              left: BorderSide(
-                                                color: Colors.black,
-                                                width: 8,
+
+                        isLoading
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 30),
+                                    height: 50,
+                                    width: 50,
+                                    child: const CircularProgressIndicator(),
+                                  )
+                                ],
+                              )
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: ListView.builder(
+                                  itemCount: categories?.length ?? 0,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, categoryIndex) {
+                                    final category = categories?[categoryIndex];
+                                    return category!.serviceList != null
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 20,
                                               ),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            utf8
-                                                .decode(category?.categoryType
-                                                        ?.codeUnits ??
-                                                    Uint8List(0))
-                                                .toUpperCase(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: GridView.builder(
-                                            itemCount:
-                                                category?.serviceList?.length ??
-                                                    0,
-                                            scrollDirection: Axis.vertical,
-                                            padding: const EdgeInsets.all(5),
-                                            shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              crossAxisSpacing: 10,
-                                              mainAxisSpacing: 20,
-                                              childAspectRatio: 2 / 3.1,
-                                            ),
-                                            itemBuilder:
-                                                (context, serviceIndex) {
-                                              final service = category
-                                                  ?.serviceList?[serviceIndex];
-// final thumbnailUrl = service?.branchServiceList?.first.thumbnailUrl ?? '';
-                                              return Container(
-                                                height: 204,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.black,
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 15,
+                                                  vertical: 4,
                                                 ),
-                                                child: Padding(
+                                                decoration: const BoxDecoration(
+                                                  border: Border(
+                                                    left: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 8,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  category.categoryType!
+                                                      .toString()
+                                                      .toUpperCase(),
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: GridView.builder(
+                                                  itemCount: category
+                                                          .serviceList
+                                                          ?.length ??
+                                                      0,
+                                                  scrollDirection:
+                                                      Axis.vertical,
                                                   padding:
-                                                      const EdgeInsets.all(2.0),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      ClipRRect(
+                                                      const EdgeInsets.all(5),
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  gridDelegate:
+                                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    crossAxisSpacing: 10,
+                                                    mainAxisSpacing: 20,
+                                                    childAspectRatio: 2 / 3.1,
+                                                  ),
+                                                  itemBuilder:
+                                                      (context, serviceIndex) {
+                                                    final service =
+                                                        category.serviceList?[
+                                                            serviceIndex];
+                                                    // final thumbnailUrl = service?.branchServiceList?.first.thumbnailUrl ?? '';
+                                                    return Container(
+                                                      height: 204,
+                                                      decoration: BoxDecoration(
                                                         borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                        ),
-                                                        child: FutureBuilder<
-                                                            Widget>(
-                                                          future: getImageFB(
-                                                              service!),
-                                                          builder: (BuildContext
-                                                                  context,
-                                                              AsyncSnapshot<
-                                                                      Widget>
-                                                                  snapshot) {
-                                                            if (snapshot
-                                                                    .connectionState ==
-                                                                ConnectionState
-                                                                    .done) {
-                                                              if (snapshot
-                                                                  .hasData) {
-                                                                return Container(
-                                                                  constraints:
-                                                                      const BoxConstraints(
-                                                                          minHeight:
-                                                                              140),
-                                                                  child: snapshot
-                                                                      .data!,
-                                                                ); // Return the widget when the future is complete
-                                                              } else {
-                                                                return Container(
-                                                                    height:
-                                                                        140); // Handle the case when the future completes with an error
-                                                              }
-                                                            } else {
-                                                              return const SizedBox(
-                                                                  height: 140,
-                                                                  child: Center(
-                                                                      child:
-                                                                          CircularProgressIndicator())); // Show a loading indicator while the future is in progress
-                                                            }
-                                                          },
-                                                        ),
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        color: Colors.black,
                                                       ),
-                                                      Padding(
+                                                      child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .all(2),
+                                                                .all(2.0),
                                                         child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
-                                                                  .spaceAround,
+                                                                  .start,
                                                           children: [
-                                                            const SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Flexible(
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                              ),
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: service!
+                                                                    .serviceDisplayList![
+                                                                        0]
+                                                                    .serviceDisplayUrl!,
+                                                                height: 140,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    1.4,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                progressIndicatorBuilder:
+                                                                    (context,
+                                                                            url,
+                                                                            progress) =>
+                                                                        Center(
                                                                   child:
-                                                                      ClipRRect(
-                                                                    child:
-                                                                        Container(
-                                                                      child:
-                                                                          Text(
-                                                                        utf8.decode(service.name?.codeUnits ??
-                                                                            Uint8List(0)),
-                                                                        maxLines:
-                                                                            2, // Số dòng tối đa
-                                                                        softWrap:
-                                                                            true, // Cho phép tự động xuống dòng
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          fontSize:
-                                                                              18,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                      ),
-                                                                    ),
+                                                                      CircularProgressIndicator(
+                                                                    value: progress
+                                                                        .progress,
                                                                   ),
                                                                 ),
-                                                              ],
+                                                              ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 5,
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(2),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceAround,
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Flexible(
+                                                                        child:
+                                                                            ClipRRect(
+                                                                          child:
+                                                                              Container(
+                                                                            child:
+                                                                                Text(
+                                                                              utf8.decode(service.name.toString().runes.toList()),
+                                                                              maxLines: 2, // Số dòng tối đa
+                                                                              softWrap: true, // Cho phép tự động xuống dòng
+                                                                              style: const TextStyle(
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                fontSize: 18,
+                                                                                fontWeight: FontWeight.w500,
+                                                                                color: Colors.white,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 5,
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    );
+                                                  },
                                                 ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Container();
-                            },
-                          ),
-                        ),
+                                              ),
+                                            ],
+                                          )
+                                        : Container();
+                                  },
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -484,4 +411,84 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
       ),
     );
   }
+
+  List<CategoryModel>? categories;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    _fetchCategoryServiceList();
+    super.initState();
+  }
+
+  Future<void> _fetchCategoryServiceList() async {
+    if (!_isDisposed && mounted) {
+      try {
+        final categoryService = CategoryServices();
+        final result = await categoryService.getCategoryServiceList();
+
+        if (result['statusCode'] == 200) {
+          categories = result['data'].values;
+          for (var category in categories!) {
+            if (category.categoryType == 'HAIRCUT') {
+              category.categoryType = 'Cắt tóc'.toUpperCase();
+            } else if (category.categoryType == 'MASSAGE') {
+              category.categoryType;
+            } else {
+              category.categoryType = 'Dịch vụ khác'.toUpperCase();
+            }
+            for (var service in category.serviceList!) {
+              try {
+                var reference = storage.ref(
+                    'service/${service.serviceDisplayList![0].serviceDisplayUrl}');
+                service.serviceDisplayList![0].serviceDisplayUrl =
+                    await reference.getDownloadURL();
+              } catch (e) {
+                final random = Random();
+                var randomUrl = random.nextInt(urlList.length);
+                var reference = storage.ref('service/${urlList[randomUrl]}');
+                service.serviceDisplayList![0].serviceDisplayUrl =
+                    await reference.getDownloadURL();
+              }
+            }
+          }
+          if (!_isDisposed && mounted) {
+            setState(() {
+              categories;
+              isLoading = false;
+            });
+          }
+        } else if (result['statusCode'] == 500) {
+          _errorMessage("${result['error']}");
+        } else {
+          // Xử lý lỗi nếu cần
+          print(result['status'] + result['error']);
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  final storage = FirebaseStorage.instance;
+  List<String> urlList = [
+    "1.jpg",
+    "2.png",
+    "3.png",
+  ];
 }

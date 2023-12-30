@@ -50,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
+    _isDisposed = true;
     super.dispose();
   }
 
@@ -106,16 +107,20 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
           onTap: (value) async {
-            if (!await SharedPreferencesService.checkJwtExpired()) {
-              setState(() {
-                bottomIndex = value;
-              });
-            } else {
-              Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+            if (!_isDisposed && mounted) {
+              if (!await SharedPreferencesService.checkJwtExpired()) {
+                setState(() {
+                  bottomIndex = value;
+                });
+              } else {
+                Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+              }
             }
           },
         ),
       ),
     );
   }
+
+  bool _isDisposed = false;
 }

@@ -12,7 +12,7 @@ import 'package:realmen_customer_application/service/share_prreference/share_prr
 
 abstract class IAccountService {
   Future<dynamic> getAccountInfo();
-  Future<dynamic> getStaff(int pageSize);
+  Future<dynamic> getStaff(int pageSize, int current, int? branchId);
 }
 
 class AccountService extends IAccountService {
@@ -92,7 +92,7 @@ class AccountService extends IAccountService {
   }
 
   @override
-  Future getStaff(int pageSize) async {
+  Future getStaff(int pageSize, int current, int? branchId) async {
     try {
       List<AccountInfoModel> accountInfoModels = [];
       final String jwtToken = await SharedPreferencesService.getJwt();
@@ -101,7 +101,7 @@ class AccountService extends IAccountService {
       bool isShowDistance = false;
       bool locationPermission =
           await SharedPreferencesService.getLocationPermission();
-      int current = 1;
+
       String sorter = "createdAt";
       if (locationPermission) {
         final positionLongLat = await SharedPreferencesService.getLongLat();
@@ -113,8 +113,14 @@ class AccountService extends IAccountService {
         lng = 0;
         isShowDistance = false;
       }
-      Uri uri = Uri.parse(
-          "$getStaffUrl?role=STAFF&iShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
+      Uri uri;
+      if (branchId != null) {
+        uri = Uri.parse(
+            "$getStaffUrl?branchId=$branchId&role=STAFF&iShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
+      } else {
+        uri = Uri.parse(
+            "$getStaffUrl?role=STAFF&iShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
+      }
       final client = http.Client();
       final response = await client.get(
         uri,
@@ -129,11 +135,16 @@ class AccountService extends IAccountService {
       final responseBody = response.body;
       if (statusCode == 200) {
         final content = json.decode(responseBody)['content'] as List;
+        var totalPages = json.decode(responseBody)['totalPages'] as int;
+        current = json.decode(responseBody)['current'] as int;
+
         accountInfoModels =
             content.map((e) => AccountInfoModel.fromJson(e)).toList();
         return {
           'statusCode': statusCode,
           'data': accountInfoModels,
+          'totalPages': totalPages,
+          'current': current,
         };
       } else if (statusCode == 401) {
         try {

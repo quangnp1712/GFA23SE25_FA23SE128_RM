@@ -49,10 +49,10 @@ class _ChooseStylistAndDateTimeBookingState
               accountStaffList: widget.accountStaffList,
               updateSelectedStylist: updateSelectedStylist),
           ChooseDateAndTimeSlot(
-            onDateSelected: widget.onDateSelected,
-            onTimeSelected: widget.onTimeSelected,
-            stylistSelected: stylistSelected,
-          ),
+              onDateSelected: widget.onDateSelected,
+              onTimeSelected: widget.onTimeSelected,
+              stylistSelected: stylistSelected,
+              isChangeStylist: isChangeStylist),
           const SizedBox(height: 20),
           Container(
             child: Padding(

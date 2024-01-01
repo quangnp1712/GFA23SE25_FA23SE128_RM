@@ -284,7 +284,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   @override
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
     getDate();
-    if (widget.isChangeStylist != null) {
+    if (widget.isChangeStylist!) {
       if (listDate!.isNotEmpty) {
         dateController = listDate?.first['id'].toString();
         dateSeleted = listDate?.first;
@@ -349,7 +349,11 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
             // }
           }
         }).toList();
-        listDate;
+        if (!_isDisposed && mounted) {
+          setState(() {
+            listDate;
+          });
+        }
       } on Exception catch (e) {
         listDate?.add({
           'date': formatDate(now.add(const Duration(days: 1)))['date'],

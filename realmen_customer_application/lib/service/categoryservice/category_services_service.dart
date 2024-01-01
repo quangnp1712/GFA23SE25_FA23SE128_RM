@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
+import 'package:realmen_customer_application/models/categoryservice/category_model.dart';
 import 'package:realmen_customer_application/models/service/service_model.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:realmen_customer_application/models/exception/exception_model.dart';

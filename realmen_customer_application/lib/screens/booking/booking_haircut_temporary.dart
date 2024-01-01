@@ -1,23 +1,41 @@
-// ignore_for_file: must_be_immutable, constant_identifier_names
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:intl/intl.dart';
-import 'package:realmen_customer_application/models/branch/branch_model.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:sizer/sizer.dart';
 
-class BookingHaircutTemporary extends StatefulWidget {
-  BookingHaircutTemporary({super.key});
-  Map<String, dynamic> params = Get.arguments;
+import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
+import 'package:realmen_customer_application/models/categoryservice/category_model.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/service/booking/booking.dart';
+import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
-  dynamic branch = Get.arguments['branch'];
-  List<BranchServiceModel> service = Get.arguments['service']; //List<String>
-  dynamic stylist = Get.arguments['stylist'];
-  dynamic date = Get.arguments['date'];
-  dynamic time = Get.arguments['time'];
+class BookingHaircutTemporary extends StatefulWidget {
+  Function? callback;
+  BranchModel? branch;
+  List<BranchServiceModel>? service; //List<String>
+  AccountInfoModel? stylist;
+  dynamic date;
+  dynamic time;
+
+  BookingHaircutTemporary({
+    Key? key,
+    this.callback,
+    this.branch,
+    this.service,
+    this.stylist,
+    this.date,
+    this.time,
+  }) : super(key: key);
 
   @override
   State<BookingHaircutTemporary> createState() =>
@@ -98,7 +116,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                             children: [
                               _buildInfoUser(widget.branch, widget.stylist,
                                   widget.date, widget.time),
-                              _buildService(widget.service),
+                              _buildService(widget.service!),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
@@ -243,22 +261,6 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
-  int total = 0;
-  getTotal() {
-    for (var element in widget.service) {
-      total += element.price!;
-    }
-    setState(() {
-      total;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getTotal();
-  }
-
   Widget _buildService(List<BranchServiceModel> service) {
     return Column(
       children: [
@@ -311,7 +313,6 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     );
   }
 
-  NumberFormat formatter = NumberFormat("#,##0");
   Widget _buildTotalMoney() {
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -361,7 +362,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: submitBooking,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
@@ -377,4 +378,261 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.stylist; // null
+    getTotal();
+    getMassuerIdList();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  int total = 0;
+  getTotal() {
+    for (var element in widget.service!) {
+      total += element.price!;
+    }
+    setState(() {
+      total;
+    });
+  }
+
+  List<BookingServiceModel> bookingServices = [];
+  NumberFormat formatter = NumberFormat("#,##0");
+  BookingModel postBooking = BookingModel();
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _successMessage(String? message) {
+    try {
+      ShowSnackBar.SuccessSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<int> massuerIdList = [];
+  List<int> stylistIdList = [];
+
+  Future getMassuerIdList() async {
+    if (!_isDisposed && mounted) {
+      try {
+        int current = 1;
+        int totalPages = 0;
+        do {
+          AccountService accountService = AccountService();
+          final int branchId = widget.branch!.branchId!;
+          final result = await accountService.getStaff(10, current, branchId);
+          if (result['statusCode'] == 200) {
+            final List<AccountInfoModel> accounts =
+                result['data'] as List<AccountInfoModel>;
+            current = result['current'];
+            totalPages = result['totalPages'];
+
+            for (var account in accounts) {
+              if (account.staff != null &&
+                  account.staff!.professional != null) {
+                if (account.staff!.professional == "MASSEUR") {
+                  massuerIdList.add(account.staff!.staffId!);
+                }
+              }
+            }
+            if (!_isDisposed && mounted) {
+              setState(() {
+                massuerIdList;
+                getStylistIdList();
+              });
+            }
+            current++;
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+            break;
+          } else {
+            print("$result['statusCode'] : $result['error']");
+            break;
+          }
+        } while (current <= totalPages);
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
+  Future getStylistIdList() async {
+    if (!_isDisposed && mounted) {
+      try {
+        int current = 1;
+        int totalPages = 0;
+        do {
+          AccountService accountService = AccountService();
+          final int branchId = widget.branch!.branchId!;
+          final result = await accountService.getStaff(10, current, branchId);
+          if (result['statusCode'] == 200) {
+            final List<AccountInfoModel> accounts =
+                result['data'] as List<AccountInfoModel>;
+            current = result['current'];
+            totalPages = result['totalPages'];
+
+            for (var account in accounts) {
+              if (account.staff != null &&
+                  account.staff!.professional != null) {
+                if (account.staff!.professional == "STYLIST") {
+                  stylistIdList.add(account.staff!.staffId!);
+                }
+              }
+            }
+            if (!_isDisposed && mounted) {
+              setState(() {
+                stylistIdList;
+                setInforBooking();
+              });
+            }
+            current++;
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+            break;
+          } else {
+            print("$result['statusCode'] : $result['error']");
+            break;
+          }
+        } while (current <= totalPages);
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
+  DateFormat format = DateFormat.Hm();
+  Future setInforBooking() async {
+    if (!_isDisposed && mounted) {
+      CategoryServices categoryServices = CategoryServices();
+      String selectedTime = "${widget.time}:00";
+      String startTime = "";
+      String endTime = '';
+      int staffId = 0;
+      int staffIdNull = 0;
+      if (widget.stylist == null) {
+        final random = Random();
+        staffIdNull = stylistIdList[random.nextInt(stylistIdList.length)];
+      }
+
+      try {
+        final result = await categoryServices.getCategoryServiceList();
+        if (result['statusCode'] == 200) {
+          final List<CategoryModel> categoryList = result['data'].values;
+
+          for (var caterogy in categoryList) {
+            if (caterogy.serviceList != null) {
+              // lấy widget.service so sánh vs service trong category
+              for (var service in widget.service!) {
+                if (caterogy.serviceList!.any((cateService) =>
+                        cateService.serviceId! == service.serviceId) ==
+                    true) {
+                  if (caterogy.categoryId == 1) {
+                    final random = Random();
+                    staffId =
+                        massuerIdList[random.nextInt(massuerIdList.length)];
+                  } else {
+                    if (widget.stylist != null) {
+                      staffId = widget.stylist!.staff!.staffId!;
+                    } else {
+                      staffId = staffIdNull;
+                    }
+                  }
+                  // start Time
+                  startTime = selectedTime;
+
+                  // end Time
+                  int duration = 30;
+                  DateTime time = format.parse(startTime);
+                  endTime =
+                      format.format(time.add(Duration(minutes: duration)));
+                  endTime = "$endTime:00";
+
+                  // newBookingService
+                  BookingServiceModel newBookingService = BookingServiceModel(
+                    serviceId: service.serviceId,
+                    staffId: staffId,
+                    startTime: startTime,
+                    endTime: endTime,
+                  );
+
+                  // List BookingService add newBookingService
+                  bookingServices.add(newBookingService);
+
+                  // startTime sau sẽ là EndTime trước
+                  selectedTime = endTime;
+                }
+              }
+            }
+          }
+          bookingServices;
+          if (!_isDisposed && mounted) {
+            setState(() {
+              bookingServices;
+            });
+          }
+        } else {
+          print("${result['statusCode']}  ${result['error']}");
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<void> submitBooking() async {
+    if (!_isDisposed && mounted) {
+      try {
+        String selectedDate = widget.date.split(', ')[1];
+        DateTime date = DateFormat("dd/MM/yyyy", "vi").parse(selectedDate);
+        String appointmentDate = DateFormat("yyyy-MM-dd").format(date);
+        int branchId = widget.branch!.branchId!;
+        int accountId = await SharedPreferencesService.getAccountId();
+        postBooking = BookingModel(
+            appointmentDate: appointmentDate,
+            branchId: branchId,
+            accountId: accountId,
+            bookingServices: bookingServices);
+        try {
+          final result = await BookingService().postBooking(postBooking);
+          if (result['statusCode'] == 200) {
+            _successMessage("Đặt lịch thành công");
+            Get.toNamed(MainScreen.MainScreenRoute);
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+          } else {
+            _errorMessage("Đặt lịch thất bại");
+            print(result);
+          }
+        } catch (e) {
+          _errorMessage("Đặt lịch thất bại");
+        }
+      } catch (e) {
+        print(e.toString());
+        _errorMessage("Đặt lịch thất bại");
+      }
+    }
+  }
+
+  // Future<void> submitBooking() async {
+  //   massuerIdList;
+  //   stylistIdList;
+  //   Get.toNamed(MainScreen.MainScreenRoute);
+  // }
 }

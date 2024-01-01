@@ -451,6 +451,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       } on Exception catch (e) {
         print("Error: $e");
+        // AuthenticateService authenticateService = AuthenticateService();
+        // authenticateService.logout();
+        _errorMessage("Cần đăng nhập lại");
       }
     }
   }

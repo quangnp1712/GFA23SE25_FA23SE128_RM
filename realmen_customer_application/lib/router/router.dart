@@ -44,10 +44,12 @@ class RouteGenerator {
                 future: SharedPreferencesService.checkJwtExpired(),
                 builder: (context, snapshot) {
                   //bool snapshot.hasData
-                  if (snapshot.hasData && snapshot.data == true) {
+                  if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const MainScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -59,8 +61,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const ViewEditProfileScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -72,8 +76,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const BranchesOverviewScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -85,8 +91,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const HistoryBookingScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -98,8 +106,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const DetailHistoryBookingScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -111,8 +121,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const BookingProcessingScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -124,8 +136,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return ListBranchesScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -137,8 +151,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return ChooseBranchesScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -150,8 +166,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return const ChooseStylistScreen();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),
@@ -163,8 +181,10 @@ class RouteGenerator {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
-                  } else {
+                  } else if (snapshot.data == false) {
                     return BookingHaircutTemporary();
+                  } else {
+                    return const LoginPhoneScreen();
                   }
                 });
           }),

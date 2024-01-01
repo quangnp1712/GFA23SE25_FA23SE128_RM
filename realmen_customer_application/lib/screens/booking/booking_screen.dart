@@ -201,9 +201,9 @@ class _BookingScreenState extends State<BookingScreen>
                               child: TabBarView(
                                 controller: _tabController,
                                 physics: const NeverScrollableScrollPhysics(),
-                                children: const [
-                                  BranchOptionBooking(),
-                                  StylistOptionBooking(),
+                                children: [
+                                  BranchOptionBooking(widget.callback),
+                                  StylistOptionBooking(widget.callback),
                                 ],
                               ),
                             ),

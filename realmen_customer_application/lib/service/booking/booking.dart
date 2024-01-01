@@ -164,7 +164,7 @@ class BookingService implements IBookingService {
   }
 
   @override
-  Future postBooking(BookingModel booking) async {
+  Future<Map<String, dynamic>> postBooking(BookingModel booking) async {
     try {
       Uri uri = Uri.parse(bookingUrl);
       final client = http.Client();

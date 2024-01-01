@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:convert';
-import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
+import 'package:realmen_customer_application/models/categoryservice/category_model.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';

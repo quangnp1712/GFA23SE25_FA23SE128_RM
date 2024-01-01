@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,8 @@ import 'package:sizer/sizer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class StylistOptionBooking extends StatefulWidget {
-  const StylistOptionBooking({super.key});
+  Function? callback;
+  StylistOptionBooking(this.callback, {super.key});
 
   @override
   State<StylistOptionBooking> createState() => _StylistOptionBookingState();

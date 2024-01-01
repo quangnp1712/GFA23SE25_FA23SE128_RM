@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
-import 'package:realmen_customer_application/models/categoryservice/category_service.dart';
+import 'package:realmen_customer_application/models/categoryservice/category_model.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
 
 class ChooseServiceBookingScreen extends StatefulWidget {
@@ -78,7 +78,7 @@ class _ChooseServiceBookingScreenState
           for (var caterogy in categoryList) {
             // List<ServiceList> serviceList = [];
             if (caterogy.serviceList != null) {
-// lấy branchservice so sánh vs service trong category
+              // lấy branchservice so sánh vs service trong category
               List<SubServiceTile> serviceLists = [];
               for (var branchService in widget.branchServiceList) {
                 // bool check = caterogy.serviceList!.any(

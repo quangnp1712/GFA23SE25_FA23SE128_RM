@@ -3,7 +3,7 @@ class BookingModel {
   String? appointmentDate;
   int? branchId;
   int? accountId;
-  List<BookingService>? bookingServices;
+  List<BookingServiceModel>? bookingServices;
 
   // From Json
   List<BookingContent>? content;
@@ -53,38 +53,6 @@ class BookingModel {
   }
 }
 
-class TimeModel {
-  int? hour;
-  int? minute;
-  int? second;
-  int? nano;
-
-  TimeModel({
-    this.hour,
-    this.minute,
-    this.second,
-    this.nano,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'hour': hour,
-      'minute': minute,
-      'second': second,
-      'nano': nano,
-    };
-  }
-
-  factory TimeModel.fromJson(Map<String, dynamic> json) {
-    return TimeModel(
-      hour: json['hour'],
-      minute: json['minute'],
-      second: json['second'],
-      nano: json['nano'],
-    );
-  }
-}
-
 class BookingContent {
   int? bookingId;
   int? accountId;
@@ -95,7 +63,7 @@ class BookingContent {
   String? branchAddress;
   String? branchName;
   String? appointmentDate;
-  List<BookingService>? bookingServices;
+  List<BookingServiceModel>? bookingServices;
   String? bookingStatus;
 
   BookingContent({
@@ -124,15 +92,15 @@ class BookingContent {
       branchName: json['branchName'],
       appointmentDate: json['appointmentDate'],
       bookingServices: json['bookingServices'] != null
-          ? List<BookingService>.from(
-              json['bookingServices']?.json((e) => BookingService.fromJson(e)))
+          ? List<BookingServiceModel>.from(json['bookingServices']
+              ?.json((e) => BookingServiceModel.fromJson(e)))
           : null,
       bookingStatus: json['bookingStatus'],
     );
   }
 }
 
-class BookingService {
+class BookingServiceModel {
   int? bookingServiceId;
   int? bookingId;
   int? serviceId;
@@ -141,32 +109,33 @@ class BookingService {
   int? servicePrice;
   String? staffName;
   String? staffPhone;
-  TimeModel? startTime;
-  TimeModel? actualStartTime;
-  TimeModel? endTime;
-  TimeModel? actualEndTime;
+  String? startTime;
+  String? actualStartTime;
+  String? endTime;
+  String? actualEndTime;
   DurationModel? duration;
   String? durationText;
   String? bookingServiceStatus;
   bool? allowUpdate;
 
-  BookingService({this.serviceId, this.staffId, this.startTime, this.endTime});
+  BookingServiceModel(
+      {this.serviceId, this.staffId, this.startTime, this.endTime});
 
   Map<String, dynamic> toJson() {
     return {
       'serviceId': serviceId,
       'staffId': staffId,
-      'startTime': startTime != null ? startTime!.toJson() : null,
-      'endTime': endTime != null ? endTime!.toJson() : null,
+      'startTime': startTime,
+      'endTime': endTime,
     };
   }
 
-  factory BookingService.fromJson(Map<String, dynamic> json) {
-    return BookingService(
+  factory BookingServiceModel.fromJson(Map<String, dynamic> json) {
+    return BookingServiceModel(
       serviceId: json['serviceId'],
       staffId: json['staffId'],
-      startTime: TimeModel.fromJson(json['startTime']),
-      endTime: TimeModel.fromJson(json['endTime']),
+      startTime: json['startTime'],
+      endTime: json['endTime'],
     );
   }
 }

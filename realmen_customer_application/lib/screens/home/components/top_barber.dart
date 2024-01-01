@@ -240,28 +240,39 @@ class _barberTopState extends State<barberTop> {
   Future<void> getStylist() async {
     if (!_isDisposed && mounted) {
       try {
-        AccountService accountService = AccountService();
-        staffList = [];
-        final result = await accountService.getStaff(5);
-        if (result['statusCode'] == 200) {
-          staffList = result['data'] as List<AccountInfoModel>;
-          for (var staff in staffList) {
-            try {
-              var reference = storage.ref('stylist/${staff.thumbnailUrl}');
-              staff.thumbnailUrl = await reference.getDownloadURL();
-            } catch (e) {
-              final random = Random();
-              var randomUrl = random.nextInt(urlList.length);
-              var reference = storage.ref('stylist/${urlList[randomUrl]}');
-              staff.thumbnailUrl = await reference.getDownloadURL();
+        int current = 1;
+        int totalPages = 0;
+        do {
+          AccountService accountService = AccountService();
+          staffList = [];
+          final result = await accountService.getStaff(5, current, null);
+          if (result['statusCode'] == 200) {
+            staffList = result['data'] as List<AccountInfoModel>;
+            current = result['current'];
+            totalPages = result['totalPages'];
+            for (var staff in staffList) {
+              try {
+                var reference = storage.ref('stylist/${staff.thumbnailUrl}');
+                staff.thumbnailUrl = await reference.getDownloadURL();
+              } catch (e) {
+                final random = Random();
+                var randomUrl = random.nextInt(urlList.length);
+                var reference = storage.ref('stylist/${urlList[randomUrl]}');
+                staff.thumbnailUrl = await reference.getDownloadURL();
+              }
             }
+            setState(() {
+              staffList;
+            });
+            current++;
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+            break;
+          } else {
+            print("$result");
+            break;
           }
-          setState(() {
-            staffList;
-          });
-        } else {
-          print("$result");
-        }
+        } while (current <= totalPages);
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");

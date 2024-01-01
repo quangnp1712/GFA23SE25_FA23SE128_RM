@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:realmen_customer_application/service/change_notifier_provider/change_notifier_provider_service.dart';
 import 'package:sizer/sizer.dart';
@@ -630,21 +631,40 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   Future<void> getStaff() async {
     if (!_isDisposed && mounted) {
       try {
-        AccountService accountService = AccountService();
-        staffList = [];
-        final result = await accountService.getStaff(10);
-        if (result['statusCode'] == 200) {
-          staffList = result['data'] as List<AccountInfoModel>;
-          setState(() {
-            staffList;
-          });
-        } else {
-          print("$result['statusCode'] : $result['error']");
-        }
+        int current = 1;
+        int totalPages = 0;
+        do {
+          AccountService accountService = AccountService();
+          staffList = [];
+          final result = await accountService.getStaff(10, current, null);
+          if (result['statusCode'] == 200) {
+            staffList = result['data'] as List<AccountInfoModel>;
+            current = result['result'];
+            totalPages = result['totalPages'];
+            setState(() {
+              staffList;
+            });
+            current++;
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+            break;
+          } else {
+            print("$result");
+            break;
+          }
+        } while (current <= totalPages);
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");
       }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
     }
   }
 }

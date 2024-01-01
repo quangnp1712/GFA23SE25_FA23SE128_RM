@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,8 +14,8 @@ import 'package:sizer/sizer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class BranchOptionBooking extends StatefulWidget {
-  const BranchOptionBooking({super.key});
-
+  BranchOptionBooking(this.callback, {super.key});
+  Function? callback;
   @override
   State<BranchOptionBooking> createState() => _BranchOptionBookingState();
 }
@@ -301,14 +301,14 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
     } else if (selectedTime == null) {
       _errorMessage("Xin chọn giờ");
     } else {
-      Get.toNamed(BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
-          arguments: {
-            'branch': selectedBranch, // String name
-            'service': selectedService, // List <String> name
-            'stylist': selectedStylist, // String name
-            'date': selectedDate, // String
-            'time': selectedTime, // String
-          });
+      Get.to(() => BookingHaircutTemporary(
+            callback: widget.callback,
+            branch: selectedBranch,
+            service: selectedService,
+            stylist: selectedStylist,
+            date: selectedDate,
+            time: selectedTime,
+          ));
     }
   }
 }

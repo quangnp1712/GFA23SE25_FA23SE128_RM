@@ -293,14 +293,14 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
     } else if (selectedTime == null) {
       _errorMessage("Xin chọn giờ");
     } else {
-      Get.toNamed(BookingHaircutTemporary.BookingHaircutTemporaryScreenRoute,
-          arguments: {
-            'branch': selectedBranch, // String name
-            'service': selectedService, // List <String> name
-            'stylist': selectedStylist, // String name
-            'date': selectedDate, // String
-            'time': selectedTime, // String
-          });
+      Get.to(() => BookingHaircutTemporary(
+            callback: widget.callback,
+            branch: selectedBranch,
+            service: selectedService,
+            stylist: selectedStylist,
+            date: selectedDate,
+            time: selectedTime,
+          ));
     }
   }
 }

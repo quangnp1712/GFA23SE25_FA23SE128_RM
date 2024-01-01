@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
+// import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -104,81 +104,93 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                         const SizedBox(
                           height: 5.0,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 170,
-                                padding: const EdgeInsets.only(left: 5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black,
-                                  ),
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2<String>(
-                                    isExpanded: true,
-                                    alignment: Alignment.centerLeft,
-                                    value: _selectedOption,
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _selectedOption = newValue!;
-                                      });
-                                    },
-                                    items: <String>[
-                                      'Stylist theo lịch sử cắt',
-                                      'Stylist gần đây nhất',
-                                      'Stylist được cắt nhiều nhất',
-                                      'Tất cả stylist',
-                                    ].map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            value,
-                                            style: const TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 160,
-                                      width: 170,
-                                      // padding: EdgeInsets.only(right: 5),
-                                      decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.circular(14),
-                                        color: Colors.grey.shade200,
-                                      ),
-                                      offset: const Offset(-5, -2),
-                                      scrollbarTheme: ScrollbarThemeData(
-                                        // radius: const Radius.circular(40),
-                                        // thickness: MaterialStateProperty.all(6),
-                                        thumbVisibility:
-                                            MaterialStateProperty.all(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        buildStylistList(
-                            staffList, _selectedOption, selectedProvider),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10.0),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.start,
+                        //     children: [
+                        //       Container(
+                        //         height: 40,
+                        //         width: 190,
+                        //         padding: const EdgeInsets.only(left: 5),
+                        //         decoration: BoxDecoration(
+                        //           border: Border.all(
+                        //             color: Colors.black,
+                        //           ),
+                        //           borderRadius: BorderRadius.circular(4.0),
+                        //         ),
+                        //         child: DropdownButtonHideUnderline(
+                        //           child: DropdownButton2<String>(
+                        //             isExpanded: true,
+                        //             alignment: Alignment.centerLeft,
+                        //             value: _selectedOption,
+                        //             onChanged: (String? newValue) {
+                        //               setState(() {
+                        //                 _selectedOption = newValue!;
+                        //               });
+                        //             },
+                        //             items: <String>[
+                        //               'Stylist theo lịch sử cắt',
+                        //               'Stylist gần đây nhất',
+                        //               'Stylist được cắt nhiều nhất',
+                        //               'Tất cả stylist',
+                        //             ].map<DropdownMenuItem<String>>(
+                        //                 (String value) {
+                        //               return DropdownMenuItem<String>(
+                        //                 value: value,
+                        //                 child: Padding(
+                        //                   padding: const EdgeInsets.all(8.0),
+                        //                   child: Text(
+                        //                     value,
+                        //                     style: const TextStyle(
+                        //                         fontSize: 17,
+                        //                         color: Colors.black,
+                        //                         fontWeight: FontWeight.w400),
+                        //                   ),
+                        //                 ),
+                        //               );
+                        //             }).toList(),
+                        //             dropdownStyleData: DropdownStyleData(
+                        //               maxHeight: 160,
+                        //               width: 170,
+                        //               // padding: EdgeInsets.only(right: 5),
+                        //               decoration: BoxDecoration(
+                        //                 // borderRadius: BorderRadius.circular(14),
+                        //                 color: Colors.grey.shade200,
+                        //               ),
+                        //               offset: const Offset(-5, -2),
+                        //               scrollbarTheme: ScrollbarThemeData(
+                        //                 // radius: const Radius.circular(40),
+                        //                 // thickness: MaterialStateProperty.all(6),
+                        //                 thumbVisibility:
+                        //                     MaterialStateProperty.all(true),
+                        //               ),
+                        //             ),
+                        //             menuItemStyleData: const MenuItemStyleData(
+                        //               height: 40,
+                        //               padding:
+                        //                   EdgeInsets.only(left: 10, right: 14),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        isLoading
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 30),
+                                    height: 50,
+                                    width: 50,
+                                    child: const CircularProgressIndicator(),
+                                  )
+                                ],
+                              )
+                            : buildStylistList(staffList, selectedProvider),
                       ],
                     ),
                   ),
@@ -191,8 +203,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     );
   }
 
-  Widget buildStylistList(List<AccountInfoModel> stylistDataList,
-      String _selectedOption, var selectedProvider) {
+  Widget buildStylistList(
+      List<AccountInfoModel> stylistDataList, var selectedProvider) {
     return Column(
       children: stylistDataList.map((stylistData) {
         return Container(
@@ -544,7 +556,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                 //     : Container(),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 6,
@@ -572,34 +584,32 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    _selectedOption != 'Tất cả stylist'
-                        ? Expanded(
-                            flex: 3,
-                            child: Container(
-                              // width: 100,
+                    // const SizedBox(width: 20),
+                    //  Expanded(
+                    //         flex: 3,
+                    //         child: Container(
+                    //           // width: 100,
 
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Define the action for the "Xem thêm" button
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      20.0,
-                                    ),
-                                  ),
-                                ),
-                                child: const Text(
-                                  "Xem thêm",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(width: 100),
+                    //           child: ElevatedButton(
+                    //             onPressed: () {
+                    //               // Define the action for the "Xem thêm" button
+                    //             },
+                    //             style: ElevatedButton.styleFrom(
+                    //               foregroundColor: Colors.white,
+                    //               backgroundColor: Colors.white,
+                    //               shape: RoundedRectangleBorder(
+                    //                 borderRadius: BorderRadius.circular(
+                    //                   20.0,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             child: const Text(
+                    //               "Xem thêm",
+                    //               style: TextStyle(color: Colors.black),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
                   ],
                 ),
               ],
@@ -617,8 +627,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     getStaff();
   }
 
-  String _selectedOption = 'Stylist theo lịch sử cắt'; // Giá trị mặc định
-
+  // String _selectedOption = 'Stylist theo lịch sử cắt'; // Giá trị mặc định
+  bool isLoading = true;
   bool _isDisposed = false;
   @override
   void dispose() {
@@ -639,11 +649,16 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
           final result = await accountService.getStaff(10, current, null);
           if (result['statusCode'] == 200) {
             staffList = result['data'] as List<AccountInfoModel>;
-            current = result['result'];
+            current = result['current'];
             totalPages = result['totalPages'];
-            setState(() {
-              staffList;
-            });
+            staffList
+                .removeWhere((staff) => staff.staff!.professional == 'MASSEUR');
+            if (!_isDisposed && mounted) {
+              setState(() {
+                staffList;
+                isLoading = false;
+              });
+            }
             current++;
           } else if (result['statusCode'] == 500) {
             _errorMessage(result['error']);

@@ -28,6 +28,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   @override
   Widget build(BuildContext context) {
     var selectedProvider = Provider.of<ChangeNotifierServices>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -374,213 +375,201 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                             height: 30,
                           ),
 
-                          SizedBox(
-                            height: 100,
-                            width: 200,
-                            child: FutureBuilder(
-                              future: yourAsyncFunctionToGetBranches(
-                                  branchesForCity),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const SizedBox(
-                                      height: 140,
-                                      width: 140,
-                                      child: Center(
-                                          child:
-                                              CircularProgressIndicator())); // Hiển thị tiến trình đang tải
-                                } else if (snapshot.hasError) {
-                                  return Text(
-                                      'Error: ${snapshot.error}'); // Hiển thị thông báo lỗi nếu có lỗi xảy ra
-                                } else if (snapshot.hasData) {
-                                  List<BranchModel> branches = snapshot
-                                      .data!; // Lấy danh sách chi nhánh từ dữ liệu snapshot
-                                  return ListView.builder(
-                                    itemCount: branches.length,
-                                    itemBuilder: (context, index) {
-                                      // ignore: avoid_unnecessary_containers
-                                      return Container(
-                                        // Hiển thị thông tin của từng chi nhánh ở đây
-                                        child:
-                                            Text(branches[index].branchName!),
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  return const Text(
-                                      'No data'); // Hiển thị thông báo nếu không có dữ liệu
-                                }
-                              },
-                            ),
-                          ),
-                          branchesForCity != null
-                              ? ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: branchesForCity?.length,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        FutureBuilder(
-                                          future: getImageFB(
-                                              branchesForCity![index]),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<Widget> snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              if (snapshot.hasData) {
-                                                return Container(
-                                                  constraints:
-                                                      const BoxConstraints(
-                                                          minHeight: 140),
-                                                  child: snapshot.data!,
-                                                ); // Return the widget when the future is complete
-                                              } else {
-                                                return Container(
-                                                    height:
-                                                        140); // Handle the case when the future completes with an error
-                                              }
-                                            } else {
-                                              return const SizedBox(
-                                                  height: 140,
-                                                  child: Center(
-                                                      child:
-                                                          CircularProgressIndicator())); // Show a loading indicator while the future is in progress
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(width: 5),
-                                        ListTile(
-                                          title: Wrap(
-                                            spacing:
-                                                8.0, // Khoảng cách giữa các widget con theo chiều ngang
-                                            runSpacing:
-                                                4.0, // Khoảng cách giữa các dòng theo chiều dọc
-                                            children: [
-                                              Text(utf8.decode(
+                          // nội dung branch
+
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  ],
+                                )
+                              : branchesForCity != null
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: branchesForCity?.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            FutureBuilder(
+                                              future: getImageFB(
+                                                  branchesForCity![index]),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Widget>
+                                                      snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.done) {
+                                                  if (snapshot.hasData) {
+                                                    return Container(
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                              minHeight: 140),
+                                                      child: snapshot.data!,
+                                                    ); // Return the widget when the future is complete
+                                                  } else {
+                                                    return Container(
+                                                        height:
+                                                            140); // Handle the case when the future completes with an error
+                                                  }
+                                                } else {
+                                                  return const SizedBox(
+                                                      height: 140,
+                                                      child: Center(
+                                                          child:
+                                                              CircularProgressIndicator())); // Show a loading indicator while the future is in progress
+                                                }
+                                              },
+                                            ),
+                                            const SizedBox(width: 5),
+                                            ListTile(
+                                              title: Wrap(
+                                                spacing:
+                                                    8.0, // Khoảng cách giữa các widget con theo chiều ngang
+                                                runSpacing:
+                                                    4.0, // Khoảng cách giữa các dòng theo chiều dọc
+                                                children: [
+                                                  Text(utf8.decode(
+                                                      branchesForCity![index]
+                                                          .branchName
+                                                          .toString()
+                                                          .runes
+                                                          .toList())),
                                                   branchesForCity![index]
-                                                      .branchName
-                                                      .toString()
-                                                      .runes
-                                                      .toList())),
-                                              branchesForCity![index]
-                                                          .distanceKilometer !=
-                                                      null
-                                                  ? Text.rich(
-                                                      TextSpan(
-                                                        style: TextStyle(
-                                                          fontSize: 17,
-                                                          color: Colors.black
-                                                              .withOpacity(0.6),
-                                                        ),
-                                                        children: [
-                                                          WidgetSpan(
-                                                            child: Icon(
-                                                              Icons.location_on,
+                                                              .distanceKilometer !=
+                                                          null
+                                                      ? Text.rich(
+                                                          TextSpan(
+                                                            style: TextStyle(
+                                                              fontSize: 17,
                                                               color: Colors
                                                                   .black
                                                                   .withOpacity(
-                                                                      0.9),
+                                                                      0.6),
                                                             ),
+                                                            children: [
+                                                              WidgetSpan(
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .location_on,
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.9),
+                                                                ),
+                                                              ),
+                                                              const WidgetSpan(
+                                                                child: SizedBox(
+                                                                    width: 4),
+                                                              ),
+                                                              TextSpan(
+                                                                  text: branchesForCity![
+                                                                          index]
+                                                                      .distanceKilometer,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                            0.8),
+                                                                  )),
+                                                            ],
                                                           ),
-                                                          const WidgetSpan(
-                                                            child: SizedBox(
-                                                                width: 4),
-                                                          ),
-                                                          TextSpan(
-                                                              text: branchesForCity![
-                                                                      index]
-                                                                  .distanceKilometer,
-                                                              style: TextStyle(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.8),
-                                                              )),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : Container(),
-                                            ],
-                                          ),
-                                          subtitle: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 4),
-                                            child: Text(utf8.decode(
-                                                branchesForCity![index]
-                                                    .address
-                                                    .toString()
-                                                    .runes
-                                                    .toList())),
-                                          ),
-                                          trailing: Container(
-                                            height: 40,
-                                            width: 85,
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xffE3E3E3),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(4),
+                                                        )
+                                                      : Container(),
+                                                ],
                                               ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .shade800, // Màu của bóng
-                                                  offset: const Offset(0,
-                                                      2), // Độ dịch chuyển theo trục x và y
-                                                  blurRadius:
-                                                      2, // Bán kính làm mờ của bóng
-                                                  spreadRadius:
-                                                      0, // Bán kính lan rộng của bóng
-                                                ),
-                                              ],
-                                            ),
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                getBranchById(
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4),
+                                                child: Text(utf8.decode(
                                                     branchesForCity![index]
-                                                        .branchId!,
-                                                    selectedProvider);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.all(0),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                ),
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                shadowColor: Colors.transparent,
+                                                        .address
+                                                        .toString()
+                                                        .runes
+                                                        .toList())),
                                               ),
-                                              child: const Text(
-                                                'Chọn',
-                                                style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.black,
+                                              trailing: Container(
+                                                height: 40,
+                                                width: 85,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xffE3E3E3),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(4),
+                                                  ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .shade800, // Màu của bóng
+                                                      offset: const Offset(0,
+                                                          2), // Độ dịch chuyển theo trục x và y
+                                                      blurRadius:
+                                                          2, // Bán kính làm mờ của bóng
+                                                      spreadRadius:
+                                                          0, // Bán kính lan rộng của bóng
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    getBranchById(
+                                                        branchesForCity![index]
+                                                            .branchId!,
+                                                        selectedProvider);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  child: const Text(
+                                                    'Chọn',
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        (index != branchesForCity!.length - 1)
-                                            ? const Divider(
-                                                color: Color(0x73444444),
-                                                height: 1,
-                                                thickness: 1,
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ],
-                                    );
-                                  },
-                                )
-                              : Container(),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            (index !=
+                                                    branchesForCity!.length - 1)
+                                                ? const Divider(
+                                                    color: Color(0x73444444),
+                                                    height: 1,
+                                                    thickness: 1,
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ],
+                                        );
+                                      },
+                                    )
+                                  : Container(),
                         ],
                       ),
                     ),
@@ -603,6 +592,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   }
 
   bool _isDisposed = false;
+  bool isLoading = true;
   @override
   void dispose() {
     focusNode.dispose();
@@ -640,9 +630,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           } on Exception catch (e) {
             print(e);
           }
-          if (!_isDisposed) {
+          if (!_isDisposed && mounted) {
             setState(() {
               cities;
+              isLoading = false;
             });
           }
         } else {
@@ -656,7 +647,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   }
 
   getBranches(String search) async {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       branchesForCity = [];
       try {
         BranchService branchService = BranchService();
@@ -681,10 +677,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
             }
           });
         }
-
-        setState(() {
-          branchesForCity;
-        });
+        if (!_isDisposed && mounted) {
+          setState(() {
+            branchesForCity;
+            isLoading = false;
+          });
+        }
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");
@@ -721,7 +719,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   }
 
   Future<void> searchBranchesWithLocation() async {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       final locationPermission =
           await SharedPreferencesService.getLocationPermission();
       if (!locationPermission) {
@@ -748,9 +751,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
               return distanceA.compareTo(distanceB);
             }
           });
-          setState(() {
-            branchesForCity;
-          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              branchesForCity;
+              isLoading = false;
+            });
+          }
         } else {
           print("$result['statusCode'] : $result['error']");
         }

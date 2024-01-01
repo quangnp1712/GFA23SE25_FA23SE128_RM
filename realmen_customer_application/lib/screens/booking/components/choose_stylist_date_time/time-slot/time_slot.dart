@@ -284,7 +284,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   @override
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
     getDate();
-    if (widget.isChangeStylist!) {
+    if (widget.isChangeStylist != null && widget.isChangeStylist! == true) {
       if (listDate!.isNotEmpty) {
         dateController = listDate?.first['id'].toString();
         dateSeleted = listDate?.first;

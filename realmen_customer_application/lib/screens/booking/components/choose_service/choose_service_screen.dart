@@ -28,109 +28,6 @@ class ChooseServiceBookingScreen extends StatefulWidget {
 
 class _ChooseServiceBookingScreenState
     extends State<ChooseServiceBookingScreen> {
-  List<BranchServiceModel> selectedServices = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // var selectedServicesProvider =
-    //     Provider.of<ChangeNotifierServices>(context, listen: false);
-    // selectedServices = selectedServicesProvider.selectedServices;
-    if (widget.selectedServices.isNotEmpty && widget.selectedServices != []) {
-      selectedServices = widget.selectedServices;
-    }
-
-    getServices();
-  }
-
-  bool _isDisposed = false;
-  @override
-  void dispose() {
-    _isDisposed = true;
-    super.dispose();
-  }
-
-  void updateSelectedServiceCount(
-      bool isSelected, BranchServiceModel serviceName) {
-    if (!_isDisposed && mounted) {
-      setState(() {
-        if (isSelected) {
-          selectedServices.add(serviceName);
-        } else {
-          selectedServices.remove(serviceName);
-        }
-      });
-      print(selectedServices);
-    }
-  }
-
-  List<ServiceCategoryTile> serviceCategoryTileList = [];
-
-  Future getServices() async {
-    if (!_isDisposed && mounted) {
-      serviceCategoryTileList = [];
-      CategoryServices categoryServices = CategoryServices();
-      try {
-        final result = await categoryServices.getCategoryServiceList();
-        if (result['statusCode'] == 200) {
-          final List<CategoryModel> categoryList = result['data'].values;
-
-          for (var caterogy in categoryList) {
-            // List<ServiceList> serviceList = [];
-            if (caterogy.serviceList != null) {
-              // lấy branchservice so sánh vs service trong category
-              List<SubServiceTile> serviceLists = [];
-              for (var branchService in widget.branchServiceList) {
-                // bool check = caterogy.serviceList!.any(
-                //     (service) => service.serviceId! == branchService.serviceId);
-                if (caterogy.serviceList!.any((service) =>
-                        service.serviceId! == branchService.serviceId) ==
-                    true) {
-                  String? description;
-                  for (var service in caterogy.serviceList!) {
-                    if (service.serviceId == branchService.serviceId) {
-                      description = service.description;
-                    }
-                  }
-                  SubServiceTile subServiceTile = SubServiceTile(
-                    selectedServices: selectedServices,
-                    onSelect: (bool isSelected) {
-                      updateSelectedServiceCount(isSelected, branchService);
-                    },
-                    branchService: branchService,
-                    description: description,
-                  );
-                  serviceLists.add(subServiceTile);
-                }
-              }
-              String title = '';
-              if (caterogy.categoryType == 'HAIRCUT') {
-                title = 'Cắt tóc';
-              } else if (caterogy.categoryType == 'MASSAGE') {
-                title = caterogy.categoryType!;
-              } else {
-                title = 'Dịch vụ khác';
-              }
-              if (serviceLists.isNotEmpty) {
-                serviceCategoryTileList.add(ServiceCategoryTile(
-                    title: title,
-                    serviceLists: serviceLists,
-                    isGridView: true));
-              }
-            }
-          }
-          setState(() {
-            serviceCategoryTileList;
-          });
-        } else {
-          print("${result['statusCode']}  ${result['error']}");
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -235,25 +132,43 @@ class _ChooseServiceBookingScreenState
                           //   ],
                           //   isGridView: false,
                           // ),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: serviceCategoryTileList.length,
-                              itemBuilder: (context, index) {
-                                return ServiceCategoryTile(
-                                  title: serviceCategoryTileList[index]
-                                      .title
-                                      .toUpperCase(),
-                                  serviceLists: serviceCategoryTileList[index]
-                                      .serviceLists,
-                                  isGridView: true,
-                                );
-                              }),
+
+                          // nội dung service list
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  ],
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: serviceCategoryTileList.length,
+                                  itemBuilder: (context, index) {
+                                    return ServiceCategoryTile(
+                                      title: serviceCategoryTileList[index]
+                                          .title
+                                          .toUpperCase(),
+                                      serviceLists:
+                                          serviceCategoryTileList[index]
+                                              .serviceLists,
+                                      isGridView: true,
+                                    );
+                                  }),
                         ],
                       ),
                     ),
                   ),
                 ),
+
+                // Button chọn các dịch vụ và quay lại
                 Positioned(
                   bottom: 12.0,
                   left: 20.0,
@@ -262,8 +177,6 @@ class _ChooseServiceBookingScreenState
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        // selectedServicesProvider
-                        //     .updateSelectedServices(selectedServices);
                         Navigator.pop(context, selectedServices);
                       },
                       style: ButtonStyle(
@@ -296,6 +209,107 @@ class _ChooseServiceBookingScreenState
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selectedServices.isNotEmpty && widget.selectedServices != []) {
+      selectedServices = widget.selectedServices;
+    }
+    getServices();
+  }
+
+  List<BranchServiceModel> selectedServices = [];
+  bool _isDisposed = false;
+  bool isLoading = true;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  void updateSelectedServiceCount(
+      bool isSelected, BranchServiceModel serviceName) {
+    if (!_isDisposed && mounted) {
+      setState(() {
+        if (isSelected) {
+          selectedServices.add(serviceName);
+        } else {
+          selectedServices.remove(serviceName);
+        }
+      });
+      print(selectedServices);
+    }
+  }
+
+  List<ServiceCategoryTile> serviceCategoryTileList = [];
+
+  Future getServices() async {
+    if (!_isDisposed && mounted) {
+      serviceCategoryTileList = [];
+      CategoryServices categoryServices = CategoryServices();
+      try {
+        final result = await categoryServices.getCategoryServiceList();
+        if (result['statusCode'] == 200) {
+          final List<CategoryModel> categoryList = result['data'].values;
+          for (var caterogy in categoryList) {
+            // List<ServiceList> serviceList = [];
+            if (caterogy.serviceList != null) {
+              // lấy branchservice so sánh vs service trong category
+              List<SubServiceTile> serviceLists = [];
+              for (var branchService in widget.branchServiceList) {
+                // bool check = caterogy.serviceList!.any(
+                //     (service) => service.serviceId! == branchService.serviceId);
+                if (caterogy.serviceList!.any((service) =>
+                        service.serviceId! == branchService.serviceId) ==
+                    true) {
+                  String? description;
+                  for (var service in caterogy.serviceList!) {
+                    if (service.serviceId == branchService.serviceId) {
+                      description = service.description;
+                    }
+                  }
+                  SubServiceTile subServiceTile = SubServiceTile(
+                    selectedServices: selectedServices,
+                    onSelect: (bool isSelected) {
+                      updateSelectedServiceCount(isSelected, branchService);
+                    },
+                    branchService: branchService,
+                    description: description,
+                  );
+                  serviceLists.add(subServiceTile);
+                }
+              }
+              String title = '';
+              if (caterogy.categoryType == 'HAIRCUT') {
+                title = 'Cắt tóc';
+              } else if (caterogy.categoryType == 'MASSAGE') {
+                title = caterogy.categoryType!;
+              } else {
+                title = 'Dịch vụ khác';
+              }
+              if (serviceLists.isNotEmpty) {
+                serviceCategoryTileList.add(ServiceCategoryTile(
+                    title: title,
+                    serviceLists: serviceLists,
+                    isGridView: true));
+              }
+            }
+          }
+          if (!_isDisposed && mounted) {
+            setState(() {
+              serviceCategoryTileList;
+              isLoading = false;
+            });
+          }
+        } else {
+          print("${result['statusCode']}  ${result['error']}");
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
   }
 }
 

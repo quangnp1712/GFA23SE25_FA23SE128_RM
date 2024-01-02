@@ -1,11 +1,17 @@
 package com.realman.becore.dto.service;
 
+import com.realman.becore.dto.enums.EDurationTime;
+
 public interface ShopServiceInfo {
     void setServiceId(Long serviceId);
 
+    void setCategoryId(Long categoryId);
+
+    void setCategoryName(String categoryName);
+
     void setServiceName(String serviceName);
 
-    void setDescription(String description);
+    void setServiceDescription(String serviceDescription);
 
     void setDuration(Integer duration);
 
@@ -13,19 +19,37 @@ public interface ShopServiceInfo {
 
     void setBranchName(String branchName);
 
-    void setPrice(Long price);
+    void setBranchServicePrice(Long branchServicePrice);
+
+    void setServicePrice(Long servicePrice);
+
+    void setDurationValue(Integer durationValue);
+
+    void setDurationTime(EDurationTime durationTime);
+
+    void setDurationText(String durationText);
 
     Long getServiceId();
 
+    Long getCategoryId();
+
+    String getCategoryName();
+
     String getServiceName();
 
-    String getDescription();
+    String getServiceDescription();
 
     Integer getDuration();
 
     Long getBranchId();
 
-    String getBranchName();
+    Long getBranchServicePrice();
 
-    Long getPrice();
+    Long getServicePrice();
+
+    Integer getDurationValue();
+
+    EDurationTime getDurationTime();
+
+    String getDurationText();
 }

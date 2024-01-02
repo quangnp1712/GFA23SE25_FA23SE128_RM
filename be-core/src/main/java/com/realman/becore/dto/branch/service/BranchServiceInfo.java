@@ -13,7 +13,7 @@ public interface BranchServiceInfo {
 
     void setBranchThumbnailUrl(String branchThumbnailUrl);
 
-    void setPrice(Long price);
+    void setBranchServicePrice(Long branchServicePrice);
 
     Long getBranchServiceId();
 
@@ -27,5 +27,5 @@ public interface BranchServiceInfo {
 
     String getBranchThumbnailUrl();
 
-    Long getPrice();
+    Long getBranchServicePrice();
 }

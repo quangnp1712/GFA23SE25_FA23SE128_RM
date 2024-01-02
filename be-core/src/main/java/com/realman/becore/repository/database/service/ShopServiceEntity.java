@@ -1,5 +1,6 @@
 package com.realman.becore.repository.database.service;
 
+import com.realman.becore.dto.enums.EDurationTime;
 import com.realman.becore.dto.enums.EServiceStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,10 @@ public class ShopServiceEntity {
     private Long categoryId;
     private String serviceName;
     private String serviceDescription;
-    private Integer duration;
+    private Integer durationValue;
+    private EDurationTime durationTime;
+    private String durationText;
+    private Long servicePrice;
     private EServiceStatus status;
 
 }

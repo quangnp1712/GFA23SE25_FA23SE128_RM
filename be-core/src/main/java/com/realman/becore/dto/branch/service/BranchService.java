@@ -4,12 +4,11 @@ import lombok.Builder;
 
 @Builder
 public record BranchService(
-    Long serviceId,
-    Long branchId,
-    String serviceName,
-    String branchName,
-    String thumbnailUrl,
-    Long price
-) {
-    
+        Long serviceId,
+        Long branchId,
+        String serviceName,
+        String branchName,
+        String thumbnailUrl,
+        Long branchServicePrice) {
+
 }

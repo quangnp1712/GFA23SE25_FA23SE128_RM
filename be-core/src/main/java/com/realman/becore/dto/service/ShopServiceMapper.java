@@ -22,6 +22,9 @@ public interface ShopServiceMapper {
 
     ShopService updateDto(List<BranchService> branchServiceList, List<ServiceDisplay> serviceDisplayList);
 
+    ShopService toDto(ShopServiceInfo info, List<BranchService> branchServiceList,
+            List<ServiceDisplay> serviceDisplayList);
+
     ShopService toDto(ShopServiceInfo info);
 
     @Mapping(source = "serviceDisplayList", target = "serviceDisplayList")

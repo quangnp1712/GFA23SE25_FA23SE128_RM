@@ -21,7 +21,7 @@ public interface BookingServiceInfo {
 
     void setPriority(Integer priority);
 
-    void setServicePrice(Long serviceId);
+    void setBranchServicePrice(Long branchServicePrice);
 
     void setServiceName(String serviceName);
 
@@ -43,6 +43,8 @@ public interface BookingServiceInfo {
 
     void setAllowUpdate(Boolean allowUpdate);
 
+    void setCusPhone(String cusPhone);
+
     Long getBookingServiceId();
 
     Long getBookingId();
@@ -57,7 +59,7 @@ public interface BookingServiceInfo {
 
     Integer getPriority();
 
-    Long getServicePrice();
+    Long getBranchServicePrice();
 
     String getServiceName();
 
@@ -78,4 +80,6 @@ public interface BookingServiceInfo {
     EBookingServiceStatus getBookingServiceStatus();
 
     Boolean getAllowUpdate();
+
+    String getCusPhone();
 }

@@ -22,5 +22,5 @@ public class BranchServiceEntity {
     private Long branchServiceId;
     private Long branchId;
     private Long serviceId;
-    private Long price;
+    private Long branchServicePrice;
 }

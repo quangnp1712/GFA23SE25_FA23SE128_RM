@@ -15,6 +15,8 @@ import com.realman.becore.dto.enums.EBookingServiceStatus;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.booking.service.BookingServiceEntity;
 import com.realman.becore.repository.database.booking.service.BookingServiceRepository;
+import java.time.LocalDate;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -54,6 +56,10 @@ public class BookingServiceCommandService {
             foundBookingServiceEntity.setBookingServiceStatus(EBookingServiceStatus.FINISHED);
             foundBookingServiceEntity.setActualEndTime(LocalTime.now());
             bookingServiceRepository.save(foundBookingServiceEntity);
+            BookingServiceInfo info = bookingServiceRepository
+                    .findNearBookingService(foundBookingServiceEntity.getStaffId(), LocalDate.now())
+                    .stream().findFirst().orElse(null);
+
         }
     }
 }

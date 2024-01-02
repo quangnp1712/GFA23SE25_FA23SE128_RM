@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import com.realman.becore.controller.api.services.models.ServiceId;
 import com.realman.becore.dto.branch.service.BranchService;
 import com.realman.becore.dto.service.ShopService;
+import com.realman.becore.dto.service.ShopServiceInfo;
 import com.realman.becore.dto.service.ShopServiceMapper;
 import com.realman.becore.dto.service.display.ServiceDisplay;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
-import com.realman.becore.repository.database.service.ShopServiceEntity;
 import com.realman.becore.repository.database.service.ShopServiceRepository;
 import com.realman.becore.service.branch.service.BranchServiceUseCaseService;
 import com.realman.becore.service.services.display.ServiceDisplayUseCaseService;
@@ -34,7 +34,8 @@ public class ShopServiceQueryService {
         private final ShopServiceMapper shopServiceMapper;
 
         public Page<ShopService> findAll(PageRequestCustom pageRequestCustom) {
-                Page<ShopServiceEntity> shopServices = shopServiceRepository.findAll(pageRequestCustom.pageRequest());
+                Page<ShopServiceInfo> shopServices = shopServiceRepository
+                                .findAllInfo(pageRequestCustom.pageRequest());
                 Map<Long, List<ServiceDisplay>> serviceDisplayMap = serviceDisplayUseCaseService.findAll()
                                 .stream().collect(Collectors.groupingBy(ServiceDisplay::serviceId));
                 Map<Long, List<BranchService>> branchServiceMap = branchServiceUseCaseService.findAll().stream()
@@ -45,7 +46,7 @@ public class ShopServiceQueryService {
         }
 
         public ShopService findById(ServiceId serviceId) {
-                ShopServiceEntity service = shopServiceRepository.findById(serviceId.value())
+                ShopServiceInfo service = shopServiceRepository.findInfoById(serviceId.value())
                                 .orElseThrow(ResourceNotFoundException::new);
                 Map<Long, List<ServiceDisplay>> serviceDisplayMap = serviceDisplayUseCaseService
                                 .findByServiceId(serviceId.value())

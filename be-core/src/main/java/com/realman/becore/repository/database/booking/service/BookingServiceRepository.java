@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import com.realman.becore.dto.booking.service.BookingServiceInfo;
+import java.time.LocalDate;
 
 @Repository
 public interface BookingServiceRepository extends JpaRepository<BookingServiceEntity, Long> {
@@ -20,7 +20,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 c.categoryId AS categoryId,
                 c.categoryName AS categoryName,
                 c.priority AS priority,
-                brs.price AS servicePrice,
+                brs.branchServicePrice AS branchServicePrice,
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
@@ -50,7 +50,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 c.categoryId AS categoryId,
                 c.categoryName AS categoryName,
                 c.priority AS priority,
-                brs.price AS servicePrice,
+                brs.branchServicePrice AS branchServicePrice,
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
@@ -80,7 +80,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 c.categoryId AS categoryId,
                 c.categoryName AS categoryName,
                 c.priority AS priority,
-                brs.price AS servicePrice,
+                brs.branchServicePrice AS branchServicePrice,
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
@@ -100,4 +100,17 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             WHERE bs.bookingServiceId = :bookingServiceId
             """)
     Optional<BookingServiceInfo> findInfoById(Long bookingServiceId, Long accountId);
+
+    @Query("""
+            SELECT
+                a.phone AS cusPhone
+            FROM BookingServiceEntity bs
+            INNER JOIN BookingEntity b ON b.bookingId = bs.bookingId
+            INNER JOIN AccountEntity a ON a.accountId = b.accountId
+            WHERE bs.staffId = :staffId
+            AND b.appointmentDate = :appointmentDate
+            AND bs.bookingServiceStatus = com.realman.becore.dto.enums.EBookingServiceStatus.PENDING
+            ORDER BY bs.startTime
+            """)
+    List<BookingServiceInfo> findNearBookingService(Long staffId, LocalDate appointmentDate);
 }

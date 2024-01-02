@@ -18,7 +18,7 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
                     s.serviceName AS serviceName,
                     b.branchName AS branchName,
                     b.branchThumbnailUrl AS branchThumbnailUrl,
-                    bs.price AS price
+                    bs.branchServicePrice AS branchServicePrice
                FROM BranchServiceEntity bs
                INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
                INNER JOIN BranchEntity b ON b.branchId = bs.branchId
@@ -34,7 +34,7 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
                     s.serviceName AS serviceName,
                     b.branchName AS branchName,
                     b.branchThumbnailUrl AS branchThumbnailUrl,
-                    bs.price AS price
+                    bs.branchServicePrice AS branchServicePrice
                FROM BranchServiceEntity bs
                INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
                INNER JOIN BranchEntity b ON b.branchId = bs.branchId
@@ -50,7 +50,7 @@ public interface BranchServiceRepository extends JpaRepository<BranchServiceEnti
                     s.serviceName AS serviceName,
                     b.branchName AS branchName,
                     b.branchThumbnailUrl AS branchThumbnailUrl,
-                    bs.price AS price
+                    bs.branchServicePrice AS branchServicePrice
                FROM BranchServiceEntity bs
                INNER JOIN ShopServiceEntity s ON s.serviceId = bs.serviceId
                INNER JOIN BranchEntity b ON b.branchId = bs.branchId

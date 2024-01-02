@@ -15,7 +15,7 @@ import 'package:realmen_customer_application/models/booking/booking_model.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/models/categoryservice/category_model.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
-import 'package:realmen_customer_application/service/booking/booking.dart';
+import 'package:realmen_customer_application/service/booking/booking_service.dart';
 import 'package:realmen_customer_application/service/categoryservice/category_services_service.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
@@ -155,37 +155,58 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Ngày và giờ
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 width: 130,
                 child: Text(
-                  "Salon: ",
+                  "Ngày: ",
                   style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 220,
-                child: Text(
-                  utf8.decode(branch.address.toString().runes.toList()),
-                  maxLines: 3,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
                     fontSize: 17,
                   ),
                 ),
               ),
+              Text(
+                date ?? " ",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
+              ),
             ],
           ),
+
+          // Giờ
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Giờ booking: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Text(
+                time != null ? "$time" : "",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17,
+                ),
+              ),
+            ],
+          ),
+          //Stylist
           const SizedBox(
-            height: 10,
+            height: 12,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -195,7 +216,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 child: Text(
                   "Stylist: ",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                   ),
                 ),
               ),
@@ -219,40 +240,35 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+
+          const SizedBox(height: 12),
+          // Barber Shop:
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 width: 130,
                 child: Text(
-                  "Ngày và giờ hẹn: ",
+                  "Barber Shop: ",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Text(
-                    date ?? " ",
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17),
+              SizedBox(
+                width: 220,
+                child: Text(
+                  utf8.decode(branch.address.toString().runes.toList()),
+                  maxLines: 3,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
                   ),
-                  // const SizedBox(width: 5),
-                  Text(
-                    time != null ? ",  $time" : "",
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 17,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
@@ -299,11 +315,26 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(service != []
-                      ? utf8.decode(
-                          service[index].serviceName.toString().runes.toList())
-                      : ""),
-                  Text(formatter.format(service[index].price)),
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 280),
+                    child: Expanded(
+                      child: Text(
+                        service != []
+                            ? utf8.decode(service[index]
+                                .serviceName
+                                .toString()
+                                .runes
+                                .toList())
+                            : "",
+                        maxLines: 2,
+                        style: const TextStyle(fontSize: 17),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    formatter.format(service[index].price),
+                    style: const TextStyle(fontSize: 17),
+                  ),
                 ],
               ),
             );
@@ -326,7 +357,45 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               const Text(
                 "Tổng Tiền:",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
+                ),
+              ),
+              // SizedBox(width: 140),
+              Text(
+                formatter.format(total),
+                style: const TextStyle(fontSize: 17),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Tổng Giảm Giá:",
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
+              // SizedBox(width: 140),
+              Text(
+                "0",
+                style: TextStyle(fontSize: 17),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Tổng Hóa Đơn::",
+                style: TextStyle(
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -334,7 +403,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               Text(
                 formatter.format(total),
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                 ),
               ),
             ],

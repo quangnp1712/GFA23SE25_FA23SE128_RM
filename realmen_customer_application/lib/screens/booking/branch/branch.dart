@@ -127,45 +127,52 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
         ),
         // button Đặt Lịch
         selectedBranch.branchId != null && selectedService != []
-            ? Container(
-                width: 81.w,
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                padding: const EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xff302E2E),
-                        Color(0xe6444141),
-                        Color(0x8c484646),
-                        Color(0x26444141),
-                      ]),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _onBooking();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.black12,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    minimumSize: const Size(200, 50),
+            ? Column(
+                children: [
+                  Container(
+                    width: 81.w,
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
                     padding: const EdgeInsets.all(0),
-                    shadowColor: Colors.transparent,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xff302E2E),
+                            Color(0xe6444141),
+                            Color(0x8c484646),
+                            Color(0x26444141),
+                          ]),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _onBooking();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.black12,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        minimumSize: const Size(200, 50),
+                        padding: const EdgeInsets.all(0),
+                        shadowColor: Colors.transparent,
+                      ),
+                      child: const Text(
+                        'Đặt Lịch',
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
                   ),
-                  child: const Text(
-                    'Đặt Lịch',
-                    style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                        letterSpacing: 1.5,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
+                  const Center(
+                    child: Text("Cắt xong trả tiền, hủy lịch không sao"),
+                  )
+                ],
               )
             : Container(),
 

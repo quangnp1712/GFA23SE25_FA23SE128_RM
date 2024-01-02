@@ -92,8 +92,9 @@ class BookingContent {
       branchName: json['branchName'],
       appointmentDate: json['appointmentDate'],
       bookingServices: json['bookingServices'] != null
-          ? List<BookingServiceModel>.from(json['bookingServices']
-              ?.json((e) => BookingServiceModel.fromJson(e)))
+          ? ((json['bookingServices'] as List)
+              .map((e) => BookingServiceModel.fromJson(e))
+              .toList())
           : null,
       bookingStatus: json['bookingStatus'],
     );
@@ -118,8 +119,24 @@ class BookingServiceModel {
   String? bookingServiceStatus;
   bool? allowUpdate;
 
-  BookingServiceModel(
-      {this.serviceId, this.staffId, this.startTime, this.endTime});
+  BookingServiceModel({
+    this.bookingServiceId,
+    this.bookingId,
+    this.serviceId,
+    this.staffId,
+    this.serviceName,
+    this.servicePrice,
+    this.staffName,
+    this.staffPhone,
+    this.startTime,
+    this.actualStartTime,
+    this.endTime,
+    this.actualEndTime,
+    this.duration,
+    this.durationText,
+    this.bookingServiceStatus,
+    this.allowUpdate,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -132,10 +149,22 @@ class BookingServiceModel {
 
   factory BookingServiceModel.fromJson(Map<String, dynamic> json) {
     return BookingServiceModel(
+      bookingServiceId: json['bookingServiceId'],
+      bookingId: json['bookingId'],
       serviceId: json['serviceId'],
       staffId: json['staffId'],
+      serviceName: json['serviceName'],
+      servicePrice: json['servicePrice'],
+      staffName: json['staffName'],
+      staffPhone: json['staffPhone'],
       startTime: json['startTime'],
+      actualStartTime: json['actualStartTime'],
       endTime: json['endTime'],
+      actualEndTime: json['actualEndTime'],
+      duration: json['duration'],
+      durationText: json['durationText'],
+      bookingServiceStatus: json['bookingServiceStatus'],
+      allowUpdate: json['allowUpdate'],
     );
   }
 }

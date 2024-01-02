@@ -38,9 +38,13 @@ class BookingService implements IBookingService {
       final responseBody = response.body;
       if (statusCode == 200) {
         bookingModel = BookingModel.fromJson(json.decode(responseBody));
+        var totalPages = json.decode(responseBody)['totalPages'] as int;
+        current = json.decode(responseBody)['current'] as int;
         return {
           'statusCode': statusCode,
           'data': bookingModel,
+          'totalPages': totalPages,
+          'current': current,
         };
       } else if (statusCode == 401) {
         try {
@@ -59,7 +63,7 @@ class BookingService implements IBookingService {
       } else if (statusCode == 403) {
         return {
           'statusCode': statusCode,
-          'error': "Forbidden",
+          'error': "Hết hạn đăng nhập",
         };
       } else if (statusCode == 400) {
         return {

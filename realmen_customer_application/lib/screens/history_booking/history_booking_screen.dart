@@ -1,9 +1,17 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
 
-import 'package:realmen_customer_application/screens/history_booking/components/card_history_hair_cut.dart';
+import 'package:realmen_customer_application/screens/history_booking/detail_history_hair_cut_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
+import 'package:realmen_customer_application/service/booking/booking_service.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 
 class HistoryBookingScreen extends StatefulWidget {
@@ -80,14 +88,184 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                           ),
                         ),
                       ),
-                      const Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: CardHistoryHairCut(),
-                          ),
-                        ],
-                      ),
+                      isLoading
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(top: 30),
+                                  height: 50,
+                                  width: 50,
+                                  child: const CircularProgressIndicator(),
+                                )
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: SizedBox(
+                                    height: 300,
+                                    child: ListView.builder(
+                                      controller: _scrollController,
+                                      shrinkWrap: true,
+                                      // physics:
+                                      //     const NeverScrollableScrollPhysics(),
+                                      itemCount: bookings
+                                          .length, // Số lượng thẻ lịch sử cắt tóc
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.home,
+                                                          color: Colors.red,
+                                                          size: 24,
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(10),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  utf8.decode(bookings[
+                                                                          index]
+                                                                      .branchName
+                                                                      .toString()
+                                                                      .runes
+                                                                      .toList()),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(bookings[index]
+                                                                            .appointmentDate ??
+                                                                        ""),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            10),
+                                                                    Text(bookings[
+                                                                            index]
+                                                                        .bookingServices!
+                                                                        .first
+                                                                        .startTime
+                                                                        .toString()),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Image.asset(
+                                                          "assets/images/admin.png",
+                                                          height: 170,
+                                                          width: 140,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                      "Booking: ${bookings[index].bookingId} "),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          10),
+                                                                  const Text(
+                                                                      "Stylist: Le Anh Tuan"),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          10),
+                                                                  const Text(
+                                                                      "Massuer: Be Dep"),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          10),
+                                                                  const Text(
+                                                                      "Tổng hóa đơn: 180,000"),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          25),
+                                                                  ElevatedButton(
+                                                                    onPressed: () =>
+                                                                        Get.toNamed(
+                                                                            DetailHistoryBookingScreen.DetailHistoryBookingScreenRoute),
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .black,
+                                                                    ),
+                                                                    child:
+                                                                        const Text(
+                                                                      'Xem chi tiết ->',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                     ],
                   ),
                 ),
@@ -112,4 +290,140 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
         // ),
         );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoadMore();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // Khi scroll tới dưới cùng
+        checkLoadMore();
+      }
+    });
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(HistoryBookingScreen oldWidget) {
+    setState(() {
+      build(context);
+      current;
+    });
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  bool isLoading = true;
+  List<BookingContent> bookings = [];
+  String stylist = 'Đang đợi update APi';
+  int current = 0;
+  int currentResult = 0;
+  int totalPages = 0;
+
+  Future<void> getBookingPending(int current) async {
+    if (!_isDisposed && mounted) {
+      try {
+        int accountId = await SharedPreferencesService.getAccountId();
+        if (accountId != 0) {
+          BookingModel bookingModel = BookingModel();
+
+          final result =
+              await BookingService().getBooking(accountId, current, 2);
+          if (result['statusCode'] == 200) {
+            bookingModel = result['data'] as BookingModel;
+            currentResult = result['current'];
+            totalPages = result['totalPages'];
+            if (bookingModel.content!.isNotEmpty) {
+              for (var content in bookingModel.content!) {
+                bookings.add(content);
+              }
+              for (var booking in bookings) {
+                try {
+                  DateTime date = DateTime.parse(booking.appointmentDate!);
+                  booking.appointmentDate = formatDate(date);
+                } on Exception catch (e) {
+                  // TODO
+                }
+              }
+
+              if (!_isDisposed && mounted) {
+                setState(() {
+                  bookings;
+                  isLoading = false;
+                  // current;
+                });
+              }
+            } else {
+              if (!_isDisposed && mounted) {
+                setState(() {
+                  bookings;
+                  // current;
+                });
+              }
+            }
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+          } else if (result['statusCode'] == 403) {
+            _errorMessage(result['error']);
+            AuthenticateService authenticateService = AuthenticateService();
+            authenticateService.logout();
+          } else {
+            print("$result");
+          }
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
+  void checkLoadMore() async {
+    current = currentResult;
+    current = current + 1;
+    if (totalPages == 0) {
+      await getBookingPending(current);
+    } else {
+      if (current <= totalPages) {
+        await getBookingPending(current);
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  formatDate(DateTime date) {
+    String day = DateFormat('EEEE').format(date);
+    day = formatDay(day);
+    return "$day, ${DateFormat('dd/MM/yyyy').format(date)}";
+  }
+
+  String formatDay(String day) {
+    return dayNames[day.toLowerCase()] ?? day;
+  }
+
+  final Map<String, String> dayNames = {
+    'monday': 'Thứ hai',
+    'tuesday': 'Thứ ba',
+    'wednesday': 'Thứ tư',
+    'thursday': 'Thứ năm',
+    'friday': 'Thứ sáu',
+    'saturday': 'Thứ bảy',
+    'sunday': 'Chủ nhật'
+  };
+  final ScrollController _scrollController = ScrollController();
 }

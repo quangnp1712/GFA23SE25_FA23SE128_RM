@@ -1,9 +1,17 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
+import 'package:realmen_customer_application/screens/booking/components/pop_up/popup_confirm.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
+import 'package:realmen_customer_application/service/booking/booking_service.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 
 class BookingProcessingScreen extends StatefulWidget {
@@ -84,27 +92,40 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                               ),
                             ),
                           ),
-                          Column(
-                            children: [
-                              _buildInfoUser(),
-                              _buildService(),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10),
-                                child: Divider(
-                                  color: Colors.black,
-                                  height: 2,
-                                  thickness: 1,
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    _buildInfoUser(),
+                                    _buildService(),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 10),
+                                      child: Divider(
+                                        color: Colors.black,
+                                        height: 2,
+                                        thickness: 1,
+                                      ),
+                                    ),
+                                    // _buildButton(),
+                                    _buildTotalMoney(),
+                                    _buildButton(),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
                                 ),
-                              ),
-                              // _buildButton(),
-                              _buildTotalMoney(),
-                              _buildButton(),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -121,76 +142,120 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
   }
 
   Widget _buildInfoUser() {
-    return const Padding(
-      padding: EdgeInsets.all(12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // Ngày và giờ
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                "Ngày: ",
-                style: TextStyle(fontSize: 17),
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Ngày: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
               ),
-              SizedBox(height: 12),
               Text(
-                "Giờ booking: ",
-                style: TextStyle(fontSize: 17),
-              ),
-              SizedBox(height: 12),
-              Text(
-                "Stylist: ",
-                style: TextStyle(fontSize: 17),
-              ),
-              SizedBox(height: 12),
-              Text(
-                "Barber Shop: ",
-                style: TextStyle(fontSize: 17),
+                booking.appointmentDate ?? " ",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
               ),
             ],
           ),
-          SizedBox(
-            width: 30,
+
+          // Giờ
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Giờ booking: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Text(
+                booking.bookingServices!.first.startTime ?? "",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17,
+                ),
+              ),
+            ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "Thứ 6, 01/12/2023",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 17),
+          //Stylist
+          const SizedBox(
+            height: 12,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Stylist: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
               ),
-              SizedBox(height: 12),
-              Text(
-                "12:30",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 17),
-              ),
-              SizedBox(height: 12),
-              Text(
-                "Le Anh Tuan",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 17),
-              ),
-              SizedBox(height: 12),
               SizedBox(
                 width: 220,
                 child: Text(
-                  "590 Cách Mạng Tháng 8, Phường 11, Quận 3, Hồ Chí Minh",
-                  maxLines: 3,
-                  style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
+                  stylist,
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 17),
+                      fontSize: 17,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+          // Barber Shop:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Barber Shop: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 220,
+                child: Text(
+                  utf8.decode(booking.branchAddress.toString().runes.toList()),
+                  maxLines: 3,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                  ),
                 ),
               ),
             ],
@@ -226,22 +291,33 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: serviceList.length, // The number of items in the list
+          itemCount: booking
+              .bookingServices!.length, // The number of items in the list
           itemBuilder: (context, index) {
             // Return a Card widget for each item in the list
             return Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 10, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    serviceList[index].name.toString(),
-                    style: const TextStyle(fontSize: 17),
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 280),
+                    child: Expanded(
+                      child: Text(
+                        utf8.decode(booking.bookingServices![index].serviceName
+                            .toString()
+                            .runes
+                            .toList()),
+                        style: const TextStyle(fontSize: 17),
+                        maxLines: 2,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 140),
                   Text(
-                    formatter.format(serviceList[index].price),
+                    formatter
+                        .format(booking.bookingServices![index].servicePrice),
                     style: const TextStyle(fontSize: 17),
                   ),
                 ],
@@ -330,78 +406,31 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Flexible(
-          flex: 4,
-          fit: FlexFit.tight,
-          child: Container(
-            // margin: const EdgeInsets.only(top: 22),
-            // width: 70.w,
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.redAccent, width: 1),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-              child: const Text(
-                "Hủy lịch đặt",
-                style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
+        Container(
+          // margin: const EdgeInsets.only(top: 22),
+          width: 70.w,
+          height: 40,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.redAccent, width: 1),
+            borderRadius: BorderRadius.circular(24),
           ),
-        ),
-        const Flexible(
-          flex: 1,
-          child: SizedBox(),
-        ),
-        Flexible(
-          flex: 4,
-          fit: FlexFit.tight,
-          child: Container(
-            // margin: const EdgeInsets.only(top: 22),
-            // width: 70.w,
-            height: 40,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xff302E2E),
-                    Color(0xe6444141),
-                    Color(0xe6444141),
-                    Color(0x8c484646),
-                    // Color(0x26444141),
-                  ]),
-              borderRadius: BorderRadius.circular(24),
+          child: ElevatedButton(
+            onPressed: () {
+              _popup();
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
             ),
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-              child: const Text(
-                "Cập nhật",
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
-              ),
+            child: const Text(
+              "Hủy lịch đặt",
+              style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w500),
             ),
           ),
         ),
@@ -412,24 +441,143 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
   NumberFormat formatter = NumberFormat("#,##0");
   double total = 0;
   calTotal() {
-    for (var service in serviceList) {
-      total += service.price as double;
+    for (var service in booking.bookingServices!) {
+      total += double.parse(service.servicePrice.toString());
     }
     setState(() {
       total;
+      isLoading = false;
     });
   }
 
-  List<ServiceList> serviceList = [
-    ServiceList(name: "Cắt tóc", price: 70000),
-    ServiceList(name: "Massage đầu", price: 50000),
-    ServiceList(name: "Cạo Mặt", price: 30000),
-    ServiceList(name: "Ráy tai", price: 30000),
-  ];
   @override
   void initState() {
     super.initState();
-    calTotal();
+    getBookingPending();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  bool isLoading = true;
+  BookingContent booking = BookingContent();
+  String stylist = 'Đang đợi update APi';
+  Future<void> getBookingPending() async {
+    if (!_isDisposed && mounted) {
+      try {
+        int current = 1;
+        int totalPages = 0;
+        int accountId = await SharedPreferencesService.getAccountId();
+        if (accountId != 0) {
+          do {
+            BookingModel bookingModel = BookingModel();
+            final result = await BookingService().getBooking(accountId, 1, 1);
+            if (result['statusCode'] == 200) {
+              bookingModel = result['data'] as BookingModel;
+              current = result['current'];
+              totalPages = result['totalPages'];
+              if (bookingModel.content!.isNotEmpty) {
+                booking = bookingModel.content!.first;
+                DateTime date = DateTime.parse(booking.appointmentDate!);
+                booking.appointmentDate = formatDate(date);
+
+                if (!_isDisposed && mounted) {
+                  setState(() {
+                    booking;
+                    calTotal();
+                  });
+                }
+                // if (booking.bookingStatus == 'PENDING') {
+                //   if (!_isDisposed && mounted) {
+                //     setState(() {
+                //       bookingModel;
+                //       isLoading = false;
+                //     });
+                //   }
+                // }
+
+                break;
+              } else {
+                // if (!_isDisposed && mounted) {
+                //   setState(() {
+                //     bookingModel;
+                //     isLoading = false;
+                //   });
+                // }
+                current++;
+              }
+            } else if (result['statusCode'] == 500) {
+              _errorMessage(result['error']);
+              break;
+            } else if (result['statusCode'] == 403) {
+              _errorMessage(result['error']);
+              AuthenticateService authenticateService = AuthenticateService();
+              authenticateService.logout();
+              break;
+            } else {
+              print("$result");
+              break;
+            }
+          } while (current <= totalPages);
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  formatDate(DateTime date) {
+    String day = DateFormat('EEEE').format(date);
+    day = formatDay(day);
+    return "$day, ${DateFormat('dd/MM/yyyy').format(date)}";
+  }
+
+  String formatDay(String day) {
+    return dayNames[day.toLowerCase()] ?? day;
+  }
+
+  final Map<String, String> dayNames = {
+    'monday': 'Thứ hai',
+    'tuesday': 'Thứ ba',
+    'wednesday': 'Thứ tư',
+    'thursday': 'Thứ năm',
+    'friday': 'Thứ sáu',
+    'saturday': 'Thứ bảy',
+    'sunday': 'Chủ nhật'
+  };
+
+  Future<void> _popup() async {
+    if (!_isDisposed) {
+      return showModalBottomSheet(
+        enableDrag: true,
+        isDismissible: true,
+        isScrollControlled: false,
+        context: context,
+        backgroundColor: Colors.white,
+        barrierColor: const Color(0x8c111111),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (context) {
+          return PopUpConfirm();
+        },
+      );
+    }
   }
 }
 

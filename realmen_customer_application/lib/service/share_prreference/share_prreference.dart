@@ -111,7 +111,7 @@ class SharedPreferencesService {
       int accountId = int.parse(result[3]);
       return accountId;
     } else {
-      throw Exception("Failed to get account ID from SharedPreferences");
+      return 0;
     }
   }
 

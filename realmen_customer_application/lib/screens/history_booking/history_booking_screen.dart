@@ -199,14 +199,14 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                      .all(10),
+                                                                      .all(9),
                                                               child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
                                                                   Text(
-                                                                      "Booking: ${bookings[index].bookingCode} "),
+                                                                      "Code: ${bookings[index].bookingCode} "),
                                                                   const SizedBox(
                                                                       height:
                                                                           10),

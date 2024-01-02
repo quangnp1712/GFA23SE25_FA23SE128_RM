@@ -206,7 +206,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                         .start,
                                                                 children: [
                                                                   Text(
-                                                                      "Booking: ${bookings[index].bookingId} "),
+                                                                      "Booking: ${bookings[index].bookingCode} "),
                                                                   const SizedBox(
                                                                       height:
                                                                           10),

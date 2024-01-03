@@ -118,7 +118,6 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                                         thickness: 1,
                                       ),
                                     ),
-                                    // _buildButton(),
                                     _buildTotalMoney(),
                                     _buildButton(),
                                     const SizedBox(
@@ -316,8 +315,10 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                     ),
                   ),
                   Text(
-                    formatter
-                        .format(booking.bookingServices![index].servicePrice),
+                    booking.bookingServices![index].servicePrice != null
+                        ? formatter.format(
+                            booking.bookingServices![index].servicePrice)
+                        : '0',
                     style: const TextStyle(fontSize: 17),
                   ),
                 ],
@@ -443,7 +444,11 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
   calTotal() {
     if (booking.bookingServices != null) {
       for (var service in booking.bookingServices!) {
-        total += double.parse(service.servicePrice.toString());
+        if (service.servicePrice != null) {
+          total += double.parse(service.servicePrice.toString());
+        } else {
+          total = 0;
+        }
       }
     } else {
       total = 0;

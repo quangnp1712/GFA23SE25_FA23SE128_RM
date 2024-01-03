@@ -32,7 +32,7 @@ class CategoryModel {
       categoryId: json['categoryId'],
       name: json['name'],
       categoryType: json['categoryType'],
-      serviceList: (json['serviceList'] as List<dynamic>?)
+      serviceList: (json['serviceList'] as List?)
           ?.map((item) => ServiceList.fromJson(item))
           .toList(),
     );
@@ -42,24 +42,42 @@ class CategoryModel {
 class ServiceList {
   String? name;
   String? description;
+  int? price;
   int? serviceId;
+  int? categoryId;
+  String? categoryName;
+  int? durationValue;
+  String? durationTime;
+  String? durationText;
 
   List<ServiceDisplayListModel>? serviceDisplayList;
   List<BranchServiceModel>? branchServiceList;
 
   ServiceList({
-    this.description,
-    this.serviceId,
     this.name,
+    this.description,
+    this.price,
+    this.serviceId,
+    this.categoryId,
+    this.categoryName,
+    this.durationValue,
+    this.durationTime,
+    this.durationText,
     this.serviceDisplayList,
     this.branchServiceList,
   });
 
   factory ServiceList.fromJson(Map<String, dynamic> json) {
     return ServiceList(
-      description: json['description'],
-      serviceId: json['serviceId'],
       name: json['name'],
+      description: json['description'],
+      price: json['price'],
+      serviceId: json['serviceId'],
+      categoryId: json['categoryId'],
+      categoryName: json['categoryName'],
+      durationValue: json['durationValue'],
+      durationTime: json['durationTime'],
+      durationText: json['durationText'],
       branchServiceList: (json['branchServiceList'] as List<dynamic>?)
           ?.map((item) => BranchServiceModel.fromJson(item))
           .toList(),

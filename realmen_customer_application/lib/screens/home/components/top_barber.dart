@@ -250,6 +250,8 @@ class _barberTopState extends State<barberTop> {
             staffList = result['data'] as List<AccountInfoModel>;
             current = result['current'];
             totalPages = result['totalPages'];
+            staffList
+                .removeWhere((staff) => staff.staff!.professional == 'MASSEUR');
             for (var staff in staffList) {
               try {
                 var reference = storage.ref('stylist/${staff.thumbnailUrl}');

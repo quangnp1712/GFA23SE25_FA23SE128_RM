@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:convert';
@@ -214,24 +215,25 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                   )
                                 ],
                               )
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: ListView.builder(
-                                  itemCount: categories?.length ?? 0,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, categoryIndex) {
-                                    final category = categories?[categoryIndex];
-                                    return category!.serviceList != null
-                                        ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              Container(
+                            : ListView.builder(
+                                itemCount: categories?.length ?? 0,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, categoryIndex) {
+                                  final category = categories?[categoryIndex];
+                                  return category!.serviceList != null
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              child: Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                   horizontal: 15,
@@ -255,150 +257,218 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 20,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+
+                                            // nôi dung card
+                                            GridView.builder(
+                                              itemCount: category
+                                                      .serviceList?.length ??
+                                                  0,
+                                              scrollDirection: Axis.vertical,
+                                              padding: const EdgeInsets.all(5),
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount:
+                                                    2, // Thay đổi giá trị này nếu cần
+                                                crossAxisSpacing: 8.0,
+                                                mainAxisSpacing: 8.0,
+                                                childAspectRatio:
+                                                    2 / 4.2, // width : height
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: GridView.builder(
-                                                  itemCount: category
-                                                          .serviceList
-                                                          ?.length ??
-                                                      0,
-                                                  scrollDirection:
-                                                      Axis.vertical,
+                                              itemBuilder:
+                                                  (context, serviceIndex) {
+                                                final service = category
+                                                    .serviceList?[serviceIndex];
+                                                // final thumbnailUrl = service?.branchServiceList?.first.thumbnailUrl ?? '';
+                                                return Container(
+                                                  margin:
+                                                      const EdgeInsets.all(8),
                                                   padding:
-                                                      const EdgeInsets.all(5),
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  gridDelegate:
-                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2,
-                                                    crossAxisSpacing: 10,
-                                                    mainAxisSpacing: 20,
-                                                    childAspectRatio: 2 / 3.1,
+                                                      const EdgeInsets.all(2.0),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    border: Border.all(
+                                                        color: Colors.grey),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
                                                   ),
-                                                  itemBuilder:
-                                                      (context, serviceIndex) {
-                                                    final service =
-                                                        category.serviceList?[
-                                                            serviceIndex];
-                                                    // final thumbnailUrl = service?.branchServiceList?.first.thumbnailUrl ?? '';
-                                                    return Container(
-                                                      height: 204,
-                                                      decoration: BoxDecoration(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      ClipRRect(
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        color: Colors.black,
+                                                            const BorderRadius
+                                                                .only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                        ),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: service!
+                                                              .serviceDisplayList![
+                                                                  0]
+                                                              .serviceDisplayUrl!,
+                                                          height: 140,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              1.4,
+                                                          fit: BoxFit.cover,
+                                                          progressIndicatorBuilder:
+                                                              (context, url,
+                                                                      progress) =>
+                                                                  Center(
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              value: progress
+                                                                  .progress,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                      child: Padding(
+                                                      Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .all(2.0),
+                                                                .symmetric(
+                                                                vertical: 8.0),
                                                         child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  const BorderRadius
-                                                                      .only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                              ),
-                                                              child:
-                                                                  CachedNetworkImage(
-                                                                imageUrl: service!
-                                                                    .serviceDisplayList![
-                                                                        0]
-                                                                    .serviceDisplayUrl!,
-                                                                height: 140,
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width /
-                                                                    1.4,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                progressIndicatorBuilder:
-                                                                    (context,
-                                                                            url,
-                                                                            progress) =>
-                                                                        Center(
-                                                                  child:
-                                                                      CircularProgressIndicator(
-                                                                    value: progress
-                                                                        .progress,
-                                                                  ),
+                                                            Container(
+                                                              height: 60,
+                                                              child: Text(
+                                                                utf8.decode(service
+                                                                    .name
+                                                                    .toString()
+                                                                    .runes
+                                                                    .toList()),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                maxLines:
+                                                                    2, // Số dòng tối đa
+                                                                softWrap:
+                                                                    true, // Cho phép tự động xuống dòng
+                                                                style:
+                                                                    const TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 17,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .white,
                                                                 ),
                                                               ),
                                                             ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(2),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceAround,
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height: 5,
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Flexible(
-                                                                        child:
-                                                                            ClipRRect(
-                                                                          child:
-                                                                              Container(
-                                                                            child:
-                                                                                Text(
-                                                                              utf8.decode(service.name.toString().runes.toList()),
-                                                                              maxLines: 2, // Số dòng tối đa
-                                                                              softWrap: true, // Cho phép tự động xuống dòng
-                                                                              style: const TextStyle(
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                fontSize: 18,
-                                                                                fontWeight: FontWeight.w500,
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5,
-                                                                  ),
-                                                                ],
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 60,
+                                                              child: Text(
+                                                                service.description ==
+                                                                        null
+                                                                    ? ''
+                                                                    : utf8.decode(service
+                                                                        .description!
+                                                                        .toString()
+                                                                        .runes
+                                                                        .toList()),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 15,
+                                                                ),
                                                               ),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 7),
+                                                            Container(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  style:
+                                                                      BorderStyle
+                                                                          .solid,
+                                                                  width: 2,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade300,
+                                                              ),
+                                                              child: Text(
+                                                                "${service.durationValue.toString()} ${utf8.decode(service.durationText.toString().runes.toList())}",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 17,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 7),
+                                                            Text(
+                                                              service.price !=
+                                                                      null
+                                                                  ? ' ${formatter.format(service.price)} VNĐ'
+                                                                  : "0 VND",
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
                                                             ),
                                                           ],
                                                         ),
                                                       ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : Container();
-                                  },
-                                ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      : Container();
+                                },
                               ),
                       ],
                     ),
@@ -421,6 +491,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
     super.initState();
   }
 
+  NumberFormat formatter = NumberFormat("#,##0");
   Future<void> _fetchCategoryServiceList() async {
     if (!_isDisposed && mounted) {
       try {

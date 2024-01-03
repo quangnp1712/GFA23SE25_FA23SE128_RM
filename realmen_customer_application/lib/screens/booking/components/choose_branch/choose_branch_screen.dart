@@ -702,7 +702,21 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;
-
+          branchesForCity!.sort((a, b) {
+            if (a.distanceKilometer == null && b.distanceKilometer == null) {
+              return 0;
+            } else if (a.distanceKilometer == null) {
+              return 1;
+            } else if (b.distanceKilometer == null) {
+              return -1;
+            } else {
+              double distanceA = double.parse(
+                  a.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+              double distanceB = double.parse(
+                  b.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+              return distanceA.compareTo(distanceB);
+            }
+          });
           setState(() {
             branchesForCity;
             isSearching = true;
@@ -791,6 +805,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
 
   LocationService locationService = LocationService();
   Position? position;
+
   final storage = FirebaseStorage.instance;
   List<String> urlList = [
     "barber1.jpg",

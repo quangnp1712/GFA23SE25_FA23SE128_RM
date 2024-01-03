@@ -1,11 +1,16 @@
 // ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
 
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
+import 'package:realmen_customer_application/service/location/location_service.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -254,21 +259,34 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                             children: [
                               Container(
                                 height: 40,
-                                width: 192,
+                                width: 200,
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: const Color(0xff8E1D1D),
-                                    width: 0.5,
+                                    width: 1,
                                     style: BorderStyle.solid,
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(8),
                                   color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.grey.shade800, // Màu của bóng
+                                      offset: const Offset(0,
+                                          2), // Độ dịch chuyển theo trục x và y
+                                      blurRadius: 2, // Bán kính làm mờ của bóng
+                                      spreadRadius:
+                                          0, // Bán kính lan rộng của bóng
+                                    ),
+                                  ],
                                 ),
                                 child: TextButton(
                                   style: const ButtonStyle(),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    searchBranchesWithLocation();
+                                  },
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -280,7 +298,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                               ),
                               Container(
                                 height: 40,
-                                width: 158,
+                                width: 150,
                                 padding: const EdgeInsets.only(left: 5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -353,123 +371,199 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                           const SizedBox(
                             height: 30,
                           ),
-                          branchesForCity != null
-                              ? ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: branchesForCity?.length,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Image.asset(
-                                          image,
-                                          // width: double.infinity,
-                                          // height: double.infinity,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              1.2,
-
-                                          height: 140,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        ListTile(
-                                          title: Row(
-                                            children: [
-                                              Text(
-                                                utf8.decode(
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  ],
+                                )
+                              : branchesForCity != null
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: branchesForCity?.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            FutureBuilder(
+                                              future: getImageFB(
+                                                  branchesForCity![index]),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Widget>
+                                                      snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.done) {
+                                                  if (snapshot.hasData) {
+                                                    return Container(
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                              minHeight: 140),
+                                                      child: snapshot.data!,
+                                                    ); // Return the widget when the future is complete
+                                                  } else {
+                                                    return Container(
+                                                        height:
+                                                            140); // Handle the case when the future completes with an error
+                                                  }
+                                                } else {
+                                                  return const SizedBox(
+                                                      height: 140,
+                                                      child: Center(
+                                                          child:
+                                                              CircularProgressIndicator())); // Show a loading indicator while the future is in progress
+                                                }
+                                              },
+                                            ),
+                                            const SizedBox(width: 5),
+                                            ListTile(
+                                              title: Wrap(
+                                                spacing:
+                                                    8.0, // Khoảng cách giữa các widget con theo chiều ngang
+                                                runSpacing: 4.0,
+                                                children: [
+                                                  Text(utf8.decode(
+                                                      branchesForCity![index]
+                                                          .branchName
+                                                          .toString()
+                                                          .runes
+                                                          .toList())),
+                                                  branchesForCity![index]
+                                                              .distanceKilometer !=
+                                                          null
+                                                      ? Text.rich(
+                                                          TextSpan(
+                                                            style: TextStyle(
+                                                              fontSize: 17,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.6),
+                                                            ),
+                                                            children: [
+                                                              WidgetSpan(
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .location_on,
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.9),
+                                                                ),
+                                                              ),
+                                                              const WidgetSpan(
+                                                                child: SizedBox(
+                                                                    width: 4),
+                                                              ),
+                                                              TextSpan(
+                                                                  text: branchesForCity![
+                                                                          index]
+                                                                      .distanceKilometer,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                            0.8),
+                                                                  )),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : Container(),
+                                                ],
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4),
+                                                child: Text(utf8.decode(
                                                     branchesForCity![index]
-                                                        .branchName
+                                                        .address
                                                         .toString()
                                                         .runes
-                                                        .toList()),
+                                                        .toList())),
                                               ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.black
-                                                        .withOpacity(0.6),
+                                              trailing: Container(
+                                                height: 40,
+                                                width: 85,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xffE3E3E3),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(4),
                                                   ),
-                                                  children: [
-                                                    WidgetSpan(
-                                                      child: Icon(
-                                                        Icons.location_on,
-                                                        color: Colors.black
-                                                            .withOpacity(0.9),
-                                                      ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .shade800, // Màu của bóng
+                                                      offset: const Offset(0,
+                                                          2), // Độ dịch chuyển theo trục x và y
+                                                      blurRadius:
+                                                          2, // Bán kính làm mờ của bóng
+                                                      spreadRadius:
+                                                          0, // Bán kính lan rộng của bóng
                                                     ),
-                                                    const WidgetSpan(
-                                                      child: SizedBox(width: 4),
-                                                    ),
-                                                    TextSpan(
-                                                        text: branchesForCity![
-                                                                index]
-                                                            .distanceKilometer,
-                                                        style: TextStyle(
-                                                          color: Colors.black
-                                                              .withOpacity(0.8),
-                                                        )),
                                                   ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          subtitle: Text(utf8.decode(
-                                              branchesForCity![index]
-                                                  .address
-                                                  .toString()
-                                                  .runes
-                                                  .toList())),
-                                          trailing: Container(
-                                            height: 40,
-                                            width: 85,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xffE3E3E3),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(4),
-                                              ),
-                                            ),
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                // Xử lý sự kiện khi nhấn nút đặt lịch
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.all(0),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                ),
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                shadowColor: Colors.transparent,
-                                              ),
-                                              child: const Text(
-                                                'Đặt lịch',
-                                                style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.black,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    // Xử lý sự kiện khi nhấn nút đặt lịch
+                                                    // mainScreenState
+                                                    //     .pageChooser(2);
+                                                    // Get.to(() =>
+                                                    //     MainScreen(index: 2));
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  child: const Text(
+                                                    'Đặt lịch',
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        (index != branchesForCity!.length - 1)
-                                            ? const Divider(
-                                                color: Color(0x73444444),
-                                                height: 1,
-                                                thickness: 1,
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ],
-                                    );
-                                  },
-                                )
-                              : Container(),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            (index !=
+                                                    branchesForCity!.length - 1)
+                                                ? const Divider(
+                                                    color: Color(0x73444444),
+                                                    height: 1,
+                                                    thickness: 1,
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ],
+                                        );
+                                      },
+                                    )
+                                  : Container(),
                         ],
                       ),
                     ),
@@ -498,6 +592,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
     super.dispose();
   }
 
+  bool isLoading = true;
   String image = "assets/images/branch1.png";
   BranchesModel? branchesByCityModel = BranchesModel();
   List<BranchModel>? branchesForCity;
@@ -525,9 +620,12 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           } on Exception catch (e) {
             print(e.toString());
           }
-          setState(() {
-            cities;
-          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              cities;
+              isLoading = false;
+            });
+          }
         } else {
           print("$result['statusCode'] : $result['error']");
         }
@@ -539,7 +637,12 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   }
 
   getBranches(String search) async {
-    if (!_isDisposed) {
+    if (!_isDisposed && mounted) {
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       branchesForCity = [];
       try {
         BranchService branchService = BranchService();
@@ -548,11 +651,29 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           for (var branch in result['data'].values!) {
             branchesForCity = branch.branchList;
           }
+          branchesForCity!.sort((a, b) {
+            if (a.distanceKilometer == null && b.distanceKilometer == null) {
+              return 0;
+            } else if (a.distanceKilometer == null) {
+              return 1;
+            } else if (b.distanceKilometer == null) {
+              return -1;
+            } else {
+              double distanceA = double.parse(
+                  a.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+              double distanceB = double.parse(
+                  b.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+              return distanceA.compareTo(distanceB);
+            }
+          });
         }
 
-        setState(() {
-          branchesForCity;
-        });
+        if (!_isDisposed && mounted) {
+          setState(() {
+            branchesForCity;
+            isLoading = false;
+          });
+        }
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");
@@ -624,4 +745,85 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
 
   BranchModel selectedAddress = BranchModel();
   bool _isDisposed = false;
+
+  LocationService locationService = LocationService();
+  Future<void> searchBranchesWithLocation() async {
+    if (!_isDisposed && mounted) {
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
+      final locationPermission =
+          await SharedPreferencesService.getLocationPermission();
+      if (!locationPermission) {
+        await locationService.getUserCurrentLocation();
+      }
+      try {
+        BranchService branchService = BranchService();
+        final result = await branchService.getSearchBranches("", 5);
+        if (result['statusCode'] == 200) {
+          branchesForCity = [];
+          branchesForCity = result['data'] as List<BranchModel>;
+          branchesForCity!.sort((a, b) {
+            if (a.distanceKilometer == null && b.distanceKilometer == null) {
+              return 0;
+            } else if (a.distanceKilometer == null) {
+              return 1;
+            } else if (b.distanceKilometer == null) {
+              return -1;
+            } else {
+              double distanceA = double.parse(
+                  a.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+              double distanceB = double.parse(
+                  b.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+              return distanceA.compareTo(distanceB);
+            }
+          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              branchesForCity;
+              isLoading = false;
+            });
+          }
+        } else {
+          print("$result['statusCode'] : $result['error']");
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
+  final storage = FirebaseStorage.instance;
+  List<String> urlList = [
+    "barber1.jpg",
+    "barber2.jpg",
+    "barber3.jpg",
+  ];
+  Future<Widget> getImageFB(BranchModel branch) async {
+    try {
+      var reference = storage.ref('branch/${branch.thumbnailUrl}');
+      return Image.network(
+        await reference.getDownloadURL(),
+        scale: 1,
+        // ignore: use_build_context_synchronously
+        width: MediaQuery.of(context).size.width / 1.2,
+        height: 140,
+        fit: BoxFit.cover,
+      );
+    } catch (e) {
+      final random = Random();
+      var randomUrl = random.nextInt(urlList.length);
+      var reference = storage.ref('branch/${urlList[randomUrl]}');
+      return Image.network(
+        await reference.getDownloadURL(),
+        scale: 1,
+        width: MediaQuery.of(context).size.width / 1.2,
+        height: 140,
+        fit: BoxFit.cover,
+      );
+    }
+  }
 }

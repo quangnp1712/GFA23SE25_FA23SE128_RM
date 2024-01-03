@@ -520,8 +520,8 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                                     // Xử lý sự kiện khi nhấn nút đặt lịch
                                                     // mainScreenState
                                                     //     .pageChooser(2);
-                                                    // Get.to(() =>
-                                                    //     MainScreen(index: 2));
+                                                    Get.to(() =>
+                                                        MainScreen(index: 2));
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(

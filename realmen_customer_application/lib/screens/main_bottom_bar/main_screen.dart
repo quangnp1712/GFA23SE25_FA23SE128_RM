@@ -15,7 +15,8 @@ import 'package:realmen_customer_application/screens/service_price_list/service_
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  int? index;
+  MainScreen({Key? key, this.index}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -52,6 +53,17 @@ class _MainScreenState extends State<MainScreen> {
   void dispose() {
     _isDisposed = true;
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.index != null) {
+        bottomIndex = widget.index!;
+        setPage(bottomIndex);
+      }
+    });
   }
 
   pageChooser(int page) {

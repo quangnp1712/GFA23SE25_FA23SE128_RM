@@ -43,11 +43,8 @@ class RouteGenerator {
             return FutureBuilder(
                 future: SharedPreferencesService.checkJwtExpired(),
                 builder: (context, snapshot) {
-                  //bool snapshot.hasData
-                  if (snapshot.hasData && snapshot.data!) {
-                    return const LoginPhoneScreen();
-                  } else if (snapshot.data == false) {
-                    return const MainScreen();
+                  if (snapshot.data == false) {
+                    return MainScreen();
                   } else {
                     return const LoginPhoneScreen();
                   }

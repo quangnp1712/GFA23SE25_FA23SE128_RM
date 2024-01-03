@@ -495,7 +495,9 @@ class _SubServiceTileState extends State<SubServiceTile> {
                 Text(
                   widget.price != null
                       ? ' ${widget.price!} VNĐ'
-                      : ' ${formatter.format(widget.branchService!.price)} VNĐ',
+                      : (widget.branchService!.price != null
+                          ? ' ${formatter.format(widget.branchService!.price)} VNĐ'
+                          : "0 VND"),
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,

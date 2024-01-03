@@ -441,8 +441,12 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
   NumberFormat formatter = NumberFormat("#,##0");
   double total = 0;
   calTotal() {
-    for (var service in booking.bookingServices!) {
-      total += double.parse(service.servicePrice.toString());
+    if (booking.bookingServices != null) {
+      for (var service in booking.bookingServices!) {
+        total += double.parse(service.servicePrice.toString());
+      }
+    } else {
+      total = 0;
     }
     setState(() {
       total;

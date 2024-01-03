@@ -167,14 +167,17 @@ class BranchServiceModel {
   String? branchName;
   String? thumbnailUrl;
   int? price;
+  int? branchServicePrice;
 
-  BranchServiceModel(
-      {this.serviceId,
-      this.branchId,
-      this.serviceName,
-      this.branchName,
-      this.thumbnailUrl,
-      this.price});
+  BranchServiceModel({
+    this.serviceId,
+    this.branchId,
+    this.serviceName,
+    this.branchName,
+    this.thumbnailUrl,
+    this.price,
+    this.branchServicePrice,
+  });
 
   factory BranchServiceModel.fromJson(Map<String, dynamic> json) =>
       BranchServiceModel(
@@ -183,7 +186,8 @@ class BranchServiceModel {
           serviceName: json["serviceName"],
           branchName: json["branchName"],
           thumbnailUrl: json["thumbnailUrl"],
-          price: json["price"]);
+          price: json["price"],
+          branchServicePrice: json["branchServicePrice"]);
 }
 
 class BranchDisplayListUrl {

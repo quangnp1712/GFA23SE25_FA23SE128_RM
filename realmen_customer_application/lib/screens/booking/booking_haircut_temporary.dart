@@ -673,23 +673,28 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         String appointmentDate = DateFormat("yyyy-MM-dd").format(date);
         int branchId = widget.branch!.branchId!;
         int accountId = await SharedPreferencesService.getAccountId();
-        postBooking = BookingModel(
-            appointmentDate: appointmentDate,
-            branchId: branchId,
-            accountId: accountId,
-            bookingServices: bookingServices);
-        try {
-          final result = await BookingService().postBooking(postBooking);
-          if (result['statusCode'] == 200) {
-            _successMessage("Đặt lịch thành công");
-            Get.toNamed(MainScreen.MainScreenRoute);
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-          } else {
+        // ignore: unnecessary_null_comparison
+        if (bookingServices != null) {
+          postBooking = BookingModel(
+              appointmentDate: appointmentDate,
+              branchId: branchId,
+              accountId: accountId,
+              bookingServices: bookingServices);
+          try {
+            final result = await BookingService().postBooking(postBooking);
+            if (result['statusCode'] == 200) {
+              _successMessage("Đặt lịch thành công");
+              Get.toNamed(MainScreen.MainScreenRoute);
+            } else if (result['statusCode'] == 500) {
+              _errorMessage(result['error']);
+            } else {
+              _errorMessage("Đặt lịch thất bại");
+              print(result);
+            }
+          } catch (e) {
             _errorMessage("Đặt lịch thất bại");
-            print(result);
           }
-        } catch (e) {
+        } else {
           _errorMessage("Đặt lịch thất bại");
         }
       } catch (e) {

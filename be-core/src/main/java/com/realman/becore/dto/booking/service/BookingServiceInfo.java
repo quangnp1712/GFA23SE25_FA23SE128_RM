@@ -21,7 +21,7 @@ public interface BookingServiceInfo {
 
     void setPriority(Integer priority);
 
-    void setBranchServicePrice(Long branchServicePrice);
+    void setServicePrice(Long servicePrice);
 
     void setServiceName(String serviceName);
 
@@ -59,7 +59,7 @@ public interface BookingServiceInfo {
 
     Integer getPriority();
 
-    Long getBranchServicePrice();
+    Long getServicePrice();
 
     String getServiceName();
 

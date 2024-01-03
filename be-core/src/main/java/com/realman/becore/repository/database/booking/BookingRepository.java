@@ -22,7 +22,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 a.phone AS bookingOwnerPhone,
                 be.branchName AS branchName,
                 be.branchAddress AS branchAddress,
-                b.appointmentDate AS appointmentDate
+                b.appointmentDate AS appointmentDate,
+                b.bookingStatus AS bookingStatus
             FROM BookingEntity b
             INNER JOIN AccountEntity a ON a.accountId = b.accountId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId
@@ -40,7 +41,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 a.phone AS bookingOwnerPhone,
                 be.branchName AS branchName,
                 be.branchAddress AS branchAddress,
-                b.appointmentDate AS appointmentDate
+                b.appointmentDate AS appointmentDate,
+                b.bookingStatus AS bookingStatus
             FROM BookingEntity b
             INNER JOIN AccountEntity a ON a.accountId = b.accountId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId

@@ -106,6 +106,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(10.0),
+                                  // ignore: avoid_unnecessary_containers
                                   child: Container(
                                     // height: 85.8.h,
                                     child: ListView.builder(

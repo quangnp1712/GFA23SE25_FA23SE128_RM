@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -168,12 +169,17 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                 child: CircleAvatar(
                                   radius: 30,
                                   child: ClipOval(
-                                    child: Image.asset(
-                                      'assets/images/s1.jpg',
-                                      scale: 1,
-                                      fit: BoxFit.cover,
+                                    child: CachedNetworkImage(
+                                      imageUrl: stylistData.thumbnailUrl!,
                                       width: 80,
                                       height: 80,
+                                      fit: BoxFit.cover,
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                          value: progress.progress,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -293,12 +299,18 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                     SizedBox(
                                       width: 80,
                                       height: 80,
-                                      child: Image.asset(
-                                        'assets/images/barber1.jpg',
-                                        scale: 1,
-                                        fit: BoxFit.cover,
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            stylistData.branch!.thumbnailUrl!,
                                         width: 80,
                                         height: 80,
+                                        fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) => Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.progress,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 10.0),

@@ -1,8 +1,11 @@
 // ignore_for_file: constant_identifier_names, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers, avoid_print
 
 import 'dart:convert';
+import 'dart:math';
 
 // import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -232,13 +235,17 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                       child: CircleAvatar(
                         radius: 30,
                         child: ClipOval(
-                          child: Image.asset(
-                            // stylistData.thumbnailUrl!,
-                            'assets/images/s1.jpg',
-                            scale: 1,
-                            fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            imageUrl: stylistData.thumbnailUrl!,
                             width: 80,
                             height: 80,
+                            fit: BoxFit.cover,
+                            progressIndicatorBuilder:
+                                (context, url, progress) => Center(
+                              child: CircularProgressIndicator(
+                                value: progress.progress,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -637,37 +644,70 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   }
 
   List<AccountInfoModel> staffList = [];
+  final storage = FirebaseStorage.instance;
+  List<String> urlStylistList = [
+    "1.jpg",
+    "2.jpg",
+    "3.jpg",
+    "4.jpg",
+  ];
+  List<String> urlBranchList = [
+    "barber1.jpg",
+    "barber2.jpg",
+    "barber3.jpg",
+  ];
 
   Future<void> getStaff() async {
     if (!_isDisposed && mounted) {
       try {
         int current = 1;
         int totalPages = 0;
-        do {
-          AccountService accountService = AccountService();
-          staffList = [];
-          final result = await accountService.getStaff(10, current, null);
-          if (result['statusCode'] == 200) {
-            staffList = result['data'] as List<AccountInfoModel>;
-            current = result['current'];
-            totalPages = result['totalPages'];
-            staffList
-                .removeWhere((staff) => staff.staff!.professional == 'MASSEUR');
-            if (!_isDisposed && mounted) {
-              setState(() {
-                staffList;
-                isLoading = false;
-              });
+
+        AccountService accountService = AccountService();
+        staffList = [];
+        final result = await accountService.getStaff(5, current, null);
+        if (result['statusCode'] == 200) {
+          staffList = result['data'] as List<AccountInfoModel>;
+          current = result['current'];
+          totalPages = result['totalPages'];
+          staffList
+              .removeWhere((staff) => staff.staff!.professional == 'MASSEUR');
+
+          for (var staff in staffList) {
+            try {
+              var reference = storage.ref('stylist/${staff.thumbnailUrl}');
+              staff.thumbnailUrl = await reference.getDownloadURL();
+            } catch (e) {
+              final random = Random();
+              var randomUrl = random.nextInt(urlStylistList.length);
+              var reference =
+                  storage.ref('stylist/${urlStylistList[randomUrl]}');
+              staff.thumbnailUrl = await reference.getDownloadURL();
             }
-            current++;
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-            break;
-          } else {
-            print("$result");
-            break;
+            try {
+              var reference =
+                  storage.ref('branch/${staff.branch!.thumbnailUrl}');
+              staff.branch!.thumbnailUrl = await reference.getDownloadURL();
+            } catch (e) {
+              final random = Random();
+              var randomUrl = random.nextInt(urlBranchList.length);
+              var reference =
+                  storage.ref('stylist/${urlBranchList[randomUrl]}');
+              staff.branch!.thumbnailUrl = await reference.getDownloadURL();
+            }
           }
-        } while (current <= totalPages);
+          if (!_isDisposed && mounted) {
+            setState(() {
+              staffList;
+              isLoading = false;
+            });
+          }
+          current++;
+        } else if (result['statusCode'] == 500) {
+          _errorMessage(result['error']);
+        } else {
+          print("$result");
+        }
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");

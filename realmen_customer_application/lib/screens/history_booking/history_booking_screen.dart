@@ -53,6 +53,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white),
                   child: ListView(
+                    controller: _scrollController,
                     children: <Widget>[
                       Container(
                         padding: const EdgeInsets.only(left: 7),
@@ -104,14 +105,14 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                           : Column(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.all(16.0),
-                                  child: SizedBox(
-                                    height: 300,
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    height: 85.8.h,
                                     child: ListView.builder(
-                                      controller: _scrollController,
+                                      // controller: _scrollController,
                                       shrinkWrap: true,
-                                      // physics:
-                                      //     const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemCount: bookings
                                           .length, // Số lượng thẻ lịch sử cắt tóc
                                       itemBuilder: (context, index) {
@@ -133,7 +134,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                         const Icon(
                                                           Icons.home,
                                                           color: Colors.red,
-                                                          size: 24,
+                                                          size: 26,
                                                         ),
                                                         Expanded(
                                                           child: Container(
@@ -153,28 +154,42 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                       .runes
                                                                       .toList()),
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     fontSize:
-                                                                        16,
+                                                                        17,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .bold,
+                                                                            .w600,
                                                                   ),
                                                                 ),
+                                                                const SizedBox(
+                                                                    height: 2),
                                                                 Row(
                                                                   children: [
-                                                                    Text(bookings[index]
-                                                                            .appointmentDate ??
-                                                                        ""),
-                                                                    SizedBox(
+                                                                    Text(
+                                                                      bookings[index]
+                                                                              .appointmentDate ??
+                                                                          "",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          color:
+                                                                              Colors.black54),
+                                                                    ),
+                                                                    const SizedBox(
                                                                         width:
                                                                             10),
-                                                                    Text(bookings[
-                                                                            index]
-                                                                        .bookingServices!
-                                                                        .first
-                                                                        .startTime
-                                                                        .toString()),
+                                                                    Text(
+                                                                        bookings[index]
+                                                                            .bookingServices!
+                                                                            .first
+                                                                            .startTime
+                                                                            .toString(),
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                16,
+                                                                            color:
+                                                                                Colors.black54)),
                                                                   ],
                                                                 ),
                                                               ],
@@ -205,30 +220,64 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  Text(
-                                                                      "Code: ${bookings[index].bookingCode} "),
+                                                                  // Text(
+                                                                  //     "Code: ${bookings[index].bookingCode} "),
+                                                                  // const SizedBox(
+                                                                  //     height:
+                                                                  //         10),
+                                                                  Row(
+                                                                    children: [
+                                                                      const Text(
+                                                                          "Stylist:"),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              2),
+                                                                      Text(
+                                                                          stylist)
+                                                                    ],
+                                                                  ),
+
                                                                   const SizedBox(
                                                                       height:
                                                                           10),
-                                                                  const Text(
-                                                                      "Stylist: Le Anh Tuan"),
+
+                                                                  Row(
+                                                                    children: [
+                                                                      const Text(
+                                                                          "Massuer:"),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              2),
+                                                                      Text(
+                                                                          massuer)
+                                                                    ],
+                                                                  ),
                                                                   const SizedBox(
                                                                       height:
                                                                           10),
-                                                                  const Text(
-                                                                      "Massuer: Be Dep"),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          10),
-                                                                  const Text(
-                                                                      "Tổng hóa đơn: 180,000"),
+
+                                                                  Row(
+                                                                    children: [
+                                                                      const Text(
+                                                                          "Tổng hóa đơn:"),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              2),
+                                                                      totals[index]['bookingId'] ==
+                                                                              bookings[index].bookingId
+                                                                          ? Text(
+                                                                              formatter.format(totals[index]['total']),
+                                                                            )
+                                                                          : Text("0"),
+                                                                    ],
+                                                                  ),
                                                                   const SizedBox(
                                                                       height:
                                                                           25),
                                                                   ElevatedButton(
                                                                     onPressed: () =>
-                                                                        Get.toNamed(
-                                                                            DetailHistoryBookingScreen.DetailHistoryBookingScreenRoute),
+                                                                        Get.to(() =>
+                                                                            DetailHistoryBookingScreen(booking: bookings[index])),
                                                                     style: ElevatedButton
                                                                         .styleFrom(
                                                                       backgroundColor:
@@ -321,9 +370,13 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
     super.didUpdateWidget(oldWidget);
   }
 
+  NumberFormat formatter = NumberFormat("#,##0");
+  double total = 0;
+
   bool isLoading = true;
   List<BookingContent> bookings = [];
   String stylist = 'Đang đợi update APi';
+  String massuer = 'Đang đợi update APi';
   int current = 0;
   int currentResult = 0;
   int totalPages = 0;
@@ -346,17 +399,35 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                 bookings.add(content);
               }
               for (var booking in bookings) {
+                total = 0;
                 try {
                   DateTime date = DateTime.parse(booking.appointmentDate!);
                   booking.appointmentDate = formatDate(date);
+                  if (booking.bookingServices != null) {
+                    for (var service in booking.bookingServices!) {
+                      if (service.servicePrice != null) {
+                        total += double.parse(service.servicePrice.toString());
+                      } else {
+                        total = 0;
+                      }
+                    }
+                    totals
+                        .add({'bookingId': booking.bookingId, 'total': total});
+                  } else {
+                    total = 0;
+                    totals
+                        .add({'bookingId': booking.bookingId, 'total': total});
+                  }
                 } on Exception catch (e) {
                   // TODO
+                  totals.add({'bookingId': 0, 'total': 0});
                 }
               }
 
               if (!_isDisposed && mounted) {
                 setState(() {
                   bookings;
+                  totals;
                   isLoading = false;
                   // current;
                 });
@@ -426,4 +497,6 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
     'sunday': 'Chủ nhật'
   };
   final ScrollController _scrollController = ScrollController();
+
+  List<Map<String, dynamic>> totals = [];
 }

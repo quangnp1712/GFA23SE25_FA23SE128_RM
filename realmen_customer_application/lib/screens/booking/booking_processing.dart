@@ -295,8 +295,8 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
           itemBuilder: (context, index) {
             // Return a Card widget for each item in the list
             return Padding(
-              padding: const EdgeInsets.only(
-                  top: 10, bottom: 10, left: 10, right: 20),
+              padding:
+                  const EdgeInsets.only(top: 7, bottom: 7, left: 12, right: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,

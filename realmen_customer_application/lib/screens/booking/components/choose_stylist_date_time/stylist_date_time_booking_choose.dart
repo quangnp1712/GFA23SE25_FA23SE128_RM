@@ -54,66 +54,66 @@ class _ChooseStylistAndDateTimeBookingState
               stylistSelected: stylistSelected,
               isChangeStylist: isChangeStylist),
           const SizedBox(height: 20),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Chụp Hình Sau Khi Cắt",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      OnOffSwitch(
-                        initialValue: isSwitched2,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitched2 = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  isSwitched2
-                      ? const Text(
-                          "Anh cho phép các em chụp hình lưu lại kiểu tóc, để lần sau không phải mô tả lại cho thợ khác.",
-                          style: TextStyle(fontSize: 14),
-                        )
-                      : const Text(
-                          "Anh không cho phép các em chụp hình lưu lại kiểu tóc.",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(0),
+          //     child: Column(
+          //       children: [
+          //         const SizedBox(height: 10),
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           crossAxisAlignment: CrossAxisAlignment.end,
+          //           children: [
+          //             const Row(
+          //               crossAxisAlignment: CrossAxisAlignment.center,
+          //               mainAxisAlignment: MainAxisAlignment.start,
+          //               children: [
+          //                 Icon(
+          //                   Icons.person,
+          //                   size: 24,
+          //                 ),
+          //                 SizedBox(
+          //                   width: 10,
+          //                 ),
+          //                 Text(
+          //                   "Chụp Hình Sau Khi Cắt",
+          //                   textAlign: TextAlign.start,
+          //                   style: TextStyle(
+          //                     fontSize: 17,
+          //                     fontWeight: FontWeight.w500,
+          //                   ),
+          //                 ),
+          //               ],
+          //             ),
+          //             OnOffSwitch(
+          //               initialValue: isSwitched2,
+          //               onChanged: (value) {
+          //                 setState(() {
+          //                   isSwitched2 = value;
+          //                 });
+          //               },
+          //             ),
+          //           ],
+          //         ),
+          //         const SizedBox(
+          //           height: 6,
+          //         ),
+          //         isSwitched2
+          //             ? const Text(
+          //                 "Anh cho phép các em chụp hình lưu lại kiểu tóc, để lần sau không phải mô tả lại cho thợ khác.",
+          //                 style: TextStyle(fontSize: 14),
+          //               )
+          //             : const Text(
+          //                 "Anh không cho phép các em chụp hình lưu lại kiểu tóc.",
+          //                 style: TextStyle(fontSize: 14),
+          //               ),
+          //         const SizedBox(
+          //           height: 15,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

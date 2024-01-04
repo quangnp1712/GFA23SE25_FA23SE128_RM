@@ -379,7 +379,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                               ),
                                                             ),
                                                             const SizedBox(
-                                                              height: 5,
+                                                              height: 9,
                                                             ),
                                                             SizedBox(
                                                               height: 60,
@@ -395,16 +395,19 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 15,
-                                                                ),
+                                                                maxLines: 3,
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        15,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis),
                                                               ),
                                                             ),
                                                             const SizedBox(
-                                                                height: 7),
+                                                                height: 19),
                                                             Container(
                                                               padding: EdgeInsets
                                                                   .symmetric(

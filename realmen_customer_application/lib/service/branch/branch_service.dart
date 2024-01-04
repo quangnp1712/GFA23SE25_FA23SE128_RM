@@ -128,7 +128,7 @@ class BranchService implements IBranchService {
         lng = positionLongLat['lng'] as double;
         final String jwtToken = await SharedPreferencesService.getJwt();
         Uri uri;
-        // v1/branches
+        // v1/branches/{city}
         uri = Uri.parse(
             "$getBranchesUrl/$search?isShowDistance=true&lat=$lat&lng=$lng&sorter=$sorter&current=$current&pageSize=$pageSize");
 

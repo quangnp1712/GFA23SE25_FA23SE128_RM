@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -399,34 +400,24 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                       itemBuilder: (context, index) {
                                         return Column(
                                           children: [
-                                            FutureBuilder(
-                                              future: getImageFB(
-                                                  branchesForCity![index]),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<Widget>
-                                                      snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.done) {
-                                                  if (snapshot.hasData) {
-                                                    return Container(
-                                                      constraints:
-                                                          const BoxConstraints(
-                                                              minHeight: 140),
-                                                      child: snapshot.data!,
-                                                    ); // Return the widget when the future is complete
-                                                  } else {
-                                                    return Container(
-                                                        height:
-                                                            140); // Handle the case when the future completes with an error
-                                                  }
-                                                } else {
-                                                  return const SizedBox(
-                                                      height: 140,
-                                                      child: Center(
-                                                          child:
-                                                              CircularProgressIndicator())); // Show a loading indicator while the future is in progress
-                                                }
-                                              },
+                                            CachedNetworkImage(
+                                              imageUrl: branchesForCity![index]
+                                                  .branchDisplayList![0]
+                                                  .url!,
+                                              height: 140,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  1.2,
+                                              fit: BoxFit.cover,
+                                              progressIndicatorBuilder:
+                                                  (context, url, progress) =>
+                                                      Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: progress.progress,
+                                                ),
+                                              ),
                                             ),
                                             const SizedBox(width: 5),
                                             ListTile(
@@ -676,6 +667,19 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
               return distanceA.compareTo(distanceB);
             }
           });
+          for (BranchModel branch in branchesForCity!) {
+            try {
+              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              branch.branchDisplayList![0].url =
+                  await reference.getDownloadURL();
+            } catch (e) {
+              final random = Random();
+              var randomUrl = random.nextInt(urlList.length);
+              var reference = storage.ref('branch/${urlList[randomUrl]}');
+              branch.branchDisplayList![0].url =
+                  await reference.getDownloadURL();
+            }
+          }
         }
         if (!_isDisposed && mounted) {
           setState(() {
@@ -717,6 +721,19 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
               return distanceA.compareTo(distanceB);
             }
           });
+          for (BranchModel branch in branchesForCity!) {
+            try {
+              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              branch.branchDisplayList![0].url =
+                  await reference.getDownloadURL();
+            } catch (e) {
+              final random = Random();
+              var randomUrl = random.nextInt(urlList.length);
+              var reference = storage.ref('branch/${urlList[randomUrl]}');
+              branch.branchDisplayList![0].url =
+                  await reference.getDownloadURL();
+            }
+          }
           setState(() {
             branchesForCity;
             isSearching = true;
@@ -765,6 +782,19 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
               return distanceA.compareTo(distanceB);
             }
           });
+          for (BranchModel branch in branchesForCity!) {
+            try {
+              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              branch.branchDisplayList![0].url =
+                  await reference.getDownloadURL();
+            } catch (e) {
+              final random = Random();
+              var randomUrl = random.nextInt(urlList.length);
+              var reference = storage.ref('branch/${urlList[randomUrl]}');
+              branch.branchDisplayList![0].url =
+                  await reference.getDownloadURL();
+            }
+          }
           if (!_isDisposed && mounted) {
             setState(() {
               branchesForCity;
@@ -812,30 +842,6 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     "barber2.jpg",
     "barber3.jpg",
   ];
-  Future<Widget> getImageFB(BranchModel branch) async {
-    try {
-      var reference = storage.ref('branch/${branch.thumbnailUrl}');
-      return Image.network(
-        await reference.getDownloadURL(),
-        scale: 1,
-        // ignore: use_build_context_synchronously
-        width: MediaQuery.of(context).size.width / 1.2,
-        height: 140,
-        fit: BoxFit.cover,
-      );
-    } catch (e) {
-      final random = Random();
-      var randomUrl = random.nextInt(urlList.length);
-      var reference = storage.ref('branch/${urlList[randomUrl]}');
-      return Image.network(
-        await reference.getDownloadURL(),
-        scale: 1,
-        width: MediaQuery.of(context).size.width / 1.2,
-        height: 140,
-        fit: BoxFit.cover,
-      );
-    }
-  }
 
 // Button "Chọn" call API get branch by ID
   Future<void> getBranchById(

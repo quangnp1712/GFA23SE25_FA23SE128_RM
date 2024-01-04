@@ -1,7 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api, constant_identifier_names, avoid_print, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -244,7 +247,12 @@ class _ChooseServiceBookingScreenState
   }
 
   List<ServiceCategoryTile> serviceCategoryTileList = [];
-
+  final storage = FirebaseStorage.instance;
+  List<String> urlList = [
+    "1.jpg",
+    "2.png",
+    "3.png",
+  ];
   Future getServices() async {
     if (!_isDisposed && mounted) {
       serviceCategoryTileList = [];
@@ -268,6 +276,19 @@ class _ChooseServiceBookingScreenState
                   for (var service in caterogy.serviceList!) {
                     if (service.serviceId == branchService.serviceId) {
                       description = service.description;
+                      try {
+                        var reference = storage.ref(
+                            'service/${service.serviceDisplayList![0].serviceDisplayUrl}');
+                        branchService.thumbnailUrl =
+                            await reference.getDownloadURL();
+                      } catch (e) {
+                        final random = Random();
+                        var randomUrl = random.nextInt(urlList.length);
+                        var reference =
+                            storage.ref('service/${urlList[randomUrl]}');
+                        branchService.thumbnailUrl =
+                            await reference.getDownloadURL();
+                      }
                     }
                   }
                   SubServiceTile subServiceTile = SubServiceTile(
@@ -445,14 +466,16 @@ class _SubServiceTileState extends State<SubServiceTile> {
               topRight: Radius.circular(8),
               topLeft: Radius.circular(8),
             ),
-            child: Image.asset(
-              // widget.image != null
-              //     ? widget.image!
-              //     : widget.branchService!.thumbnailUrl!,
-              'assets/images/massage.jpg',
-              width: double.infinity,
-              height: 150,
+            child: CachedNetworkImage(
+              imageUrl: widget.branchService!.thumbnailUrl!,
+              height: 140,
+              width: MediaQuery.of(context).size.width / 1.4,
               fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(
+                  value: progress.progress,
+                ),
+              ),
             ),
           ),
           Padding(

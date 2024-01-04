@@ -389,7 +389,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
           BookingModel bookingModel = BookingModel();
 
           final result =
-              await BookingService().getBooking(accountId, current, 2);
+              await BookingService().getBooking(accountId, current, 4);
           if (result['statusCode'] == 200) {
             bookingModel = result['data'] as BookingModel;
             currentResult = result['current'];

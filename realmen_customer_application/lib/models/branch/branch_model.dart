@@ -85,6 +85,7 @@ class BranchModel {
       branchId: json['branchId'],
       shopOwnerId: json['shopOwnerId'],
       branchName: json['branchName'],
+      thumbnailUrl: json['thumbnailUrl'],
       phone: json['phone'],
       address: json['address'],
       status: json['status'],

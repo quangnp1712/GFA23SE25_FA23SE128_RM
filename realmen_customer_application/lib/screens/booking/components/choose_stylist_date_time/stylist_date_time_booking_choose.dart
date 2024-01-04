@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
+// ignore: unused_import
 import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 
 import 'stylist/choose_stylist.dart';

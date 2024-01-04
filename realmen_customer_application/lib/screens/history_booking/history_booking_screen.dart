@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, sized_box_for_whitespace, avoid_print
 
 import 'dart:convert';
 
@@ -268,7 +268,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                           ? Text(
                                                                               formatter.format(totals[index]['total']),
                                                                             )
-                                                                          : Text("0"),
+                                                                          : const Text("0"),
                                                                     ],
                                                                   ),
                                                                   const SizedBox(
@@ -418,8 +418,8 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                     totals
                         .add({'bookingId': booking.bookingId, 'total': total});
                   }
+                  // ignore: unused_catch_clause
                 } on Exception catch (e) {
-                  // TODO
                   totals.add({'bookingId': 0, 'total': 0});
                 }
               }

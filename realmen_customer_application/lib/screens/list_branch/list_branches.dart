@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:math';
@@ -808,7 +808,6 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
       return Image.network(
         await reference.getDownloadURL(),
         scale: 1,
-        // ignore: use_build_context_synchronously
         width: MediaQuery.of(context).size.width / 1.2,
         height: 140,
         fit: BoxFit.cover,

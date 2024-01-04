@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print, avoid_unnecessary_containers, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print, avoid_unnecessary_containers, use_build_context_synchronously, sized_box_for_whitespace
 
 import 'dart:math';
 
@@ -409,8 +409,9 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                             const SizedBox(
                                                                 height: 19),
                                                             Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
                                                                       horizontal:
                                                                           10),
                                                               decoration:
@@ -438,7 +439,7 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                                     TextAlign
                                                                         .center,
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   color: Colors
                                                                       .black,
                                                                   fontSize: 17,

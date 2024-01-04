@@ -38,7 +38,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
             const SizedBox(
               height: 20,
             ),
-            Center(
+            const Center(
               child: Text(
                 "Các bạn stylist massuer đã sẵn sàng phục vụ anh, anh chắc chắn muốn hủy lịch chứ?",
                 style: TextStyle(fontSize: 17),
@@ -57,7 +57,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                   decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {
                       Get.back();
@@ -65,7 +65,8 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                     child: Center(
                       child: Text(
                         "quay lại".toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),
@@ -75,10 +76,10 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                       color: Colors.white,
                       border: Border.all(color: Colors.redAccent, width: 1),
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {},
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "Chắc chắn hủy lịch",
                         style: TextStyle(fontSize: 21, color: Colors.redAccent),

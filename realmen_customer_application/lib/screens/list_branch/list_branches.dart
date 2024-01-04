@@ -156,7 +156,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     if (widget.city == "Thành Phố/Tỉnh") {
                                       final value = await BranchService()
                                           .getSearchBranches(
-                                              textEditingValue.text, 10);
+                                              textEditingValue.text, 10, 1);
                                       if (value['statusCode'] == 200) {
                                         try {
                                           options = (await value)['data']
@@ -637,7 +637,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
       branchesForCity = [];
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getBranches(search, 10);
+        final result = await branchService.getBranches(search, 10, 1);
         if (result['statusCode'] == 200) {
           for (var branch in result['data'].values!) {
             branchesForCity = branch.branchList;
@@ -693,7 +693,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
     if (!_isDisposed) {
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getSearchBranches(query, 10);
+        final result = await branchService.getSearchBranches(query, 10, 1);
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;
@@ -778,7 +778,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
       }
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getSearchBranches("", 5);
+        final result = await branchService.getSearchBranches("", 5, 1);
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;

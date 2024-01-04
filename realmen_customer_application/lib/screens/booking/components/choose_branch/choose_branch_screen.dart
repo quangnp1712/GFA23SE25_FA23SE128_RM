@@ -60,6 +60,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                         color: Colors.white,
                       ),
                       child: ListView(
+                        controller: _scrollController,
                         children: <Widget>[
                           Container(
                             padding: const EdgeInsets.only(left: 7),
@@ -159,7 +160,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                   if (cityController == "Thành Phố/Tỉnh") {
                                     final value = await BranchService()
                                         .getSearchBranches(
-                                            textEditingValue.text, 5);
+                                            textEditingValue.text, 5, 1);
                                     if (value['statusCode'] == 200) {
                                       try {
                                         options = (await value)['data']
@@ -580,6 +581,13 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     super.initState();
     getBranchesByCity();
     cityController = "Thành Phố/Tỉnh";
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // Khi scroll tới dưới cùng
+        checkLoadMore();
+      }
+    });
   }
 
   bool _isDisposed = false;
@@ -594,8 +602,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   String image = "assets/images/branch1.png";
   BranchesModel? branchesByCityModel = BranchesModel();
   List<BranchModel>? branchesForCity = [];
-  String? cityController;
+  String? cityController; // dropdown chọn city
   List<String> cities = [];
+  final ScrollController _scrollController = ScrollController();
+
   Future<void> getBranchesByCity() async {
     if (!_isDisposed && mounted) {
       try {
@@ -637,6 +647,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     }
   }
 
+// get branch by city
   getBranches(String search) async {
     if (!_isDisposed && mounted) {
       if (!_isDisposed && mounted) {
@@ -647,8 +658,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
       branchesForCity = [];
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getBranches(search, 10);
+        final result = await branchService.getBranches(search, 5, current);
         if (result['statusCode'] == 200) {
+          currentResult = result['current'];
+          totalPages = result['totalPages'];
           for (var branch in result['data'].values!) {
             branchesForCity = branch.branchList;
           }
@@ -698,14 +711,17 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   FocusNode focusNode = FocusNode();
   FocusScopeNode focusScopeNode = FocusScopeNode();
 
+// get branch by search
   Future<void> searchBranches(String query, FocusNode focusNode) async {
     if (!_isDisposed) {
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getSearchBranches(query, 10);
+        final result = await branchService.getSearchBranches(query, 5, current);
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;
+          currentResult = result['current'];
+          totalPages = result['totalPages'];
           branchesForCity!.sort((a, b) {
             if (a.distanceKilometer == null && b.distanceKilometer == null) {
               return 0;
@@ -749,11 +765,14 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     }
   }
 
+  bool isFindBranchNear = false;
+// Tim chi nhanh gan anh
   Future<void> searchBranchesWithLocation() async {
     if (!_isDisposed && mounted) {
-      if (!_isDisposed && mounted) {
+      if (!_isDisposed && mounted && !isCheckLoadMore && !isFindBranchNear) {
         setState(() {
           isLoading = true;
+          current = 1;
         });
       }
       final locationPermission =
@@ -763,10 +782,31 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
       }
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getSearchBranches("", 5);
+        final result = await branchService.getSearchBranches(null, 3, current);
         if (result['statusCode'] == 200) {
-          branchesForCity = [];
-          branchesForCity = result['data'] as List<BranchModel>;
+          if (isCheckLoadMore || isFindBranchNear) {
+            branchesForCity!.addAll(result['data'] as List<BranchModel>);
+          } else {
+            branchesForCity = [];
+            branchesForCity!.addAll(result['data'] as List<BranchModel>);
+          }
+
+          currentResult = result['current'];
+          totalPages = result['totalPages'];
+          branchesForCity!.removeWhere((branch) {
+            String distanceText = branch.distanceKilometer!
+                .substring(branch.distanceKilometer!.indexOf(" ") + 1);
+            double distanceValue = double.parse(
+                branch.distanceKilometer!.replaceAll(RegExp(r'[^0-9.]'), ''));
+
+            if (distanceText == 'm') {
+              return false;
+            } else if (distanceValue <= 5) {
+              return false;
+            } else {
+              return true;
+            }
+          });
           branchesForCity!.sort((a, b) {
             if (a.distanceKilometer == null && b.distanceKilometer == null) {
               return 0;
@@ -795,6 +835,20 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                   await reference.getDownloadURL();
             }
           }
+
+          if (branchesForCity!.length < 3) {
+            current = currentResult;
+            current = current + 1;
+            if (current <= totalPages) {
+              isFindBranchNear = true;
+              searchBranchesWithLocation();
+            } else {
+              isFindBranchNear = false;
+            }
+          } else {
+            isFindBranchNear = false;
+            isCheckLoadMore = false;
+          }
           if (!_isDisposed && mounted) {
             setState(() {
               branchesForCity;
@@ -807,6 +861,8 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");
+        isFindBranchNear = false;
+        isCheckLoadMore = false;
       }
     }
   }
@@ -868,19 +924,16 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     }
   }
 
-// đợi lấy data
-  Future<List<BranchModel>> yourAsyncFunctionToGetBranches(
-      List<BranchModel>? branchesForCity) async {
-    if (branchesForCity!.isNotEmpty) {
-      // ignore: await_only_futures
-      List<BranchModel> awaitBranch = await branchesForCity;
-      if (awaitBranch.isNotEmpty) {
-        return awaitBranch;
-      } else {
-        return [];
-      }
-    } else {
-      return [];
+  int current = 1;
+  int currentResult = 0;
+  int totalPages = 0;
+  bool isCheckLoadMore = false;
+  void checkLoadMore() async {
+    isCheckLoadMore = true;
+    current = currentResult;
+    current = current + 1;
+    if (current <= totalPages) {
+      await searchBranchesWithLocation();
     }
   }
 }

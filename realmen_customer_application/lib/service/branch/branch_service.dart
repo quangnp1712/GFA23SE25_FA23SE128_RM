@@ -11,8 +11,8 @@ import 'dart:io';
 
 abstract class IBranchService {
   Future<dynamic> getBranchId(int branchId);
-  Future<dynamic> getBranches(String search, int pageSize);
-  Future<dynamic> getSearchBranches(String search, int pageSize);
+  Future<dynamic> getBranches(String? search, int pageSize, int current);
+  Future<dynamic> getSearchBranches(String? search, int pageSize, int current);
   Future<dynamic> getBranchesByCity();
 }
 
@@ -111,8 +111,7 @@ class BranchService implements IBranchService {
   }
 
   @override
-  Future getBranches(String search, int pageSize) async {
-    int current = 1;
+  Future getBranches(String? search, int pageSize, int current) async {
     String sorter = "branchName";
     double lat = 0;
     double lng = 0;
@@ -146,9 +145,13 @@ class BranchService implements IBranchService {
         final responseBody = response.body;
         if (statusCode == 200) {
           final branches = BranchesModel.fromJson(json.decode(responseBody));
+          var totalPages = json.decode(responseBody)['totalPages'] as int;
+          current = json.decode(responseBody)['current'] as int;
           return {
             'statusCode': statusCode,
             'data': branches,
+            'totalPages': totalPages,
+            'current': current
           };
         } else if (statusCode == 401) {
           try {
@@ -217,9 +220,13 @@ class BranchService implements IBranchService {
         final responseBody = response.body;
         if (statusCode == 200) {
           final branches = BranchesModel.fromJson(json.decode(responseBody));
+          var totalPages = json.decode(responseBody)['totalPages'] as int;
+          current = json.decode(responseBody)['current'] as int;
           return {
             'statusCode': statusCode,
             'data': branches,
+            'totalPages': totalPages,
+            'current': current,
           };
         } else if (statusCode == 401) {
           try {
@@ -271,24 +278,35 @@ class BranchService implements IBranchService {
   }
 
   @override
-  Future getSearchBranches(String search, int pageSize) async {
-    int current = 1;
+  Future getSearchBranches(String? search, int pageSize, int current) async {
     String sorter = "createdAt";
     double lat = 0;
     double lng = 0;
+    bool isShowDistance = false;
     bool locationPermission =
         await SharedPreferencesService.getLocationPermission();
     if (locationPermission) {
-      try {
+      if (locationPermission) {
         final positionLongLat = await SharedPreferencesService.getLongLat();
         lat = positionLongLat['lat'] as double;
         lng = positionLongLat['lng'] as double;
-
+        isShowDistance = true;
+      } else {
+        lat = 0;
+        lng = 0;
+        isShowDistance = false;
+      }
+      try {
         final String jwtToken = await SharedPreferencesService.getJwt();
         Uri uri;
-        // v1/branches
-        uri = Uri.parse(
-            "$getBranchesUrl?isShowDistance=true&originLat=$lat&originLng=$lng&current=$current&sorter=$sorter&pageSize=$pageSize");
+        if (search != null) {
+          uri = Uri.parse(
+              "$getBranchesUrl?search=$search&isShowDistance=$isShowDistance&originLat=$lat&originLng=$lng&current=$current&sorter=$sorter&pageSize=$pageSize");
+        } else {
+          // v1/branches
+          uri = Uri.parse(
+              "$getBranchesUrl?isShowDistance=$isShowDistance&originLat=$lat&originLng=$lng&current=$current&sorter=$sorter&pageSize=$pageSize");
+        }
 
         final client = http.Client();
         final response = await client.get(
@@ -307,10 +325,13 @@ class BranchService implements IBranchService {
           final branches = (branch['content'] as List)
               .map((e) => BranchModel.fromJson(e))
               .toList();
-
+          var totalPages = json.decode(responseBody)['totalPages'] as int;
+          current = json.decode(responseBody)['current'] as int;
           return {
             'statusCode': statusCode,
             'data': branches,
+            'totalPages': totalPages,
+            'current': current,
           };
         } else if (statusCode == 401) {
           try {
@@ -329,7 +350,7 @@ class BranchService implements IBranchService {
         } else if (statusCode == 403) {
           return {
             'statusCode': statusCode,
-            'error': "Forbidden",
+            'error': "Hết hạn đăng nhập",
           };
         } else if (statusCode == 400) {
           return {
@@ -386,10 +407,13 @@ class BranchService implements IBranchService {
             final branches = (branch['content'] as List)
                 .map((e) => BranchModel.fromJson(e))
                 .toList();
-
+            var totalPages = json.decode(responseBody)['totalPages'] as int;
+            current = json.decode(responseBody)['current'] as int;
             return {
               'statusCode': statusCode,
               'data': branches,
+              'totalPages': totalPages,
+              'current': current,
             };
           } else if (statusCode == 401) {
             try {

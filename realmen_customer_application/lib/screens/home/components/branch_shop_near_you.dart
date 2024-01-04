@@ -296,7 +296,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
       }
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getSearchBranches("", 5);
+        final result = await branchService.getSearchBranches("", 5, 1);
         if (result['statusCode'] == 200) {
           branchesForCity = [];
           branchesForCity = result['data'] as List<BranchModel>;

@@ -217,7 +217,7 @@ class _barberTopState extends State<barberTop> {
   @override
   void initState() {
     super.initState();
-    getStylist();
+    getStylist(false);
   }
 
   // ignore: unused_field
@@ -237,7 +237,7 @@ class _barberTopState extends State<barberTop> {
     "4.jpg",
   ];
   List<AccountInfoModel> staffList = [];
-  Future<void> getStylist() async {
+  Future<void> getStylist(bool callBack) async {
     if (!_isDisposed && mounted) {
       try {
         int current = 1;
@@ -245,7 +245,8 @@ class _barberTopState extends State<barberTop> {
         do {
           AccountService accountService = AccountService();
           staffList = [];
-          final result = await accountService.getStaff(5, current, null);
+          final result =
+              await accountService.getStaff(5, current, null, callBack);
           if (result['statusCode'] == 200) {
             staffList = result['data'] as List<AccountInfoModel>;
             current = result['current'];
@@ -270,6 +271,13 @@ class _barberTopState extends State<barberTop> {
           } else if (result['statusCode'] == 500) {
             _errorMessage(result['error']);
             break;
+          } else if (result['statusCode'] == 403) {
+            if (callBack == false) {
+              callBack = true;
+              getStylist(callBack);
+            } else {
+              print(result);
+            }
           } else {
             print("$result");
             break;

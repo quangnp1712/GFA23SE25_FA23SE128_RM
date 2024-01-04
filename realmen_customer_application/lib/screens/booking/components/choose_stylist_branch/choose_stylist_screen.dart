@@ -686,7 +686,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
       try {
         AccountService accountService = AccountService();
         staffList = [];
-        final result = await accountService.getStaff(5, current, null);
+        final result = await accountService.getStaff(5, current, null, false);
         if (result['statusCode'] == 200) {
           staffList = result['data'] as List<AccountInfoModel>;
           current = result['current'];

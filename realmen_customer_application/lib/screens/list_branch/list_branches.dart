@@ -341,7 +341,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     onChanged: (city) => setState(() {
                                       cityController = city!;
                                       widget.city = city;
-                                      getBranches(city);
+                                      getBranches(city, false);
                                     }),
                                     dropdownStyleData: DropdownStyleData(
                                       maxHeight: 160,
@@ -598,7 +598,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           branchesByCityModel = result['data'] as BranchesModel;
           try {
             if (branchesByCityModel != null) {
-              getBranches(widget.city);
+              getBranches(widget.city, false);
               cities.add("Thành Phố/Tỉnh");
               if (branchesByCityModel?.values != null) {
                 for (var values in branchesByCityModel!.values!) {
@@ -627,7 +627,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
     }
   }
 
-  getBranches(String search) async {
+  getBranches(String search, bool callBack) async {
     if (!_isDisposed && mounted) {
       if (!_isDisposed && mounted) {
         setState(() {
@@ -637,7 +637,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
       branchesForCity = [];
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getBranches(search, 10, 1);
+        final result = await branchService.getBranches(search, callBack);
         if (result['statusCode'] == 200) {
           for (var branch in result['data'].values!) {
             branchesForCity = branch.branchList;
@@ -670,13 +670,21 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                   await reference.getDownloadURL();
             }
           }
-        }
-
-        if (!_isDisposed && mounted) {
-          setState(() {
-            branchesForCity;
-            isLoading = false;
-          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              branchesForCity;
+              isLoading = false;
+            });
+          }
+        } else if (result['statusCode'] == 403) {
+          if (callBack == false) {
+            callBack = true;
+            getBranches(search, callBack);
+          } else {
+            print(result);
+          }
+        } else {
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
         print(e.toString());

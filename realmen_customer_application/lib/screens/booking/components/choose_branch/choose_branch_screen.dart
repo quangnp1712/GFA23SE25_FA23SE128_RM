@@ -210,7 +210,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                       focusNode: focusNode,
                                       onEditingComplete: onEditingComplete,
                                       onSubmitted: (value) async {
-                                        searchBranches(value, focusNode);
+                                        searchBranches(value, focusNode, false);
                                         focusNode.requestFocus();
                                       },
 
@@ -345,7 +345,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     onChanged: (city) => setState(() {
                                       cityController = city!;
 
-                                      getBranches(city);
+                                      getBranches(city, false);
                                     }),
                                     dropdownStyleData: DropdownStyleData(
                                       maxHeight: 160,
@@ -616,7 +616,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           try {
             if (branchesByCityModel != null) {
               if (cityController != null) {
-                getBranches(cityController!);
+                getBranches(cityController!, false);
               }
 
               cities.add("Thành Phố/Tỉnh");
@@ -648,7 +648,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   }
 
 // get branch by city
-  getBranches(String search) async {
+  getBranches(String search, bool callBack) async {
     if (!_isDisposed && mounted) {
       if (!_isDisposed && mounted) {
         setState(() {
@@ -658,10 +658,10 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
       branchesForCity = [];
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getBranches(search, 5, current);
+        final result = await branchService.getBranches(search, callBack);
         if (result['statusCode'] == 200) {
-          currentResult = result['current'];
-          totalPages = result['totalPages'];
+          // currentResult = result['current'];
+          // totalPages = result['totalPages'];
           for (var branch in result['data'].values!) {
             branchesForCity = branch.branchList;
           }
@@ -693,12 +693,21 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                   await reference.getDownloadURL();
             }
           }
-        }
-        if (!_isDisposed && mounted) {
-          setState(() {
-            branchesForCity;
-            isLoading = false;
-          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              branchesForCity;
+              isLoading = false;
+            });
+          }
+        } else if (result['statusCode'] == 403) {
+          if (callBack == false) {
+            callBack = true;
+            getBranches(search, callBack);
+          } else {
+            print(result);
+          }
+        } else {
+          print("$result['statusCode'] : $result['error']");
         }
       } on Exception catch (e) {
         print(e.toString());
@@ -712,7 +721,8 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   FocusScopeNode focusScopeNode = FocusScopeNode();
 
 // get branch by search
-  Future<void> searchBranches(String query, FocusNode focusNode) async {
+  Future<void> searchBranches(
+      String query, FocusNode focusNode, bool callBack) async {
     if (!_isDisposed) {
       try {
         BranchService branchService = BranchService();
@@ -755,6 +765,11 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
             isSearching = true;
             focusNode.unfocus();
           });
+        } else if (result['statusCode'] == 403) {
+          if (callBack == false) {
+            callBack = true;
+            searchBranches(query, focusNode, callBack);
+          }
         } else {
           print("$result['statusCode'] : $result['error']");
         }

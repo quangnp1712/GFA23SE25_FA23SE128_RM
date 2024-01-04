@@ -521,7 +521,8 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         do {
           AccountService accountService = AccountService();
           final int branchId = widget.branch!.branchId!;
-          final result = await accountService.getStaff(10, current, branchId);
+          final result =
+              await accountService.getStaff(10, current, branchId, false);
           if (result['statusCode'] == 200) {
             final List<AccountInfoModel> accounts =
                 result['data'] as List<AccountInfoModel>;
@@ -566,7 +567,8 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         do {
           AccountService accountService = AccountService();
           final int branchId = widget.branch!.branchId!;
-          final result = await accountService.getStaff(10, current, branchId);
+          final result =
+              await accountService.getStaff(10, current, branchId, false);
           if (result['statusCode'] == 200) {
             final List<AccountInfoModel> accounts =
                 result['data'] as List<AccountInfoModel>;

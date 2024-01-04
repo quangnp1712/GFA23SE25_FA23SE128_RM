@@ -11,7 +11,7 @@ import 'dart:io';
 
 abstract class IBranchService {
   Future<dynamic> getBranchId(int branchId);
-  Future<dynamic> getBranches(String? search, int pageSize, int current);
+  Future<dynamic> getBranches(String? search, bool callBack);
   Future<dynamic> getSearchBranches(String? search, int pageSize, int current);
   Future<dynamic> getBranchesByCity();
 }
@@ -110,101 +110,39 @@ class BranchService implements IBranchService {
     }
   }
 
+  // v1/branch/{city}
   @override
-  Future getBranches(String? search, int pageSize, int current) async {
+  Future getBranches(String? search, bool callBack) async {
     String sorter = "branchName";
+    int pageSize = 5;
     double lat = 0;
     double lng = 0;
+    bool isShowDistance = false;
     bool locationPermission =
         await SharedPreferencesService.getLocationPermission();
     // ignore: unnecessary_null_comparison
     if (search == null && search == '') {
       return const Iterable<String>.empty();
-    } else if (locationPermission) {
-      try {
+    } else {
+      if (locationPermission && callBack == false) {
+        // sorter = "isShortDistance";
         final positionLongLat = await SharedPreferencesService.getLongLat();
         lat = positionLongLat['lat'] as double;
         lng = positionLongLat['lng'] as double;
-        final String jwtToken = await SharedPreferencesService.getJwt();
-        Uri uri;
-        // v1/branches/{city}
-        uri = Uri.parse(
-            "$getBranchesUrl/$search?isShowDistance=true&lat=$lat&lng=$lng&sorter=$sorter&current=$current&pageSize=$pageSize");
-
-        final client = http.Client();
-        final response = await client.get(
-          uri,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Authorization': 'Bearer $jwtToken'
-          },
-        ).timeout(Duration(seconds: connectionTimeOut));
-        final statusCode = response.statusCode;
-        final responseBody = response.body;
-        if (statusCode == 200) {
-          final branches = BranchesModel.fromJson(json.decode(responseBody));
-          var totalPages = json.decode(responseBody)['totalPages'] as int;
-          current = json.decode(responseBody)['current'] as int;
-          return {
-            'statusCode': statusCode,
-            'data': branches,
-            'totalPages': totalPages,
-            'current': current
-          };
-        } else if (statusCode == 401) {
-          try {
-            final exceptionModel =
-                ServerExceptionModel.fromJson(json.decode(responseBody));
-            return {
-              'statusCode': statusCode,
-              'error': exceptionModel,
-            };
-          } catch (e) {
-            return {
-              'statusCode': statusCode,
-              'error': e,
-            };
-          }
-        } else if (statusCode == 403) {
-          return {
-            'statusCode': statusCode,
-            'error': "Forbidden",
-          };
-        } else if (statusCode == 400) {
-          return {
-            'statusCode': statusCode,
-            'error': "Bad request",
-          };
-        } else {
-          return {
-            'statusCode': statusCode,
-            'error': 'Failed to fetch data',
-          };
-        }
-      } on TimeoutException catch (e) {
-        return {
-          'statusCode': 408,
-          'error': "Request timeout",
-        };
-      } on SocketException catch (e) {
-        return {
-          'statusCode': 500,
-          'error': 'Kiểm tra lại kết nối Internet',
-        };
-      } catch (e) {
-        return {
-          'statusCode': 500,
-          'error': 'Kiểm tra lại kết nối Internet',
-        };
+        isShowDistance = true;
+        pageSize = 5;
+      } else {
+        sorter = "branchName";
+        lat = 0;
+        lng = 0;
+        isShowDistance = false;
+        pageSize = 10;
       }
-    } else {
       try {
         final String jwtToken = await SharedPreferencesService.getJwt();
         Uri uri;
         uri = Uri.parse(
-            "$getBranchesUrl/$search?isShowDistance=false&lat=$lat&lng=$lng&sorter=$sorter&current=$current&pageSize=$pageSize");
+            "$getBranchesUrl/$search?isShowDistance=$isShowDistance&lat=$lat&lng=$lng&sorter=$sorter&current=1&pageSize=$pageSize");
 
         final client = http.Client();
         final response = await client.get(
@@ -220,13 +158,9 @@ class BranchService implements IBranchService {
         final responseBody = response.body;
         if (statusCode == 200) {
           final branches = BranchesModel.fromJson(json.decode(responseBody));
-          var totalPages = json.decode(responseBody)['totalPages'] as int;
-          current = json.decode(responseBody)['current'] as int;
           return {
             'statusCode': statusCode,
             'data': branches,
-            'totalPages': totalPages,
-            'current': current,
           };
         } else if (statusCode == 401) {
           try {
@@ -295,6 +229,7 @@ class BranchService implements IBranchService {
         lat = 0;
         lng = 0;
         isShowDistance = false;
+        sorter = 'isShortDistance';
       }
       try {
         final String jwtToken = await SharedPreferencesService.getJwt();

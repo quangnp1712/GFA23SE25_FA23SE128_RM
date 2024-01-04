@@ -57,6 +57,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                       color: Colors.white,
                     ),
                     child: ListView(
+                      controller: _scrollController,
                       children: <Widget>[
                         Container(
                           padding: const EdgeInsets.only(left: 7),
@@ -631,7 +632,26 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   @override
   void initState() {
     super.initState();
-    getStaff();
+    checkLoadMore();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // Khi scroll tới dưới cùng
+        checkLoadMore();
+      }
+    });
+  }
+
+  void checkLoadMore() async {
+    current = currentResult;
+    current = current + 1;
+    if (totalPages == 0) {
+      await getStaff(current);
+    } else {
+      if (current <= totalPages) {
+        await getStaff(current);
+      }
+    }
   }
 
   // String _selectedOption = 'Stylist theo lịch sử cắt'; // Giá trị mặc định
@@ -643,6 +663,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     super.dispose();
   }
 
+  final ScrollController _scrollController = ScrollController();
   List<AccountInfoModel> staffList = [];
   final storage = FirebaseStorage.instance;
   List<String> urlStylistList = [
@@ -657,12 +678,12 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     "barber3.jpg",
   ];
 
-  Future<void> getStaff() async {
+  int current = 0;
+  int currentResult = 0;
+  int totalPages = 0;
+  Future<void> getStaff(int current) async {
     if (!_isDisposed && mounted) {
       try {
-        int current = 1;
-        int totalPages = 0;
-
         AccountService accountService = AccountService();
         staffList = [];
         final result = await accountService.getStaff(5, current, null);

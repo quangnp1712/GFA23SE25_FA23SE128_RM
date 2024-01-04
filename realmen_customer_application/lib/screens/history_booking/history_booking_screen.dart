@@ -107,7 +107,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Container(
-                                    height: 85.8.h,
+                                    // height: 85.8.h,
                                     child: ListView.builder(
                                       // controller: _scrollController,
                                       shrinkWrap: true,
@@ -179,17 +179,14 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                     const SizedBox(
                                                                         width:
                                                                             10),
-                                                                    Text(
-                                                                        bookings[index]
-                                                                            .bookingServices!
-                                                                            .first
-                                                                            .startTime
-                                                                            .toString(),
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                16,
-                                                                            color:
-                                                                                Colors.black54)),
+                                                                    bookings[index].bookingServices !=
+                                                                            null
+                                                                        ? Text(
+                                                                            bookings[index].bookingServices!.first.startTime.toString(),
+                                                                            style:
+                                                                                const TextStyle(fontSize: 16, color: Colors.black54),
+                                                                          )
+                                                                        : Container(),
                                                                   ],
                                                                 ),
                                                               ],
@@ -220,11 +217,11 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  // Text(
-                                                                  //     "Code: ${bookings[index].bookingCode} "),
-                                                                  // const SizedBox(
-                                                                  //     height:
-                                                                  //         10),
+                                                                  Text(
+                                                                      "Code: ${bookings[index].bookingId} "),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          10),
                                                                   Row(
                                                                     children: [
                                                                       const Text(
@@ -236,11 +233,9 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                           stylist)
                                                                     ],
                                                                   ),
-
                                                                   const SizedBox(
                                                                       height:
                                                                           10),
-
                                                                   Row(
                                                                     children: [
                                                                       const Text(
@@ -255,22 +250,21 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                   const SizedBox(
                                                                       height:
                                                                           10),
-
-                                                                  Row(
-                                                                    children: [
-                                                                      const Text(
-                                                                          "Tổng hóa đơn:"),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              2),
-                                                                      totals[index]['bookingId'] ==
-                                                                              bookings[index].bookingId
-                                                                          ? Text(
-                                                                              formatter.format(totals[index]['total']),
-                                                                            )
-                                                                          : const Text("0"),
-                                                                    ],
-                                                                  ),
+                                                                  // Row(
+                                                                  //   children: [
+                                                                  //     const Text(
+                                                                  //         "Tổng hóa đơn:"),
+                                                                  //     const SizedBox(
+                                                                  //         width:
+                                                                  //             2),
+                                                                  //     totals[index]['bookingId'] ==
+                                                                  //             bookings[index].bookingId
+                                                                  //         ? Text(
+                                                                  //             formatter.format(totals[index]['total']),
+                                                                  //           )
+                                                                  //         : const Text("0"),
+                                                                  //   ],
+                                                                  // ),
                                                                   const SizedBox(
                                                                       height:
                                                                           25),

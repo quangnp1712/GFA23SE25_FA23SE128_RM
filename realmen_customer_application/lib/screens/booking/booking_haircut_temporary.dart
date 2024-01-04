@@ -112,28 +112,44 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                               ),
                             ),
                           ),
-                          Column(
-                            children: [
-                              _buildInfoUser(widget.branch, widget.stylist,
-                                  widget.date, widget.time),
-                              _buildService(widget.service!),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10),
-                                child: Divider(
-                                  color: Colors.black,
-                                  height: 2,
-                                  thickness: 1,
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    _buildInfoUser(
+                                        widget.branch,
+                                        widget.stylist,
+                                        widget.date,
+                                        widget.time),
+                                    _buildService(widget.service!),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 10),
+                                      child: Divider(
+                                        color: Colors.black,
+                                        height: 2,
+                                        thickness: 1,
+                                      ),
+                                    ),
+                                    // _buildButton(),
+                                    _buildTotalMoney(),
+                                    _buildButton(),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
                                 ),
-                              ),
-                              // _buildButton(),
-                              _buildTotalMoney(),
-                              _buildButton(),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -473,6 +489,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     });
   }
 
+  bool isLoading = true;
   List<BookingServiceModel> bookingServices = [];
   NumberFormat formatter = NumberFormat("#,##0");
   BookingModel postBooking = BookingModel();
@@ -654,6 +671,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           if (!_isDisposed && mounted) {
             setState(() {
               bookingServices;
+              isLoading = false;
             });
           }
         } else {
@@ -674,7 +692,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         int branchId = widget.branch!.branchId!;
         int accountId = await SharedPreferencesService.getAccountId();
         // ignore: unnecessary_null_comparison
-        if (bookingServices != null) {
+        if (bookingServices != null && bookingServices.isNotEmpty) {
           postBooking = BookingModel(
               appointmentDate: appointmentDate,
               branchId: branchId,

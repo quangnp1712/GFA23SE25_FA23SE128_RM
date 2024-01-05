@@ -1,14 +1,13 @@
+// ignore_for_file: unused_field, unused_element, sized_box_for_whitespace, avoid_print, camel_case_types
+
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:realmen_staff_application/screens/task/component/add_more_service_screen.dart';
-import 'package:sizer/sizer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
-import 'package:realmen_staff_application/screens/history_booking/history_booking_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/history_customer_processing.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_confirm.dart';
 
@@ -314,7 +313,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                 //     },
                 //   ),
                 // ),
-                masseurServices != null && masseurServices.length > 0
+                masseurServices.isNotEmpty
                     ? Column(
                         children: [
                           Container(
@@ -479,7 +478,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                 const SizedBox(
                   height: 15,
                 ),
-                stylistServices != null && stylistServices.length > 0
+                stylistServices.isNotEmpty
                     ? Column(
                         children: [
                           Container(

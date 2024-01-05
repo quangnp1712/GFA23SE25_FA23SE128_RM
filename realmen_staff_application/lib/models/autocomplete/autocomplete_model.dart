@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class PredictionModel {
   String? description;
   String? placeId;

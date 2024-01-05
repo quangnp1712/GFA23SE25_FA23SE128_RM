@@ -7,8 +7,8 @@ class SchedulesModel {
     return SchedulesModel(
       scheduleModelList: json['values'] != null
           ? (json['values'] as List)
-              ?.map((e) => ScheduleModel.fromJson(e))
-              ?.toList()
+              .map((e) => ScheduleModel.fromJson(e))
+              .toList()
           : null,
     );
   }

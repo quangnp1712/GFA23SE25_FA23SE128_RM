@@ -10,7 +10,6 @@ import 'package:realmen_staff_application/screens/profile/view_edit_profile.dart
 import 'package:realmen_staff_application/screens/splash/splash_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/history_customer_processing.dart';
 import 'package:realmen_staff_application/screens/task/component/history_customer_waiting.dart';
-import 'package:realmen_staff_application/screens/task/task_screen.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 
 class RouteGenerator {

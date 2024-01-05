@@ -6,8 +6,8 @@ class BranchesModel {
   factory BranchesModel.fromJson(Map<String, dynamic> json) {
     return BranchesModel(
       values: (json['values'] as List)
-          ?.map((e) => BranchesValuesModel.fromJson(e))
-          ?.toList(),
+          .map((e) => BranchesValuesModel.fromJson(e))
+          .toList(),
     );
   }
 }
@@ -24,11 +24,11 @@ class BranchesValuesModel {
   factory BranchesValuesModel.fromJson(Map<String, dynamic> json) {
     return BranchesValuesModel(
       city: json['city'],
-      branch: json['branch'] != null ? json['branch'] : null,
+      branch: json['branch'],
       branchList: json['branchList'] != null
           ? (json['branchList'] as List)
-              ?.map((e) => BranchModel.fromJson(e))
-              ?.toList()
+              .map((e) => BranchModel.fromJson(e))
+              .toList()
           : null,
     );
   }
@@ -75,16 +75,13 @@ class BranchModel {
       numberStaffs: json['numberStaffs'],
       open: json['open'],
       close: json['close'],
-      displayUrlList: json['displayUrlList'] != null
-          ? json['displayUrlList'].cast<String>()
-          : null,
+      displayUrlList: json['displayUrlList'].cast<String>(),
       branchServiceList: json['branchServiceList'] != null
           ? (json['branchServiceList'] as List)
-              ?.map((e) => BranchServiceModel.fromJson(e))
-              ?.toList()
+              .map((e) => BranchServiceModel.fromJson(e))
+              .toList()
           : null,
-      distanceKilometer:
-          json['distanceKilometer'] != null ? json['distanceKilometer'] : null,
+      distanceKilometer: json['distanceKilometer'],
     );
   }
 }

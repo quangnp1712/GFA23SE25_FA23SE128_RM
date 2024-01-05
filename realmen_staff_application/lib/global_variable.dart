@@ -30,3 +30,6 @@ final schedulesListUrl =
     "${dotenv.env["DOMAIN"]}/${dotenv.env["POST_SCHEDULE_LIST"]}";
 final scheduleListUrl =
     "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_SCHEDULE_LIST"]}";
+
+// Booking API
+final bookingUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BOOKING"]}";

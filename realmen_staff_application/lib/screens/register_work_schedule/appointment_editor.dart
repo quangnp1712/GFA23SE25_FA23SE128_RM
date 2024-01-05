@@ -1,8 +1,9 @@
+// ignore_for_file: use_key_in_widget_constructors, avoid_unnecessary_containers
+
 import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_staff_application/screens/register_work_schedule/edit_dialog.dart';
@@ -263,7 +264,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
 
       // selectedAppointment tạo mới
       else if (widget.selectedAppointment!.subject == '(No title)') {
-        if (widget._dataSource!.appointments!.any((element) =>
+        if (widget._dataSource.appointments!.any((element) =>
             (element.startTime as DateTime).isAtSameMomentAs(_startDate))) {
           Future.delayed(const Duration(milliseconds: 200), () {
             Get.back();
@@ -323,7 +324,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
         }
       } else if (widget.selectedAppointment!.appointmentType !=
           AppointmentType.normal) {
-        if (widget._dataSource!.appointments!.any((element) =>
+        if (widget._dataSource.appointments!.any((element) =>
             (element.startTime as DateTime).isAtSameMomentAs(_startDate))) {
           Future.delayed(const Duration(milliseconds: 200), () {
             Get.back();
@@ -357,7 +358,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
       }
       // selectedAppointment != null && appointmentType = normal
       else {
-        if (widget._dataSource!.appointments!.any((element) =>
+        if (widget._dataSource.appointments!.any((element) =>
             (element.startTime as DateTime).isAtSameMomentAs(_startDate))) {
           Future.delayed(const Duration(milliseconds: 200), () {
             Future.delayed(const Duration(milliseconds: 200), () {
@@ -746,8 +747,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                           right: 15),
                                                 ),
                                                 onChanged: (value) {
-                                                  if (value != null &&
-                                                      value.isNotEmpty) {
+                                                  if (value.isNotEmpty) {
                                                     repeatEveryController.text =
                                                         value.toString();
                                                     if (repeatEveryController
@@ -1119,8 +1119,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                 });
                                               },
                                               onChanged: (String value) async {
-                                                if (value != null &&
-                                                    value.isNotEmpty) {
+                                                if (value.isNotEmpty) {
                                                   _count = int.parse(value);
                                                   _countController.text =
                                                       value.toString();
@@ -1137,8 +1136,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                           '999';
                                                     });
                                                   }
-                                                } else if (value.isEmpty ||
-                                                    value == null) {
+                                                } else if (value.isEmpty) {
                                                   _count = 1;
                                                 }
                                                 setState(() {
@@ -1388,6 +1386,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                     _recurrenceProperties!
                                                             .recurrenceRange =
                                                         RecurrenceRange.endDate;
+                                                    // ignore: unnecessary_null_comparison
                                                     if (pickedDate != null) {
                                                       _selectedDate = DateTime(
                                                           pickedDate.year,
@@ -1569,6 +1568,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
 
   //Recurrence lặp lại
   RecurrenceProperties? _recurrenceProperties;
+  // ignore: unused_field
   _SelectRule? _rule = _SelectRule.doesNotRepeat;
 
   // Reapeat
@@ -1644,6 +1644,9 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
           break;
         case RecurrenceType.monthly:
           _rule = _SelectRule.everyMonth;
+          break;
+        case RecurrenceType.yearly:
+          // TODO: Handle this case.
           break;
       }
     } else {

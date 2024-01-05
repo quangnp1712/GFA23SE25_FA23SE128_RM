@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors, prefer_final_fields, avoid_unnecessary_containers, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_add_service.dart';
@@ -293,7 +295,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                                 },
                                 child: Center(
                                   child: Text(
-                                    "thêm ${selectedBookingServices.length > 0 ? selectedBookingServices.length.toString() + ' ' : ""}dịch vụ"
+                                    "thêm ${selectedBookingServices.isNotEmpty ? '${selectedBookingServices.length} ' : ""}dịch vụ"
                                         .toUpperCase(),
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 25),
@@ -380,7 +382,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
 }
 
 class AddServiceWidget extends StatefulWidget {
-  AddServiceWidget(
+  const AddServiceWidget(
       {super.key, required this.selectedService, required this.onSelect});
   final serviceDemoModel selectedService;
   final Function(bool) onSelect;

@@ -1,9 +1,9 @@
+// ignore_for_file: constant_identifier_names, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_staff_application/screens/history_booking/components/card_history_hair_cut.dart';
-import 'package:realmen_staff_application/screens/history_booking/detail_history_hair_cut_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class HistoryBookingScreen extends StatefulWidget {
@@ -69,7 +69,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                 child: Center(
                                   child: Text(
                                     "Lịch sử đặt lịch".toUpperCase(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 24,
                                     ),

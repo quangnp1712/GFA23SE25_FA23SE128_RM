@@ -1,7 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:get/get.dart';
 
 import 'package:realmen_staff_application/screens/login/login_phone_screen.dart';
@@ -21,13 +22,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int bottomIndex = 0;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   late final ProfileScreen profileScreen;
   late final TaskScreen taskScreen;
   late final WorkScheduleScreen workScheduleScreen;
   late final RegisterWorkScheduleScreen registerWorkScheduleScreen;
-  late final LoginPhoneScreen loginScreen = LoginPhoneScreen();
+  final LoginPhoneScreen loginScreen = const LoginPhoneScreen();
 
   void setPage(index) {
     final CurvedNavigationBarState? navBarState =

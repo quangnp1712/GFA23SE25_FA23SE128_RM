@@ -1,5 +1,6 @@
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison, avoid_print, constant_identifier_names, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_staff_application/models/schedule/schedule_model.dart';
@@ -116,6 +117,7 @@ class _RegisterWorkScheduleScreenState
                               timeRulerSize: 80,
                               timeFormat: "CA TỐI",
                             ),
+                            // ignore: prefer_if_null_operators,
                             specialRegions: _specialTimeRegions != null
                                 ? _specialTimeRegions
                                 : <TimeRegion>[],
@@ -141,7 +143,7 @@ class _RegisterWorkScheduleScreenState
                                 }),
                               ),
                               onPressed: _registerSchedule,
-                              child: Text(
+                              child: const Text(
                                 "ĐĂNG KÝ LỊCH LÀM",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 23),
@@ -174,7 +176,7 @@ class _RegisterWorkScheduleScreenState
     _getSchedule();
     DateTime nextWeekEnd = DateTime.now()
         .add(Duration(days: 8 - DateTime.now().weekday))
-        .add(Duration(days: 6));
+        .add(const Duration(days: 6));
     maxDateSfCalendar = DateTime(
         nextWeekEnd.year, nextWeekEnd.month, nextWeekEnd.day + 1, 0, 0, 0);
 
@@ -275,6 +277,7 @@ class _RegisterWorkScheduleScreenState
   }
 
   final List<TimeRegion> _specialTimeRegions = <TimeRegion>[];
+  // ignore: prefer_final_fields
   CalendarView _view = CalendarView.week;
 
   _registerSchedule() async {
@@ -284,6 +287,7 @@ class _RegisterWorkScheduleScreenState
 
     if (_dataSource != null) {
       for (var data in _dataSource.appointments) {
+        // ignore: prefer_typing_uninitialized_variables
         var shiftId;
         if (data.subject == "CA SÁNG") {
           shiftId = 1;
@@ -307,10 +311,10 @@ class _RegisterWorkScheduleScreenState
                   .map((date) =>
                       DateFormat('yyyy-MM-dd').format(date).toString())
                   .toList();
-              recurrentDateList.forEach((element) {
+              for (var element in recurrentDateList) {
                 schedulesModel.scheduleModelList!
                     .add(ScheduleModel(shiftId: shiftId, workingDate: element));
-              });
+              }
             }
           }
         }
@@ -430,7 +434,7 @@ class _RegisterWorkScheduleScreenState
             _dataSource.source.add(newAppointment!);
             // _dataSource.notifyListeners();
             _dataSource.notifyListeners(
-                CalendarDataSourceAction.add, <Appointment>[newAppointment!]);
+                CalendarDataSourceAction.add, <Appointment>[newAppointment]);
           });
         }
         _appointmentSoucre = List.from(_dataSource.source);

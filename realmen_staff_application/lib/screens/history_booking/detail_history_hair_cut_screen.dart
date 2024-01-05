@@ -1,6 +1,7 @@
+// ignore_for_file: constant_identifier_names, sized_box_for_whitespace, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 class DetailHistoryBookingScreen extends StatefulWidget {
@@ -71,7 +72,7 @@ class _DetailHistoryBookingScreenState
                                     child: Center(
                                       child: Text(
                                         "chi tiết hóa đơn".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
                                         ),
@@ -197,7 +198,7 @@ class _DetailHistoryBookingScreenState
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.black,
+                  backgroundColor: Colors.black,
                 ),
                 child: const Text(
                   "Đặt lại dịch vụ",

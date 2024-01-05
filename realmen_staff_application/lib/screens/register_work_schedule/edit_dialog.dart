@@ -3,7 +3,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EditDialog extends StatefulWidget {
   const EditDialog(this.newAppointment, this.selectedAppointment,
-      this.recurrenceProperties, this._dataSource);
+      this.recurrenceProperties, this._dataSource,
+      {super.key});
 
   final Appointment newAppointment, selectedAppointment;
   final RecurrenceProperties? recurrenceProperties;
@@ -35,7 +36,7 @@ class _EditDialogState extends State<EditDialog> {
                   child: Center(
                     child: Text(
                       'lưu ca làm'.toUpperCase(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -78,7 +79,7 @@ class _EditDialogState extends State<EditDialog> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: const Text(
                         'Quay lại',
                         style: TextStyle(
                             color: Colors.grey, fontWeight: FontWeight.w500),
@@ -93,7 +94,7 @@ class _EditDialogState extends State<EditDialog> {
                       },
                       child: Text(
                         'Lưu'.toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.blueAccent),
                       ),
@@ -225,4 +226,5 @@ class _EditDialogState extends State<EditDialog> {
 
 enum _Edit { event, series }
 
+// ignore: unused_element, unused_field
 enum _Delete { event, series }

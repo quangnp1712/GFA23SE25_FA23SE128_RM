@@ -2,7 +2,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:realmen_staff_application/models/login_register/login_otp_model.dart';
+import 'package:realmen_staff_application/models/schedule/login_register/login_otp_model.dart';
 
 class SharedPreferencesService {
   static Future<SharedPreferences> initSharedPreferenced() async {
@@ -80,7 +80,7 @@ class SharedPreferencesService {
       loginOtpResponseModel.jwtToken!,
       loginOtpResponseModel.role!,
       loginOtpResponseModel.accountId!.toString(),
-      loginOtpResponseModel.staffId!.toString(),
+      loginOtpResponseModel.staffId?.toString() ?? "",
       loginOtpResponseModel.branchId?.toString() ?? "",
     ]);
   }

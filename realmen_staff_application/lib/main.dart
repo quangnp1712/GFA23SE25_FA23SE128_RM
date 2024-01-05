@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +15,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'service/change_notifier_provider/change_notifier_provider_service.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 Future<void> main() async {
@@ -25,7 +26,7 @@ Future<void> main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ChangeNotifierServices(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -38,13 +39,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return GetMaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           SfGlobalLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('vi'),
+        supportedLocales: const [
+          Locale('vi'),
         ],
         // onGenerateRoute: Routers.generateRoute,
         // onGenerateRoute: (settings) => GetPageRoute(settings: settings),

@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
 
@@ -18,7 +19,7 @@ class LogoutPopup extends StatelessWidget {
           Center(
             child: Text(
               "đăng xuất".toUpperCase(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 25,
               ),
@@ -33,13 +34,13 @@ class LogoutPopup extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Center(
+          const Center(
             child: Text(
               "Xác nhận đăng xuất",
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 20,
-                color: const Color(0xff7a7a7a),
+                color: Color(0xff7a7a7a),
               ),
             ),
           ),

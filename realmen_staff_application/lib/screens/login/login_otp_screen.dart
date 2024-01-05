@@ -1,12 +1,13 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:realmen_staff_application/models/login_register/login_otp_model.dart';
+import 'package:realmen_staff_application/models/schedule/login_register/login_otp_model.dart';
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
 class LoginOTPScreen extends StatefulWidget {
@@ -90,23 +91,23 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                   SizedBox(
                                     height: 5.h,
                                   ),
-                                  Text(
+                                  const Text(
                                     "ĐĂNG NHẬP",
                                     style: TextStyle(
                                       fontSize: 35,
                                       fontWeight: FontWeight.w700,
-                                      color: const Color(0xff444444),
+                                      color: Color(0xff444444),
                                     ),
                                   ),
                                   SizedBox(
                                     height: 2.h,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Nhập OTP",
                                     style: TextStyle(
                                       fontSize: 27,
                                       fontWeight: FontWeight.w400,
-                                      color: const Color(0xff444444),
+                                      color: Color(0xff444444),
                                     ),
                                   ),
                                   SizedBox(
@@ -185,6 +186,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
   TextEditingController otpController = TextEditingController();
   void submitOtp() async {
     String phone = await SharedPreferencesService.getPhone();
+    // ignore: unused_local_variable
     String otp = otpController.text.toString();
     // LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
     LoginOtpModel loginOtpModel =

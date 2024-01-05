@@ -1,9 +1,7 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, unused_field
+
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
 import 'package:realmen_staff_application/models/schedule/schedule_model.dart';
-import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/screens/work_schedule/appointment_editor.dart';
 import 'package:realmen_staff_application/service/schedule/schedule_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
@@ -109,9 +107,7 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
                               timeRulerSize: 80,
                               timeFormat: "CA TỐI",
                             ),
-                            specialRegions: _specialTimeRegions != null
-                                ? _specialTimeRegions
-                                : <TimeRegion>[],
+                            specialRegions: _specialTimeRegions,
                           ),
                         ),
                       ],

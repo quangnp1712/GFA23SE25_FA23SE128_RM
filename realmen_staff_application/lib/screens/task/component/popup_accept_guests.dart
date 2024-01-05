@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
+import 'package:realmen_staff_application/screens/task/task_screen.dart';
+import 'package:realmen_staff_application/service/booking/booking_service.dart';
 
 class PopUpAcceptGuest extends StatefulWidget {
-  const PopUpAcceptGuest({super.key});
+  final String name;
+  final String phone;
+  final int bookingId;
+  PopUpAcceptGuest({
+    Key? key,
+    required this.name,
+    required this.phone,
+    required this.bookingId,
+  }) : super(key: key);
 
   @override
   State<PopUpAcceptGuest> createState() => _PopUpAcceptGuestState();
@@ -36,17 +48,17 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
             const SizedBox(
               height: 20,
             ),
-            const Center(
+            Center(
               child: Text.rich(TextSpan(children: [
-                WidgetSpan(
+                const WidgetSpan(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4),
                     child: Icon(Icons.account_circle),
                   ),
                 ),
                 TextSpan(
-                  text: "Anh Tuấn - xxxxxx1487",
-                  style: TextStyle(
+                  text: "${widget.name} - ${widget.phone}",
+                  style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20,
                     color: Colors.black,
@@ -148,7 +160,7 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(10)),
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: TextButton(
                       onPressed: () {
                         Get.back();
@@ -156,7 +168,8 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
                       child: Center(
                         child: Text(
                           "quay lại".toUpperCase(),
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.white),
                         ),
                       ),
                     ),
@@ -172,13 +185,14 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
                           style: BorderStyle.solid,
                         ),
                         borderRadius: BorderRadius.circular(10)),
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: ConfirmBooking,
                       child: Center(
                         child: Text(
                           "xác nhận".toUpperCase(),
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.white),
                         ),
                       ),
                     ),
@@ -206,4 +220,52 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
   //     print(e);
   //   }
   // }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  bool isLoading = true;
+  Future<void> ConfirmBooking() async {
+    if (!_isDisposed && mounted) {
+      try {
+        final result = await BookingService().confirmBooking(widget.bookingId);
+        if (result['statusCode'] == 200) {
+          _successMessage('Nhận khách thành công');
+          // Get.toNamed(TaskScreen.TaskScreenRoute);
+          Get.to(() => MainScreen());
+        } else if (result['statusCode'] == 500) {
+          _errorMessage(result['error']);
+        } else {
+          _errorMessage('Nhận khách thất bại');
+        }
+      } catch (e) {
+        _errorMessage('Nhận khách thất bại');
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _successMessage(String? message) {
+    try {
+      ShowSnackBar.SuccessSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
 }

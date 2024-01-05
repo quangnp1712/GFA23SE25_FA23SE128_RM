@@ -1,10 +1,11 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print
+
 import 'dart:convert';
 
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_staff_application/models/account/account_info_model.dart';
 import 'package:realmen_staff_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_staff_application/screens/message/logout_popup.dart';
@@ -79,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Center(
                               child: Text(
                                 name ?? '',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black),
@@ -91,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Center(
                               child: Text(
                                 phone ?? "",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w300,
                                     color: Colors.black),
@@ -448,7 +449,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             top: Radius.circular(20),
           ),
         ),
-        builder: (context) => LogoutPopup(),
+        builder: (context) => const LogoutPopup(),
       );
     }
   }

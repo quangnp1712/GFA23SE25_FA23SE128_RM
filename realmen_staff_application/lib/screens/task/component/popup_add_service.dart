@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
@@ -39,8 +41,7 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
             const SizedBox(
               height: 15,
             ),
-            widget.selectedBookingServices.length > 0 &&
-                    widget.selectedBookingServices.isNotEmpty
+            widget.selectedBookingServices.isNotEmpty
                 ? ListView.builder(
                     shrinkWrap: true,
                     itemCount: widget.selectedBookingServices.length,
@@ -48,7 +49,7 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
                       return Center(
                         child: Text(
                           widget.selectedBookingServices[index].name.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 20,
                             color: Colors.black,
@@ -56,7 +57,7 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
                         ),
                       );
                     })
-                : Center(
+                : const Center(
                     child: Text(
                       "Không có dịch vụ",
                       style: TextStyle(
@@ -78,7 +79,7 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
                   decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {
                       Get.back();
@@ -86,13 +87,13 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
                     child: Center(
                       child: Text(
                         "quay lại".toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),
                 ),
-                widget.selectedBookingServices.length > 0 &&
-                        widget.selectedBookingServices.isNotEmpty
+                widget.selectedBookingServices.isNotEmpty
                     ? Container(
                         width: 200,
                         decoration: BoxDecoration(
@@ -103,7 +104,7 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
                               style: BorderStyle.solid,
                             ),
                             borderRadius: BorderRadius.circular(10)),
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         child: TextButton(
                           onPressed: () {
                             // call api update service
@@ -112,8 +113,8 @@ class _PopUpAddServiceState extends State<PopUpAddService> {
                           child: Center(
                             child: Text(
                               "xác nhận".toUpperCase(),
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.white),
                             ),
                           ),
                         ),

@@ -39,7 +39,7 @@ export class AccountApiService {
       .pipe(catchError(this.handleError));
   }
 
-  public getAccount(accountId: number, role: string) {
+  public getAccount(accountId: string, role: string) {
 
     const url = `${this.REST_API_SERVER}/v1/auth/account/${accountId}/${role === "STAFF" ? 'staff' : 'manager'}`;
     return this._http
@@ -47,7 +47,7 @@ export class AccountApiService {
       .pipe(catchError(this.handleError));
   }
 
-  public getSchedule(staffId: number) {
+  public getSchedule(staffId: string) {
 
     const url = `${this.REST_API_SERVER}/v1/schedule/${staffId}`;
     return this._http

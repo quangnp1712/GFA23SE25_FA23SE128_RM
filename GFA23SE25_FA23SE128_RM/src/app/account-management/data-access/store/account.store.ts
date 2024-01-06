@@ -80,9 +80,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     branchId: localStorage.getItem('branchId$')!,
   };
 
-  accountStaffId : string[] = this._activatedRoute.snapshot.paramMap.getAll('account');
-  id!: number
-  staffId!: number
+  accountStaffId : string[] = (this._activatedRoute.snapshot.paramMap.getAll('account'));
+  staffId: string[] = (this._activatedRoute.snapshot.paramMap.getAll('account1'));
 
   form = new FormGroup<
     AccountAddApi.RequestFormGroup | AccountUpdateApi.RequestFormGroup
@@ -125,7 +124,7 @@ export class AccountStore extends ComponentStore<AccountState> {
     pipe(
       tap(() => this.updateLoading(true)),
       switchMap(() =>
-        this._aApiSvc.getAccount(this.id, this.pagingRequest.role).pipe(
+        this._aApiSvc.getAccount(this.accountStaffId[0], this.pagingRequest.role).pipe(
           tap({
             next: (resp) => {
               this.form.patchValue(resp.value!);
@@ -142,7 +141,7 @@ export class AccountStore extends ComponentStore<AccountState> {
     pipe(
       tap(() => this.updateLoading(true)),
       switchMap(() =>
-        this._aApiSvc.getSchedule(this.staffId).pipe(
+        this._aApiSvc.getSchedule(this.staffId[0]).pipe(
           tap({
             next: (resp) => {
               this.patchState({ scheduleData: resp });

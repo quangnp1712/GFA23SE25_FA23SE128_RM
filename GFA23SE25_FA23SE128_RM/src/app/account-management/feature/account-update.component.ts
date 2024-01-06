@@ -234,11 +234,10 @@ export class AccountUpdateComponent implements OnInit {
   form = this.aStore.form;
 
   ngOnInit(): void {
-    this.aStore.id = Number(this.aStore.accountStaffId[0])
-    this.aStore.staffId = Number(this.aStore.accountStaffId[1])
     this.aStore.getAccountData();
     this.aStore.getScheduleData();
-    console.log(this.aStore.id);
+    console.log(this.aStore.accountStaffId);
+    console.log(this.aStore.staffId);
   }
 
   getAddress(event: Event) {

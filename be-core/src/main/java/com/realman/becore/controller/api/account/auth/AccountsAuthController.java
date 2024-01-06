@@ -13,6 +13,7 @@ import com.realman.becore.controller.api.account.models.AccountResponse;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountSearchCriteria;
 import com.realman.becore.dto.branch.BranchId;
+import com.realman.becore.dto.enums.ECategoryType;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.enums.ERole;
 import com.realman.becore.service.account.AccountUseCaseService;
@@ -48,7 +49,10 @@ public class AccountsAuthController implements AccountsAuthAPI {
         }
 
         @Override
-        public PageImplResponse<AccountResponse> findAll(List<String> searches, Long branchId, ERole role,
+        public PageImplResponse<AccountResponse> findAll(List<String> searches,
+                        Long branchId,
+                        ERole role,
+                        ECategoryType category,
                         Boolean isShowDistance,
                         Double lat,
                         Double lng,
@@ -58,9 +62,8 @@ public class AccountsAuthController implements AccountsAuthAPI {
                 PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
                 List<String> searchesCriteria = Objects.nonNull(searches) ? searches
                                 : new ArrayList<>();
-                AccountSearchCriteria criteria = AccountSearchCriteria.builder()
-                                .searches(searchesCriteria).branchId(branchId).role(role)
-                                .isShowDistance(isShowDistance).lat(lat).lng(lng).build();
+                AccountSearchCriteria criteria = AccountSearchCriteria.of(searchesCriteria, branchId, isShowDistance,
+                                lat, lng, role, category);
                 Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
                 Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
                 return new PageImplResponse<>(

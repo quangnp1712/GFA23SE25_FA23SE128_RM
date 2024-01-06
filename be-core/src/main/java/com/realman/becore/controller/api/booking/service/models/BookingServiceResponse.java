@@ -1,6 +1,8 @@
 package com.realman.becore.controller.api.booking.service.models;
 
 import com.realman.becore.dto.enums.EBookingServiceStatus;
+import com.realman.becore.dto.enums.EProfessional;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -21,6 +23,7 @@ public record BookingServiceResponse(
         Duration duration,
         String durationText,
         EBookingServiceStatus bookingServiceStatus,
+        EProfessional professional,
         Boolean allowUpdate) {
     public String durationText() {
         StringBuilder builder = new StringBuilder();

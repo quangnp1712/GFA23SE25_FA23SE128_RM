@@ -1,16 +1,13 @@
 package com.realman.becore.repository.database.account;
 
-import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import com.realman.becore.dto.account.AccountInfo;
-import com.realman.becore.dto.enums.ERole;
+import com.realman.becore.dto.account.AccountSearchCriteria;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
@@ -118,14 +115,21 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 a.role AS role
             FROM AccountEntity a
             INNER JOIN BranchEntity b ON a.branchId = b.branchId
-            WHERE a.role = :role
-            AND (:#{#searches.isEmpty()} = TRUE)
-                OR (a.firstName IN (:searches)
-                OR a.lastName IN (:searches) OR a.phone IN (:searches)
-                OR a.address IN (:searches))
-            AND :branchId IS NULL OR a.branchId = :branchId
+            LEFT JOIN StaffEntity s ON s.accountId = a.accountId
+            WHERE a.role = :#{#searchCriteria.role}
+            AND (:#{#searchCriteria.hasSearchEmpty()} = TRUE
+                OR LOWER(a.firstName) IN :#{#searchCriteria.searches}
+                OR LOWER(a.lastName) IN :#{#searchCriteria.searches}
+                OR a.phone IN :#{#searchCriteria.searches}
+                OR LOWER(a.address) IN :#{#searchCriteria.searches})
+            AND (:#{#searchCriteria.hasBranchIdEmpty()} = TRUE OR a.branchId = :#{#searchCriteria.branchId})
+            AND (:#{#searchCriteria.hasCategoryEmpty()} = TRUE
+                OR CASE
+                    WHEN :#{#searchCriteria.category} = 'massage' THEN s.professional = com.realman.becore.dto.enums.EProfessional.MASSEUR
+                    WHEN :#{#searchCriteria.category} = 'haircut' THEN s.professional = com.realman.becore.dto.enums.EProfessional.STYLIST
+                END)
             """)
-    Page<AccountInfo> findAll(List<String> searches, ERole role, Long branchId,
+    Page<AccountInfo> findAll(AccountSearchCriteria searchCriteria,
             Pageable pageable);
 
 }

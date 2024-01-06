@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.controller.api.services.models.ServiceId;
 import com.realman.becore.dto.service.ShopService;
+import com.realman.becore.dto.service.ShopServiceSearchCriteria;
 import com.realman.becore.util.response.PageRequestCustom;
 
 import lombok.NonNull;
@@ -31,8 +32,8 @@ public class ShopServiceUseCaseService {
         shopServiceCommandService.update(serviceId, shopService);
     }
 
-    public Page<ShopService> findAll(PageRequestCustom pageRequestCustom) {
-        return shopServiceQueryService.findAll(pageRequestCustom);
+    public Page<ShopService> findAll(ShopServiceSearchCriteria searchCriteria, PageRequestCustom pageRequestCustom) {
+        return shopServiceQueryService.findAll(searchCriteria, pageRequestCustom);
     }
 
     public List<ShopService> findAllServiceField() {

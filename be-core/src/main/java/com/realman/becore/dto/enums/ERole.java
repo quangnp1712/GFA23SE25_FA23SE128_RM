@@ -13,11 +13,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ERole {
         STAFF(Set.of(EPermission.ACCOUNT_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
-                        EPermission.SCHEDULE_ADD.getPermission(), EPermission.SCHEDULE_VIEW.getPermission(), 
-                        EPermission.SERVICE_VIEW.getPermission(), EPermission.CATEGORY_VIEW.getPermission())),
+                        EPermission.SCHEDULE_ADD.getPermission(), EPermission.SCHEDULE_VIEW.getPermission(),
+                        EPermission.SERVICE_VIEW.getPermission(), EPermission.CATEGORY_VIEW.getPermission(),
+                        EPermission.BOOKING_VIEW.getPermission(), EPermission.BOOKING_UPDATE.getPermission())),
         RECEPTIONIST(Set.of(EPermission.ACCOUNT_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
                         EPermission.BOOKING_ADD.getPermission(), EPermission.BOOKING_UPDATE.getPermission(),
-                        EPermission.SCHEDULE_ADD.getPermission(), EPermission.SCHEDULE_VIEW.getPermission(), 
+                        EPermission.SCHEDULE_ADD.getPermission(), EPermission.SCHEDULE_VIEW.getPermission(),
                         EPermission.SERVICE_VIEW.getPermission(), EPermission.CATEGORY_VIEW.getPermission())),
         BRANCH_MANAGER(Set.of(EPermission.ACCOUNT_VIEW.getPermission(), EPermission.SCHEDULE_UPDATE.getPermission(),
                         EPermission.SCHEDULE_VIEW.getPermission(), EPermission.BRANCH_VIEW.getPermission(),
@@ -35,6 +36,7 @@ public enum ERole {
                         EPermission.SERVICE_VIEW.getPermission(), EPermission.CATEGORY_VIEW.getPermission()));
 
         private Set<String> permissions;
+
         public List<SimpleGrantedAuthority> getAuthorities() {
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));

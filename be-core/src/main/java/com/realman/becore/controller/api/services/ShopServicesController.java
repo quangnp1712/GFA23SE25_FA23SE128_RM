@@ -9,7 +9,9 @@ import com.realman.becore.controller.api.services.models.ShopServiceFieldRespons
 import com.realman.becore.controller.api.services.models.ShopServiceModelMapper;
 import com.realman.becore.controller.api.services.models.ShopServiceRequest;
 import com.realman.becore.controller.api.services.models.ShopServiceResponse;
+import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.service.ShopService;
+import com.realman.becore.dto.service.ShopServiceSearchCriteria;
 import com.realman.becore.service.services.ShopServiceUseCaseService;
 import com.realman.becore.util.response.ListResponse;
 import com.realman.becore.util.response.PageImplResponse;
@@ -35,9 +37,11 @@ public class ShopServicesController implements ShopServicesAPI {
     }
 
     @Override
-    public PageImplResponse<ShopServiceResponse> findAll(@Min(1) Integer current, String sorter, Integer pageSize) {
+    public PageImplResponse<ShopServiceResponse> findAll(String search, EProfessional professional,
+            @Min(1) Integer current, String sorter, Integer pageSize) {
         PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
-        Page<ShopService> shopServices = shopServiceUseCaseService.findAll(pageRequestCustom);
+        ShopServiceSearchCriteria searchCriteria = ShopServiceSearchCriteria.of(search, professional);
+        Page<ShopService> shopServices = shopServiceUseCaseService.findAll(searchCriteria, pageRequestCustom);
         Page<ShopServiceResponse> responses = shopServices.map(shopServiceModelMapper::toModel);
         return new PageImplResponse<>(responses.getContent(), responses.getTotalElements(), responses.getTotalPages(),
                 pageSize, current);

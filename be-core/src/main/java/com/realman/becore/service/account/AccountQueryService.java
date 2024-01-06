@@ -78,15 +78,13 @@ public class AccountQueryService {
                 return accountMapper.fromInfo(info);
         }
 
-        public Page<Account> findAll(AccountSearchCriteria criteria,
+        public Page<Account> findAll(AccountSearchCriteria searchCriteria,
                         PageRequestCustom pageRequestCustom) {
-                Page<AccountInfo> infoList = accountRepository.findAll(criteria.searches(), criteria.role(),
-                                criteria.branchId(),
+                Page<AccountInfo> infoList = accountRepository.findAll(searchCriteria.toLowerCase(),
                                 pageRequestCustom.pageRequest());
-
                 return infoList.map(info -> {
                         Branch branch = branchUseCaseService.findById(new BranchId(info.getBranchId()),
-                                        criteria.isShowDistance(), criteria.lat(), criteria.lng());
+                                        searchCriteria.isShowDistance(), searchCriteria.lat(), searchCriteria.lng());
                         Staff staff = staffUsercaseService.findByAccountId(info.getAccountId(), true);
                         return accountMapper.fromInfo(info, staff, branch);
                 });

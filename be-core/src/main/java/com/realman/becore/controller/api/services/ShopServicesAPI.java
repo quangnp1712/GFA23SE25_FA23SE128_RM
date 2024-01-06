@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.realman.becore.controller.api.services.models.ShopServiceFieldResponse;
 import com.realman.becore.controller.api.services.models.ShopServiceRequest;
 import com.realman.becore.controller.api.services.models.ShopServiceResponse;
+import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.util.response.ListResponse;
 import com.realman.becore.util.response.PageImplResponse;
 
@@ -26,6 +27,8 @@ public interface ShopServicesAPI {
 
     @GetMapping
     PageImplResponse<ShopServiceResponse> findAll(
+            @RequestParam(required = false, value = "search", defaultValue = "") String search,
+            @RequestParam(required = false, value = "staffProfessional", defaultValue = "") EProfessional professional,
             @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
             @RequestParam(required = false, value = "sorter", defaultValue = "serviceName") String sorter,
             @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);

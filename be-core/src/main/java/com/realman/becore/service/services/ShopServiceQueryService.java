@@ -11,6 +11,7 @@ import com.realman.becore.dto.branch.service.BranchService;
 import com.realman.becore.dto.service.ShopService;
 import com.realman.becore.dto.service.ShopServiceInfo;
 import com.realman.becore.dto.service.ShopServiceMapper;
+import com.realman.becore.dto.service.ShopServiceSearchCriteria;
 import com.realman.becore.dto.service.display.ServiceDisplay;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.service.ShopServiceRepository;
@@ -33,9 +34,10 @@ public class ShopServiceQueryService {
         @NonNull
         private final ShopServiceMapper shopServiceMapper;
 
-        public Page<ShopService> findAll(PageRequestCustom pageRequestCustom) {
+        public Page<ShopService> findAll(ShopServiceSearchCriteria searchCriteria,
+                        PageRequestCustom pageRequestCustom) {
                 Page<ShopServiceInfo> shopServices = shopServiceRepository
-                                .findAllInfo(pageRequestCustom.pageRequest());
+                                .findAllInfo(searchCriteria.toLowerCase(), pageRequestCustom.pageRequest());
                 Map<Long, List<ServiceDisplay>> serviceDisplayMap = serviceDisplayUseCaseService.findAll()
                                 .stream().collect(Collectors.groupingBy(ServiceDisplay::serviceId));
                 Map<Long, List<BranchService>> branchServiceMap = branchServiceUseCaseService.findAll().stream()

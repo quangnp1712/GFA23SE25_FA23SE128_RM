@@ -179,6 +179,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
         transition: color 0.3s;
       }
 
+
       .trigger:hover {
         color: #1890ff;
       }

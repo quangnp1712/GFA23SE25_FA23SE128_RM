@@ -9,84 +9,196 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { AccountStore } from '../data-access/store/account.store';
+import { provideComponentStore } from '@ngrx/component-store';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { RxLet } from '@rx-angular/template/let';
+import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 @Component({
   selector: 'app-account-update',
   standalone: true,
   imports: [
     CommonModule,
-    NzGridModule,
-    NzUploadModule,
-    NzImageModule,
-    NzMenuModule,
-    NzInputModule,
-    NzButtonModule,
     NzCalendarModule,
-    NzAlertModule,
+    NzBreadCrumbModule,
+    NzDividerModule,
+    NzGridModule,
+    NzInputModule,
+    NzIconModule,
+    NzButtonModule,
+    NzFormModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzSelectModule,
+    NzDatePickerModule,
+    RxLet,
+    NzSelectChangeDirective,
+    NzAutocompleteModule,
     NzBadgeModule,
   ],
-  template: `
-    <div nz-row nzJustify="start">
-      <div nz-col nzSpan="6">
-        <div class=" tw-text-center">
-          <img
-            class="tw-rounded-full"
-            nz-image
-            width="50%"
-            height="50%"
-            nzSrc="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            alt=""
-          />
-          <h1>Yasuo</h1>
-          <h5>Staff</h5>
+  providers: [provideComponentStore(AccountStore), NzMessageService],
+  template: `<nz-breadcrumb>
+      <nz-breadcrumb-item>Quản lý tài khoản</nz-breadcrumb-item>
+      <nz-breadcrumb-item>Cập nhật tài khoản</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-divider></nz-divider>
+    <div *rxLet="vm$ as vm">
+      <form nz-form [formGroup]="form">
+        <div nz-row class="tw-ml-[12%]">
+          <!-- first name -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Họ và tên đệm</nz-form-label
+            >
+            <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
+              <input
+                class="tw-rounded-md tw-w-[70%]"
+                [formControl]="form.controls.firstName"
+                nz-input
+                placeholder="Nhập tên tài khoản"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- last name -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Tên</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng nhập tên">
+              <input
+                class="tw-rounded-md tw-w-[70%]"
+                [formControl]="form.controls.lastName"
+                nz-input
+                placeholder="Nhập tên tài khoản"
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- dia chi -->
+
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Địa chỉ</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ">
+              <input
+                class="tw-rounded-md tw-w-[70%]"
+                placeholder="Nhập địa chỉ"
+                [formControl]="form.controls.address"
+                nz-input
+                (input)="getAddress($event)"
+                [nzAutocomplete]="auto"
+              />
+              <nz-autocomplete
+                [nzDataSource]="vm.addressData"
+                nzBackfill
+                #auto
+              ></nz-autocomplete>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- so dien thoai -->
+
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Số điện thoại</nz-form-label
+            >
+            <nz-form-control [nzErrorTip]="phoneErrorTpl">
+              <input
+                class="tw-rounded-md tw-w-[70%]"
+                [formControl]="form.controls.phone"
+                nz-input
+                placeholder="Nhập số điện thoại"
+              />
+            </nz-form-control>
+            <ng-template #phoneErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('trimRequired')">
+                Vui lòng nhập sđt
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  control.hasError('minlength') &&
+                  !control.hasError('trimRequired')
+                "
+              >
+                Sđt gồm 10 số hoặc hơn
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  control.hasError('maxlength') &&
+                  !control.hasError('minlength')
+                "
+              >
+                Sđt ít hơn 12 số
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+          <!-- gioi tinh -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Giới tính</nz-form-label>
+            <nz-form-control nzErrorTip="Chọn giới tính">
+              <nz-select
+                class="tw-w-[70%]"
+                nzPlaceHolder="Chọn giới tính"
+                [formControl]="form.controls.gender"
+              >
+                <nz-option nzValue="NAM" nzLabel="Nam"></nz-option>
+                <nz-option nzValue="NU" nzLabel="Nữ"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- ngay sinh -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Ngày sinh</nz-form-label>
+            <nz-form-control nzErrorTip="Chọn ngày sinh">
+              <nz-date-picker
+                class="tw-w-[70%]"
+                [formControl]="form.controls.dob"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+      <nz-divider></nz-divider>
+      <!-- calendar -->
+      <div nz-row>
+        <div>
+          <h3 class="tw-ml-[11%]">Lịch làm</h3>
+          <nz-calendar nz-col nzMd="18" class="tw-ml-[11%]">
+            <ul *nzDateCell="let date" class="events">
+              <ng-container *ngFor="let event of objects">
+                <li *ngIf="event.date.getTime() === date.getTime()">
+                  <nz-badge
+                    [nzStatus]="event.type"
+                    [nzText]="event.title"
+                  ></nz-badge>
+                </li>
+              </ng-container>
+            </ul>
+          </nz-calendar>
         </div>
       </div>
-      <div nz-col nzSpan="18">
-        <div nz-row>
-          <div nz-col nzSpan="12">
-            <h3 class="tw-ml-5">Họ</h3>
-            <input nz-input disabled class="tw-w-[80%] tw-ml-5" />
-            <h3 class="tw-ml-5">Email</h3>
-            <input nz-input disabled class="tw-w-[80%] tw-ml-5" />
-            <h3 class="tw-ml-5">Giới tính</h3>
-            <input nz-input disabled class="tw-w-[80%] tw-ml-5" />
-          </div>
-          <div nz-col nzSpan="12">
-            <h3 class="tw-ml-5">Tên</h3>
-            <input nz-input disabled class="tw-w-[80%] tw-ml-5" />
-            <h3 class="tw-ml-5">Số điện thoại</h3>
-            <input nz-input disabled class="tw-w-[80%] tw-ml-5" />
-            <h3 class="tw-ml-5">Ngày sinh</h3>
-            <input nz-input disabled class="tw-w-[80%] tw-ml-5" />
-          </div>
-        </div>
-        <h3 class="tw-ml-5">Địa Chỉ</h3>
-        <input nz-input disabled class="tw-w-[90%] tw-ml-5" /> <br />
 
-        <!-- calendar -->
-        <h3 class="tw-ml-5">Lịch làm</h3>
-        <nz-calendar nz-col nzSpan="22">
-          <ul *nzDateCell="let date" class="events">
-            <ng-container *ngFor="let event of objects">
-              <li *ngIf="event.date.getTime() === date.getTime()">
-                <nz-badge
-                  [nzStatus]="event.type"
-                  [nzText]="event.title"
-                ></nz-badge>
-              </li>
-            </ng-container>
-          </ul>
-        </nz-calendar>
-
-        <!-- end -->
-
-        <div class="tw-mt-7 tw-text-center">
-          <button nz-button nzType="primary" nzDanger>Hủy</button>
-          <button nz-button class="tw-ml-3" nzType="primary">Cập Nhật</button>
-        </div>
+      <div class="tw-text-center">
+        <button nz-button nzDanger nzType="primary" (click)="form.reset()">
+          Làm mới
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          class="tw-ml-4"
+          [disabled]="form.invalid"
+        >
+          Cập nhật
+        </button>
       </div>
-    </div>
-  `,
+    </div> `,
   styles: [
     `
       .events {
@@ -116,11 +228,32 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountUpdateComponent implements OnInit {
-  constructor() {
-  }
+  constructor(public aStore: AccountStore) {}
+
+  vm$ = this.aStore.state$;
+  form = this.aStore.form;
+
   ngOnInit(): void {
-    console.log(this.mai);
+    this.aStore.id = Number(this.aStore.accountStaffId[0])
+    this.aStore.staffId = Number(this.aStore.accountStaffId[1])
+    this.aStore.getAccountData();
+    this.aStore.getScheduleData();
+    console.log(this.aStore.id);
   }
+
+  getAddress(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.aStore.getAddress(value);
+  }
+
+  onSeachBranchName(branchName: string) {
+    this.aStore.getBranchName(branchName);
+  }
+
+  onChangeLicense(branchId: number) {
+    this.aStore.getBranchData(branchId);
+  }
+
   current = new Date();
   mai = new Date('12/22/2023');
 

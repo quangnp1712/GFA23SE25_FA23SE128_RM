@@ -5,13 +5,13 @@ export enum RoleType {
   RECEPTIONIST = "RECEPTIONIST",
   BRANCH_MANAGER = "BRANCH_MANAGER",
   SHOP_OWNER = "SHOP_OWNER",
-  CUSTOMER = "CUSTOMER"
+  // CUSTOMER = "CUSTOMER"
 }
 
 export const roleTypeNameMapping: NameMapping<RoleType>[] = [
   { value: RoleType.STAFF, label: 'Staff' },
   { value: RoleType.RECEPTIONIST, label: 'receptionist' },
   { value: RoleType.BRANCH_MANAGER, label: 'Branch Manager' },
-  { value: RoleType.SHOP_OWNER, label: 'Shop Owner' },
-  { value: RoleType.CUSTOMER, label: 'Customer' },
+  // { value: RoleType.SHOP_OWNER, label: 'Shop Owner' },
+  // { value: RoleType.CUSTOMER, label: 'Customer' },
 ];

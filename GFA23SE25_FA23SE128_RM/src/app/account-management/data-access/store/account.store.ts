@@ -17,16 +17,24 @@ import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { AccountApiService } from '../api/account.service';
-import { AccountAddApi, AccountPagingApi } from '../model/account-api.model';
+import {
+  AccountAddApi,
+  AccountPagingApi,
+  AccountUpdateApi,
+  ScheduleGetApi,
+} from '../model/account-api.model';
 import { BranchNameApi } from 'src/app/share/data-access/model/branch-name.model';
 import { BranchAddressApi } from 'src/app/share/data-access/model/branch-address-api.model';
 import { RoleType } from 'src/app/share/data-access/api/enum/role.enum';
+import { ActivatedRoute } from '@angular/router';
 
 export interface AccountState {
   acountPaging: Paging<AccountPagingApi.Response>;
   loadingCount: number;
   branchNameData: BranchNameApi.Response;
   addressData: string[];
+  accountData: AccountUpdateApi.Response;
+  scheduleData: ScheduleGetApi.Response;
 }
 
 const initialState: AccountState = {
@@ -40,6 +48,8 @@ const initialState: AccountState = {
   loadingCount: 0,
   branchNameData: { values: [] },
   addressData: [],
+  accountData: { value: null },
+  scheduleData: { values: [] },
 };
 
 @Injectable()
@@ -48,7 +58,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     private _aApiSvc: AccountApiService,
     private _fb: NonNullableFormBuilder,
     private _nzMessageService: NzMessageService,
-    private _cApiSvc: CommonApiService
+    private _cApiSvc: CommonApiService,
+    private _activatedRoute: ActivatedRoute
   ) {
     super(initialState);
   }
@@ -57,7 +68,7 @@ export class AccountStore extends ComponentStore<AccountState> {
   options: string[] = [];
   branchData: BranchAddressApi.Response = {
     value: { address: '', branchId: -1, branchName: '', numberStaffs: 0 },
-  }
+  };
 
   pagingRequest: AccountPagingApi.Request = {
     current: 1,
@@ -66,10 +77,16 @@ export class AccountStore extends ComponentStore<AccountState> {
     sorter: '',
     orderDescending: false,
     role: RoleType.STAFF,
-    branchId: localStorage.getItem('branchId$')!
+    branchId: localStorage.getItem('branchId$')!,
   };
 
-  form = new FormGroup<AccountAddApi.RequestFormGroup>({
+  accountStaffId : string[] = this._activatedRoute.snapshot.paramMap.getAll('account');
+  id!: number
+  staffId!: number
+
+  form = new FormGroup<
+    AccountAddApi.RequestFormGroup | AccountUpdateApi.RequestFormGroup
+  >({
     firstName: this._fb.control('', trimRequired),
     lastName: this._fb.control('', [trimRequired]),
     address: this._fb.control('', trimRequired),
@@ -83,8 +100,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     professional: this._fb.control(''),
     branch: this._fb.control(-1),
     thumbnailUrl: this._fb.control('123'),
-    branchAddress: this._fb.control({value:'', disabled: true}),
-    numberStaffs: this._fb.control({value:null, disabled: true})
+    branchAddress: this._fb.control({ value: '', disabled: true }),
+    numberStaffs: this._fb.control({ value: null, disabled: true }),
   });
 
   readonly getAccountPaging = this.effect<never>(
@@ -95,6 +112,40 @@ export class AccountStore extends ComponentStore<AccountState> {
           tap({
             next: (resp) => {
               if (resp.content) this.patchState({ acountPaging: resp });
+            },
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  readonly getAccountData = this.effect<never>(
+    pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(() =>
+        this._aApiSvc.getAccount(this.id, this.pagingRequest.role).pipe(
+          tap({
+            next: (resp) => {
+              this.form.patchValue(resp.value!);
+            },
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  readonly getScheduleData = this.effect<never>(
+    pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(() =>
+        this._aApiSvc.getSchedule(this.staffId).pipe(
+          tap({
+            next: (resp) => {
+              this.patchState({ scheduleData: resp });
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -128,8 +179,8 @@ export class AccountStore extends ComponentStore<AccountState> {
         this._cApiSvc.getBranchAddress(branchId).pipe(
           tap({
             next: (resp) => {
-              this.form.controls.branchAddress.setValue(resp.value.address)
-              this.form.controls.numberStaffs.setValue(resp.value.numberStaffs)
+              this.form.controls.branchAddress.setValue(resp.value.address);
+              this.form.controls.numberStaffs.setValue(resp.value.numberStaffs);
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -152,7 +203,7 @@ export class AccountStore extends ComponentStore<AccountState> {
                 resp.value.predictions.forEach((address) => {
                   this.options.push(address.description);
                 });
-                this.patchState({addressData: this.options})
+                this.patchState({ addressData: this.options });
               }
             },
             finalize: () => {},

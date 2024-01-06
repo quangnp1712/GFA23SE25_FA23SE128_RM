@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
   FormsModule,
-  NonNullableFormBuilder,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -13,16 +10,15 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ServiceStore } from '../data-access/store/service.store';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { ServiceAddApi } from '../data-access/model/service-api.model';
+import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
 
 @Component({
   selector: 'app-service',
@@ -40,7 +36,8 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
     ReactiveFormsModule,
     NzSelectModule,
     NzUploadModule,
-    RxLet
+    RxLet,
+    OnlyNumberInputDirective
   ],
   providers: [NzMessageService, provideComponentStore(ServiceStore)],
   template: `
@@ -52,14 +49,14 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
     <div *rxLet="vm$ as vm">
       <form nz-form [formGroup]="form">
         <div nz-row class="tw-ml-[12%]">
-          <!-- Tên chi nhánh -->
+          <!-- Tên dich vu -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
               >Tên dịch vụ</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập tên dịch vụ">
               <input
-                class="tw-rounded-md tw-w-[70%]"
+                class="tw-w-[70%]"
                 nz-input
                 [formControl]="form.controls.name"
                 placeholder="Nhập tên dịch vụ"
@@ -67,31 +64,93 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
             </nz-form-control>
           </nz-form-item>
 
-          <!-- loaij dichj vuj -->
+          <!-- Tien -->
+
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Loại dịch vụ</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
-              <nz-select class="tw-rounded-md tw-w-[70%]" [formControl]="form.controls.categoryId">
-            <nz-option *ngFor="let option of vm.categoryData.values" [nzLabel]="option.categoryType" [nzValue]="option.categoryId"></nz-option>
-            </nz-select>
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Số Tiền</nz-form-label
+            >
+            <nz-form-control nzErrorTip="Vui lòng nhập số tiền">
+              <input
+                class="tw-w-[70%]"
+                nz-input
+                [formControl]="form.controls.price"
+                placeholder="Nhập số tiền"
+                appOnlyNumber
+              />
             </nz-form-control>
           </nz-form-item>
+
+          <!-- loaij dichj vuj -->
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Loại dịch vụ</nz-form-label
+            >
+            <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
+              <nz-select
+                class="tw-w-[70%]"
+                [formControl]="form.controls.categoryId"
+              >
+                <nz-option
+                  *ngFor="let option of vm.categoryData.values"
+                  [nzLabel]="option.categoryType"
+                  [nzValue]="option.categoryId"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- thoi gian -->
+
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Thời gian dự tính</nz-form-label
+            >
+            <nz-form-control nzErrorTip="Vui lòng nhập thời gian ước tính">
+              <nz-input-group nzCompact>
+                <nz-select [formControl]="form.controls.durationTime" class="tw-w-[15%]">
+                  <nz-option
+                    [nzLabel]="'Minute'"
+                    [nzValue]="'MINUTE'"
+                  ></nz-option>
+                  <nz-option [nzLabel]="'Hour'" [nzValue]="'Hour'"></nz-option>
+                </nz-select>
+                <input
+                  class="tw-w-[55%]"
+                  type="text"
+                  nz-input
+                  [formControl]="form.controls.durationValue"
+                  appOnlyNumber
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- mo ta -->
 
           <nz-form-item nz-col nzSpan="12">
             <nz-form-label class="tw-ml-3">Mô tả dịch vụ</nz-form-label>
             <nz-form-control>
-            <textarea  class="tw-w-[70%]" rows="5" nz-input [formControl]="form.controls.description"></textarea>
+              <textarea
+                class="tw-w-[70%]"
+                rows="5"
+                nz-input
+                [formControl]="form.controls.description"
+              ></textarea>
             </nz-form-control>
           </nz-form-item>
 
+          <!-- anh -->
+
           <nz-form-item nz-col nzSpan="12" class="">
-            <nz-form-label class="tw-ml-3" nzRequired>Ảnh dịch vụ</nz-form-label>
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Ảnh dịch vụ</nz-form-label
+            >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
               <nz-upload
                 nzType="drag"
                 [nzMultiple]="true"
                 nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-
               >
                 <p class="ant-upload-drag-icon">
                   <span nz-icon nzType="inbox"></span>
@@ -102,14 +161,20 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
               </nz-upload>
             </nz-form-control>
           </nz-form-item>
-
-          <!-- dia chi -->
         </div>
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary" (click)="form.reset()">Làm mới</button>
-        <button nz-button nzType="primary" class="tw-ml-4" (click)="addService()" [disabled]="form.invalid">
+        <button nz-button nzDanger nzType="primary" (click)="form.reset()">
+          Làm mới
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          class="tw-ml-4"
+          (click)="addService()"
+          [disabled]="form.invalid"
+        >
           Tạo dịch vụ
         </button>
       </div>
@@ -119,12 +184,12 @@ import { ServiceAddApi } from '../data-access/model/service-api.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceComponent {
-  constructor(public sStore: ServiceStore){}
+  constructor(public sStore: ServiceStore) {}
 
-  vm$ = this.sStore.state$
-  form = this.sStore.form
+  vm$ = this.sStore.state$;
+  form = this.sStore.form;
 
-  addService(){
-    this.sStore.addService({model: ServiceAddApi.mapModel(this.form)})
+  addService() {
+    this.sStore.addService({ model: ServiceAddApi.mapModel(this.form) });
   }
 }

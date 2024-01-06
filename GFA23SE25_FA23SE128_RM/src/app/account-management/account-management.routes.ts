@@ -21,7 +21,7 @@ const ACCOUNT_MANAGEMENT_ROUTES: Route[] = [
       import('./feature/account.component').then((m) => m.AccountComponent),
   },
   {
-    path: ':id',
+    path: 'update-account',
     loadComponent: () =>
       import('./feature/account-update.component').then((m) => m.AccountUpdateComponent),
   },

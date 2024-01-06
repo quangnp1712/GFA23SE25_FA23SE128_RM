@@ -6,7 +6,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { AccountAddApi, AccountPagingApi } from '../model/account-api.model';
+import { AccountAddApi, AccountPagingApi, AccountUpdateApi, ScheduleGetApi } from '../model/account-api.model';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
 
 @Injectable({
@@ -36,6 +36,22 @@ export class AccountApiService {
     const url = `${this.REST_API_SERVER}/v1/auth/accounts?branchId=${model.branchId}&searches=${model.searches}&role=${model.role}&current=${model.current}&pageSize=${model.pageSize}&sorter=${model.sorter}`;
     return this._http
       .get<Paging<AccountPagingApi.Response>>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  public getAccount(accountId: number, role: string) {
+
+    const url = `${this.REST_API_SERVER}/v1/auth/account/${accountId}/${role === "STAFF" ? 'staff' : 'manager'}`;
+    return this._http
+      .get<AccountUpdateApi.Response>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  public getSchedule(staffId: number) {
+
+    const url = `${this.REST_API_SERVER}/v1/schedule/${staffId}`;
+    return this._http
+      .get<ScheduleGetApi.Response>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 

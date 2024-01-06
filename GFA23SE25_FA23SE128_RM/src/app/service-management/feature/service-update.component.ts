@@ -62,6 +62,21 @@ import {
             </nz-form-control>
           </nz-form-item>
 
+          <!-- Tien -->
+
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired>Số Tiền</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng nhập số tiền">
+              <input
+                class="tw-w-[70%]"
+                nz-input
+                [formControl]="form.controls.price"
+                placeholder="Nhập số tiền"
+                appOnlyNumber
+              />
+            </nz-form-control>
+          </nz-form-item>
+
           <!-- loaij dichj vuj -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired
@@ -69,7 +84,7 @@ import {
             >
             <nz-form-control nzErrorTip="Vui lòng chọn loại dịch vụ">
               <nz-select
-                class="tw-rounded-md tw-w-[70%]"
+                class="tw-w-[70%]"
                 [formControl]="form.controls.categoryId"
               >
                 <nz-option
@@ -80,6 +95,37 @@ import {
               </nz-select>
             </nz-form-control>
           </nz-form-item>
+
+          <!-- thoi gian -->
+
+          <nz-form-item nz-col nzSpan="12" class="">
+            <nz-form-label class="tw-ml-3" nzRequired
+              >Thời gian dự tính</nz-form-label
+            >
+            <nz-form-control nzErrorTip="Vui lòng nhập thời gian ước tính">
+              <nz-input-group nzCompact>
+                <nz-select
+                  [formControl]="form.controls.durationTime"
+                  class="tw-w-[15%]"
+                >
+                  <nz-option
+                    [nzLabel]="'Minute'"
+                    [nzValue]="'MINUTE'"
+                  ></nz-option>
+                  <nz-option [nzLabel]="'Hour'" [nzValue]="'Hour'"></nz-option>
+                </nz-select>
+                <input
+                  class="tw-w-[55%]"
+                  type="text"
+                  nz-input
+                  [formControl]="form.controls.durationValue"
+                  appOnlyNumber
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- mo ta -->
 
           <nz-form-item nz-col nzSpan="12">
             <nz-form-label class="tw-ml-3">Mô tả dịch vụ</nz-form-label>
@@ -92,6 +138,8 @@ import {
               ></textarea>
             </nz-form-control>
           </nz-form-item>
+
+          <!-- anh -->
 
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired

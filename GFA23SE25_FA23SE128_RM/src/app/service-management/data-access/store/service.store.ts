@@ -73,8 +73,10 @@ export class ServiceStore
     name: this._fb.control('', trimRequired),
     categoryId: this._fb.control(null, Validators.required),
     description: this._fb.control(''),
-    duration: this._fb.control(0),
     serviceDisplayList: this._fb.control([]),
+    durationTime: this._fb.control('MINUTE'),
+    durationValue: this._fb.control(0, trimRequired),
+    price: this._fb.control(0, trimRequired)
   });
 
   readonly getServicePaging = this.effect<never>(

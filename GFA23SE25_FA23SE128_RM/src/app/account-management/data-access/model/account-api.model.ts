@@ -13,6 +13,7 @@ export namespace AccountAddApi {
     professional: string;
     thumbnailUrl: string;
   }
+
   export type RequestFormGroup = {
     firstName: FormControl<string>;
     lastName: FormControl<string>;
@@ -82,5 +83,59 @@ export namespace AccountPagingApi {
       professional: string;
     };
     role: RoleType;
+  }
+}
+
+export namespace AccountUpdateApi {
+  export interface Request {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    address: string;
+    gender: string;
+    dob: string;
+    branch: number;
+    professional: string;
+    thumbnailUrl: string;
+  }
+
+  export type RequestFormGroup = {
+    firstName: FormControl<string>;
+    lastName: FormControl<string>;
+    phone: FormControl<string>;
+    address: FormControl<string>;
+    gender: FormControl<string>;
+    dob: FormControl<string>;
+    branch: FormControl<number>;
+    professional: FormControl<string>;
+    thumbnailUrl: FormControl<string>;
+    branchAddress: FormControl<string>;
+    numberStaffs: FormControl<number | null>;
+  };
+
+  export interface Response {
+    value: {
+      firstName: string;
+      lastName: string;
+      phone: string;
+      address: string;
+      gender: string;
+      dob: string;
+      branch: number;
+      professional: string;
+      thumbnailUrl: string;
+    } | null;
+  }
+}
+
+export namespace ScheduleGetApi {
+  export interface Response {
+    values: {
+      scheduleId: number;
+      staffId: number;
+      shift: string;
+      workingDate: string;
+      scheduleStatus: string;
+    }[];
   }
 }

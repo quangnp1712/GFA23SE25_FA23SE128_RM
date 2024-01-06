@@ -37,7 +37,9 @@ export namespace ServiceAddApi {
     description: string;
     categoryId: number;
     serviceDisplayList: serviceDisplayList;
-    duration: number;
+    price: number;
+    durationValue: number;
+    durationTime: string;
   }
 
   export type serviceDisplayList = {
@@ -48,8 +50,10 @@ export namespace ServiceAddApi {
     description: FormControl<string>;
     name: FormControl<string>;
     categoryId: FormControl<number | null>;
-    duration: FormControl<number>;
     serviceDisplayList: FormControl<serviceDisplayList>;
+    price: FormControl<number>;
+    durationValue: FormControl<number>;
+    durationTime: FormControl<string>;
   };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
@@ -57,9 +61,11 @@ export namespace ServiceAddApi {
     return {
       description: formValue.description,
       categoryId: formValue.categoryId!,
-      duration: formValue.duration,
+      durationTime: formValue.durationTime,
       name: formValue.name,
       serviceDisplayList: formValue.serviceDisplayList,
+      durationValue: formValue.durationValue,
+      price: formValue.price
     };
   }
 }
@@ -105,7 +111,9 @@ export namespace ServiceUpdateApi {
     description: string;
     categoryId: number;
     serviceDisplayList: serviceDisplayList;
-    duration: number;
+    price: number;
+    durationValue: number;
+    durationTime: string;
   }
 
   export type serviceDisplayList = {
@@ -116,8 +124,10 @@ export namespace ServiceUpdateApi {
     description: FormControl<string>;
     name: FormControl<string>;
     categoryId: FormControl<number | null>;
-    duration: FormControl<number>;
     serviceDisplayList: FormControl<serviceDisplayList>;
+    price: FormControl<number>;
+    durationValue: FormControl<number>;
+    durationTime: FormControl<string>;
   };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
@@ -125,9 +135,11 @@ export namespace ServiceUpdateApi {
     return {
       description: formValue.description,
       categoryId: formValue.categoryId!,
-      duration: formValue.duration,
+      durationTime: formValue.durationTime,
       name: formValue.name,
       serviceDisplayList: formValue.serviceDisplayList,
+      durationValue: formValue.durationValue,
+      price: formValue.price
     };
   }
 }

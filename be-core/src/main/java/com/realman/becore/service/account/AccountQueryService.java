@@ -42,7 +42,7 @@ public class AccountQueryService {
                 AccountEntity entity = accountRepository
                                 .findByPhone(phone)
                                 .orElseThrow(ResourceNotFoundException::new);
-                Staff staff = staffUsercaseService.findByAccountId(entity.getAccountId(), true);
+                Staff staff = staffUsercaseService.findByAccountId(entity.getAccountId());
                 return accountMapper.toDto(entity, staff);
         }
 
@@ -54,7 +54,7 @@ public class AccountQueryService {
         public Account findStaffAccount(AccountId accountId, Boolean isShowDistance, Double lat, Double lng) {
                 AccountInfo info = accountRepository.findStaffAccount(accountId.value())
                                 .orElseThrow(ResourceNotFoundException::new);
-                Staff staff = staffUsercaseService.findByAccountId(accountId.value(), false);
+                Staff staff = staffUsercaseService.findByAccountId(accountId.value());
                 Branch branch = branchUseCaseService
                                 .findById(new BranchId(info.getBranchId()), isShowDistance, lat, lng);
                 return accountMapper.fromInfo(info, staff, branch);
@@ -85,7 +85,7 @@ public class AccountQueryService {
                 return infoList.map(info -> {
                         Branch branch = branchUseCaseService.findById(new BranchId(info.getBranchId()),
                                         searchCriteria.isShowDistance(), searchCriteria.lat(), searchCriteria.lng());
-                        Staff staff = staffUsercaseService.findByAccountId(info.getAccountId(), true);
+                        Staff staff = staffUsercaseService.findByAccountId(info.getAccountId());
                         return accountMapper.fromInfo(info, staff, branch);
                 });
         }

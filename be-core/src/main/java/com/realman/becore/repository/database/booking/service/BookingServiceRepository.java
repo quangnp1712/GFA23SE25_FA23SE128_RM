@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.realman.becore.dto.booking.service.BookingServiceInfo;
-import java.time.LocalDate;
 
 @Repository
 public interface BookingServiceRepository extends JpaRepository<BookingServiceEntity, Long> {
@@ -25,11 +24,11 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
-                bs.startTime AS startTime,
-                bs.endTime AS endTime,
-                bs.actualStartTime AS actualStartTime,
-                bs.actualEndTime AS actualEndTime,
-                (bs.actualEndTime - bs.actualStartTime) AS duration,
+                bs.startAppointment AS startAppointment,
+                bs.endAppointment AS endAppointment,
+                bs.actualStartAppointment AS actualStartAppointment,
+                bs.actualEndAppointment AS actualEndAppointment,
+                (bs.actualEndAppointment - bs.actualStartAppointment) AS duration,
                 bs.bookingServiceStatus AS bookingServiceStatus
             FROM BookingServiceEntity bs
             INNER JOIN StaffEntity s ON bs.staffId = bs.staffId
@@ -56,11 +55,11 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
-                bs.startTime AS startTime,
-                bs.endTime AS endTime,
-                bs.actualStartTime AS actualStartTime,
-                bs.actualEndTime AS actualEndTime,
-                (bs.actualEndTime - bs.actualStartTime) AS duration,
+                bs.startAppointment AS startAppointment,
+                bs.endAppointment AS endAppointment,
+                bs.actualStartAppointment AS actualStartAppointment,
+                bs.actualEndAppointment AS actualEndAppointment,
+                (bs.actualEndAppointment - bs.actualStartAppointment) AS duration,
                 (a.accountId = :accountId) AS allowUpdate,
                 bs.bookingServiceStatus AS bookingServiceStatus
             FROM BookingServiceEntity bs
@@ -87,11 +86,11 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
-                bs.startTime AS startTime,
-                bs.endTime AS endTime,
-                bs.actualStartTime AS actualStartTime,
-                bs.actualEndTime AS actualEndTime,
-                (bs.actualEndTime - bs.actualStartTime) AS duration,
+                bs.startAppointment AS startAppointment,
+                bs.endAppointment AS endAppointment,
+                bs.actualStartAppointment AS actualStartAppointment,
+                bs.actualEndAppointment AS actualEndAppointment,
+                (bs.actualEndAppointment - bs.actualStartAppointment) AS duration,
                 (a.accountId = :accountId) AS allowUpdate,
                 bs.bookingServiceStatus AS bookingServiceStatus
             FROM BookingServiceEntity bs
@@ -103,17 +102,4 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             WHERE bs.bookingServiceId = :bookingServiceId
             """)
     Optional<BookingServiceInfo> findInfoById(Long bookingServiceId, Long accountId);
-
-    @Query("""
-            SELECT
-                a.phone AS cusPhone
-            FROM BookingServiceEntity bs
-            INNER JOIN BookingEntity b ON b.bookingId = bs.bookingId
-            INNER JOIN AccountEntity a ON a.accountId = b.accountId
-            WHERE bs.staffId = :staffId
-            AND b.appointmentDate = :appointmentDate
-            AND bs.bookingServiceStatus = com.realman.becore.dto.enums.EBookingServiceStatus.PENDING
-            ORDER BY bs.startTime
-            """)
-    List<BookingServiceInfo> findNearBookingService(Long staffId, LocalDate appointmentDate);
 }

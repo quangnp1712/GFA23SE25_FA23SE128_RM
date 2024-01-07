@@ -8,7 +8,7 @@ import com.realman.becore.dto.enums.ERole;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AccountModelMapper {
-    
+
     Account toDto(AccountRequest model, ERole role);
 
     AccountResponse toModel(Account dto);

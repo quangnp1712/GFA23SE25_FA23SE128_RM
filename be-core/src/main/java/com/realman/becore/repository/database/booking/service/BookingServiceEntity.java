@@ -28,12 +28,12 @@ public class BookingServiceEntity {
     private Long serviceId;
     private Long staffId;
     @Temporal(TemporalType.TIME)
-    private LocalTime startTime;
+    private LocalTime startAppointment;
     @Temporal(TemporalType.TIME)
-    private LocalTime actualStartTime;
+    private LocalTime actualStartAppointment;
     @Temporal(TemporalType.TIME)
-    private LocalTime endTime;
+    private LocalTime endAppointment;
     @Temporal(TemporalType.TIME)
-    private LocalTime actualEndTime;
+    private LocalTime actualEndAppointment;
     private EBookingServiceStatus bookingServiceStatus;
 }

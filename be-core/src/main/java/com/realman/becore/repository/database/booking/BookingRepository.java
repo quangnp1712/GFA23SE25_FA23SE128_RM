@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.realman.becore.dto.booking.BookingInfo;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -48,4 +49,18 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             INNER JOIN BranchEntity be ON be.branchId = b.branchId
             """)
     Page<BookingInfo> findAllInfo(Pageable pageable);
+
+    @Query("""
+            SELECT
+                b.bookingId AS bookingId,
+                bs.bookingServiceId AS bookingServiceId,
+                b.appointmentDate AS appointmentDate,
+                bs.startAppointment AS startAppointment,
+                bs.endAppointment AS endAppointment,
+                bs.bookingServiceStatus AS bookingServiceStatus
+            FROM BookingEntity b
+            INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
+            WHERE bs.staffId = :staffId
+            """)
+    List<BookingInfo> findInfoByStaffId(Long staffId);
 }

@@ -26,7 +26,7 @@ public class ShiftEntity {
     private Long shiftId;
     private EShift shift;
     @Temporal(TemporalType.TIME)
-    private LocalTime start;
+    private LocalTime startShift;
     @Temporal(TemporalType.TIME)
-    private LocalTime end;
+    private LocalTime endShift;
 }

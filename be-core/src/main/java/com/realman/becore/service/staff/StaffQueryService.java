@@ -1,17 +1,17 @@
 package com.realman.becore.service.staff;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.realman.becore.dto.schedule.Schedule;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.dto.staff.StaffMapper;
-import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
+import com.realman.becore.dto.staff.booking.BookingStaff;
 import com.realman.becore.repository.database.staff.StaffEntity;
 import com.realman.becore.repository.database.staff.StaffRepository;
+import com.realman.becore.service.booking.BookingUseCaseService;
 import com.realman.becore.service.schedule.ScheduleQueryService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -25,21 +25,18 @@ public class StaffQueryService {
     private final ScheduleQueryService scheduleQueryService;
     @NonNull
     private final StaffMapper staffMapper;
+    @NonNull
+    private final BookingUseCaseService bookingUseCaseService;
 
-    public Staff findByAccountId(Long accountId, Boolean allowNull) {
-        if (allowNull) {
-            StaffEntity staffEntity = staffRepository.findByAccountId(accountId)
-                    .orElse(null);
-            List<Schedule> scheduleList = Objects.nonNull(staffEntity)
-                    ? scheduleQueryService.findById(staffEntity.getStaffId())
-                    : new ArrayList<>();
-            return staffMapper.toDto(staffEntity, scheduleList);
-        } else {
-            StaffEntity staffEntity = staffRepository.findByAccountId(accountId)
-                    .orElseThrow(ResourceNotFoundException::new);
-            List<Schedule> scheduleList = scheduleQueryService.findById(staffEntity.getStaffId());
-            return staffMapper.toDto(staffEntity, scheduleList);
+    public Staff findByAccountId(Long accountId) {
+        Optional<StaffEntity> staffEntity = staffRepository.findByAccountId(accountId);
+        if (staffEntity.isPresent()) {
+            StaffEntity staff = staffEntity.get();
+            List<BookingStaff> bookings = bookingUseCaseService.findByStaffId(staff.getStaffId());
+            List<Schedule> schedules = scheduleQueryService.findById(staff.getStaffId());
+            return staffMapper.toDto(staffEntity.get(), schedules, bookings);
         }
+        return staffMapper.toDto(null, List.<Schedule>of(), List.<BookingStaff>of());
 
     }
 }

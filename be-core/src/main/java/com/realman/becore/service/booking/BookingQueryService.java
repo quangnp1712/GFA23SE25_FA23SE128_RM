@@ -10,6 +10,8 @@ import com.realman.becore.dto.booking.Booking;
 import com.realman.becore.dto.booking.BookingInfo;
 import com.realman.becore.dto.booking.BookingMapper;
 import com.realman.becore.dto.booking.service.BookingService;
+import com.realman.becore.dto.staff.booking.BookingStaff;
+import com.realman.becore.dto.staff.booking.BookingStaffMapper;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.booking.BookingRepository;
 import com.realman.becore.service.booking.service.BookingServiceUseCaseService;
@@ -27,6 +29,8 @@ public class BookingQueryService {
     private final BookingServiceUseCaseService bookingServiceUseCaseService;
     @NonNull
     private final BookingMapper bookingMapper;
+    @NonNull
+    private final BookingStaffMapper bookingStaffMapper;
 
     public Booking findById(BookingId bookingId) {
         List<BookingService> bookingServices = bookingServiceUseCaseService.findByBookingId(bookingId.value());
@@ -42,5 +46,10 @@ public class BookingQueryService {
         Page<Booking> bookings = bookingRepository.findAllInfo(pageRequestCustom.pageRequest())
                 .map(booking -> bookingMapper.toDto(booking, bookingServiceMap.get(booking.getBookingId())));
         return bookings;
+    }
+
+    public List<BookingStaff> findByStaffId(Long staffId) {
+        List<BookingInfo> bookingInfos = bookingRepository.findInfoByStaffId(staffId);
+        return bookingInfos.stream().map(bookingStaffMapper::toDto).toList();
     }
 }

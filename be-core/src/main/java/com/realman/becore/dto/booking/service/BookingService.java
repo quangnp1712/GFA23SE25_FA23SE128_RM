@@ -10,21 +10,21 @@ import lombok.Builder;
 
 @Builder
 public record BookingService(
-                Long bookingServiceId,
-                Long bookingId,
-                Long serviceId,
-                Long staffId,
-                String serviceName,
-                Long servicePrice,
-                String staffName,
-                String staffPhone,
-                LocalTime startTime,
-                LocalTime actualStartTime,
-                LocalTime endTime,
-                LocalTime actualEndTime,
-                Duration duration,
-                EBookingServiceStatus bookingServiceStatus,
-                EProfessional professional,
-                Boolean allowUpdate) {
+        Long bookingServiceId,
+        Long bookingId,
+        Long serviceId,
+        Long staffId,
+        String serviceName,
+        Long servicePrice,
+        String staffName,
+        String staffPhone,
+        LocalTime startAppointment,
+        LocalTime actualStartAppointment,
+        LocalTime endAppointment,
+        LocalTime actualEndAppointment,
+        Duration duration,
+        EBookingServiceStatus bookingServiceStatus,
+        EProfessional professional,
+        Boolean allowUpdate) {
 
 }

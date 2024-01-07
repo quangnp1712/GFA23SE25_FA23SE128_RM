@@ -30,13 +30,13 @@ public interface BookingServiceInfo {
 
     void setStaffPhone(String staffPhone);
 
-    void setStartTime(LocalTime startTime);
+    void setStartAppointment(LocalTime startAppointment);
 
-    void setEndTime(LocalTime endTime);
+    void setEndAppointment(LocalTime endAppointment);
 
-    void setActualStartTime(LocalTime actualStartTime);
+    void setActualStartAppointment(LocalTime actualStartAppointment);
 
-    void setActualEndTime(LocalTime actualEndTime);
+    void setActualEndAppointment(LocalTime actualEndAppointment);
 
     void setDuration(Duration duration);
 
@@ -70,13 +70,13 @@ public interface BookingServiceInfo {
 
     String getStaffPhone();
 
-    LocalTime getStartTime();
+    LocalTime getStartAppointment();
 
-    LocalTime getEndTime();
+    LocalTime getEndAppointment();
 
-    LocalTime getActualStartTime();
+    LocalTime getActualStartAppointment();
 
-    LocalTime getActualEndTime();
+    LocalTime getActualEndAppointment();
 
     Duration getDuration();
 

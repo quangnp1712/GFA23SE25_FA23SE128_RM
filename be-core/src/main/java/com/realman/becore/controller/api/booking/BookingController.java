@@ -1,7 +1,6 @@
 package com.realman.becore.controller.api.booking;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.realman.becore.controller.api.booking.models.BookingId;
 import com.realman.becore.controller.api.booking.models.BookingModelMapper;
 import com.realman.becore.controller.api.booking.models.BookingResponse;
@@ -19,11 +18,6 @@ public class BookingController implements BookingAPI {
     private final BookingUseCaseService bookingUseCaseService;
     @NonNull
     private final BookingModelMapper bookingModelMapper;
-
-    @Override
-    public void confirmBooking(Long bookingId, Boolean isAccepted) {
-        bookingUseCaseService.confirmBooking(new BookingId(bookingId), isAccepted);
-    }
 
     @Override
     public ValueResponse<BookingResponse> findById(Long bookingId) {

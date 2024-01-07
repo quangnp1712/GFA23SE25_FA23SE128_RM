@@ -123,11 +123,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 OR a.phone IN :#{#searchCriteria.searches}
                 OR LOWER(a.address) IN :#{#searchCriteria.searches})
             AND (:#{#searchCriteria.hasBranchIdEmpty()} = TRUE OR a.branchId = :#{#searchCriteria.branchId})
-            AND (:#{#searchCriteria.hasCategoryEmpty()} = TRUE
-                OR CASE
-                    WHEN :#{#searchCriteria.category} = 'massage' THEN s.professional = com.realman.becore.dto.enums.EProfessional.MASSEUR
-                    WHEN :#{#searchCriteria.category} = 'haircut' THEN s.professional = com.realman.becore.dto.enums.EProfessional.STYLIST
-                END)
             """)
     Page<AccountInfo> findAll(AccountSearchCriteria searchCriteria,
             Pageable pageable);

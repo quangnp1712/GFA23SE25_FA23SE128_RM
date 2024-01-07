@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.realman.becore.dto.enums.EScheduleStatus;
+import com.realman.becore.dto.staff.StaffInfo;
 import com.realman.becore.repository.database.schedule.ScheduleEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -19,4 +20,6 @@ public interface ScheduleMapper {
     Schedule toDto(ScheduleInfo info);
 
     Schedule toDto(ScheduleEntity entity);
+
+    Schedule fromStaffInfo(StaffInfo info);
 }

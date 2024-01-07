@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch.BranchId;
@@ -40,8 +39,8 @@ public class AccountCommandService {
         public void saveStaff(Account account, BranchId branchId,
                         EProfessional professional) {
                 Optional<AccountEntity> accountExisted = accountRepository
-                        .findByPhone(account.phone());
-                if(accountExisted.isPresent()) {
+                                .findByPhone(account.phone());
+                if (accountExisted.isPresent()) {
                         throw new ResourceDuplicateException();
                 }
                 AccountEntity entity = accountMapper.toEntity(account, branchId.value());
@@ -53,8 +52,8 @@ public class AccountCommandService {
 
         public void saveCustomer(Account account) {
                 Optional<AccountEntity> accountExisted = accountRepository
-                        .findByPhone(account.phone());
-                if(accountExisted.isPresent()) {
+                                .findByPhone(account.phone());
+                if (accountExisted.isPresent()) {
                         throw new ResourceDuplicateException();
                 }
                 AccountEntity entity = accountMapper.toEntity(account);
@@ -65,8 +64,8 @@ public class AccountCommandService {
 
         public void save(Account account, BranchId branchId) {
                 Optional<AccountEntity> accountExisted = accountRepository
-                        .findByPhone(account.phone());
-                if(accountExisted.isPresent()) {
+                                .findByPhone(account.phone());
+                if (accountExisted.isPresent()) {
                         throw new ResourceDuplicateException();
                 }
                 AccountEntity entity = accountMapper.toEntity(account, branchId.value());
@@ -75,8 +74,8 @@ public class AccountCommandService {
 
         public void save(Account account) {
                 Optional<AccountEntity> accountExisted = accountRepository
-                        .findByPhone(account.phone());
-                if(accountExisted.isPresent()) {
+                                .findByPhone(account.phone());
+                if (accountExisted.isPresent()) {
                         throw new ResourceDuplicateException();
                 }
                 AccountEntity entity = accountMapper.toEntity(account);

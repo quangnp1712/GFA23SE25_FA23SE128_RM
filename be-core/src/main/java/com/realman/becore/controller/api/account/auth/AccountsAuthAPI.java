@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.realman.becore.controller.api.account.models.AccountRequest;
 import com.realman.becore.controller.api.account.models.AccountResponse;
-import com.realman.becore.dto.enums.ECategoryType;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.dto.enums.ERole;
 import com.realman.becore.util.response.PageImplResponse;
@@ -41,7 +40,6 @@ public interface AccountsAuthAPI {
                         @RequestParam(required = false, value = "searches") List<String> searches,
                         @RequestParam(required = false) Long branchId,
                         @RequestParam(required = false, value = "role", defaultValue = "STAFF") ERole role,
-                        @RequestParam(required = false, value = "serviceCategory", defaultValue = "") ECategoryType category,
                         @RequestParam(required = false, value = "isShowDistance", defaultValue = "false") Boolean isShowDistance,
                         @RequestParam(required = false, value = "lat", defaultValue = "0") Double lat,
                         @RequestParam(required = false, value = "lng", defaultValue = "0") Double lng,

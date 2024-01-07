@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum EBookingServiceStatus {
-    PENDING(1),
+    ONGOING(1),
     PROCESSING(2),
     FINISHED(3);
 

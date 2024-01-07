@@ -2,7 +2,7 @@ package com.realman.becore.dto.account;
 
 import java.util.List;
 import java.util.Objects;
-import com.realman.becore.dto.enums.ECategoryType;
+
 import com.realman.becore.dto.enums.ERole;
 
 import lombok.Builder;
@@ -12,10 +12,9 @@ public record AccountSearchCriteria(
                 List<String> searches,
                 Long branchId,
                 Boolean isShowDistance,
-                Double lat,
-                Double lng,
                 ERole role,
-                String category) {
+                Double lat,
+                Double lng) {
         public Boolean hasSearchEmpty() {
                 return searches.isEmpty();
         }
@@ -24,20 +23,15 @@ public record AccountSearchCriteria(
                 return Objects.isNull(branchId);
         }
 
-        public Boolean hasCategoryEmpty() {
-                return Objects.isNull(category) || category.isEmpty();
-        }
-
         public static AccountSearchCriteria of(List<String> searches, Long branchId, Boolean isShowDistance,
-                        Double lat, Double lng, ERole role, ECategoryType category) {
+                        ERole role, Double lat, Double lng) {
                 return AccountSearchCriteria.builder()
                                 .searches(searches)
                                 .branchId(branchId)
                                 .isShowDistance(isShowDistance)
+                                .role(role)
                                 .lat(lat)
                                 .lng(lng)
-                                .role(role)
-                                .category(Objects.nonNull(category) ? category.name() : "")
                                 .build();
         }
 
@@ -46,10 +40,9 @@ public record AccountSearchCriteria(
                                 .branchId(branchId)
                                 .searches(searches.stream().map(String::toLowerCase).toList())
                                 .isShowDistance(isShowDistance)
+                                .role(role)
                                 .lat(lat)
                                 .lng(lng)
-                                .role(role)
-                                .category(category.toLowerCase())
                                 .build();
         }
 }

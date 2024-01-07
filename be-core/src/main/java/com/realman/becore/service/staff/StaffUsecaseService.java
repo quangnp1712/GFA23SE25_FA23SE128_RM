@@ -14,8 +14,7 @@ public class StaffUsecaseService {
     @NonNull
     private final StaffQueryService staffQueryService;
 
-    public Staff findByAccountId(Long accountId, Boolean allowNull) {
-        return staffQueryService.findByAccountId(accountId, allowNull);
+    public Staff findByAccountId(Long accountId) {
+        return staffQueryService.findByAccountId(accountId);
     }
-
 }

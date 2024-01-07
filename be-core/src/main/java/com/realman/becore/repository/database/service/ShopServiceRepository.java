@@ -32,14 +32,8 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
             LEFT JOIN BranchServiceEntity bs ON bs.serviceId = s.serviceId
             LEFT JOIN BranchEntity b ON b.branchId = bs.branchId
             INNER JOIN CategoryEntity c ON c.categoryId = s.categoryId
-            WHERE (:#{#searchCriteria.hasSearchEmpty()} = TRUE
-                    OR (LOWER(s.serviceName) LIKE %:#{#searchCriteria.search}%))
-                AND (:#{#searchCriteria.hasProfessionalEmpty()} = TRUE
-                    OR CASE
-                        WHEN :#{#searchCriteria.professional} = 'stylist' THEN c.categoryType = com.realman.becore.dto.enums.ECategoryType.HAIRCUT
-                        WHEN :#{#searchCriteria.professional} = 'masseur' THEN c.categoryType = com.realman.becore.dto.enums.ECategoryType.MASSAGE
-                    END)
-
+            WHERE :#{#searchCriteria.hasSearchEmpty()} = TRUE
+                    OR (LOWER(s.serviceName) LIKE %:#{#searchCriteria.search}%)
             """)
     Page<ShopServiceInfo> findAllInfo(ShopServiceSearchCriteria searchCriteria, Pageable pageable);
 

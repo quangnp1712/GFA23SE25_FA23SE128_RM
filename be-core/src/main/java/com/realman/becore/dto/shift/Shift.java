@@ -8,9 +8,8 @@ import lombok.Builder;
 
 @Builder
 public record Shift(
-    EShift shift,
-    LocalTime start,
-    LocalTime end
-) {
-    
+        EShift shift,
+        LocalTime startShift,
+        LocalTime endShift) {
+
 }

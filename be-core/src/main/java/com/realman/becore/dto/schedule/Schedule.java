@@ -10,14 +10,13 @@ import lombok.Builder;
 
 @Builder
 public record Schedule(
-    Long scheduleId,
-    Long staffId,
-    Long shiftId,
-    EShift shift,
-    LocalDate workingDate,
-    LocalTime start,
-    LocalTime end,
-    EScheduleStatus scheduleStatus
-) {
-    
+        Long scheduleId,
+        Long staffId,
+        Long shiftId,
+        EShift shift,
+        LocalDate workingDate,
+        LocalTime startShift,
+        LocalTime endShift,
+        EScheduleStatus scheduleStatus) {
+
 }

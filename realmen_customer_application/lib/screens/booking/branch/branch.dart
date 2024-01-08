@@ -195,8 +195,17 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
 // BranchModel branch
   void updateSelectedBranch(dynamic branch) {
     if (!_isDisposed) {
+      selectedBranch = branch;
+      if (selectedBranch.accountStaffList != null) {
+        selectedBranch.accountStaffList!
+            .removeWhere((account) => account.staff!.professional == "MASSEUR");
+      }
       setState(() {
         selectedBranch = branch;
+        if (selectedBranch.accountStaffList != null) {
+          selectedBranch.accountStaffList!.removeWhere(
+              (account) => account.staff!.professional == "MASSEUR");
+        }
         selectedService = [];
         isUpdateBranch = true;
       });

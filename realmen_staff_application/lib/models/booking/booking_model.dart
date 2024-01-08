@@ -110,13 +110,14 @@ class BookingServiceModel {
   int? servicePrice;
   String? staffName;
   String? staffPhone;
-  String? startTime;
+  String? startAppointment;
   String? actualStartTime;
-  String? endTime;
+  String? endAppointment;
   String? actualEndTime;
   DurationModel? duration;
   String? durationText;
   String? bookingServiceStatus;
+  String? professional;
   bool? allowUpdate;
 
   BookingServiceModel({
@@ -128,13 +129,14 @@ class BookingServiceModel {
     this.servicePrice,
     this.staffName,
     this.staffPhone,
-    this.startTime,
+    this.startAppointment,
     this.actualStartTime,
-    this.endTime,
+    this.endAppointment,
     this.actualEndTime,
     this.duration,
     this.durationText,
     this.bookingServiceStatus,
+    this.professional,
     this.allowUpdate,
   });
 
@@ -142,8 +144,8 @@ class BookingServiceModel {
     return {
       'serviceId': serviceId,
       'staffId': staffId,
-      'startTime': startTime,
-      'endTime': endTime,
+      'startAppointment': startAppointment,
+      'endAppointment': endAppointment,
     };
   }
 
@@ -157,13 +159,14 @@ class BookingServiceModel {
       servicePrice: json['servicePrice'],
       staffName: json['staffName'],
       staffPhone: json['staffPhone'],
-      startTime: json['startTime'],
+      startAppointment: json['startAppointment'],
       actualStartTime: json['actualStartTime'],
-      endTime: json['endTime'],
+      endAppointment: json['endAppointment'],
       actualEndTime: json['actualEndTime'],
       duration: json['duration'],
       durationText: json['durationText'],
       bookingServiceStatus: json['bookingServiceStatus'],
+      professional: json['professional'],
       allowUpdate: json['allowUpdate'],
     );
   }

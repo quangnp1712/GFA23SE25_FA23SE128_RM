@@ -183,7 +183,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                     bookings[index].bookingServices !=
                                                                             null
                                                                         ? Text(
-                                                                            bookings[index].bookingServices!.first.startTime.toString(),
+                                                                            bookings[index].bookingServices!.first.startAppointment.toString(),
                                                                             style:
                                                                                 const TextStyle(fontSize: 16, color: Colors.black54),
                                                                           )

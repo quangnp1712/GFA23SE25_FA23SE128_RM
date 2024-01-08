@@ -656,8 +656,8 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                   BookingServiceModel newBookingService = BookingServiceModel(
                     serviceId: service.serviceId,
                     staffId: staffId,
-                    startTime: startTime,
-                    endTime: endTime,
+                    startAppointment: startTime,
+                    endAppointment: endTime,
                   );
 
                   // List BookingService add newBookingService

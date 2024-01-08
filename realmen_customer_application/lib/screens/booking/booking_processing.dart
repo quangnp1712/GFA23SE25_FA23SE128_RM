@@ -186,7 +186,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                 ),
               ),
               Text(
-                booking.bookingServices!.first.startTime ?? "",
+                booking.bookingServices!.first.startAppointment ?? "",
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Colors.black,

@@ -179,7 +179,7 @@ class _DetailHistoryBookingScreenState
                 ),
               ),
               Text(
-                widget.booking!.bookingServices!.first.startTime ?? "",
+                widget.booking!.bookingServices!.first.startAppointment ?? "",
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Colors.black,

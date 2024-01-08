@@ -115,51 +115,6 @@ class BranchModel {
   }
 }
 
-class OpenModel {
-  int? hour;
-  int? minute;
-  int? second;
-  int? nano;
-
-  OpenModel({
-    this.hour,
-    this.minute,
-    this.second,
-    this.nano,
-  });
-
-  factory OpenModel.fromJson(Map<String, dynamic> json) {
-    return OpenModel(
-      hour: json['hour'],
-      minute: json['minute'],
-      second: json['second'],
-      nano: json['nano'],
-    );
-  }
-}
-
-class CloseModel {
-  int? hour;
-  int? minute;
-  int? second;
-  int? nano;
-
-  CloseModel({
-    this.hour,
-    this.minute,
-    this.second,
-    this.nano,
-  });
-
-  factory CloseModel.fromJson(Map<String, dynamic> json) {
-    return CloseModel(
-      hour: json['hour'],
-      minute: json['minute'],
-      second: json['second'],
-      nano: json['nano'],
-    );
-  }
-}
 
 class BranchServiceModel {
   int? serviceId;

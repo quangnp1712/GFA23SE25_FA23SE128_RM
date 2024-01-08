@@ -237,7 +237,8 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
   Future<void> ConfirmBooking() async {
     if (!_isDisposed && mounted) {
       try {
-        final result = await BookingService().confirmBooking(widget.bookingId);
+        final result =
+            await BookingService().putConfirmBooking(widget.bookingId);
         if (result['statusCode'] == 200) {
           _successMessage('Nhận khách thành công');
           // Get.toNamed(TaskScreen.TaskScreenRoute);

@@ -20,7 +20,8 @@ class AccountService extends IAccountService {
       final int accountId = await SharedPreferencesService.getAccountId();
 
       final String jwtToken = await SharedPreferencesService.getJwt();
-      Uri uri = Uri.parse("$accountInfoUrl/$accountId/$staff");
+      Uri uri = Uri.parse(
+          "$accountInfoUrl/$accountId/$staff?isShowDistance=false&lat=0&lng=0");
       final client = http.Client();
       final response = await client.get(
         uri,
@@ -34,11 +35,11 @@ class AccountService extends IAccountService {
       final statusCode = response.statusCode;
       final responseBody = response.body;
       if (statusCode == 200) {
-        final accountInfo =
-            AccountInfoModel.fromJson(json.decode(responseBody));
+        accountInfoModel =
+            AccountInfoModel.fromJson(json.decode(responseBody)['value']);
         return {
           'statusCode': statusCode,
-          'data': accountInfo,
+          'data': accountInfoModel,
         };
       } else if (statusCode == 401) {
         try {

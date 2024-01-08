@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:realmen_staff_application/models/branch/branch_model.dart';
+
 class AccountInfoModel {
   int? accountId;
   int? branchId;
@@ -11,12 +13,18 @@ class AccountInfoModel {
   String? dob;
   String? gender;
   String? status;
-  String? branchName;
-  String? branchAddress;
+  BranchModel? branch;
+  StaffModel? staff;
+
   String? itimacyLevel;
   String? professional;
   int? average;
   String? role;
+
+  int? totalElements;
+  int? totalPages;
+  int? pageSize;
+  int? current;
 
   AccountInfoModel({
     this.accountId,
@@ -29,32 +37,109 @@ class AccountInfoModel {
     this.dob,
     this.gender,
     this.status,
-    this.branchName,
-    this.branchAddress,
+    this.branch,
+    this.staff,
     this.itimacyLevel,
     this.professional,
     this.average,
     this.role,
+    this.totalElements,
+    this.totalPages,
+    this.pageSize,
+    this.current,
   });
 
   factory AccountInfoModel.fromJson(Map<String, dynamic> json) {
     return AccountInfoModel(
-      accountId: json['value']['accountId'],
-      branchId: json['value']['branchId'],
-      thumbnailUrl: json['value']['thumbnailUrl'],
-      firstName: json['value']['firstName'],
-      lastName: json['value']['lastName'],
-      phone: json['value']['phone'],
-      address: json['value']['address'],
-      dob: json['value']['dob'],
-      gender: json['value']['gender'],
-      status: json['value']['status'],
-      branchName: json['value']['branchName'],
-      branchAddress: json['value']['branchAddress'],
-      itimacyLevel: json['value']['itimacyLevel'],
-      professional: json['value']['professional'],
-      average: json['value']['average'],
-      role: json['value']['role'],
+      accountId: json['accountId'],
+      branchId: json['branchId'],
+      thumbnailUrl: json['thumbnailUrl'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      phone: json['phone'],
+      address: json['address'],
+      dob: json['dob'],
+      gender: json['gender'],
+      status: json['status'],
+      branch: json['branch'] != null && json['branch'] != []
+          ? BranchModel.fromJson(json['branch'])
+          : null,
+      staff: json['staff'] != null && json['staff'] != []
+          ? StaffModel.fromJson(json['staff'])
+          : null,
+      itimacyLevel: json['itimacyLevel'],
+      professional: json['professional'],
+      average: json['average'] ?? 0,
+      role: json['role'],
+      totalElements: json['totalElements'],
+      totalPages: json['totalPages'],
+      pageSize: json['pageSize'],
+      current: json['current'],
+    );
+  }
+}
+
+class StaffModel {
+  int? staffId;
+  int? accountId;
+  double? averageRating;
+  List<ScheduleModel>? scheduleList;
+  String? professional;
+
+  StaffModel({
+    this.staffId,
+    this.accountId,
+    this.averageRating,
+    this.scheduleList,
+    this.professional,
+  });
+
+  factory StaffModel.fromJson(Map<String, dynamic> json) {
+    return StaffModel(
+      accountId: json['accountId'],
+      staffId: json['staffId'] ?? null,
+      averageRating: json['averageRating'] ?? 0,
+      scheduleList: json['scheduleList'] != null && json['scheduleList'] != []
+          ? (json['scheduleList'] as List)
+              .map((item) => ScheduleModel.fromJson(item))
+              .toList()
+          : null,
+      professional: json['professional'] ?? null,
+    );
+  }
+}
+
+class ScheduleModel {
+  int? scheduleId;
+  int? staffId;
+  int? shiftId;
+  String? shift;
+  String? workingDate;
+  String? start;
+  String? end;
+  String? scheduleStatus;
+
+  ScheduleModel({
+    this.scheduleId,
+    this.staffId,
+    this.shiftId,
+    this.shift,
+    this.workingDate,
+    this.start,
+    this.end,
+    this.scheduleStatus,
+  });
+
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) {
+    return ScheduleModel(
+      scheduleId: json['scheduleId'] ?? null,
+      staffId: json['staffId'] ?? null,
+      shiftId: json['shiftId'] ?? null,
+      shift: json['shift'] ?? null,
+      workingDate: json['workingDate'] ?? null,
+      start: json['start'] ?? null,
+      end: json['end'] ?? null,
+      scheduleStatus: json['scheduleStatus'] ?? null,
     );
   }
 }

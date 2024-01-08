@@ -1,11 +1,34 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:realmen_staff_application/models/booking/booking_model.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/task/booking_processing.dart';
+import 'package:realmen_staff_application/screens/task/service_booking_processing.dart';
+import 'package:realmen_staff_application/service/booking/booking_service.dart';
+import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 
 class PopUpConfirm extends StatefulWidget {
-  const PopUpConfirm({super.key, required this.service, required this.index});
-  final serviceDemoModel? service;
+  final BookingServiceModel? service;
   final int? index;
+  String? bookingCode;
+  String? appointmentDate;
+  String? startAppointment;
+  String? bookingOwnerName;
+  String? phone;
+
+  PopUpConfirm({
+    Key? key,
+    this.service,
+    this.index,
+    this.bookingCode,
+    this.appointmentDate,
+    this.startAppointment,
+    this.bookingOwnerName,
+    this.phone,
+  }) : super(key: key);
   @override
   State<PopUpConfirm> createState() => _PopUpConfirmState();
 }
@@ -40,44 +63,51 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
             ),
             widget.service != null
                 ? Center(
-                    child: Text.rich(TextSpan(children: [
-                      WidgetSpan(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4),
-                          child: Container(
-                            height: 23,
-                            width: 25,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey.shade300,
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${widget.index! + 1}",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4),
+                              child: Container(
+                                height: 23,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.grey.shade300,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${widget.index! + 1}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          WidgetSpan(
+                            child: SizedBox(
+                              width: 5,
+                            ),
+                          ),
+                          TextSpan(
+                            text: utf8.decode(widget.service!.serviceName
+                                .toString()
+                                .runes
+                                .toList()),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 22,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                      WidgetSpan(
-                        child: SizedBox(
-                          width: 5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: widget.service!.name.toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 22,
-                          color: Colors.black,
-                        ),
-                      )
-                    ])),
+                    ),
                   )
                 : Container(),
             const SizedBox(
@@ -106,6 +136,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                   ),
                 ),
                 Container(
+                  width: 200,
                   decoration: BoxDecoration(
                       color: Colors.black,
                       border: Border.all(
@@ -116,10 +147,10 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                       borderRadius: BorderRadius.circular(10)),
                   margin: EdgeInsets.all(10),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: btnStartBookingService,
                     child: Center(
                       child: Text(
-                        "bắt đầu phục vụ".toUpperCase(),
+                        "xác nhận".toUpperCase(),
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
@@ -131,5 +162,63 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
         ),
       ),
     );
+  }
+
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  Future<void> btnStartBookingService() async {
+    if (!_isDisposed && mounted) {
+      try {
+        final int bookingServiceId = widget.service!.bookingServiceId!;
+        final int accountId = await SharedPreferencesService.getAccountId();
+        BookingService bookingService = BookingService();
+        final result =
+            await bookingService.putStartService(bookingServiceId, accountId);
+        if (result['statusCode'] == 200) {
+          Get.to(() => ServiceBookingProcessingScreen(
+                service: widget.service,
+                index: widget.index,
+                bookingCode: widget.bookingCode,
+                appointmentDate: widget.appointmentDate,
+                startAppointment: widget.startAppointment,
+                bookingOwnerName: widget.bookingOwnerName,
+                phone: widget.phone,
+              ));
+        } else {
+          _errorMessage(result['message']);
+          print(result['error']);
+        }
+      } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _successMessage(String? message) {
+    try {
+      ShowSnackBar.SuccessSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -12,6 +12,7 @@ import 'package:realmen_staff_application/screens/message/logout_popup.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 
 import 'package:realmen_staff_application/screens/profile/view_edit_profile.dart';
+import 'package:realmen_staff_application/screens/test_screen.dart';
 import 'package:realmen_staff_application/service/account/account_info_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -266,8 +267,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         child: TextButton(
                                           onPressed: () {
-                                            // Get.toNamed(
-                                            //     TestScreen.TestScreenRoute);
+                                            Get.to(() => TestScreen());
                                           },
                                           style: TextButton.styleFrom(
                                             padding:

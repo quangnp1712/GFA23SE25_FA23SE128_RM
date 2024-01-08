@@ -12,7 +12,9 @@ import 'package:realmen_staff_application/service/share_prreference/share_prrefe
 abstract class IBookingService {
   Future<dynamic> getBooking(int accountId, int current, int pageRequest);
   Future<dynamic> getBookingById(int bookingId);
-  Future<dynamic> confirmBooking(int bookingId);
+  Future<dynamic> putConfirmBooking(int bookingId);
+  Future<dynamic> putStartService(int bookingServiceId, int accountId);
+  Future<dynamic> putFinishService(int bookingServiceId, int accountId);
 }
 
 class BookingService implements IBookingService {
@@ -45,50 +47,41 @@ class BookingService implements IBookingService {
           'totalPages': totalPages,
           'current': current,
         };
-      } else if (statusCode == 401) {
+      } else {
         try {
-          final exceptionModel =
+          final ServerExceptionModel exceptionModel =
               ServerExceptionModel.fromJson(json.decode(responseBody));
           return {
             'statusCode': statusCode,
             'error': exceptionModel,
+            'message': "Vui lòng thử lại",
           };
         } catch (e) {
           return {
-            'statusCode': statusCode,
+            'statusCode': 400,
             'error': e,
+            'message': "Vui lòng thử lại",
           };
         }
-      } else if (statusCode == 403) {
-        return {
-          'statusCode': statusCode,
-          'error': "Hết hạn đăng nhập",
-        };
-      } else if (statusCode == 400) {
-        return {
-          'statusCode': statusCode,
-          'error': "Bad request",
-        };
-      } else {
-        return {
-          'statusCode': statusCode,
-          'error': 'Failed to fetch data',
-        };
       }
     } on TimeoutException catch (e) {
       return {
         'statusCode': 408,
-        'error': "Request timeout",
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
       };
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
-        'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
       };
     }
   }
@@ -118,56 +111,47 @@ class BookingService implements IBookingService {
           'statusCode': statusCode,
           'data': bookingModel,
         };
-      } else if (statusCode == 401) {
+      } else {
         try {
-          final exceptionModel =
+          final ServerExceptionModel exceptionModel =
               ServerExceptionModel.fromJson(json.decode(responseBody));
           return {
             'statusCode': statusCode,
             'error': exceptionModel,
+            'message': "Vui lòng thử lại",
           };
         } catch (e) {
           return {
-            'statusCode': statusCode,
+            'statusCode': 400,
             'error': e,
+            'message': "Vui lòng thử lại",
           };
         }
-      } else if (statusCode == 403) {
-        return {
-          'statusCode': statusCode,
-          'error': "Forbidden",
-        };
-      } else if (statusCode == 400) {
-        return {
-          'statusCode': statusCode,
-          'error': "Bad request",
-        };
-      } else {
-        return {
-          'statusCode': statusCode,
-          'error': 'Failed to fetch data',
-        };
       }
     } on TimeoutException catch (e) {
       return {
         'statusCode': 408,
-        'error': "Request timeout",
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
       };
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
-        'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
       };
     }
   }
 
   @override
-  Future confirmBooking(int bookingId) async {
+  Future putConfirmBooking(int bookingId) async {
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse("$bookingUrl/$bookingId?isAccepted=true");
@@ -187,50 +171,163 @@ class BookingService implements IBookingService {
         return {
           'statusCode': statusCode,
         };
-      } else if (statusCode == 401) {
+      } else {
         try {
-          final exceptionModel =
+          final ServerExceptionModel exceptionModel =
               ServerExceptionModel.fromJson(json.decode(responseBody));
           return {
             'statusCode': statusCode,
             'error': exceptionModel,
+            'message': "Vui lòng thử lại",
           };
         } catch (e) {
           return {
-            'statusCode': statusCode,
+            'statusCode': 400,
             'error': e,
+            'message': "Vui lòng thử lại",
           };
         }
-      } else if (statusCode == 403) {
-        return {
-          'statusCode': statusCode,
-          'error': "Hết hạn đăng nhập",
-        };
-      } else if (statusCode == 400) {
-        return {
-          'statusCode': statusCode,
-          'error': "Bad request",
-        };
-      } else {
-        return {
-          'statusCode': statusCode,
-          'error': 'Failed to fetch data',
-        };
       }
     } on TimeoutException catch (e) {
       return {
         'statusCode': 408,
-        'error': "Request timeout",
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
       };
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
+      };
+    }
+  }
+
+  @override
+  Future putStartService(int bookingServiceId, int accountId) async {
+    try {
+      final String jwtToken = await SharedPreferencesService.getJwt();
+      Uri uri = Uri.parse(
+          "$startBookingUrl/$bookingServiceId/start-service?accountId=$accountId");
+      final client = http.Client();
+      final response = await client.put(
+        uri,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Authorization': 'Bearer $jwtToken'
+        },
+      ).timeout(Duration(seconds: connectionTimeOut));
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+      if (statusCode == 200) {
+        return {
+          'statusCode': statusCode,
+        };
+      } else {
+        try {
+          final ServerExceptionModel exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+            'message': "Vui lòng thử lại",
+          };
+        } catch (e) {
+          return {
+            'statusCode': 400,
+            'error': e,
+            'message': "Vui lòng thử lại",
+          };
+        }
+      }
+    } on TimeoutException catch (e) {
+      return {
+        'statusCode': 408,
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
+      };
+    } on SocketException catch (e) {
+      return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
+      };
+    } catch (e) {
+      return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
+      };
+    }
+  }
+
+  @override
+  Future putFinishService(int bookingServiceId, int accountId) async {
+    try {
+      final String jwtToken = await SharedPreferencesService.getJwt();
+      Uri uri = Uri.parse(
+          "$startBookingUrl/$bookingServiceId/finish-service?accountId=$accountId");
+      final client = http.Client();
+      final response = await client.put(
+        uri,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Authorization': 'Bearer $jwtToken'
+        },
+      ).timeout(Duration(seconds: connectionTimeOut));
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+      if (statusCode == 200) {
+        return {
+          'statusCode': statusCode,
+        };
+      } else {
+        try {
+          final ServerExceptionModel exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+            'message': "Vui lòng thử lại",
+          };
+        } catch (e) {
+          return {
+            'statusCode': 400,
+            'error': e,
+            'message': "Vui lòng thử lại",
+          };
+        }
+      }
+    } on TimeoutException catch (e) {
+      return {
+        'statusCode': 408,
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
+      };
+    } on SocketException catch (e) {
+      return {
+        'statusCode': 500,
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
+      };
+    } catch (e) {
+      return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
       };
     }
   }

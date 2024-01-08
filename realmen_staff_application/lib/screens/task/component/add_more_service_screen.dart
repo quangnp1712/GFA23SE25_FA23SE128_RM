@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_add_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -9,7 +10,7 @@ import '../booking_processing.dart';
 
 class AddMoreServiceScreen extends StatefulWidget {
   AddMoreServiceScreen(this._selectedService);
-  List<dynamic> _selectedService;
+  List<BookingServiceModel> _selectedService;
 
   @override
   State<AddMoreServiceScreen> createState() => _AddMoreServiceScreenState();

@@ -80,14 +80,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           Container(
+                            constraints: BoxConstraints(maxWidth: 70.w),
                             margin: const EdgeInsets.only(top: 10),
                             child: Center(
                               child: Text(
                                 name ?? '',
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.black),
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ),

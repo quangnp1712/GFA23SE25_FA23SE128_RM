@@ -103,7 +103,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                       .bookings![i]
                                       .bookingServices!
                                       .first
-                                      .startTime!
+                                      .startAppointment!
                                       .toString())
                                 ],
                               )
@@ -192,31 +192,31 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                           ),
                                         ],
                                       ),
-                                      Center(
-                                        child: TextButton(
-                                          onPressed: () {
-                                            Get.to(
-                                                const HistoryCustomerWaitingScreen());
-                                          },
-                                          child: const Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: "Xem lịch sử",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.blueAccent,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      decorationStyle:
-                                                          TextDecorationStyle
-                                                              .solid),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      // Center(
+                                      //   child: TextButton(
+                                      //     onPressed: () {
+                                      //       Get.to(
+                                      //           const HistoryCustomerWaitingScreen());
+                                      //     },
+                                      //     child: const Text.rich(
+                                      //       TextSpan(
+                                      //         children: [
+                                      //           TextSpan(
+                                      //             text: "Xem lịch sử",
+                                      //             style: TextStyle(
+                                      //                 fontSize: 18,
+                                      //                 color: Colors.blueAccent,
+                                      //                 decoration: TextDecoration
+                                      //                     .underline,
+                                      //                 decorationStyle:
+                                      //                     TextDecorationStyle
+                                      //                         .solid),
+                                      //           ),
+                                      //         ],
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -429,8 +429,12 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
 
             if (bookingModel.content!.isNotEmpty) {
               for (var content in bookingModel.content!) {
-                if (!dateTimes
-                    .contains(DateTime.parse(content.appointmentDate!))) {
+                DateTime nowWithTime = DateTime.now();
+                DateTime now = DateTime(
+                    nowWithTime.year, nowWithTime.month, nowWithTime.day);
+                DateTime bookingDate = DateTime.parse(content.appointmentDate!);
+                int checkDate = bookingDate.compareTo(now);
+                if (!dateTimes.contains(bookingDate) && checkDate >= 0) {
                   dateTimes.add(DateTime.parse(content.appointmentDate!));
                 }
               }
@@ -444,14 +448,25 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
               for (var date in dates) {
                 bookings = [];
                 for (var content in bookingModel.content!) {
-                  if (date == content.appointmentDate) {
+                  if (date == content.appointmentDate &&
+                      content.bookingStatus == "ONGOING") {
+                    if (content.bookingServices!.length >= 2) {
+                      content.bookingServices!.sort((a, b) =>
+                          a.bookingServiceId!.compareTo(b.bookingServiceId!));
+                    }
                     bookings.add(content);
                   }
                 }
 
                 DateTime dateFormat = DateTime.parse(date);
                 date = formatDate(dateFormat);
+
                 if (bookings.isNotEmpty) {
+                  bookings.sort(((a, b) {
+                    int check = a.bookingServices!.first.startAppointment!
+                        .compareTo(b.bookingServices!.first.startAppointment!);
+                    return check;
+                  }));
                   BookingPendingModel newBookingPending =
                       BookingPendingModel(date: date, bookings: bookings);
                   bookingsPending.add(newBookingPending);

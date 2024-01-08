@@ -64,6 +64,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     super(initialState);
   }
 
+
+
   addressData!: AutocompleteApi.Response;
   options: string[] = [];
   branchData: BranchAddressApi.Response = {
@@ -137,6 +139,8 @@ export class AccountStore extends ComponentStore<AccountState> {
     )
   );
 
+  schedule : Array<{date: Date, content: string}> = [{date: new Date('12/22/2023'), content: '123'}]
+
   readonly getScheduleData = this.effect<never>(
     pipe(
       tap(() => this.updateLoading(true)),
@@ -145,6 +149,11 @@ export class AccountStore extends ComponentStore<AccountState> {
           tap({
             next: (resp) => {
               this.patchState({ scheduleData: resp });
+              this.schedule = []
+              resp.values.forEach(data => {
+                this.schedule.push({date: new Date(data.workingDate), content: data.shift})
+              })
+              console.log(this.schedule);
             },
             finalize: () => this.updateLoading(false),
           }),

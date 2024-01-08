@@ -96,7 +96,7 @@ export namespace BranchUpdateApi {
     close: FormControl<string | null>;
     branchDisplayList: FormControl<branchDisplayList>;
     branchServiceList: FormControl<branchServiceList>;
-    serviceArray: FormControl<number[]>
+    serviceArray: FormControl<string[]>
   };
 
   export type branchDisplayList = {
@@ -104,11 +104,7 @@ export namespace BranchUpdateApi {
   }[];
 
   export type branchServiceList = {
-    serviceId: number;
-    branchId: number;
-    serviceName: string;
-    branchName: string;
-    thumbnailUrl: string;
+    serviceId: string;
     price: number;
   }[];
 

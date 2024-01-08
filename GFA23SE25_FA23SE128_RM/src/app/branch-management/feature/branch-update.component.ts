@@ -217,6 +217,10 @@ export class BranchUpdateComponent implements OnInit {
   }
 
   updateBranch() {
+    this.buStore.form.controls.branchServiceList.reset()
+    this.buStore.form.controls.serviceArray.value.forEach(value =>
+    this.buStore.form.controls.branchServiceList.value.push({serviceId: value, price: 0})
+    )
     this.buStore.updateBranch({id: this.buStore.form.controls.branchId.getRawValue(), model: this.buStore.form.getRawValue()})
   }
 }

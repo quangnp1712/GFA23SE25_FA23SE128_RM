@@ -48,7 +48,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
   providers: [provideComponentStore(AccountStore), NzMessageService],
   template: `<nz-breadcrumb>
       <nz-breadcrumb-item>Quản lý tài khoản</nz-breadcrumb-item>
-      <nz-breadcrumb-item>Cập nhật tài khoản</nz-breadcrumb-item>
+      <nz-breadcrumb-item>Chi tiết tài khoản</nz-breadcrumb-item>
     </nz-breadcrumb>
     <nz-divider></nz-divider>
     <div *rxLet="vm$ as vm">
@@ -172,11 +172,11 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
           <h3 class="tw-ml-[11%]">Lịch làm</h3>
           <nz-calendar nz-col nzMd="18" class="tw-ml-[11%]">
             <ul *nzDateCell="let date" class="events">
-              <ng-container *ngFor="let event of objects">
+              <ng-container *ngFor="let event of aStore.schedule">
                 <li *ngIf="event.date.getTime() === date.getTime()">
                   <nz-badge
-                    [nzStatus]="event.type"
-                    [nzText]="event.title"
+                    [nzStatus]="event.content === 'MORNING' ? 'success' : 'warning'"
+                    [nzText]="event.content === 'MORNING' ? 'Ca Sáng' : 'Ca Tối'"
                   ></nz-badge>
                 </li>
               </ng-container>
@@ -193,6 +193,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
           nz-button
           nzType="primary"
           class="tw-ml-4"
+          (click)="click()"
           [disabled]="form.invalid"
         >
           Cập nhật
@@ -265,4 +266,8 @@ export class AccountUpdateComponent implements OnInit {
       date: this.mai,
     },
   ];
+  click(){
+    console.log(this.aStore.schedule);
+
+  }
 }

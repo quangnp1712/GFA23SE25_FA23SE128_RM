@@ -110,7 +110,7 @@ class _TaskScreenState extends State<TaskScreen>
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 10,
+                                  height: 1,
                                 ),
                                 Container(
                                   // color: Colors.amber,

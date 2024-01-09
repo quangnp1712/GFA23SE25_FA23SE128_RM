@@ -28,341 +28,428 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
     super.build(context);
     return SafeArea(
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: bookingsPending.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  mainAxisSize: MainAxisSize
-                      .min, // Điều này sẽ giúp Column co lại con của nó thay vì mở rộng
-                  crossAxisAlignment: CrossAxisAlignment
-                      .stretch, // Đảm bảo các con của Column sẽ căng đều theo chiều ngang
-                  children: [
-                    Container(
-                      height: 35,
-                      color: Colors.black,
-                      child: Center(
-                        child: Text(
-                          bookingsPending[index].date!,
-                          style: const TextStyle(
-                              fontSize: 22,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1),
-                        ),
-                      ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: bookingsPending[index]
-                          .bookings!
-                          .length, // The number of items in the list
-                      itemBuilder: (context, i) {
-                        String phone = bookingsPending[index]
-                            .bookings![i]
-                            .bookingOwnerPhone!;
-                        phone = "x" * (phone.length - 3) +
-                            phone.substring(phone.length - 3);
-                        String name = utf8.decode(bookingsPending[index]
-                            .bookings![i]
-                            .bookingOwnerName
-                            .toString()
-                            .runes
-                            .toList());
-
-                        // Return a Card widget for each item in the list
-                        return ExpansionTile(
-                          tilePadding: const EdgeInsets.all(0),
-                          backgroundColor: Colors.transparent,
-                          title: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+        child: isLoading
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 30),
+                    height: 50,
+                    width: 50,
+                    child: const CircularProgressIndicator(),
+                  )
+                ],
+              )
+            : bookingsPending.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: bookingsPending.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            mainAxisSize: MainAxisSize
+                                .min, // Điều này sẽ giúp Column co lại con của nó thay vì mở rộng
+                            crossAxisAlignment: CrossAxisAlignment
+                                .stretch, // Đảm bảo các con của Column sẽ căng đều theo chiều ngang
                             children: [
-                              Text(
-                                "${i + 1}. ${utf8.decode(bookingsPending[index].bookings![i].bookingOwnerName.toString().runes.toList())}",
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "   Giờ book: ",
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.black),
-                                  ),
-                                  Text(bookingsPending[index]
-                                      .bookings![i]
-                                      .bookingServices!
-                                      .first
-                                      .startAppointment!
-                                      .toString())
-                                ],
-                              )
-                            ],
-                          ),
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  constraints:
-                                      const BoxConstraints(minHeight: 100),
-                                  child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 120,
-                                            child: const Text(
-                                              "Khách hàng: ",
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 200,
-                                            child: Text(
-                                              "${name}",
-                                              maxLines: 2,
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 120,
-                                            child: const Text(
-                                              "Số điện thoại: ",
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 200,
-                                            child: Text(
-                                              phone,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 17,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      // Center(
-                                      //   child: TextButton(
-                                      //     onPressed: () {
-                                      //       Get.to(
-                                      //           const HistoryCustomerWaitingScreen());
-                                      //     },
-                                      //     child: const Text.rich(
-                                      //       TextSpan(
-                                      //         children: [
-                                      //           TextSpan(
-                                      //             text: "Xem lịch sử",
-                                      //             style: TextStyle(
-                                      //                 fontSize: 18,
-                                      //                 color: Colors.blueAccent,
-                                      //                 decoration: TextDecoration
-                                      //                     .underline,
-                                      //                 decorationStyle:
-                                      //                     TextDecorationStyle
-                                      //                         .solid),
-                                      //           ),
-                                      //         ],
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      const Text(
-                                        "Dich Vu: ",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        child: Divider(
-                                          color: Colors.black,
-                                          height: 2,
-                                          thickness: 1,
-                                        ),
-                                      ),
-                                      Container(
-                                        // padding: EdgeInsets.all(12.0),
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: bookingsPending[index]
-                                              .bookings![i]
-                                              .bookingServices!
-                                              .length,
-                                          itemBuilder:
-                                              (context, indexBookingService) {
-                                            // Return a Card widget for each item in the list
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: Text(
-                                                "${indexBookingService + 1}.  ${utf8.decode(bookingsPending[index].bookings![i].bookingServices![indexBookingService].serviceName.toString().runes.toList())}",
-                                                style: const TextStyle(
-                                                    fontSize: 20),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        child: Divider(
-                                          color: Colors.black,
-                                          height: 2,
-                                          thickness: 1,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            // Container(
-                                            //   height: 50,
-                                            //   padding:
-                                            //       const EdgeInsets.symmetric(
-                                            //           horizontal: 5),
-                                            //   decoration: BoxDecoration(
-                                            //       color: Colors.grey,
-                                            //       borderRadius:
-                                            //           BorderRadius.circular(
-                                            //               10)),
-                                            //   // margin: EdgeInsets.all(10),
-                                            //   child: TextButton(
-                                            //     onPressed: () {},
-                                            //     child: const Center(
-                                            //       child: Text(
-                                            //         "Chuyển khách",
-                                            //         style: TextStyle(
-                                            //             fontSize: 20,
-                                            //             color: Colors.white),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            Container(
-                                              height: 50,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  border: Border.all(
-                                                    color: Colors.black54,
-                                                    width: 1,
-                                                    style: BorderStyle.solid,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              // margin: EdgeInsets.all(10),
-                                              child: TextButton(
-                                                onPressed: () {
-                                                  _popup(
-                                                      name,
-                                                      phone,
-                                                      bookingsPending[index]
-                                                          .bookings![i]
-                                                          .bookingId!);
-                                                },
-                                                child: const Center(
-                                                  child: Text(
-                                                    "Nhận khách",
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      )
-                                    ],
+                              Container(
+                                height: 35,
+                                color: Colors.black,
+                                child: Center(
+                                  child: Text(
+                                    bookingsPending[index].date!,
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1),
                                   ),
                                 ),
                               ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 50,
-                    )
-                  ],
-                );
-              }),
-        ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: bookingsPending[index]
+                                    .bookings!
+                                    .length, // The number of items in the list
+                                itemBuilder: (context, i) {
+                                  String phone = bookingsPending[index]
+                                      .bookings![i]
+                                      .bookingOwnerPhone!;
+                                  phone = "x" * (phone.length - 3) +
+                                      phone.substring(phone.length - 3);
+                                  String name = utf8.decode(
+                                      bookingsPending[index]
+                                          .bookings![i]
+                                          .bookingOwnerName
+                                          .toString()
+                                          .runes
+                                          .toList());
+
+                                  // Return a Card widget for each item in the list
+                                  return ExpansionTile(
+                                    tilePadding: const EdgeInsets.all(0),
+                                    backgroundColor: Colors.transparent,
+                                    title: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${i + 1}. ${utf8.decode(bookingsPending[index].bookings![i].bookingOwnerName.toString().runes.toList())}",
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "   Giờ book: ",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black),
+                                            ),
+                                            Text(
+                                              bookingsPending[index]
+                                                  .bookings![i]
+                                                  .bookingServices!
+                                                  .first
+                                                  .startAppointment!
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            constraints: const BoxConstraints(
+                                                minHeight: 100),
+                                            child: Column(
+                                              // mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.start,
+                                                //   crossAxisAlignment:
+                                                //       CrossAxisAlignment.start,
+                                                //   children: [
+                                                //     Container(
+                                                //       width: 120,
+                                                //       child: const Text(
+                                                //         "Khách hàng: ",
+                                                //         style: TextStyle(
+                                                //           fontSize: 17,
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     Container(
+                                                //       width: 200,
+                                                //       child: Text(
+                                                //         "${name}",
+                                                //         maxLines: 2,
+                                                //         textAlign:
+                                                //             TextAlign.left,
+                                                //         style: TextStyle(
+                                                //           overflow: TextOverflow
+                                                //               .ellipsis,
+                                                //           color: Colors.black,
+                                                //           fontWeight:
+                                                //               FontWeight.w500,
+                                                //           fontSize: 17,
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                                // const SizedBox(
+                                                //   height: 10,
+                                                // ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width: 120,
+                                                      child: const Text(
+                                                        "Số điện thoại: ",
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: 200,
+                                                      child: Text(
+                                                        phone,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 17,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width: 120,
+                                                      child: const Text(
+                                                        "Đơn booking: ",
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: 200,
+                                                      child: Text(
+                                                        bookingsPending[index]
+                                                            .bookings![i]
+                                                            .bookingCode!,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 17,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                // Center(
+                                                //   child: TextButton(
+                                                //     onPressed: () {
+                                                //       Get.to(
+                                                //           const HistoryCustomerWaitingScreen());
+                                                //     },
+                                                //     child: const Text.rich(
+                                                //       TextSpan(
+                                                //         children: [
+                                                //           TextSpan(
+                                                //             text: "Xem lịch sử",
+                                                //             style: TextStyle(
+                                                //                 fontSize: 18,
+                                                //                 color: Colors.blueAccent,
+                                                //                 decoration: TextDecoration
+                                                //                     .underline,
+                                                //                 decorationStyle:
+                                                //                     TextDecorationStyle
+                                                //                         .solid),
+                                                //           ),
+                                                //         ],
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                const Text(
+                                                  "Dịch Vụ: ",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      fontSize: 23,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                  ),
+                                                  child: Divider(
+                                                    color: Colors.black,
+                                                    height: 2,
+                                                    thickness: 1,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  // padding: EdgeInsets.all(12.0),
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    itemCount:
+                                                        bookingsPending[index]
+                                                            .bookings![i]
+                                                            .bookingServices!
+                                                            .length,
+                                                    itemBuilder: (context,
+                                                        indexBookingService) {
+                                                      // Return a Card widget for each item in the list
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 5),
+                                                        child: Text(
+                                                          "${indexBookingService + 1}.  ${utf8.decode(bookingsPending[index].bookings![i].bookingServices![indexBookingService].serviceName.toString().runes.toList())}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 20),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                  ),
+                                                  child: Divider(
+                                                    color: Colors.black,
+                                                    height: 2,
+                                                    thickness: 1,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      // Container(
+                                                      //   height: 50,
+                                                      //   padding:
+                                                      //       const EdgeInsets.symmetric(
+                                                      //           horizontal: 5),
+                                                      //   decoration: BoxDecoration(
+                                                      //       color: Colors.grey,
+                                                      //       borderRadius:
+                                                      //           BorderRadius.circular(
+                                                      //               10)),
+                                                      //   // margin: EdgeInsets.all(10),
+                                                      //   child: TextButton(
+                                                      //     onPressed: () {},
+                                                      //     child: const Center(
+                                                      //       child: Text(
+                                                      //         "Chuyển khách",
+                                                      //         style: TextStyle(
+                                                      //             fontSize: 20,
+                                                      //             color: Colors.white),
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Container(
+                                                        height: 50,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color: Colors
+                                                                    .black,
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .black54,
+                                                                  width: 1,
+                                                                  style:
+                                                                      BorderStyle
+                                                                          .solid,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                        // margin: EdgeInsets.all(10),
+                                                        child: TextButton(
+                                                          onPressed: () {
+                                                            _popup(
+                                                                name,
+                                                                phone,
+                                                                bookingsPending[
+                                                                        index]
+                                                                    .bookings![
+                                                                        i]
+                                                                    .bookingId!);
+                                                          },
+                                                          child: const Center(
+                                                            child: Text(
+                                                              "Nhận khách",
+                                                              style: TextStyle(
+                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: 50,
+                              )
+                            ],
+                          );
+                        }),
+                  )
+                : Center(
+                    child: Text("Chưa có đơn booking"),
+                  ),
       ),
     );
   }
@@ -413,94 +500,144 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
   // get booking
   Future<void> getBookingPending(int current) async {
     if (!_isDisposed && mounted) {
-      try {
-        int accountId = await SharedPreferencesService.getAccountId();
-        if (accountId != 0) {
-          BookingModel bookingModel = BookingModel();
-          final result =
-              await BookingService().getBooking(accountId, current, 10);
-          if (result['statusCode'] == 200) {
-            bookingModel = result['data'] as BookingModel;
-            currentResult = result['current'];
-            totalPages = result['totalPages'];
-            List<BookingContent> bookings = [];
-            List<String> dates = [];
-            List<DateTime> dateTimes = [];
+      List<BookingContent> bookings = [];
+      List<String> dates = [];
+      List<DateTime> dateTimes = [];
+      do {
+        try {
+          int accountId = await SharedPreferencesService.getAccountId();
+          String professional =
+              await SharedPreferencesService.getProfessional();
+          if (accountId != 0) {
+            BookingModel bookingModel = BookingModel();
+            final result =
+                await BookingService().getBooking(accountId, current, 10);
+            if (result['statusCode'] == 200) {
+              bookingModel = result['data'] as BookingModel;
+              currentResult = result['current'];
+              totalPages = result['totalPages'];
+              current = currentResult;
+              current = current + 1;
 
-            if (bookingModel.content!.isNotEmpty) {
-              for (var content in bookingModel.content!) {
-                DateTime nowWithTime = DateTime.now();
-                DateTime now = DateTime(
-                    nowWithTime.year, nowWithTime.month, nowWithTime.day);
-                DateTime bookingDate = DateTime.parse(content.appointmentDate!);
-                int checkDate = bookingDate.compareTo(now);
-                if (!dateTimes.contains(bookingDate) && checkDate >= 0) {
-                  dateTimes.add(DateTime.parse(content.appointmentDate!));
-                }
-              }
-
-              if (dateTimes.isNotEmpty) {
-                dateTimes.sort((a, b) => a.compareTo(b));
-              }
-              for (var dateTime in dateTimes) {
-                dates.add(DateFormat('yyyy-MM-dd').format(dateTime));
-              }
-              for (var date in dates) {
-                bookings = [];
+              if (bookingModel.content!.isNotEmpty) {
                 for (var content in bookingModel.content!) {
-                  if (date == content.appointmentDate &&
-                      content.bookingStatus == "ONGOING") {
-                    if (content.bookingServices!.length >= 2) {
-                      content.bookingServices!.sort((a, b) =>
-                          a.bookingServiceId!.compareTo(b.bookingServiceId!));
-                    }
-                    bookings.add(content);
+                  DateTime nowWithTime = DateTime.now();
+                  DateTime now = DateTime(
+                      nowWithTime.year, nowWithTime.month, nowWithTime.day);
+                  DateTime bookingDate =
+                      DateTime.parse(content.appointmentDate!);
+                  int checkDate = bookingDate.compareTo(now);
+                  if (!dateTimes.contains(bookingDate) && checkDate == 0) {
+                    dateTimes.add(DateTime.parse(content.appointmentDate!));
                   }
                 }
 
-                DateTime dateFormat = DateTime.parse(date);
-                date = formatDate(dateFormat);
+                if (dateTimes.isNotEmpty) {
+                  dateTimes.sort((a, b) => a.compareTo(b));
+                }
+                for (var dateTime in dateTimes) {
+                  String sDateTime = DateFormat('yyyy-MM-dd').format(dateTime);
+                  if (dates.isNotEmpty) {
+                    bool checkDate = dates.contains((sDateTime));
 
-                if (bookings.isNotEmpty) {
-                  bookings.sort(((a, b) {
-                    int check = a.bookingServices!.first.startAppointment!
-                        .compareTo(b.bookingServices!.first.startAppointment!);
-                    return check;
-                  }));
-                  BookingPendingModel newBookingPending =
-                      BookingPendingModel(date: date, bookings: bookings);
-                  bookingsPending.add(newBookingPending);
+                    if (!checkDate) {
+                      dates.add(sDateTime);
+                    }
+                  } else {
+                    dates.add(sDateTime);
+                  }
+                }
+                for (var date in dates) {
+                  bookings = [];
+                  for (var content in bookingModel.content!) {
+                    bool checkBookingsForThisAcc = content.bookingServices!
+                        .any((service) => service.professional == professional);
+                    if (date == content.appointmentDate &&
+                        content.bookingStatus == "ONGOING" &&
+                        checkBookingsForThisAcc) {
+                      if (content.bookingServices!.length >= 2) {
+                        content.bookingServices!.sort((a, b) =>
+                            a.bookingServiceId!.compareTo(b.bookingServiceId!));
+                      }
+                      bookings.add(content);
+                    }
+                  }
+
+                  DateTime dateFormat = DateTime.parse(date);
+                  date = formatDate(dateFormat);
+
+                  if (bookings.isNotEmpty) {
+                    bookings.sort(((a, b) {
+                      int check = a.bookingServices!.first.startAppointment!
+                          .compareTo(
+                              b.bookingServices!.first.startAppointment!);
+                      return check;
+                    }));
+                    // add bookingsPending (date , bookings )
+                    if (bookingsPending.isNotEmpty) {
+                      bool isDateContained = bookingsPending
+                          .any((bookingPending) => bookingPending.date == date);
+                      if (isDateContained) {
+                        for (var bookingPending in bookingsPending) {
+                          bookingPending.bookings!.addAll(bookings);
+                          bookingPending.bookings!.sort(((a, b) {
+                            int check = a
+                                .bookingServices!.first.startAppointment!
+                                .compareTo(
+                                    b.bookingServices!.first.startAppointment!);
+                            return check;
+                          }));
+                        }
+                      } else {
+                        BookingPendingModel newBookingPending =
+                            BookingPendingModel(date: date, bookings: bookings);
+                        bookingsPending.add(newBookingPending);
+                      }
+                    } else {
+                      BookingPendingModel newBookingPending =
+                          BookingPendingModel(date: date, bookings: bookings);
+                      bookingsPending.add(newBookingPending);
+                    }
+                  }
+                }
+
+                if (!_isDisposed && mounted) {
+                  setState(() {
+                    bookingsPending;
+                    current;
+                  });
+                }
+              } else {
+                if (!_isDisposed && mounted) {
+                  setState(() {
+                    bookings;
+                    current;
+                  });
                 }
               }
-
-              if (!_isDisposed && mounted) {
-                setState(() {
-                  bookingsPending;
-                  isLoading = false;
-                  // current;
-                });
-              }
+            } else if (result['statusCode'] == 500) {
+              _errorMessage(result['error']);
+              break;
+            } else if (result['statusCode'] == 403) {
+              _errorMessage(result['error']);
+              break;
+              // AuthenticateService authenticateService = AuthenticateService();
+              // authenticateService.logout();
             } else {
-              if (!_isDisposed && mounted) {
-                setState(() {
-                  bookings;
-                  // current;
-                });
-              }
+              print("$result");
+              break;
             }
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-          } else if (result['statusCode'] == 403) {
-            _errorMessage(result['error']);
-            // AuthenticateService authenticateService = AuthenticateService();
-            // authenticateService.logout();
-          } else {
-            print("$result");
           }
+        } on Exception catch (e) {
+          print(e.toString());
+          print("Error: $e");
+          break;
         }
-      } on Exception catch (e) {
-        print(e.toString());
-        print("Error: $e");
+      } while (current <= totalPages);
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }

@@ -37,6 +37,7 @@ class AccountService extends IAccountService {
       if (statusCode == 200) {
         accountInfoModel =
             AccountInfoModel.fromJson(json.decode(responseBody)['value']);
+        await SharedPreferencesService.saveStaffInfo(accountInfoModel);
         return {
           'statusCode': statusCode,
           'data': accountInfoModel,

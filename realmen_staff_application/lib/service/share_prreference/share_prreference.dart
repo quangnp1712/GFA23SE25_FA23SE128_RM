@@ -1,4 +1,5 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:realmen_staff_application/models/account/account_info_model.dart';
 import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -206,6 +207,32 @@ class SharedPreferencesService {
       return result;
     } else {
       throw Exception("Failed to get phone number from SharedPreferences");
+    }
+  }
+
+  static Future<void> saveStaffInfo(AccountInfoModel accountInfoModel) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setStringList("staffInfo", [
+      // professional
+      accountInfoModel.staff?.professional?.toString() ?? "",
+
+      // other
+      //
+      //
+    ]);
+  }
+
+  static Future<String> getProfessional() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    List<String>? result = sharedPreferences.getStringList("staffInfo");
+
+    if (result != null) {
+      String professional = result[0];
+      return professional;
+    } else {
+      throw Exception("Failed to get account ID from SharedPreferences");
     }
   }
 }

@@ -2,28 +2,26 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
-
-import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import 'package:realmen_staff_application/models/booking/booking_model.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
+import 'package:realmen_staff_application/service/booking/booking_service.dart';
+
 class ServiceBookingProcessingScreen extends StatefulWidget {
-  final BookingServiceModel? service;
+  final int? bookingId;
   final int? index;
-  String? bookingCode;
-  String? appointmentDate;
-  String? startAppointment;
-  String? bookingOwnerName;
-  String? phone;
+  final String? professional;
+
   ServiceBookingProcessingScreen({
     Key? key,
-    this.service,
+    this.bookingId,
     this.index,
-    this.bookingCode,
-    this.appointmentDate,
-    this.startAppointment,
-    this.bookingOwnerName,
-    this.phone,
+    this.professional,
   }) : super(key: key);
 
   @override
@@ -103,376 +101,385 @@ class _ServiceBookingProcessingScreenState
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Đơn cắt:  ${widget.bookingCode}",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Ngày:  ${widget.appointmentDate}",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Giờ:  ${widget.startAppointment}",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      width: 120,
-                                      child: const Text(
-                                        "Khách hàng: ",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: 200,
-                                      child: Text(
-                                        widget.bookingOwnerName!,
-                                        maxLines: 2,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ),
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
                                   ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 120,
-                                      child: const Text(
-                                        "Số điện thoại: ",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Đơn cắt:  ${booking.bookingCode}",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: 200,
-                                      child: Text(
-                                        widget.phone!,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Ngày:  ${booking.appointmentDate}",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
                                             fontSize: 18,
-                                            overflow: TextOverflow.ellipsis),
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  "Dịch Vụ đang phục vụ: ".toUpperCase(),
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10,
-                                  ),
-                                  child: Divider(
-                                    color: Colors.black,
-                                    height: 2,
-                                    thickness: 1,
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                  ),
-                                  child: TimelineTile(
-                                    // false la hien thanh
-
-                                    isLast: false,
-                                    beforeLineStyle: LineStyle(
-                                        color: Colors.transparent,
-                                        thickness: 2),
-
-                                    // icon
-                                    indicatorStyle: IndicatorStyle(
-                                      width: 35,
-                                      height: 40,
-                                      padding: const EdgeInsets.only(
-                                          top: 4, bottom: 4, right: 5),
-                                      indicator: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.grey.shade300,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "${widget.index! + 1}",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                      indicatorXY: 0.0,
-                                    ),
-
-                                    // content
-                                    endChild: Container(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, right: 0, left: 10),
-                                      constraints:
-                                          const BoxConstraints(minHeight: 80),
-                                      child: Row(
+                                      Text(
+                                        "Giờ:  ${serviceBooking.startAppointment}",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 194),
+                                            width: 120,
+                                            child: const Text(
+                                              "Khách hàng: ",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: 200,
                                             child: Text(
-                                              utf8.decode(widget
-                                                  .service!.serviceName!
-                                                  .toString()
-                                                  .runes
-                                                  .toList()),
-                                              style:
-                                                  const TextStyle(fontSize: 20),
+                                              booking.bookingOwnerName!,
+                                              maxLines: 2,
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "thời gian phục vụ: ".toUpperCase(),
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 10,
-                                  ),
-                                  child: Divider(
-                                    color: Colors.black,
-                                    height: 2,
-                                    thickness: 1,
-                                  ),
-                                ),
-                                Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 40,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    10,
-                                                child: Icon(
-                                                  Icons.timer,
-                                                  size: 24,
-                                                ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 120,
+                                            child: const Text(
+                                              "Số điện thoại: ",
+                                              style: TextStyle(
+                                                fontSize: 18,
                                               ),
-                                              Container(
-                                                color: Colors.amberAccent,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2,
-                                                child: Text(
-                                                  "Thời gian tiêu chuẩn:",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                              ),
-                                              Container(
-                                                color: Colors.purpleAccent,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    5,
-                                                child: Text(
-                                                  widget.startAppointment!,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: 200,
+                                            child: Text(
+                                              booking.bookingOwnerPhone!,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      Text(
+                                        "Dịch Vụ đang phục vụ: ".toUpperCase(),
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 10,
                                         ),
-                                        SizedBox(
-                                          height: 10,
+                                        child: Divider(
+                                          color: Colors.black,
+                                          height: 2,
+                                          thickness: 1,
                                         ),
-                                        Container(
-                                          height: 40,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    10,
-                                                child: Icon(
-                                                  Icons.schedule,
-                                                  size: 24,
-                                                  color: Color(0xff207A20),
-                                                ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 10,
+                                        ),
+                                        child: TimelineTile(
+                                          // false la hien thanh
+
+                                          isLast: false,
+                                          beforeLineStyle: const LineStyle(
+                                              color: Colors.transparent,
+                                              thickness: 2),
+
+                                          // icon
+                                          indicatorStyle: IndicatorStyle(
+                                            width: 35,
+                                            height: 40,
+                                            padding: const EdgeInsets.only(
+                                                top: 4, bottom: 4, right: 5),
+                                            indicator: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.grey.shade300,
                                               ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2,
+                                              child: Center(
                                                 child: Text(
-                                                  "Thời gian đã làm:",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
+                                                  "${widget.index}",
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color(0xff207A20)),
+                                                          FontWeight.bold),
                                                 ),
                                               ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    5,
-                                                child: Center(
-                                                  child: StreamBuilder(
-                                                    stream: Stream.periodic(
-                                                        Duration(seconds: 1)),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      DateTime now =
-                                                          DateTime.now();
-                                                      DateTime elevenAM =
-                                                          startTime;
-                                                      Duration difference = now
-                                                          .difference(elevenAM);
-                                                      int seconds =
-                                                          difference.inSeconds %
-                                                              60;
-                                                      int minutes = (difference
-                                                                  .inSeconds ~/
-                                                              60) %
-                                                          60;
-                                                      int hours =
-                                                          difference.inHours;
-                                                      return Text(
-                                                          '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}');
-                                                    },
+                                            ),
+                                            indicatorXY: 0.0,
+                                          ),
+
+                                          // content
+                                          endChild: Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 10, right: 0, left: 10),
+                                            constraints: const BoxConstraints(
+                                                minHeight: 80),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          maxWidth: 194),
+                                                  child: Text(
+                                                    serviceBooking.serviceName!,
+                                                    style: const TextStyle(
+                                                        fontSize: 20),
                                                   ),
                                                 ),
-                                                // Text(
-                                                //   widget.startAppointment!,
-                                                //   style: TextStyle(
-                                                //       fontSize: 20,
-                                                //       fontWeight:
-                                                //           FontWeight.bold,
-                                                //       color: Color(0xff207A20)),
-                                                // ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.black45,
-                                      border: Border.all(
-                                        color: Colors.black54,
-                                        width: 1,
-                                        style: BorderStyle.solid,
                                       ),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  margin: const EdgeInsets.all(10),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    child: Center(
-                                      child: Text(
-                                        "hoàn thành".toUpperCase(),
+                                      Text(
+                                        "thời gian phục vụ: ".toUpperCase(),
+                                        textAlign: TextAlign.start,
                                         style: const TextStyle(
-                                            color: Colors.white, fontSize: 25),
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 10,
+                                        ),
+                                        child: Divider(
+                                          color: Colors.black,
+                                          height: 2,
+                                          thickness: 1,
+                                        ),
+                                      ),
+                                      Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 10,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 40,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              10,
+                                                      child: const Icon(
+                                                        Icons.timer,
+                                                        size: 24,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2,
+                                                      child: const Text(
+                                                        "Thời gian tiêu chuẩn:",
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              5,
+                                                      child: Text(
+                                                        duration,
+                                                        style: const TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                height: 40,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              10,
+                                                      child: const Icon(
+                                                        Icons.schedule,
+                                                        size: 24,
+                                                        color:
+                                                            Color(0xff207A20),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2,
+                                                      child: const Text(
+                                                        "Thời gian đã làm:",
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Color(
+                                                                0xff207A20)),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              5,
+                                                      child: StreamBuilder(
+                                                        stream: Stream.periodic(
+                                                            const Duration(
+                                                                seconds: 1)),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          return actualTime();
+                                                        },
+                                                      ),
+                                                      // Text(
+                                                      //   widget.startAppointment!,
+                                                      //   style: TextStyle(
+                                                      //       fontSize: 20,
+                                                      //       fontWeight:
+                                                      //           FontWeight.bold,
+                                                      //       color: Color(0xff207A20)),
+                                                      // ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            // color: Colors.black45,
+                                            border: Border.all(
+                                              color: Colors.black54,
+                                              width: 1,
+                                              style: BorderStyle.solid,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        margin: const EdgeInsets.all(10),
+                                        child: TextButton(
+                                          onPressed: btnFinishBookingService,
+                                          child: Center(
+                                            child: Text(
+                                              "hoàn thành".toUpperCase(),
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 25),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -487,4 +494,171 @@ class _ServiceBookingProcessingScreenState
   }
 
   DateTime startTime = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+    getBooking();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  bool isLoading = true;
+  BookingServiceModel serviceBooking = BookingServiceModel();
+  String duration = "00:00:00";
+  BookingContent booking = BookingContent();
+  Future<void> getBooking() async {
+    if (!_isDisposed && mounted) {
+      try {
+        if (widget.bookingId != null) {
+          final result =
+              await BookingService().getBookingById(widget.bookingId!);
+          if (result['statusCode'] == 200) {
+            booking = result['data'] as BookingContent;
+
+            // date
+            DateTime appointmentDate = DateTime.parse(booking.appointmentDate!);
+            booking.appointmentDate = formatDate(appointmentDate);
+
+            // phone
+            String phone = booking.bookingOwnerPhone!;
+            phone =
+                "x" * (phone.length - 3) + phone.substring(phone.length - 3);
+            booking.bookingOwnerPhone = phone;
+
+            // name
+            booking.bookingOwnerName =
+                utf8.decode(booking.bookingOwnerName.toString().runes.toList());
+
+            for (var service in booking.bookingServices!) {
+              if (service.bookingServiceStatus == "PROCESSING" &&
+                      service.professional == widget.professional
+                  // && service.actualStartTime != null
+                  ) {
+                service.serviceName =
+                    utf8.decode(service.serviceName.toString().runes.toList());
+                serviceBooking = service;
+              }
+            }
+
+            // duration
+            String hour = "00";
+            String minute = "00";
+            if (serviceBooking.durationText == "HOUR") {
+              hour = serviceBooking.duration.toString();
+            } else if (serviceBooking.durationText == "MINUTE") {
+              minute = serviceBooking.duration.toString();
+            }
+            duration = "$hour:$minute:00";
+          } else if (result['statusCode'] == 500) {
+            _errorMessage(result['error']);
+          } else if (result['statusCode'] == 403) {
+            _errorMessage(result['error']);
+            // AuthenticateService authenticateService = AuthenticateService();
+            // authenticateService.logout();
+          } else {
+            print("$result");
+          }
+        }
+        if (!_isDisposed && mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  formatDate(DateTime date) {
+    String day = DateFormat('EEEE').format(date);
+    day = formatDay(day);
+    return "$day, ${DateFormat('dd/MM/yyyy').format(date)}";
+  }
+
+  String formatDay(String day) {
+    return dayNames[day.toLowerCase()] ?? day;
+  }
+
+  final Map<String, String> dayNames = {
+    'monday': 'Thứ hai',
+    'tuesday': 'Thứ ba',
+    'wednesday': 'Thứ tư',
+    'thursday': 'Thứ năm',
+    'friday': 'Thứ sáu',
+    'saturday': 'Thứ bảy',
+    'sunday': 'Chủ nhật'
+  };
+
+  Widget actualTime() {
+    try {
+      DateTime now = DateTime.now();
+      // String timeString = serviceBooking.actualStartTime!;
+      String timeString = "00:15:56.37";
+      DateTime actualStartTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        int.parse(timeString.split(":")[0]),
+        int.parse(timeString.split(":")[1]),
+        int.parse(timeString.split(":")[2].split(".")[0]),
+      );
+      Duration difference = now.difference(actualStartTime);
+      int seconds = difference.inSeconds % 60;
+      int minutes = (difference.inSeconds ~/ 60) % 60;
+      int hours = difference.inHours;
+      String text =
+          '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      return Text(
+        text,
+        style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff207A20)),
+      );
+    } on Exception catch (e) {
+      return const Text(
+        "00:00:00",
+        style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff207A20)),
+      );
+    }
+  }
+
+  Future<void> btnFinishBookingService() async {
+    if (!_isDisposed && mounted) {
+      try {
+        final int bookingServiceId = serviceBooking.bookingServiceId!;
+        final int accountId = await SharedPreferencesService.getAccountId();
+        BookingService bookingService = BookingService();
+        final result =
+            await bookingService.putFinishService(bookingServiceId, accountId);
+        if (result['statusCode'] == 200) {
+          Get.toNamed(MainScreen.MainScreenRoute);
+        } else {
+          _errorMessage(result['message']);
+          print(result['error']);
+        }
+      } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
+      }
+    }
+  }
 }

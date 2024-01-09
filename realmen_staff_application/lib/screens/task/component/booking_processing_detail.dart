@@ -11,7 +11,9 @@ import 'package:realmen_staff_application/screens/task/booking_processing.dart';
 import 'package:realmen_staff_application/screens/task/component/add_more_service_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/history_customer_processing.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_confirm.dart';
+import 'package:realmen_staff_application/screens/task/service_booking_processing.dart';
 import 'package:realmen_staff_application/service/account/account_info_service.dart';
+import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class BookingProcessingDetail extends StatefulWidget {
@@ -810,7 +812,9 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                     },
                     child: Center(
                       child: Text(
-                        "bắt đầu phục vụ".toUpperCase(),
+                        checkServiceBookingIsProcessing
+                            ? "tiếp tục".toUpperCase()
+                            : "bắt đầu phục vụ".toUpperCase(),
                         style:
                             const TextStyle(color: Colors.white, fontSize: 25),
                       ),
@@ -828,7 +832,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   @override
   void initState() {
     super.initState();
-    getAccountInfo();
+    setDataBooking();
   }
 
   bool _isDisposed = false;
@@ -843,63 +847,71 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   List<BookingServiceModel> stylistServices = [];
 
   Future<void> _popup() async {
-    if (!_isDisposed) {
-      return showModalBottomSheet(
-        enableDrag: true,
-        isDismissible: true,
-        isScrollControlled: false,
-        context: context,
-        backgroundColor: Colors.white,
-        barrierColor: const Color(0x8c111111),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
+    if (!_isDisposed && mounted) {
+      int index = 0;
+      if (!checkServiceBookingIsProcessing) {
+        return showModalBottomSheet(
+          enableDrag: true,
+          isDismissible: true,
+          isScrollControlled: false,
+          context: context,
+          backgroundColor: Colors.white,
+          barrierColor: const Color(0x8c111111),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
+            ),
           ),
-        ),
-        builder: (context) {
-          String professional = accountInfo.staff!.professional!;
-          if (professional == "MASSEUR") {
-            for (var service in masseurServices) {
-              if (service.bookingServiceStatus == "ONGOING") {
-                return PopUpConfirm(
-                  service: service,
-                  index: masseurServices.indexOf(service),
-                  bookingCode: widget.booking.bookingCode,
-                  appointmentDate: widget.booking.appointmentDate,
-                  startAppointment:
-                      widget.booking.bookingServices!.first.startAppointment,
-                  bookingOwnerName: utf8.decode(widget.booking.bookingOwnerName
-                      .toString()
-                      .runes
-                      .toList()),
-                  phone: phone,
-                );
+          builder: (context) {
+            if (professional == "MASSEUR") {
+              for (var service in masseurServices) {
+                if (service.bookingServiceStatus == "ONGOING") {
+                  index = masseurServices.indexOf(service) + 1;
+                  return PopUpConfirm(
+                    service: service,
+                    index: index,
+                    bookingId: widget.booking.bookingId,
+                  );
+                }
+              }
+            } else if (professional == "STYLIST") {
+              for (var service in stylistServices) {
+                if (service.bookingServiceStatus == "ONGOING") {
+                  index = stylistServices.indexOf(service) + 1;
+                  return PopUpConfirm(
+                    service: service,
+                    index: index,
+                    bookingId: widget.booking.bookingId,
+                  );
+                }
               }
             }
-          } else if (professional == "STYLIST") {
-            for (var service in stylistServices) {
-              if (service.bookingServiceStatus == "ONGOING") {
-                return PopUpConfirm(
-                  service: service,
-                  index: stylistServices.indexOf(service),
-                  bookingCode: widget.booking.bookingCode,
-                  appointmentDate: widget.booking.appointmentDate,
-                  startAppointment:
-                      widget.booking.bookingServices!.first.startAppointment,
-                  bookingOwnerName: utf8.decode(widget.booking.bookingOwnerName
-                      .toString()
-                      .runes
-                      .toList()),
-                  phone: phone,
-                );
-              }
+            return Container(
+              width: 0,
+              height: 0,
+            );
+          },
+        );
+      } else {
+        if (professional == "MASSEUR") {
+          for (var service in masseurServices) {
+            if (service.bookingServiceStatus == "PROCESSING") {
+              index = masseurServices.indexOf(service) + 1;
             }
-          } else {
-            return Container();
           }
-          return Container();
-        },
-      );
+        } else if (professional == "STYLIST") {
+          for (var service in stylistServices) {
+            if (service.bookingServiceStatus == "PROCESSING") {
+              index = stylistServices.indexOf(service) + 1;
+            }
+          }
+        }
+        Get.to(() => ServiceBookingProcessingScreen(
+              bookingId: widget.booking.bookingId,
+              professional: professional,
+              index: index,
+            ));
+      }
     }
   }
 
@@ -907,71 +919,70 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   String? isMasseurServicesDone;
   String? isStylistServicesDone;
   bool isLoading = true;
-  setDataBooking() {
-    isLoading = true;
-    // date
-    DateTime appointmentDate = DateTime.parse(widget.booking.appointmentDate!);
-    widget.booking.appointmentDate = formatDate(appointmentDate);
-
-    // phone
-    phone = widget.booking.bookingOwnerPhone!;
-    phone = "x" * (phone.length - 3) + phone.substring(phone.length - 3);
-
-    // masseurServices + stylistServices
-    for (var bookingService in widget.booking.bookingServices!) {
-      if (bookingService.professional == "MASSEUR") {
-        masseurServices.add(bookingService);
-      } else if (bookingService.professional == "STYLIST") {
-        stylistServices.add(bookingService);
-      }
-    }
-    if (masseurServices.isNotEmpty) {
-      for (var service in masseurServices) {
-        if (service.bookingServiceStatus == "ONGOING") {
-          isMasseurServicesDone = "CHƯA LÀM";
-        } else if (service.bookingServiceStatus == "PROCESSING") {
-          isMasseurServicesDone = "ĐANG LÀM";
-        } else if (service.bookingServiceStatus == "FINISHED") {
-          isMasseurServicesDone = "HOÀN THÀNH";
-        }
-      }
-    }
-    if (stylistServices.isNotEmpty) {
-      for (var service in stylistServices) {
-        if (service.bookingServiceStatus == "ONGOING") {
-          isStylistServicesDone = "CHƯA LÀM";
-        } else if (service.bookingServiceStatus == "PROCESSING") {
-          isStylistServicesDone = "ĐANG LÀM";
-        } else if (service.bookingServiceStatus == "FINISHED") {
-          isStylistServicesDone = "HOÀN THÀNH";
-        }
-      }
-    }
-  }
-
-  AccountInfoModel accountInfo = AccountInfoModel();
-  Future<void> getAccountInfo() async {
-    if (!_isDisposed && mounted) {
+  bool checkServiceBookingIsProcessing = false;
+  Future<void> setDataBooking() async {
+    try {
       isLoading = true;
-      setDataBooking();
-      try {
-        AccountService accountService = AccountService();
-        final result = await accountService.getAccountInfo();
-        if (result['statusCode'] == 200) {
-          accountInfo = result['data'] as AccountInfoModel;
-          setState(() {
-            isLoading = false;
-            accountInfo;
-          });
-        } else {
-          print("$result");
+
+      // professional
+      professional = await SharedPreferencesService.getProfessional();
+      // date
+      DateTime appointmentDate =
+          DateTime.parse(widget.booking.appointmentDate!);
+      widget.booking.appointmentDate = formatDate(appointmentDate);
+
+      // phone
+      phone = widget.booking.bookingOwnerPhone!;
+      phone = "x" * (phone.length - 3) + phone.substring(phone.length - 3);
+
+      // masseurServices + stylistServices
+      for (var bookingService in widget.booking.bookingServices!) {
+        if (bookingService.professional == "MASSEUR") {
+          masseurServices.add(bookingService);
+        } else if (bookingService.professional == "STYLIST") {
+          stylistServices.add(bookingService);
         }
-      } on Exception catch (e) {
-        print(e.toString());
-        print("Error: $e");
       }
+      if (masseurServices.isNotEmpty) {
+        for (var service in masseurServices) {
+          if (service.bookingServiceStatus == "ONGOING") {
+            isMasseurServicesDone = "CHƯA LÀM";
+          } else if (service.bookingServiceStatus == "PROCESSING") {
+            isMasseurServicesDone = "ĐANG LÀM";
+          } else if (service.bookingServiceStatus == "FINISHED") {
+            isMasseurServicesDone = "HOÀN THÀNH";
+          }
+        }
+      }
+      if (stylistServices.isNotEmpty) {
+        for (var service in stylistServices) {
+          if (service.bookingServiceStatus == "ONGOING") {
+            isStylistServicesDone = "CHƯA LÀM";
+          } else if (service.bookingServiceStatus == "PROCESSING") {
+            isStylistServicesDone = "ĐANG LÀM";
+          } else if (service.bookingServiceStatus == "FINISHED") {
+            isStylistServicesDone = "HOÀN THÀNH";
+          }
+        }
+      }
+
+      // checkServiceBookingIsProcessing
+      checkServiceBookingIsProcessing = widget.booking.bookingServices!
+          .any((service) => service.bookingServiceStatus == "PROCESSING");
+
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = false;
+          professional;
+        });
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+      isLoading = true;
     }
   }
+
+  String professional = '';
 
   void _errorMessage(String? message) {
     try {

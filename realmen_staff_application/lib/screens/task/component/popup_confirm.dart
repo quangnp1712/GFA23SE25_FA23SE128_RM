@@ -13,21 +13,13 @@ import 'package:realmen_staff_application/service/share_prreference/share_prrefe
 class PopUpConfirm extends StatefulWidget {
   final BookingServiceModel? service;
   final int? index;
-  String? bookingCode;
-  String? appointmentDate;
-  String? startAppointment;
-  String? bookingOwnerName;
-  String? phone;
+  final int? bookingId;
 
   PopUpConfirm({
     Key? key,
     this.service,
     this.index,
-    this.bookingCode,
-    this.appointmentDate,
-    this.startAppointment,
-    this.bookingOwnerName,
-    this.phone,
+    this.bookingId,
   }) : super(key: key);
   @override
   State<PopUpConfirm> createState() => _PopUpConfirmState();
@@ -78,7 +70,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "${widget.index! + 1}",
+                                    "${widget.index!}",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -187,13 +179,8 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
             await bookingService.putStartService(bookingServiceId, accountId);
         if (result['statusCode'] == 200) {
           Get.to(() => ServiceBookingProcessingScreen(
-                service: widget.service,
-                index: widget.index,
-                bookingCode: widget.bookingCode,
-                appointmentDate: widget.appointmentDate,
-                startAppointment: widget.startAppointment,
-                bookingOwnerName: widget.bookingOwnerName,
-                phone: widget.phone,
+                bookingId: widget.bookingId,
+                professional: widget.service!.professional,
               ));
         } else {
           _errorMessage(result['message']);

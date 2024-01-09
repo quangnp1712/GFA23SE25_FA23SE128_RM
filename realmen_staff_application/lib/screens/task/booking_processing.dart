@@ -7,10 +7,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_staff_application/models/account/account_info_model.dart';
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/add_more_service_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/booking_processing_detail.dart';
+import 'package:realmen_staff_application/service/account/account_info_service.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
@@ -44,43 +46,52 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
               )
             ],
           )
-        : tabs.length > 1
-            ? DefaultTabController(
-                length: tabs.length,
-                child: Column(
-                  children: [
-                    TabBar(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _tabController,
-                      labelColor: Colors.black,
-                      labelStyle: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 20),
-                      indicator: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.black,
-                            width: 2.0,
+        : tabs.isNotEmpty && bookingViews.isNotEmpty
+            ? (tabs.length > 1
+                ? DefaultTabController(
+                    length: tabs.length,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _tabController,
+                          labelColor: Colors.black,
+                          labelStyle: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 17),
+                          indicator: BoxDecoration(
+                              // border: Border(
+                              //   bottom: BorderSide(
+                              //     color: Colors.black,
+                              //     width: 1.0,
+                              //   ),
+                              // ),
+                              color: Colors.grey.shade300),
+                          isScrollable: true,
+                          labelPadding: EdgeInsets.only(
+                              bottom: 10, left: 20, right: 20, top: 5),
+                          tabs: tabs,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          // color: Colors.amber,
+                          // width: 400,
+                          height: 65.h,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: bookingViews,
                           ),
                         ),
-                      ),
-                      tabs: tabs,
+                      ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      // color: Colors.amber,
-                      // width: 400,
-                      height: 65.h,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: bookingViews,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : bookingViews.first;
+                  )
+                : bookingViews.first)
+            : Center(
+                child: Text("Chưa có đơn booking"),
+              );
   }
 
   bool isDone = false;
@@ -105,7 +116,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
   int currentResult = 0;
   int totalPages = 0;
 
-  List<Tab> tabs = [];
+  List<Widget> tabs = [];
   late TabController _tabController;
   List<BookingProcessingDetail> bookingViews = [];
 
@@ -115,6 +126,8 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
       do {
         try {
           int accountId = await SharedPreferencesService.getAccountId();
+          String professional =
+              await SharedPreferencesService.getProfessional();
           if (accountId != 0) {
             BookingModel bookingModel = BookingModel();
             final result =
@@ -123,70 +136,82 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
               bookingModel = result['data'] as BookingModel;
               currentResult = result['current'];
               totalPages = result['totalPages'];
+              current = currentResult;
+              current = current + 1;
               BookingContent bookingContent;
+              bool checkBSForThisAcc = false;
 
               if (bookingModel.content!.isNotEmpty) {
                 for (var content in bookingModel.content!) {
-                  DateTime dateTimeContent =
-                      DateTime.parse(content.appointmentDate!);
-                  DateTime nowWithTime = DateTime.now();
-                  DateTime now = DateTime(
-                      nowWithTime.year, nowWithTime.month, nowWithTime.day);
-                  if (dateTimeContent.compareTo(now) == 0 &&
-                      content.bookingStatus == "PROCESSING") {
-                    content.bookingServices!.sort((a, b) =>
-                        a.bookingServiceId!.compareTo(b.bookingServiceId!));
-                    bookingContent = content;
-                    bookingViews
-                        .add(BookingProcessingDetail(booking: bookingContent));
+                  checkBSForThisAcc = content.bookingServices!
+                      .any((service) => service.professional == professional);
+                  if (checkBSForThisAcc) {
+                    DateTime dateTimeContent =
+                        DateTime.parse(content.appointmentDate!);
+                    DateTime nowWithTime = DateTime.now();
+                    DateTime now = DateTime(
+                        nowWithTime.year, nowWithTime.month, nowWithTime.day);
+                    if (dateTimeContent.compareTo(now) == 0 &&
+                        content.bookingStatus == "PROCESSING") {
+                      content.bookingServices!.sort((a, b) =>
+                          a.bookingServiceId!.compareTo(b.bookingServiceId!));
+                      bookingContent = content;
+                      bookingViews.add(
+                          BookingProcessingDetail(booking: bookingContent));
+                    }
                   }
                 }
-
-                tabs = [];
-                for (var booking in bookingViews) {
-                  Tab tab = Tab(
-                    child: Text(
-                      '${bookingViews.indexOf(booking) + 1}',
-                      style: GoogleFonts.quicksand(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
+                if (checkBSForThisAcc) {
+                  tabs = [];
+                  for (var booking in bookingViews) {
+                    Widget tab = Container(
+                      width: 55.2,
+                      // color: Colors.amberAccent,
+                      child: Tab(
+                        height: 20,
+                        child: Text(
+                          '${bookingViews.indexOf(booking) + 1}',
+                          style: GoogleFonts.quicksand(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                    ),
-                  );
-                  tabs.add(tab);
-                }
-                if (!_isDisposed && mounted) {
-                  setState(() {
-                    isLoading = false;
-                    bookingViews;
-                    tabs;
-                    _tabController =
-                        TabController(length: tabs.length, vsync: this);
-                    // current;
-                  });
-                }
-              } else {
-                if (!_isDisposed && mounted) {
-                  setState(() {
-                    // current;
-                  });
+                    );
+                    tabs.add(tab);
+                  }
                 }
               }
             } else if (result['statusCode'] == 500) {
-              _errorMessage(result['error']);
+              _errorMessage(result['message']);
+              break;
             } else if (result['statusCode'] == 403) {
-              _errorMessage(result['error']);
+              _errorMessage(result['message']);
               // AuthenticateService authenticateService = AuthenticateService();
               // authenticateService.logout();
+              break;
             } else {
               print("$result");
+              break;
             }
           }
         } on Exception catch (e) {
           print(e.toString());
           print("Error: $e");
+          break;
         }
       } while (current <= totalPages);
+      if (!_isDisposed && mounted) {
+        setState(() {
+          isLoading = false;
+          bookingViews;
+          tabs;
+          if (tabs.isNotEmpty) {
+            _tabController = TabController(length: tabs.length, vsync: this);
+          }
+          current;
+        });
+      }
     }
   }
 

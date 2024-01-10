@@ -24,8 +24,8 @@ class ScheduleModel {
   int? staffId;
   String? shift;
   String? workingDate;
-  String? start;
-  String? end;
+  String? startShift;
+  String? endShift;
   String? scheduleStatus;
 
   ScheduleModel({
@@ -34,8 +34,8 @@ class ScheduleModel {
     this.staffId,
     this.shift,
     this.workingDate,
-    this.start,
-    this.end,
+    this.startShift,
+    this.endShift,
     this.scheduleStatus,
   });
 
@@ -45,8 +45,8 @@ class ScheduleModel {
       staffId: json['staffId'],
       shift: json['shift'],
       workingDate: json['workingDate'],
-      start: json['start'],
-      end: json['end'],
+      startShift: json['startShift'],
+      endShift: json['endShift'],
       scheduleStatus: json['scheduleStatus'],
     );
   }

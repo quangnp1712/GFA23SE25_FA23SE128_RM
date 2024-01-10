@@ -367,10 +367,15 @@ class _RegisterWorkScheduleScreenState
         schedulesModel = result['data'] as SchedulesModel;
         for (var schedule in schedulesModel!.scheduleModelList!) {
           Appointment? newAppointment;
-          DateTime dateSchedule =
-              DateTime.parse(schedule.workingDate.toString());
+
+          // chuyển String workingDate thành DateTime
+          String dateString = schedule.workingDate!;
+          var parts = dateString.split('/');
+          DateTime dateSchedule = DateTime(
+              int.parse(parts[2]), int.parse(parts[0]), int.parse(parts[1]));
+
           // Lấy start time
-          final startTimeString = schedule.start.toString();
+          final startTimeString = schedule.startShift.toString();
           List<String> partsStartTimeString = startTimeString.split(":");
           int hourStart = int.parse(partsStartTimeString[0]);
           int minuteStart = int.parse(partsStartTimeString[1]);
@@ -378,7 +383,7 @@ class _RegisterWorkScheduleScreenState
               dateSchedule.day, hourStart, minuteStart);
 
           // Lấy end time
-          final endTimeString = schedule.end.toString();
+          final endTimeString = schedule.endShift.toString();
           List<String> partsEndTimeString = endTimeString.split(":");
           int hourEnd = int.parse(partsEndTimeString[0]);
           int minuteEnd = int.parse(partsEndTimeString[1]);

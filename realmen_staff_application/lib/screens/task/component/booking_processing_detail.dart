@@ -816,7 +816,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                     },
                     child: Center(
                       child: Text(
-                        btn,
+                        btn.value!,
                         style:
                             const TextStyle(color: Colors.white, fontSize: 20),
                       ),
@@ -857,7 +857,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   Future<void> _popup() async {
     if (!_isDisposed && mounted) {
       int index = 0;
-      if (!checkServiceBookingIsProcessing) {
+      if (btn.key == 0) {
         return showModalBottomSheet(
           enableDrag: true,
           isDismissible: true,
@@ -900,7 +900,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
             );
           },
         );
-      } else {
+      } else if (btn.key == 1) {
         if (professional == "MASSEUR") {
           for (var service in masseurServices) {
             if (service.bookingServiceStatus == "PROCESSING") {
@@ -919,7 +919,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
               professional: professional,
               index: index,
             ));
-      }
+      } else if (btn.key == 4) {}
     }
   }
 
@@ -929,14 +929,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   bool isLoading = true;
   bool checkServiceBookingIsProcessing = false;
   bool checkBookingIsDone = false;
-  List<Map<String, dynamic>> btnStatus = [
-    {"key": 1, "value": "bắt đầu phục vụ".toUpperCase()},
-    {"key": 2, "value": "tiếp tục".toUpperCase()},
-    {"key": 3, "value": "hoàn tất, chuyển qua stylist".toUpperCase()},
-    {"key": 4, "value": "hoàn tất, chuyển qua MASSEUR".toUpperCase()},
-    {"key": 4, "value": "Thanh toán".toUpperCase()},
+  final List<BtnStatus> btnStatus = [
+    BtnStatus(key: 0, value: "bắt đầu phục vụ".toUpperCase()),
+    BtnStatus(key: 1, value: "tiếp tục".toUpperCase()),
+    BtnStatus(key: 2, value: "hoàn tất, chuyển qua stylist".toUpperCase()),
+    BtnStatus(key: 3, value: "hoàn tất, chuyển qua MASSEUR".toUpperCase()),
+    BtnStatus(key: 4, value: "Thanh toán".toUpperCase()),
   ];
-  Map<String, dynamic> btn = btnStatus[0];
+  BtnStatus btn = BtnStatus();
   Future<void> setDataBooking() async {
     try {
       isLoading = true;
@@ -1000,21 +1000,21 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
       // checkBookingIsDone = true kiểm tra cả đơn đó xong chưa
 
       if (checkServiceBookingIsProcessing) {
-        btn = "tiếp tục".toUpperCase();
+        btn = btnStatus[1];
       } else {
         if (professional == "MASSEUR" &&
             isMasseurServicesDone == "HOÀN THÀNH" &&
             isStylistServicesDone != "HOÀN THÀNH") {
-          btn = "hoàn tất, chuyển qua stylist".toUpperCase();
+          btn = btnStatus[2];
         } else if (professional == "STYLIST" &&
             isMasseurServicesDone != "HOÀN THÀNH" &&
             isStylistServicesDone == "HOÀN THÀNH") {
-          btn = "hoàn tất, chuyển qua MASSEUR".toUpperCase();
+          btn = btnStatus[3];
         } else if (isMasseurServicesDone == "HOÀN THÀNH" &&
             isStylistServicesDone == "HOÀN THÀNH") {
-          btn = "Thanh toán".toUpperCase();
+          btn = btnStatus[4];
         } else {
-          btn = "bắt đầu phục vụ".toUpperCase();
+          btn = btnStatus[0];
         }
       }
 

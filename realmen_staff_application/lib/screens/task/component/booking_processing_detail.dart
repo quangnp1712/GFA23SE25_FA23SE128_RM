@@ -10,6 +10,7 @@ import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/task/booking_processing.dart';
 import 'package:realmen_staff_application/screens/task/component/add_more_service_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/history_customer_processing.dart';
+import 'package:realmen_staff_application/screens/task/component/popup_change_staff.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_confirm.dart';
 import 'package:realmen_staff_application/screens/task/service_booking_processing.dart';
 import 'package:realmen_staff_application/service/account/account_info_service.dart';
@@ -54,7 +55,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       Text(
                         "Đơn cắt:  ${widget.booking.bookingCode}",
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
@@ -63,7 +64,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       Text(
                         "Ngày:  ${widget.booking.appointmentDate}",
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(
@@ -72,7 +73,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       Text(
                         "Giờ:  ${widget.booking.bookingServices!.first.startAppointment}",
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(
@@ -103,7 +104,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                   .toList()),
                               maxLines: 2,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -137,7 +138,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                               phone,
                               textAlign: TextAlign.left,
                               maxLines: 1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -367,7 +368,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                           ? Column(
                               children: [
                                 Container(
-                                  constraints: BoxConstraints(minHeight: 40),
+                                  constraints:
+                                      const BoxConstraints(minHeight: 40),
                                   color: Colors.grey.shade300,
                                   child: Row(
                                     mainAxisAlignment:
@@ -375,10 +377,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                     children: [
                                       Container(
                                         constraints:
-                                            BoxConstraints(maxWidth: 245),
+                                            const BoxConstraints(maxWidth: 245),
                                         child: Text(
                                           "Massuer:  ${utf8.decode(masseurServices.first.staffName!.toString().runes.toList())} ",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 20,
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
@@ -415,10 +417,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w700,
                                                 // color: Colors.white,
-                                                color: isMasseurServicesDone !=
+                                                color: isMasseurServicesDone ==
                                                         "HOÀN THÀNH"
-                                                    ? Colors.black
-                                                    : Colors.white,
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
                                             ),
                                           ),
@@ -495,8 +497,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 194),
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 194),
                                               child: Text(
                                                 utf8.decode(
                                                     masseurServices[index]
@@ -572,7 +574,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                           ? Column(
                               children: [
                                 Container(
-                                  constraints: BoxConstraints(minHeight: 40),
+                                  constraints:
+                                      const BoxConstraints(minHeight: 40),
                                   color: Colors.grey.shade300,
                                   child: Row(
                                     mainAxisAlignment:
@@ -580,10 +583,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                     children: [
                                       Container(
                                         constraints:
-                                            BoxConstraints(maxWidth: 245),
+                                            const BoxConstraints(maxWidth: 245),
                                         child: Text(
                                           "Stylist: ${utf8.decode(stylistServices.first.staffName!.toString().runes.toList())}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 20,
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
@@ -619,9 +622,9 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                 fontWeight: FontWeight.w700,
                                                 // color: Colors.white,
                                                 color: isStylistServicesDone ==
-                                                        "CHƯA LÀM"
-                                                    ? Colors.black
-                                                    : Colors.white,
+                                                        "HOÀN THÀNH"
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
                                             ),
                                           ),
@@ -698,8 +701,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 194),
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 194),
                                               child: Text(
                                                 utf8.decode(
                                                     stylistServices[index]
@@ -771,26 +774,6 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       const SizedBox(
                         height: 20,
                       ),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //       color: Colors.black45,
-                      //       border: Border.all(
-                      //         color: Colors.black54,
-                      //         width: 1,
-                      //         style: BorderStyle.solid,
-                      //       ),
-                      //       borderRadius: BorderRadius.circular(10)),
-                      //   margin: const EdgeInsets.all(10),
-                      //   child: TextButton(
-                      //     onPressed: () {},
-                      //     child: Center(
-                      //       child: Text(
-                      //         "chuyển Massuer".toUpperCase(),
-                      //         style: const TextStyle(color: Colors.white, fontSize: 25),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -799,28 +782,65 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(
-                        color: Colors.black54,
-                        width: 1,
-                        style: BorderStyle.solid,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    children: [
+                      btn.key == 0
+                          ? Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.black45,
+                                  border: Border.all(
+                                    color: Colors.black54,
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: TextButton(
+                                onPressed: () {
+                                  _btnLeft();
+                                },
+                                child: Center(
+                                  child: Text(
+                                    "đổi $professional".toUpperCase(),
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const SizedBox(
+                              height: 0,
+                              width: 0,
+                            ),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              border: Border.all(
+                                color: Colors.black54,
+                                width: 1,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(10)),
+                          // margin: const EdgeInsets.all(10),
+                          child: TextButton(
+                            onPressed: () {
+                              _btnRight();
+                            },
+                            child: Center(
+                              child: Text(
+                                btn.value!,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(10)),
-                  // margin: const EdgeInsets.all(10),
-                  child: TextButton(
-                    onPressed: () {
-                      _popup();
-                    },
-                    child: Center(
-                      child: Text(
-                        btn.value!,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -854,7 +874,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
 
   List<BookingServiceModel> stylistServices = [];
 
-  Future<void> _popup() async {
+  Future<void> _btnRight() async {
     if (!_isDisposed && mounted) {
       int index = 0;
       if (btn.key == 0) {
@@ -1059,6 +1079,54 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     'saturday': 'Thứ bảy',
     'sunday': 'Chủ nhật'
   };
+
+  Future<void> _btnLeft() async {
+    if (!_isDisposed && mounted) {
+      int index = 0;
+      return showModalBottomSheet(
+        enableDrag: true,
+        isDismissible: true,
+        isScrollControlled: false,
+        context: context,
+        backgroundColor: Colors.white,
+        barrierColor: const Color(0x8c111111),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (context) {
+          if (professional == "MASSEUR") {
+            for (var service in masseurServices) {
+              if (service.bookingServiceStatus == "ONGOING") {
+                index = masseurServices.indexOf(service) + 1;
+                return PopupChangeStaff(
+                  service: service,
+                  index: index,
+                  bookingId: widget.booking.bookingId!,
+                );
+              }
+            }
+          } else if (professional == "STYLIST") {
+            for (var service in stylistServices) {
+              if (service.bookingServiceStatus == "ONGOING") {
+                index = stylistServices.indexOf(service) + 1;
+                return PopupChangeStaff(
+                  service: service,
+                  index: index,
+                  bookingId: widget.booking.bookingId!,
+                );
+              }
+            }
+          }
+          return Container(
+            width: 0,
+            height: 0,
+          );
+        },
+      );
+    }
+  }
 }
 
 class BtnStatus {

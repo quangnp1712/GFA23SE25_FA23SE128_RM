@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_staff_application/screens/task/booking_processing.dart';
 import 'package:realmen_staff_application/screens/task/booking_waiting.dart';
+import 'package:realmen_staff_application/service/account/account_info_service.dart';
 import 'package:sizer/sizer.dart';
 
 class TaskScreen extends StatefulWidget {
@@ -69,65 +70,80 @@ class _TaskScreenState extends State<TaskScreen>
                               ),
                             ),
                           ),
-                          DefaultTabController(
-                            length: 2,
-                            child: Column(
-                              children: [
-                                TabBar(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  controller: _tabController,
-                                  labelColor: Colors.black,
-                                  labelStyle: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20),
-                                  indicator: const BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.black,
-                                        width: 2.0,
-                                      ),
-                                    ),
-                                  ),
-                                  tabs: [
-                                    Tab(
-                                      child: Text(
-                                        'ĐANG PHỤC VỤ',
-                                        style: GoogleFonts.quicksand(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                    Tab(
-                                      child: Text(
-                                        'ĐANG CHỜ',
-                                        style: GoogleFonts.quicksand(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
+                          isLoading
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 30),
+                                      height: 50,
+                                      width: 50,
+                                      child: const CircularProgressIndicator(),
+                                    )
                                   ],
-                                ),
-                                const SizedBox(
-                                  height: 1,
-                                ),
-                                Container(
-                                  // color: Colors.amber,
-                                  // width: 400,
-                                  height: 72.h,
-                                  child: TabBarView(
-                                    controller: _tabController,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: const [
-                                      BookingProcessingTab(),
-                                      BookingWaitingTab(),
+                                )
+                              : DefaultTabController(
+                                  length: 2,
+                                  child: Column(
+                                    children: [
+                                      TabBar(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        controller: _tabController,
+                                        labelColor: Colors.black,
+                                        labelStyle: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20),
+                                        indicator: const BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: Colors.black,
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                        ),
+                                        tabs: [
+                                          Tab(
+                                            child: Text(
+                                              'ĐANG PHỤC VỤ',
+                                              style: GoogleFonts.quicksand(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                          Tab(
+                                            child: Text(
+                                              'ĐANG CHỜ',
+                                              style: GoogleFonts.quicksand(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 1,
+                                      ),
+                                      Container(
+                                        // color: Colors.amber,
+                                        // width: 400,
+                                        height: 72.h,
+                                        child: TabBarView(
+                                          controller: _tabController,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          children: const [
+                                            BookingProcessingTab(),
+                                            BookingWaitingTab(),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
                         ],
                       )),
                 )
@@ -142,6 +158,7 @@ class _TaskScreenState extends State<TaskScreen>
   late TabController _tabController;
   @override
   void initState() {
+    getAccountInfo();
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -152,5 +169,23 @@ class _TaskScreenState extends State<TaskScreen>
     _isDisposed = true;
     _tabController.dispose();
     super.dispose();
+  }
+
+  bool isLoading = true;
+  Future<void> getAccountInfo() async {
+    if (mounted) {
+      isLoading = true;
+      try {
+        AccountService accountService = AccountService();
+        final result = await accountService.getAccountInfo();
+        setState(() {
+          isLoading = false;
+        });
+        print("$result");
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
   }
 }

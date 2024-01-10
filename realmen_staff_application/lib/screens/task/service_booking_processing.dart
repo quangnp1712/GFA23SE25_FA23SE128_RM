@@ -81,7 +81,7 @@ class _ServiceBookingProcessingScreenState
                                       icon:
                                           const Icon(Icons.keyboard_arrow_left),
                                       onPressed: () {
-                                        Get.back();
+                                        Get.toNamed(MainScreen.MainScreenRoute);
                                       },
                                     ),
                                   ),
@@ -550,7 +550,8 @@ class _ServiceBookingProcessingScreenState
             String minute = "00";
             if (serviceBooking.durationText == "HOUR") {
               hour = serviceBooking.duration.toString();
-            } else if (serviceBooking.durationText == "MINUTE") {
+            }
+            if (serviceBooking.durationText == "MINUTE") {
               minute = serviceBooking.duration.toString();
             }
             duration = "$hour:$minute:00";

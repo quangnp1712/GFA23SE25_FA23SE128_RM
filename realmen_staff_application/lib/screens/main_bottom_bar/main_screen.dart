@@ -42,7 +42,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    getAccountInfo();
     profileScreen = ProfileScreen(setPage);
     taskScreen = TaskScreen(setPage);
     workScheduleScreen = WorkScheduleScreen(setPage);
@@ -70,80 +69,42 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: isLoading
-          ? Scaffold(
-              body: SizedBox(
-                height: 100.h,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/bg.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : Scaffold(
-              // key: _bottomNavigationKey,
-              body: pageChooser(bottomIndex),
-              bottomNavigationBar: CurvedNavigationBar(
-                key: _bottomNavigationKey,
-                color: Colors.white,
-                backgroundColor: Colors.black87,
-                items: const [
-                  CurvedNavigationBarItem(
-                    child: Icon(Icons.task),
-                    label: 'Công việc',
-                  ),
-                  CurvedNavigationBarItem(
-                    child: Icon(Icons.list_alt),
-                    label: 'Lịch làm',
-                  ),
-                  CurvedNavigationBarItem(
-                    child: Icon(Icons.calendar_month),
-                    label: 'Đăng kí lịch',
-                  ),
-                  CurvedNavigationBarItem(
-                    child: Icon(Icons.perm_identity),
-                    label: 'Tài khoản',
-                  ),
-                ],
-                onTap: (value) async {
-                  if (!await SharedPreferencesService.checkJwtExpired()) {
-                    setState(() {
-                      bottomIndex = value;
-                    });
-                  } else {
-                    Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-                  }
-                },
-              ),
+      child: Scaffold(
+        // key: _bottomNavigationKey,
+        body: pageChooser(bottomIndex),
+        bottomNavigationBar: CurvedNavigationBar(
+          key: _bottomNavigationKey,
+          color: Colors.white,
+          backgroundColor: Colors.black87,
+          items: const [
+            CurvedNavigationBarItem(
+              child: Icon(Icons.task),
+              label: 'Công việc',
             ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.list_alt),
+              label: 'Lịch làm',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.calendar_month),
+              label: 'Đăng kí lịch',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.perm_identity),
+              label: 'Tài khoản',
+            ),
+          ],
+          onTap: (value) async {
+            if (!await SharedPreferencesService.checkJwtExpired()) {
+              setState(() {
+                bottomIndex = value;
+              });
+            } else {
+              Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+            }
+          },
+        ),
+      ),
     );
-  }
-
-  bool isLoading = true;
-  Future<void> getAccountInfo() async {
-    if (mounted) {
-      isLoading = true;
-      try {
-        AccountService accountService = AccountService();
-        final result = await accountService.getAccountInfo();
-        setState(() {
-          isLoading = false;
-        });
-        print("$result");
-      } on Exception catch (e) {
-        print(e.toString());
-        print("Error: $e");
-      }
-    }
   }
 }

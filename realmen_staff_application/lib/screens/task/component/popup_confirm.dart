@@ -181,6 +181,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
           Get.to(() => ServiceBookingProcessingScreen(
                 bookingId: widget.bookingId,
                 professional: widget.service!.professional,
+                index: widget.index,
               ));
         } else {
           _errorMessage(result['message']);

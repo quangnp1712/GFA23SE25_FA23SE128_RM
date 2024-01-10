@@ -572,19 +572,23 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                           ? Column(
                               children: [
                                 Container(
-                                  height: 40,
+                                  constraints: BoxConstraints(minHeight: 40),
                                   color: Colors.grey.shade300,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "Stylist: ${utf8.decode(stylistServices.first.staffName!.toString().runes.toList())}",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1),
+                                      Container(
+                                        constraints:
+                                            BoxConstraints(maxWidth: 245),
+                                        child: Text(
+                                          "Stylist: ${utf8.decode(stylistServices.first.staffName!.toString().runes.toList())}",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1),
+                                        ),
                                       ),
                                       Center(
                                         child: Container(
@@ -614,8 +618,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w700,
                                                 // color: Colors.white,
-                                                color: isStylistServicesDone !=
-                                                        "FINISHED"
+                                                color: isStylistServicesDone ==
+                                                        "CHƯA LÀM"
                                                     ? Colors.black
                                                     : Colors.white,
                                               ),
@@ -812,11 +816,9 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                     },
                     child: Center(
                       child: Text(
-                        checkServiceBookingIsProcessing
-                            ? "tiếp tục".toUpperCase()
-                            : "bắt đầu phục vụ".toUpperCase(),
+                        btn,
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 25),
+                            const TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                   ),
@@ -841,6 +843,12 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     _isDisposed = true;
     super.dispose();
   }
+
+  // @override
+  // void didUpdateWidget(BookingProcessingDetail oldWidget) {
+  //   setDataBooking();
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   List<BookingServiceModel> masseurServices = [];
 
@@ -920,6 +928,15 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   String? isStylistServicesDone;
   bool isLoading = true;
   bool checkServiceBookingIsProcessing = false;
+  bool checkBookingIsDone = false;
+  List<Map<String, dynamic>> btnStatus = [
+    {"key": 1, "value": "bắt đầu phục vụ".toUpperCase()},
+    {"key": 2, "value": "tiếp tục".toUpperCase()},
+    {"key": 3, "value": "hoàn tất, chuyển qua stylist".toUpperCase()},
+    {"key": 4, "value": "hoàn tất, chuyển qua MASSEUR".toUpperCase()},
+    {"key": 4, "value": "Thanh toán".toUpperCase()},
+  ];
+  Map<String, dynamic> btn = btnStatus[0];
   Future<void> setDataBooking() async {
     try {
       isLoading = true;
@@ -970,6 +987,37 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
       checkServiceBookingIsProcessing = widget.booking.bookingServices!
           .any((service) => service.bookingServiceStatus == "PROCESSING");
 
+      // checkBookingIsDone
+      if (isStylistServicesDone == "HOÀN THÀNH" &&
+          isMasseurServicesDone == "HOÀN THÀNH") {
+        checkBookingIsDone = true;
+      } else {
+        checkBookingIsDone = false;
+      }
+      // checkServiceBookingIsProcessing = true ? "tiếp tục" : "bắt đầu phục vụ"
+      // isStylistServicesDone or isMasseurServicesDone == "HOÀN THÀNH"
+      //kiểm tra dv của staff đó đã xong chưa
+      // checkBookingIsDone = true kiểm tra cả đơn đó xong chưa
+
+      if (checkServiceBookingIsProcessing) {
+        btn = "tiếp tục".toUpperCase();
+      } else {
+        if (professional == "MASSEUR" &&
+            isMasseurServicesDone == "HOÀN THÀNH" &&
+            isStylistServicesDone != "HOÀN THÀNH") {
+          btn = "hoàn tất, chuyển qua stylist".toUpperCase();
+        } else if (professional == "STYLIST" &&
+            isMasseurServicesDone != "HOÀN THÀNH" &&
+            isStylistServicesDone == "HOÀN THÀNH") {
+          btn = "hoàn tất, chuyển qua MASSEUR".toUpperCase();
+        } else if (isMasseurServicesDone == "HOÀN THÀNH" &&
+            isStylistServicesDone == "HOÀN THÀNH") {
+          btn = "Thanh toán".toUpperCase();
+        } else {
+          btn = "bắt đầu phục vụ".toUpperCase();
+        }
+      }
+
       if (!_isDisposed && mounted) {
         setState(() {
           isLoading = false;
@@ -1011,4 +1059,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     'saturday': 'Thứ bảy',
     'sunday': 'Chủ nhật'
   };
+}
+
+class BtnStatus {
+  int? key;
+  String? value;
+  BtnStatus({this.key, this.value});
 }

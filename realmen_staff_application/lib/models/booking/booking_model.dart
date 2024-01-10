@@ -114,7 +114,7 @@ class BookingServiceModel {
   String? actualStartTime;
   String? endAppointment;
   String? actualEndTime;
-  DurationModel? duration;
+  String? duration;
   String? durationText;
   String? bookingServiceStatus;
   String? professional;
@@ -168,56 +168,6 @@ class BookingServiceModel {
       bookingServiceStatus: json['bookingServiceStatus'],
       professional: json['professional'],
       allowUpdate: json['allowUpdate'],
-    );
-  }
-}
-
-class DurationModel {
-  int? seconds;
-  bool? zero;
-  int? nano;
-  bool? negative;
-  bool? positive;
-  List<DurationUnits>? units;
-  DurationModel(
-      {this.seconds,
-      this.zero,
-      this.nano,
-      this.negative,
-      this.positive,
-      this.units});
-
-  factory DurationModel.fromJson(Map<String, dynamic> json) {
-    return DurationModel(
-      seconds: json['seconds'],
-      zero: json['zero'],
-      nano: json['nano'],
-      negative: json['negative'],
-      positive: json['positive'],
-      units: json['units'] != null
-          ? (json['units'] as List)
-              .map((e) => DurationUnits.fromJson(e))
-              .toList()
-          : null,
-    );
-  }
-}
-
-class DurationUnits {
-  bool? durationEstimated;
-  bool? timeBased;
-  bool? dateBased;
-
-  DurationUnits({
-    this.durationEstimated,
-    this.timeBased,
-    this.dateBased,
-  });
-  factory DurationUnits.fromJson(Map<String, dynamic> json) {
-    return DurationUnits(
-      durationEstimated: json['durationEstimated'],
-      timeBased: json['timeBased'],
-      dateBased: json['dateBased'],
     );
   }
 }

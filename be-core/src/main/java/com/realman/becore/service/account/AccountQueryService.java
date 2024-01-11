@@ -1,5 +1,7 @@
 package com.realman.becore.service.account;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -88,5 +90,14 @@ public class AccountQueryService {
                         Staff staff = staffUsercaseService.findByAccountId(info.getAccountId());
                         return accountMapper.fromInfo(info, staff, branch);
                 });
+        }
+
+        public Page<Account> findSuitableForBooking(Long branchId, LocalDate appointmentDate,
+                        LocalTime startAppointment, LocalTime endAppointment, PageRequestCustom pageRequestCustom) {
+                Page<Account> accounts = accountRepository
+                                .findSuitableForBooking(branchId, appointmentDate, startAppointment,
+                                                endAppointment, pageRequestCustom.pageRequest())
+                                .map(accountMapper::fromInfo);
+                return accounts;
         }
 }

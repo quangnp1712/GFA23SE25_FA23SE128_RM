@@ -3,6 +3,7 @@ package com.realman.becore.repository.database.booking.service;
 import java.time.LocalTime;
 
 import com.realman.becore.dto.enums.EBookingServiceStatus;
+import com.realman.becore.dto.enums.EBookingServiceType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,4 +37,5 @@ public class BookingServiceEntity {
     @Temporal(TemporalType.TIME)
     private LocalTime actualEndAppointment;
     private EBookingServiceStatus bookingServiceStatus;
+    private EBookingServiceType bookingServiceType;
 }

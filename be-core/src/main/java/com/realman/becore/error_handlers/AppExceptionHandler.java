@@ -10,12 +10,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import com.realman.becore.dto.enums.EErrorDes;
 import com.realman.becore.dto.enums.ESysError;
 import com.realman.becore.error_handlers.exceptions.AuthFailException;
 import com.realman.becore.error_handlers.exceptions.InvalidJwtException;
 import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;
+import com.realman.becore.error_handlers.exceptions.ResourceInvalidException;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.error_handlers.response_message.ResponseMessage;
 
@@ -72,6 +72,13 @@ public class AppExceptionHandler {
     @ExceptionHandler(AuthFailException.class)
     ResponseMessage authenticationFail(AuthFailException exc) {
         return new ResponseMessage(ESysError.RM_API.name(), EErrorDes.AUTH_FAIL.name(), exc.getMessage(),
+                LocalDateTime.now());
+    }
+
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(ResourceInvalidException.class)
+    ResponseMessage resourceInvalid(ResourceInvalidException exc) {
+        return new ResponseMessage(ESysError.RM_API.name(), EErrorDes.RESOURCE_NOT_VALID.name(), exc.getMessage(),
                 LocalDateTime.now());
     }
 }

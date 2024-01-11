@@ -24,10 +24,14 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 be.branchName AS branchName,
                 be.branchAddress AS branchAddress,
                 b.appointmentDate AS appointmentDate,
-                b.bookingStatus AS bookingStatus
+                b.bookingStatus AS bookingStatus,
+                SUM(bsr.branchServicePrice) AS totalBookingPrice
             FROM BookingEntity b
             INNER JOIN AccountEntity a ON a.accountId = b.accountId
+            INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
+            INNER JOIN ShopServiceEntity sh ON bs.serviceId = sh.serviceId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId
+            INNER JOIN BranchServiceEntity bsr ON be.branchId = bsr.branchId AND sh.serviceId = bsr.serviceId
             WHERE b.bookingId = :bookingId
             """)
     Optional<BookingInfo> findInfoById(Long bookingId);

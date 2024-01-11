@@ -29,7 +29,7 @@ public enum ERole {
                         EPermission.SERVICE_ADD.getPermission(), EPermission.SERVICE_UPDATE.getPermission(),
                         EPermission.SERVICE_VIEW.getPermission(), EPermission.SCHEDULE_VIEW.getPermission(),
                         EPermission.CATEGORY_ADD.getPermission(), EPermission.CATEGORY_UPDATE.getPermission(),
-                        EPermission.CATEGORY_VIEW.getPermission())),
+                        EPermission.CATEGORY_VIEW.getPermission(), EPermission.BOOKING_VIEW.getPermission())),
         CUSTOMER(Set.of(EPermission.BOOKING_ADD.getPermission(), EPermission.BOOKING_UPDATE.getPermission(),
                         EPermission.BOOKING_CANCLE.getPermission(), EPermission.ACCOUNT_VIEW.getPermission(),
                         EPermission.BRANCH_VIEW.getPermission(), EPermission.SCHEDULE_VIEW.getPermission(),

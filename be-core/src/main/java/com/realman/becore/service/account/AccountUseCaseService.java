@@ -1,5 +1,8 @@
 package com.realman.becore.service.account;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +70,11 @@ public class AccountUseCaseService {
     public Page<Account> findAll(AccountSearchCriteria criteria,
             PageRequestCustom pageRequestCustom) {
         return accountQueryService.findAll(criteria, pageRequestCustom);
+    }
+
+    public Page<Account> findSuitableForBooking(Long branchId, LocalDate appointmentDate, LocalTime startAppointment,
+            LocalTime endAppointment, PageRequestCustom pageRequestCustom) {
+        return accountQueryService.findSuitableForBooking(branchId, appointmentDate, startAppointment, endAppointment,
+                pageRequestCustom);
     }
 }

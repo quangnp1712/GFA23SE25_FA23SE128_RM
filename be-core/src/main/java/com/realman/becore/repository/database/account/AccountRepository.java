@@ -1,5 +1,7 @@
 package com.realman.becore.repository.database.account;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -127,4 +129,34 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
     Page<AccountInfo> findAll(AccountSearchCriteria searchCriteria,
             Pageable pageable);
 
+    @Query("""
+            SELECT
+                a.accountId AS accountId,
+                a.firstName AS firstName,
+                a.lastName AS lastName,
+                a.thumbnailUrl AS thumbnailUrl,
+                a.phone AS phone,
+                a.address AS address,
+                a.gender AS gender,
+                a.dob AS dob,
+                a.status AS status,
+                a.role AS role
+            FROM AccountEntity a
+            INNER JOIN StaffEntity s ON a.accountId = s.accountId
+            LEFT JOIN ScheduleEntity sc ON s.staffId = sc.staffId
+            LEFT JOIN ShiftEntity sh ON sc.shiftId = sh.shiftId
+            LEFT JOIN BookingServiceEntity bs ON s.staffId = bs.staffId AND (bs.bookingServiceStatus = 0 OR bs.bookingServiceStatus = 1)
+            LEFT JOIN BookingEntity b ON bs.bookingId = b.bookingId
+            WHERE a.branchId = :branchId
+                AND b.appointmentDate = :appointmentDate
+                    AND (:startAppointment BETWEEN sh.startShift AND sh.endShift
+                        AND :startAppointment NOT BETWEEN bs.startAppointment AND bs.endAppointment AND :endAppointment NOT BETWEEN bs.startAppointment AND bs.endAppointment
+                        AND CASE
+                                WHEN :startAppointment < bs.startAppointment THEN :endAppointment < bs.endAppointment
+                                WHEN :endAppointment > bs.endAppointment THEN :startAppointment > bs.endAppointment
+                            END)
+            GROUP BY a
+            """)
+    Page<AccountInfo> findSuitableForBooking(Long branchId, LocalDate appointmentDate, LocalTime startAppointment,
+            LocalTime endAppointment, Pageable pageable);
 }

@@ -102,4 +102,10 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             WHERE bs.bookingServiceId = :bookingServiceId
             """)
     Optional<BookingServiceInfo> findInfoById(Long bookingServiceId, Long accountId);
+
+    @Query("""
+            SELECT bs
+            FROM BookingServiceEntity bs WHERE bs.bookingServiceId != :bookingServiceId AND bs.bookingId = :bookingId
+            """)
+    List<BookingServiceEntity> findAllNotEqualId(Long bookingId, Long bookingServiceId);
 }

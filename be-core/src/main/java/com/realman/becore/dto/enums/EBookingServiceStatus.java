@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum EBookingServiceStatus {
     ONGOING(1),
     PROCESSING(2),
-    FINISHED(3);
+    FINISHED(3),
+    PENDING(4),
+    LOCKED(5);
 
     private final Integer value;
 }

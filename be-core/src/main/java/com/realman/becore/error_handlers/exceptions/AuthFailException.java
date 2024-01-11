@@ -4,6 +4,6 @@ import com.realman.becore.dto.enums.EErrorMessage;
 
 public class AuthFailException extends RuntimeException {
     public AuthFailException() {
-        super(EErrorMessage.AUTHENTICATION_FAIL.name());
+        super(EErrorMessage.AUTHENTICATION_FAIL.getMessage());
     }
 }

@@ -5,6 +5,6 @@ import com.realman.becore.dto.enums.EErrorMessage;
 public class InvalidJwtException extends RuntimeException {
 
     public InvalidJwtException() {
-        super(EErrorMessage.JWT_NOT_VALID.name());
+        super(EErrorMessage.JWT_NOT_VALID.getMessage());
     }
 }

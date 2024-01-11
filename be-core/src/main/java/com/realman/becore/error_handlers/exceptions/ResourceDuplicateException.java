@@ -4,6 +4,6 @@ import com.realman.becore.dto.enums.EErrorMessage;
 
 public class ResourceDuplicateException extends RuntimeException {
     public ResourceDuplicateException() {
-        super(EErrorMessage.RESOURCE_DUPLICATED.name());
+        super(EErrorMessage.RESOURCE_DUPLICATED.getMessage());
     }
 }

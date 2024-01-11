@@ -4,6 +4,6 @@ import com.realman.becore.dto.enums.EErrorMessage;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {
-        super(EErrorMessage.RESOURCE_NOT_FOUND.name());
+        super(EErrorMessage.RESOURCE_NOT_FOUND.getMessage());
     }
 }

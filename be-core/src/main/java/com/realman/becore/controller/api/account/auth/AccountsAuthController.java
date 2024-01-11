@@ -1,5 +1,7 @@
 package com.realman.becore.controller.api.account.auth;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -63,6 +65,25 @@ public class AccountsAuthController implements AccountsAuthAPI {
                                 role, lat, lng);
                 Page<Account> dtos = accountUseCaseService.findAll(criteria, pageRequestCustom);
                 Page<AccountResponse> responses = dtos.map(accountModelMapper::toModel);
+                return new PageImplResponse<>(
+                                responses.getContent(),
+                                responses.getTotalElements(),
+                                responses.getTotalPages(),
+                                responses.getSize(),
+                                pageRequestCustom.current());
+        }
+
+        @Override
+        public PageImplResponse<AccountResponse> findSuitableForBooking(Long branchId, LocalDate appointmentDate,
+                        LocalDateTime startAppointment, LocalDateTime endAppointment, @Min(1) Integer current,
+                        Integer pageSize,
+                        String sorter) {
+                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);
+                Page<AccountResponse> responses = accountUseCaseService
+                                .findSuitableForBooking(branchId, appointmentDate, startAppointment.toLocalTime(),
+                                                endAppointment.toLocalTime(),
+                                                pageRequestCustom)
+                                .map(accountModelMapper::toModel);
                 return new PageImplResponse<>(
                                 responses.getContent(),
                                 responses.getTotalElements(),

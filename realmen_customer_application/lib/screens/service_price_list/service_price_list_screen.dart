@@ -512,18 +512,20 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
             } else {
               category.categoryType = 'Dịch vụ khác'.toUpperCase();
             }
-            for (var service in category.serviceList!) {
-              try {
-                var reference = storage.ref(
-                    'service/${service.serviceDisplayList![0].serviceDisplayUrl}');
-                service.serviceDisplayList![0].serviceDisplayUrl =
-                    await reference.getDownloadURL();
-              } catch (e) {
-                final random = Random();
-                var randomUrl = random.nextInt(urlList.length);
-                var reference = storage.ref('service/${urlList[randomUrl]}');
-                service.serviceDisplayList![0].serviceDisplayUrl =
-                    await reference.getDownloadURL();
+            if (category.serviceList != null) {
+              for (var service in category.serviceList!) {
+                try {
+                  var reference = storage.ref(
+                      'service/${service.serviceDisplayList![0].serviceDisplayUrl}');
+                  service.serviceDisplayList![0].serviceDisplayUrl =
+                      await reference.getDownloadURL();
+                } catch (e) {
+                  final random = Random();
+                  var randomUrl = random.nextInt(urlList.length);
+                  var reference = storage.ref('service/${urlList[randomUrl]}');
+                  service.serviceDisplayList![0].serviceDisplayUrl =
+                      await reference.getDownloadURL();
+                }
               }
             }
           }

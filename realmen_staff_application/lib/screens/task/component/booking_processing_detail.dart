@@ -226,144 +226,6 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                           thickness: 1,
                         ),
                       ),
-                      // Container(
-                      //   // padding: EdgeInsets.all(12.0),
-                      //   child: ListView.builder(
-                      //     shrinkWrap: true,
-                      //     physics: const NeverScrollableScrollPhysics(),
-                      //     itemCount: 1, // The number of items in the list
-                      //     itemBuilder: (context, index) {
-                      //       // Return a Card widget for each item in the list
-                      //       return ExpansionTile(
-                      //         backgroundColor: Colors.transparent,
-                      //         initiallyExpanded: true,
-                      //         onExpansionChanged: (expanded) {
-                      //           expanded = false;
-                      //         },
-                      //         title: Row(
-                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //           children: [
-                      //             const Text(
-                      //               "Cắt tóc",
-                      //               style: TextStyle(fontSize: 20),
-                      //             ),
-                      //             Container(
-                      //               width: 100,
-                      //               padding: const EdgeInsets.symmetric(
-                      //                   horizontal: 5, vertical: 5),
-                      //               decoration: BoxDecoration(
-                      //                 // color: Color(0xff207A20),
-                      //                 color: isDone == false
-                      //                     ? Colors.white
-                      //                     : const Color(0xff207A20),
-                      //                 border: Border.all(
-                      //                     color: Colors.black54,
-                      //                     style: BorderStyle.solid),
-                      //               ),
-                      //               child: Center(
-                      //                 child: Text(
-                      //                   isDone == false ? "ĐANG LÀM" : "HOÀN THÀNH",
-                      //                   style: TextStyle(
-                      //                     fontSize: 14,
-                      //                     fontWeight: FontWeight.w700,
-                      //                     // color: Colors.white,
-                      //                     color: isDone == false
-                      //                         ? Colors.black
-                      //                         : Colors.white,
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             )
-                      //           ],
-                      //         ),
-                      //         children: [
-                      //           ClipRRect(
-                      //             borderRadius: BorderRadius.circular(10),
-                      //             child: Container(
-                      //               decoration: BoxDecoration(
-                      //                 borderRadius: BorderRadius.circular(10),
-                      //               ),
-                      //               constraints: const BoxConstraints(minHeight: 100),
-                      //               child: Column(
-                      //                 children: [
-                      //                   Container(
-                      //                     child: ClipRRect(
-                      //                       borderRadius: BorderRadius.circular(10),
-                      //                       child: _selectedImage != null
-                      //                           ? Image.file(
-                      //                               _selectedImage!,
-                      //                               height: 200,
-                      //                               width: 200,
-                      //                               fit: BoxFit.cover,
-                      //                             )
-                      //                           : Container(),
-                      //                     ),
-                      //                   ),
-                      //                   Row(
-                      //                     mainAxisAlignment:
-                      //                         MainAxisAlignment.spaceBetween,
-                      //                     children: [
-                      //                       Expanded(
-                      //                         child: Container(
-                      //                           decoration: BoxDecoration(
-                      //                               border: Border.all(
-                      //                                 color: Colors.black54,
-                      //                                 width: 1,
-                      //                                 style: BorderStyle.solid,
-                      //                               ),
-                      //                               borderRadius:
-                      //                                   BorderRadius.circular(10)),
-                      //                           margin: const EdgeInsets.all(10),
-                      //                           child: TextButton(
-                      //                             onPressed: () {
-                      //                               _pickImageFromCamera();
-                      //                             },
-                      //                             child: const Center(
-                      //                               child: Text(
-                      //                                 "Chụp ảnh",
-                      //                                 style: TextStyle(fontSize: 20),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ),
-                      //                       ),
-                      //                       Expanded(
-                      //                         child: Container(
-                      //                           decoration: BoxDecoration(
-                      //                               border: Border.all(
-                      //                                 color: Colors.black54,
-                      //                                 width: 1,
-                      //                                 style: BorderStyle.solid,
-                      //                               ),
-                      //                               borderRadius:
-                      //                                   BorderRadius.circular(10)),
-                      //                           margin: const EdgeInsets.all(10),
-                      //                           child: TextButton(
-                      //                             onPressed: () {
-                      //                               setState(() {
-                      //                                 isDone = true;
-                      //                               });
-                      //                             },
-                      //                             child: const Center(
-                      //                               child: Text(
-                      //                                 "Xác nhận",
-                      //                                 style: TextStyle(fontSize: 20),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ),
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           )
-                      //         ],
-                      //       );
-                      //     },
-                      //   ),
-                      // ),
                       masseurServices.isNotEmpty
                           ? Column(
                               children: [
@@ -458,8 +320,11 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             color: masseurServices[index]
-                                                        .bookingServiceStatus ==
-                                                    "ONGOING"
+                                                            .bookingServiceStatus ==
+                                                        "ONGOING" ||
+                                                    masseurServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "LOCKED"
                                                 ? Colors.grey.shade300
                                                 : (masseurServices[index]
                                                             .bookingServiceStatus ==
@@ -520,8 +385,11 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               decoration: BoxDecoration(
                                                 // color: Color(0xff207A20),
                                                 color: masseurServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "ONGOING"
+                                                                .bookingServiceStatus ==
+                                                            "ONGOING" ||
+                                                        masseurServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "LOCKED"
                                                     ? Colors.white
                                                     : (masseurServices[index]
                                                                 .bookingServiceStatus ==
@@ -536,8 +404,11 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               child: Center(
                                                 child: Text(
                                                   masseurServices[index]
-                                                              .bookingServiceStatus ==
-                                                          "ONGOING"
+                                                                  .bookingServiceStatus ==
+                                                              "ONGOING" ||
+                                                          masseurServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "LOCKED"
                                                       ? "CHƯA LÀM"
                                                       : (masseurServices[index]
                                                                   .bookingServiceStatus ==
@@ -662,8 +533,11 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             color: stylistServices[index]
-                                                        .bookingServiceStatus ==
-                                                    "ONGOING"
+                                                            .bookingServiceStatus ==
+                                                        "ONGOING" ||
+                                                    stylistServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "LOCKED"
                                                 ? Colors.grey.shade300
                                                 : (stylistServices[index]
                                                             .bookingServiceStatus ==
@@ -724,8 +598,11 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               decoration: BoxDecoration(
                                                 // color: Color(0xff207A20),
                                                 color: stylistServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "ONGOING"
+                                                                .bookingServiceStatus ==
+                                                            "ONGOING" ||
+                                                        stylistServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "LOCKED"
                                                     ? Colors.white
                                                     : (stylistServices[index]
                                                                 .bookingServiceStatus ==
@@ -740,8 +617,11 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               child: Center(
                                                 child: Text(
                                                   stylistServices[index]
-                                                              .bookingServiceStatus ==
-                                                          "ONGOING"
+                                                                  .bookingServiceStatus ==
+                                                              "ONGOING" ||
+                                                          stylistServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "LOCKED"
                                                       ? "CHƯA LÀM"
                                                       : (stylistServices[index]
                                                                   .bookingServiceStatus ==
@@ -958,95 +838,99 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
   ];
   BtnStatus btn = BtnStatus();
   Future<void> setDataBooking() async {
-    try {
-      isLoading = true;
+    if (!_isDisposed && mounted) {
+      try {
+        isLoading = true;
 
-      // professional
-      professional = await SharedPreferencesService.getProfessional();
-      // date
-      DateTime appointmentDate =
-          DateTime.parse(widget.booking.appointmentDate!);
-      widget.booking.appointmentDate = formatDate(appointmentDate);
+        // professional
+        professional = await SharedPreferencesService.getProfessional();
+        // date
+        DateTime appointmentDate =
+            DateTime.parse(widget.booking.appointmentDate!);
+        widget.booking.appointmentDate = formatDate(appointmentDate);
 
-      // phone
-      phone = widget.booking.bookingOwnerPhone!;
-      phone = "x" * (phone.length - 3) + phone.substring(phone.length - 3);
+        // phone
+        phone = widget.booking.bookingOwnerPhone!;
+        phone = "x" * (phone.length - 3) + phone.substring(phone.length - 3);
 
-      // masseurServices + stylistServices
-      for (var bookingService in widget.booking.bookingServices!) {
-        if (bookingService.professional == "MASSEUR") {
-          masseurServices.add(bookingService);
-        } else if (bookingService.professional == "STYLIST") {
-          stylistServices.add(bookingService);
-        }
-      }
-      if (masseurServices.isNotEmpty) {
-        for (var service in masseurServices) {
-          if (service.bookingServiceStatus == "ONGOING") {
-            isMasseurServicesDone = "CHƯA LÀM";
-          } else if (service.bookingServiceStatus == "PROCESSING") {
-            isMasseurServicesDone = "ĐANG LÀM";
-          } else if (service.bookingServiceStatus == "FINISHED") {
-            isMasseurServicesDone = "HOÀN THÀNH";
+        // masseurServices + stylistServices
+        for (var bookingService in widget.booking.bookingServices!) {
+          if (bookingService.professional == "MASSEUR") {
+            masseurServices.add(bookingService);
+          } else if (bookingService.professional == "STYLIST") {
+            stylistServices.add(bookingService);
           }
         }
-      }
-      if (stylistServices.isNotEmpty) {
-        for (var service in stylistServices) {
-          if (service.bookingServiceStatus == "ONGOING") {
-            isStylistServicesDone = "CHƯA LÀM";
-          } else if (service.bookingServiceStatus == "PROCESSING") {
-            isStylistServicesDone = "ĐANG LÀM";
-          } else if (service.bookingServiceStatus == "FINISHED") {
-            isStylistServicesDone = "HOÀN THÀNH";
+        if (masseurServices.isNotEmpty) {
+          for (var service in masseurServices) {
+            if (service.bookingServiceStatus == "ONGOING" ||
+                service.bookingServiceStatus == "LOCKED") {
+              isMasseurServicesDone = "CHƯA LÀM";
+            } else if (service.bookingServiceStatus == "PROCESSING") {
+              isMasseurServicesDone = "ĐANG LÀM";
+            } else if (service.bookingServiceStatus == "FINISHED") {
+              isMasseurServicesDone = "HOÀN THÀNH";
+            }
           }
         }
-      }
+        if (stylistServices.isNotEmpty) {
+          for (var service in stylistServices) {
+            if (service.bookingServiceStatus == "ONGOING" ||
+                service.bookingServiceStatus == "LOCKED") {
+              isStylistServicesDone = "CHƯA LÀM";
+            } else if (service.bookingServiceStatus == "PROCESSING") {
+              isStylistServicesDone = "ĐANG LÀM";
+            } else if (service.bookingServiceStatus == "FINISHED") {
+              isStylistServicesDone = "HOÀN THÀNH";
+            }
+          }
+        }
 
-      // checkServiceBookingIsProcessing
-      checkServiceBookingIsProcessing = widget.booking.bookingServices!
-          .any((service) => service.bookingServiceStatus == "PROCESSING");
+        // checkServiceBookingIsProcessing
+        checkServiceBookingIsProcessing = widget.booking.bookingServices!
+            .any((service) => service.bookingServiceStatus == "PROCESSING");
 
-      // checkBookingIsDone
-      if (isStylistServicesDone == "HOÀN THÀNH" &&
-          isMasseurServicesDone == "HOÀN THÀNH") {
-        checkBookingIsDone = true;
-      } else {
-        checkBookingIsDone = false;
-      }
-      // checkServiceBookingIsProcessing = true ? "tiếp tục" : "bắt đầu phục vụ"
-      // isStylistServicesDone or isMasseurServicesDone == "HOÀN THÀNH"
-      //kiểm tra dv của staff đó đã xong chưa
-      // checkBookingIsDone = true kiểm tra cả đơn đó xong chưa
-
-      if (checkServiceBookingIsProcessing) {
-        btn = btnStatus[1];
-      } else {
-        if (professional == "MASSEUR" &&
-            isMasseurServicesDone == "HOÀN THÀNH" &&
-            isStylistServicesDone != "HOÀN THÀNH") {
-          btn = btnStatus[2];
-        } else if (professional == "STYLIST" &&
-            isMasseurServicesDone != "HOÀN THÀNH" &&
-            isStylistServicesDone == "HOÀN THÀNH") {
-          btn = btnStatus[3];
-        } else if (isMasseurServicesDone == "HOÀN THÀNH" &&
-            isStylistServicesDone == "HOÀN THÀNH") {
-          btn = btnStatus[4];
+        // checkBookingIsDone
+        if (isStylistServicesDone == "HOÀN THÀNH" &&
+            isMasseurServicesDone == "HOÀN THÀNH") {
+          checkBookingIsDone = true;
         } else {
-          btn = btnStatus[0];
+          checkBookingIsDone = false;
         }
-      }
+        // checkServiceBookingIsProcessing = true ? "tiếp tục" : "bắt đầu phục vụ"
+        // isStylistServicesDone or isMasseurServicesDone == "HOÀN THÀNH"
+        //kiểm tra dv của staff đó đã xong chưa
+        // checkBookingIsDone = true kiểm tra cả đơn đó xong chưa
 
-      if (!_isDisposed && mounted) {
-        setState(() {
-          isLoading = false;
-          professional;
-        });
+        if (checkServiceBookingIsProcessing) {
+          btn = btnStatus[1];
+        } else {
+          if (professional == "MASSEUR" &&
+              isMasseurServicesDone == "HOÀN THÀNH" &&
+              isStylistServicesDone != "HOÀN THÀNH") {
+            btn = btnStatus[2];
+          } else if (professional == "STYLIST" &&
+              isMasseurServicesDone != "HOÀN THÀNH" &&
+              isStylistServicesDone == "HOÀN THÀNH") {
+            btn = btnStatus[3];
+          } else if (isMasseurServicesDone == "HOÀN THÀNH" &&
+              isStylistServicesDone == "HOÀN THÀNH") {
+            btn = btnStatus[4];
+          } else {
+            btn = btnStatus[0];
+          }
+        }
+
+        if (!_isDisposed && mounted) {
+          setState(() {
+            isLoading = false;
+            professional;
+          });
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        isLoading = true;
       }
-    } on Exception catch (e) {
-      print(e.toString());
-      isLoading = true;
     }
   }
 

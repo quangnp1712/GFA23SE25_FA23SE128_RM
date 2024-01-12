@@ -2,14 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
+import 'package:realmen_staff_application/service/booking/booking_service.dart';
 
 class PopupServiceBooking extends StatefulWidget {
   List<File>? images;
   dynamic bookings;
+  int? bookingServiceId, accountId;
   PopupServiceBooking({
     Key? key,
     this.images,
     required this.bookings,
+    required this.accountId,
+    required this.bookingServiceId,
   }) : super(key: key);
 
   @override
@@ -134,7 +140,7 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
                             borderRadius: BorderRadius.circular(10)),
                         margin: const EdgeInsets.all(10),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: btnFinishBookingService,
                           child: Center(
                             child: Text(
                               "xác nhận".toUpperCase(),
@@ -153,5 +159,43 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
         ),
       ),
     );
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  Future<void> btnFinishBookingService() async {
+    if (!_isDisposed && mounted) {
+      try {
+        BookingService bookingService = BookingService();
+        if (widget.bookingServiceId != null && widget.accountId != null) {
+          final int bookingServiceId = widget.bookingServiceId!;
+          final int accountId = widget.accountId!;
+          final result = await bookingService.putFinishService(
+              bookingServiceId, accountId);
+          if (result['statusCode'] == 200) {
+            Get.toNamed(MainScreen.MainScreenRoute);
+          } else {
+            _errorMessage(result['message']);
+            print(result['error']);
+          }
+        }
+      } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
   }
 }

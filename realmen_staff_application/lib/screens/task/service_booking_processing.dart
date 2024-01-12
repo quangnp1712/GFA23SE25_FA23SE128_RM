@@ -821,15 +821,15 @@ class _ServiceBookingProcessingScreenState
             }
 
             // duration
-            String hour = "00";
-            String minute = "00";
-            if (serviceBooking.durationText == "HOUR") {
-              hour = serviceBooking.duration.toString();
+            if (serviceBooking.startAppointment != null &&
+                serviceBooking.endAppointment != null) {
+              DateFormat format = DateFormat("HH:mm:ss");
+              DateTime startAppo =
+                  format.parse(serviceBooking.startAppointment!);
+              DateTime endAppo = format.parse(serviceBooking.endAppointment!);
+              final timeDifference = endAppo.difference(startAppo);
+              duration = timeDifference.toString().split('.')[0];
             }
-            if (serviceBooking.durationText == "MINUTE") {
-              minute = serviceBooking.duration.toString();
-            }
-            duration = "$hour:$minute:00";
           } else if (result['statusCode'] == 500) {
             _errorMessage(result['error']);
           } else if (result['statusCode'] == 403) {
@@ -883,8 +883,8 @@ class _ServiceBookingProcessingScreenState
   Widget actualTime() {
     try {
       DateTime now = DateTime.now();
-      // String timeString = serviceBooking.actualStartTime!;
-      String timeString = "00:15:56.37";
+      String timeString = serviceBooking.startAppointment!;
+      // String timeString = "00:15:56.37";
       DateTime actualStartTime = DateTime(
         now.year,
         now.month,
@@ -952,6 +952,8 @@ class _ServiceBookingProcessingScreenState
                 return PopupServiceBooking(
                   images: _images,
                   bookings: bookingHairCut,
+                  accountId: accountId,
+                  bookingServiceId: bookingServiceId,
                 );
               },
             );
@@ -961,6 +963,15 @@ class _ServiceBookingProcessingScreenState
                 _images.removeLast();
                 _selectedImageIndex = 0;
               });
+            } else {
+              final result = await bookingService.putFinishService(
+                  bookingServiceId, accountId);
+              if (result['statusCode'] == 200) {
+                Get.toNamed(MainScreen.MainScreenRoute);
+              } else {
+                _errorMessage(result['message']);
+                print(result['error']);
+              }
             }
           }
         }

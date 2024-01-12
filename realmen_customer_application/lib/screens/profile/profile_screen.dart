@@ -131,54 +131,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         child: TextButton(
                                           onPressed: () {
-                                            widget.callback(3);
-                                          },
-                                          style: TextButton.styleFrom(
-                                            padding:
-                                                const EdgeInsets.only(left: 0),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Icon(
-                                                  CommunityMaterialIcons.crown,
-                                                  color: Colors.black,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10.0),
-                                                child: const Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "RealMen Member",
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 82.w,
-                                        height: 40,
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                                color: Color(0x4D444444),
-                                                width: 1.0),
-                                          ),
-                                        ),
-                                        child: TextButton(
-                                          onPressed: () {
                                             Get.toNamed(ViewEditProfileScreen
                                                 .ViewEditProfileScreenRoute);
                                           },
@@ -204,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    "Chỉnh sửa thông tin cơ bản",
+                                                    "Thông tin tài khoản",
                                                     style: TextStyle(
                                                         fontSize: 15,
                                                         fontWeight:
@@ -255,6 +207,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       Alignment.centerLeft,
                                                   child: Text(
                                                     "Lịch sử đặt lịch",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 82.w,
+                                        height: 40,
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                                color: Color(0x4D444444),
+                                                width: 1.0),
+                                          ),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            widget.callback(3);
+                                          },
+                                          style: TextButton.styleFrom(
+                                            padding:
+                                                const EdgeInsets.only(left: 0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Icon(
+                                                  CommunityMaterialIcons.crown,
+                                                  color: Colors.black,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: const Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "RealMen Member",
                                                     style: TextStyle(
                                                         fontSize: 15,
                                                         fontWeight:

@@ -337,44 +337,44 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Tổng Tiền:",
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              // SizedBox(width: 140),
-              Text(
-                formatter.format(total),
-                style: const TextStyle(fontSize: 17),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Tổng Giảm Giá:",
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              // SizedBox(width: 140),
-              Text(
-                "0",
-                style: TextStyle(fontSize: 17),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 7,
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text(
+          //       "Tổng Tiền:",
+          //       style: TextStyle(
+          //         fontSize: 17,
+          //       ),
+          //     ),
+          //     // SizedBox(width: 140),
+          //     Text(
+          //       formatter.format(total),
+          //       style: const TextStyle(fontSize: 17),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          // const Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       "Tổng Giảm Giá:",
+          //       style: TextStyle(
+          //         fontSize: 17,
+          //       ),
+          //     ),
+          //     // SizedBox(width: 140),
+          //     Text(
+          //       "0",
+          //       style: TextStyle(fontSize: 17),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(
+          //   height: 7,
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

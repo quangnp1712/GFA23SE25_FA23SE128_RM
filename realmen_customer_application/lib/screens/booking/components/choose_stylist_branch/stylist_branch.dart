@@ -53,7 +53,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "1. Chọn Stylist",
+              "1. Chọn stylist",
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(
@@ -80,7 +80,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                                   .toString()
                                   .runes
                                   .toList())
-                          : 'Xem stylist';
+                          : 'Tất cả Stylist REALMEN';
                       stylistData = selectedStylist;
                       widget.onStylistSelected(stylistData);
                       // ignore: unnecessary_null_in_if_null_operators
@@ -112,7 +112,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
                             const Align(
                               alignment: Alignment.centerLeft,
                               child: Icon(
-                                CommunityMaterialIcons.storefront,
+                                Icons.perm_identity,
                                 color: Colors.black,
                                 size: 24,
                               ),
@@ -419,7 +419,7 @@ class _ChooseStylistAndBranchState extends State<ChooseStylistAndBranch> {
   }
 
   bool isActived = true;
-  String buttonText = 'Xem stylist';
+  String buttonText = 'Tất cả Stylist REALMEN';
   ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();
   bool hasSelectedServices = false;
   AccountInfoModel stylistData = AccountInfoModel();

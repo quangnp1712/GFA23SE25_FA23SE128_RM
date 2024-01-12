@@ -147,6 +147,31 @@ class _DetailHistoryBookingScreenState
               const SizedBox(
                 width: 130,
                 child: Text(
+                  "Code: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Text(
+                widget.booking!.bookingCode ?? " ",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
+              ),
+            ],
+          ),
+
+          // Giờ
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
                   "Ngày: ",
                   style: TextStyle(
                     fontSize: 17,
@@ -237,7 +262,7 @@ class _DetailHistoryBookingScreenState
               SizedBox(
                 width: 220,
                 child: Text(
-                  stylist,
+                  massuer,
                   textAlign: TextAlign.left,
                   maxLines: 1,
                   style: const TextStyle(
@@ -361,44 +386,44 @@ class _DetailHistoryBookingScreenState
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Tổng Tiền:",
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              // SizedBox(width: 140),
-              Text(
-                formatter.format(total),
-                style: const TextStyle(fontSize: 17),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Tổng Giảm Giá:",
-                style: TextStyle(
-                  fontSize: 17,
-                ),
-              ),
-              // SizedBox(width: 140),
-              Text(
-                "0",
-                style: TextStyle(fontSize: 17),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 7,
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text(
+          //       "Tổng Tiền:",
+          //       style: TextStyle(
+          //         fontSize: 17,
+          //       ),
+          //     ),
+          //     // SizedBox(width: 140),
+          //     Text(
+          //       formatter.format(total),
+          //       style: const TextStyle(fontSize: 17),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          // const Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       "Tổng Giảm Giá:",
+          //       style: TextStyle(
+          //         fontSize: 17,
+          //       ),
+          //     ),
+          //     // SizedBox(width: 140),
+          //     Text(
+          //       "0",
+          //       style: TextStyle(fontSize: 17),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(
+          //   height: 7,
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -428,7 +453,8 @@ class _DetailHistoryBookingScreenState
   }
 
   bool isLoading = true;
-  String stylist = 'Đang đợi update APi';
+  String stylist = '';
+  String massuer = '';
   NumberFormat formatter = NumberFormat("#,##0");
   double total = 0;
   calTotal() {
@@ -436,6 +462,11 @@ class _DetailHistoryBookingScreenState
       for (var service in widget.booking!.bookingServices!) {
         if (service.servicePrice != null) {
           total += double.parse(service.servicePrice.toString());
+          if (service.professional == "MASSEUR") {
+            massuer = utf8.decode(service.staffName!.toString().runes.toList());
+          } else {
+            stylist = utf8.decode(service.staffName!.toString().runes.toList());
+          }
         } else {
           total = 0;
         }

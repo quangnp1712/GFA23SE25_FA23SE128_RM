@@ -84,7 +84,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     height: 50,
                                     child: Center(
                                       child: Text(
-                                        "chọn chi nhánh".toUpperCase(),
+                                        "chọn barber".toUpperCase(),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
@@ -96,44 +96,45 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 30,
-                          ),
+
                           Stack(
                             children: [
                               Container(
-                                  height: 180,
+                                  height: 160,
                                   decoration:
                                       const BoxDecoration(color: Colors.black)),
                               Image.asset(
                                 "assets/images/Logo-White-NoBG-O-15.png",
                                 width: 360,
-                                height: 180,
+                                height: 160,
                               ),
                               Container(
-                                height: 180,
+                                height: 160,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: const Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
-                                      "HỆ THỐNG CHI NHÁNH CỦA REALMEN",
-                                      style: TextStyle(
+                                      "HỆ THỐNG barber CỦA REALMEN"
+                                          .toUpperCase(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18,
                                       ),
                                     ),
-                                    Text(
-                                      "Tính đến hiện tại, chuỗi barber tóc nam RealMen có 99 barber tại những vị trí đắc địa nhất TP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận. Hãy tìm đến barber RealMen gần bạn nhất để tận hưởng trải nghiệm cắt tóc nam đỉnh cao!",
+                                    const Text(
+                                      "Tận hưởng trải nghiệm cắt tóc nam đỉnh \ncao tại hơn 99 barber RealMen trải dài khắp \nTP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận!",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
+                                        height: 1.4,
                                       ),
+                                      // textAlign: TextAlign.justify,
                                     )
                                   ],
                                 ),
@@ -241,8 +242,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                             // bottom: 20,
                                             left: 15,
                                             right: 15),
-                                        hintText:
-                                            "Tìm kiếm tên chi nhánh và địa điểm",
+                                        hintText: "Tìm kiếm Barber",
                                         hintStyle: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w400,
@@ -294,7 +294,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     children: [
                                       Icon(Icons.location_on),
                                       Text(
-                                        "Tìm chi nhánh gần anh",
+                                        "Barber gần anh",
                                         style: TextStyle(color: Colors.black87),
                                       ),
                                     ],
@@ -349,7 +349,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     }),
                                     dropdownStyleData: DropdownStyleData(
                                       maxHeight: 160,
-                                      width: 160,
+                                      width: 150,
                                       // padding: EdgeInsets.only(right: 5),
                                       decoration: BoxDecoration(
                                         // borderRadius: BorderRadius.circular(14),
@@ -708,6 +708,11 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           }
         } else {
           print("$result['statusCode'] : $result['error']");
+        }
+        if (!_isDisposed && mounted) {
+          setState(() {
+            isLoading = false;
+          });
         }
       } on Exception catch (e) {
         print(e.toString());

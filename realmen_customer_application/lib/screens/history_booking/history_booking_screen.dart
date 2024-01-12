@@ -202,9 +202,9 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                               .start,
                                                       children: [
                                                         Image.asset(
-                                                          "assets/images/admin.png",
+                                                          "assets/images/default.png",
                                                           height: 170,
-                                                          width: 140,
+                                                          width: 120,
                                                           fit: BoxFit.cover,
                                                         ),
                                                         Column(
@@ -218,8 +218,18 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  Text(
-                                                                      "Code: ${bookings[index].bookingId} "),
+                                                                  Container(
+                                                                    constraints:
+                                                                        BoxConstraints(
+                                                                            maxWidth:
+                                                                                200),
+                                                                    child: Text(
+                                                                      "${bookings[index].bookingCode}",
+                                                                      style: TextStyle(
+                                                                          overflow:
+                                                                              TextOverflow.clip),
+                                                                    ),
+                                                                  ),
                                                                   const SizedBox(
                                                                       height:
                                                                           10),
@@ -370,8 +380,8 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
 
   bool isLoading = true;
   List<BookingContent> bookings = [];
-  String stylist = 'Đang đợi update APi';
-  String massuer = 'Đang đợi update APi';
+  String stylist = '';
+  String massuer = '';
   int current = 0;
   int currentResult = 0;
   int totalPages = 0;
@@ -404,6 +414,13 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                         total += double.parse(service.servicePrice.toString());
                       } else {
                         total = 0;
+                      }
+                      if (service.professional == "MASSEUR") {
+                        massuer = utf8.decode(
+                            service.staffName!.toString().runes.toList());
+                      } else {
+                        stylist = utf8.decode(
+                            service.staffName!.toString().runes.toList());
                       }
                     }
                     totals

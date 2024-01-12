@@ -121,7 +121,7 @@ class _BookingScreenState extends State<BookingScreen>
                                   ],
                                 ),
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
                                   child: Text(
                                     "Bạn có hai cách để đặt lịch cắt tóc:",
                                     style: TextStyle(
@@ -132,9 +132,9 @@ class _BookingScreenState extends State<BookingScreen>
                                   ),
                                 ),
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
                                   child: Text(
-                                    "• Chọn theo chi nhánh: Bạn có thể chọn chi nhánh gần nhất với vị trí của mình để đặt lịch",
+                                    "• Chọn Barber:  Đặt lịch tại barber shop gần bạn nhất.",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
@@ -143,9 +143,9 @@ class _BookingScreenState extends State<BookingScreen>
                                   ),
                                 ),
                                 const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
                                   child: Text(
-                                    "• Chọn theo chi nhánh: Bạn có thể chọn chi nhánh gần nhất với vị trí của mình để đặt lịch",
+                                    "• Chọn Stylist:  Đặt lịch với stylist mà bạn  yêu thích.",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
@@ -182,14 +182,20 @@ class _BookingScreenState extends State<BookingScreen>
                               tabs: [
                                 Tab(
                                   child: Text(
-                                    'Theo chi nhánh',
-                                    style: GoogleFonts.quicksand(fontSize: 20),
+                                    'Barber',
+                                    style: GoogleFonts.quicksand(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: 1),
                                   ),
                                 ),
                                 Tab(
                                   child: Text(
-                                    'Theo thợ cắt tóc',
-                                    style: GoogleFonts.quicksand(fontSize: 20),
+                                    'Stylist',
+                                    style: GoogleFonts.quicksand(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: 1.1),
                                   ),
                                 ),
                               ],

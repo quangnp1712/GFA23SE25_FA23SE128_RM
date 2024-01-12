@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, avoid_print, unused_local_variable, avoid_unnecessary_containers, library_private_types_in_public_api
+// ignore_for_file: must_be_immutable, avoid_print, unused_local_variable, avoid_unnecessary_containers, library_private_types_in_public_api, non_constant_identifier_names
 
 import 'dart:convert';
 
@@ -6,6 +6,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/models/account/staff_model.dart';
 
 class ChooseDateAndTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;
@@ -315,7 +316,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     DateTime now = DateTime.now();
     listDate = [];
     if (widget.stylistSelected?.staff?.scheduleList == null) {
-      for (int i = 0; i <= 4; i++) {
+      for (int i = 0; i <= 2; i++) {
         listDate?.add({
           'id': i.toString(),
           'date': formatDate(now.add(Duration(days: i)))['date'],
@@ -324,31 +325,60 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
       }
     } else {
       try {
+        //scheduleList
         widget.stylistSelected?.staff!.scheduleList!
             .asMap()
             .entries
             .map((schedule) {
+          DateTime workingDate = DateTime.parse(schedule.value.workingDate!);
+          DateTime nowFullDate = DateTime(now.year, now.month, now.day, 0);
+          // // kiểm tra = now
+          // bool checkNow = workingDate == nowFullDate;
+          // // kiểm tra workingDate > now
+          // bool checkIsAfter = workingDate.isAfter(now);
+          // // kiểm tra workingDate < now + 4 ngày
+          // bool checkIsBefore =
+          //     workingDate.isBefore(now.add(const Duration(days: 4)));
+
+          // bool checkBetween = checkIsAfter && checkIsBefore;
+
+          //
+          List<BookingAppointmentModel>? appointments;
+
+          // lấy những ca làm trong 3 ngày
           if (DateTime.parse(schedule.value.workingDate!) ==
                   DateTime(now.year, now.month, now.day, 0) ||
               (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
                   DateTime.parse(schedule.value.workingDate!)
-                      .isBefore(now.add(const Duration(days: 4))))) {
-            // if (!listDate!.any((date) =>
-            //     date['date'] ==
-            //     formatDate(
-            //         DateTime.parse(schedule.value.workingDate!))['date'])) {
+                      .isBefore(now.add(const Duration(days: 2))))) {
+            // appointmentDate == workingDate
+            if (widget.stylistSelected?.staff!.bookingList != null) {
+              appointments = widget.stylistSelected?.staff!.bookingList!
+                  .where((booking) =>
+                      booking.appointmentDate == schedule.value.workingDate!)
+                  .toList();
+              appointments = widget.stylistSelected?.staff!.bookingList!
+                  .where(
+                      (booking) => booking.bookingServiceStatus != "FINISHED")
+                  .toList();
+            }
+
             listDate?.add({
               'id': schedule.key.toString(),
               'date': formatDate(
                   DateTime.parse(schedule.value.workingDate!))['date'],
               'type': formatDate(
                   DateTime.parse(schedule.value.workingDate!))['type'],
-              'start': schedule.value.start,
-              'end': schedule.value.end
+              'start': schedule.value.startShift,
+              'end': schedule.value.endShift,
+              'dateTime': DateTime.parse(schedule.value.workingDate!),
+              'bookingList': appointments,
             });
-            // }
           }
         }).toList();
+
+        listDate!.sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
+
         if (!_isDisposed && mounted) {
           setState(() {
             listDate;
@@ -570,7 +600,6 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
     final now = DateTime.now();
     final formatter = DateFormat('HH:mm');
     final currentTime = formatter.format(now);
-
     return GridView.builder(
       scrollDirection: Axis.horizontal,
       controller: scrollController,
@@ -586,8 +615,10 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
 
         // kiểm tra được chọn hay không
         // TRUE chọn
-        bool isSelectable;
-        isSelectable = checkTimeSlotSelected(timeSlot);
+
+        bool isSelectable = checkTimeSlotSelected(timeSlot);
+
+        // kiểm tra ngày hôm nay
         if (widget.isCurrentDate) {
           isSelectable = timeSlot.compareTo(currentTime) >= 0 && isSelectable;
         } else {
@@ -605,29 +636,86 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
     );
   }
 
+  // isSelectable true là chọn đc
   bool checkTimeSlotSelected(dynamic timeSlot) {
+    bool result = false;
+
     try {
+      // check ca lam
       if (widget.dateSeleted?['start'] != null &&
           widget.dateSeleted?['end'] != null) {
+        // start < timeSlot < end
+        var startShift =
+            widget.dateSeleted!['start'].toString().substring(0, 5);
+
+        // timeSlot > start => true
         final start = timeSlot.compareTo(
                 widget.dateSeleted!['start'].toString().substring(0, 5)) >=
             0;
+        var endShift = widget.dateSeleted!['end'].toString().substring(0, 5);
+        // timeSlot < end
         final end = timeSlot.compareTo(
                 widget.dateSeleted!['end'].toString().substring(0, 5)) <=
             0;
 
-        if (timeSlot.compareTo(
-                    widget.dateSeleted!['start'].toString().substring(0, 5)) >=
-                0 &&
-            timeSlot.compareTo(
-                    widget.dateSeleted!['end'].toString().substring(0, 5)) <=
-                0) {
-          return true;
+        if (start && end) {
+          result = true;
+
+          // check booking
+          if (widget.dateSeleted?['bookingList'] != null) {
+            for (BookingAppointmentModel appointment
+                in widget.dateSeleted?['bookingList']) {
+              //  DTstart = DTstart.subtract(const Duration(minutes: 20));
+              // DateTime DTend = DateTime.parse(
+              // "2023-01-01 ${appointment.endAppointment.toString()}");
+              // DTend = DTend.add(const Duration(minutes: 20));
+              // DTtimeSlot > DTstart
+              // final checkAfter = DTtimeSlot.isAfter(DTstart) ||
+              //     DTtimeSlot.isAtSameMomentAs(DTstart);
+              // final checkBefore = DTtimeSlot.isBefore(DTend) ||
+              //     DTtimeSlot.isAtSameMomentAs(DTend);
+
+              // final check =
+              //     DTtimeSlot.isAfter(DTstart) && DTtimeSlot.isBefore(DTend);
+
+              final startAppointment = timeSlot.compareTo(appointment
+                      .startAppointment
+                      .toString()
+                      .substring(0, 5)) >=
+                  0;
+              final endAppointment = timeSlot.compareTo(
+                      appointment.endAppointment.toString().substring(0, 5)) <=
+                  0;
+              if (startAppointment && endAppointment) {
+                result = false;
+              }
+
+              DateTime DTtimeSlot = DateTime.parse("2023-01-01 $timeSlot:00");
+              DateTime DTtimeSlotAdd20M =
+                  DTtimeSlot.add(const Duration(minutes: 20));
+              DateTime DTstart = DateTime.parse(
+                  "2023-01-01 ${appointment.startAppointment.toString()}");
+
+              //              DTstart <= DTtimeSlotAdd20M
+              bool checkBefore = DTstart.isBefore(DTtimeSlotAdd20M);
+              // DTtimeSlot <= DTstart
+              bool checkAfter = DTstart.isAfter(DTtimeSlot);
+              if ((DTstart.isBefore(DTtimeSlotAdd20M) ||
+                      DTstart.isAtSameMomentAs(DTtimeSlotAdd20M)) &&
+                  ((DTstart.isAfter(DTtimeSlot) ||
+                      DTstart.isAtSameMomentAs(DTtimeSlot)))) {
+                return false;
+              }
+            }
+          }
+          return result;
         } else {
           return false;
         }
       } else {
-        return true;
+        result = true;
+
+        return result;
       }
       // ignore: unused_catch_clause
     } on Exception catch (e) {

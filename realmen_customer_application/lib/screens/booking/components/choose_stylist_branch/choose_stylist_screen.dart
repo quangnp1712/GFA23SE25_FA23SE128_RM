@@ -99,7 +99,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                           padding: EdgeInsets.all(10.0),
                           child: TextField(
                             decoration: InputDecoration(
-                              labelText: "Tìm kiếm tên Stylist",
+                              labelText: "Tìm kiếm stylist",
                               prefixIcon: Icon(Icons.search),
                               border: OutlineInputBorder(),
                             ),
@@ -194,7 +194,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                   )
                                 ],
                               )
-                            : buildStylistList(staffList, selectedProvider),
+                            : buildStylistList(stylists, selectedProvider),
                       ],
                     ),
                   ),
@@ -210,7 +210,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   Widget buildStylistList(
       List<AccountInfoModel> stylistDataList, var selectedProvider) {
     return Column(
-      children: stylistDataList.map((stylistData) {
+      children: stylistDataList.map((AccountInfoModel stylistData) {
         return Container(
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -359,7 +359,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: "Chi nhánh:  ",
+                                            text: "Barber:  ",
                                             style: GoogleFonts.quicksand(
                                               textStyle: const TextStyle(
                                                   fontSize: 17,
@@ -570,8 +570,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                       flex: 6,
                       child: ElevatedButton(
                         onPressed: () {
-                          selectedProvider.updateSelectedStylist(stylistData);
-                          Navigator.pop(context, stylistData);
+                          btnChoose(selectedProvider, stylistData);
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -664,7 +663,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   }
 
   final ScrollController _scrollController = ScrollController();
-  List<AccountInfoModel> staffList = [];
+  List<AccountInfoModel> stylists = [];
+  List<AccountInfoModel> massuers = [];
   final storage = FirebaseStorage.instance;
   List<String> urlStylistList = [
     "1.jpg",
@@ -681,20 +681,23 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
   int current = 0;
   int currentResult = 0;
   int totalPages = 0;
+  // v1/auth/accounts
   Future<void> getStaff(int current) async {
     if (!_isDisposed && mounted) {
       try {
         AccountService accountService = AccountService();
-        staffList = [];
-        final result = await accountService.getStaff(5, current, null, false);
+        stylists = [];
+        final result = await accountService.getStaff(3, current, null, false);
         if (result['statusCode'] == 200) {
-          staffList = result['data'] as List<AccountInfoModel>;
+          stylists = result['data'] as List<AccountInfoModel>;
+          massuers = List<AccountInfoModel>.from(stylists);
           current = result['current'];
           totalPages = result['totalPages'];
-          staffList
+          stylists
               .removeWhere((staff) => staff.staff!.professional == 'MASSEUR');
-
-          for (var staff in staffList) {
+          massuers.removeWhere(
+              (massuer) => massuer.staff!.professional == 'STYLIST');
+          for (var staff in stylists) {
             try {
               var reference = storage.ref('stylist/${staff.thumbnailUrl}');
               staff.thumbnailUrl = await reference.getDownloadURL();
@@ -719,7 +722,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
           }
           if (!_isDisposed && mounted) {
             setState(() {
-              staffList;
+              stylists;
+              massuers;
               isLoading = false;
             });
           }
@@ -742,5 +746,34 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void btnChoose(selectedProvider, AccountInfoModel stylistData) {
+    massuers = massuers
+        .where((massuer) //
+            =>
+            massuer.staff!.bookingList!.any((booking) //
+                =>
+                stylistData.staff!.bookingList!.any((stylist) //
+                    =>
+                    stylist.bookingId == booking.bookingId))) //
+        .toList(); //
+
+    //
+    //
+    for (var massuer in massuers) {
+      massuer.staff!.bookingList = massuer.staff!.bookingList!
+          .where((mbooking) //
+              =>
+              stylistData.staff!.bookingList!.any((sbooking) //
+                  =>
+                  sbooking.bookingId == mbooking.bookingId))
+          .toList();
+    }
+
+    massuers;
+
+    selectedProvider.updateSelectedStylist(stylistData);
+    Navigator.pop(context, stylistData);
   }
 }

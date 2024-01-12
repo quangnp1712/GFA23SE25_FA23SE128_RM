@@ -150,13 +150,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fontSize: 20,
                                         ),
                                       ),
-                                      const Text(
-                                        "Level 1",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                        ),
-                                      )
+                                      // const Text(
+                                      //   "Level 1",
+                                      //   style: TextStyle(
+                                      //     fontWeight: FontWeight.w600,
+                                      //     fontSize: 16,
+                                      //   ),
+                                      // )
                                     ],
                                   ),
                                 )
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisCount: 4,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 5,
-                              childAspectRatio: 4 / 6,
+                              childAspectRatio: 4 / 5,
                               children: [
                                 cardHolder(
                                   'Đặt lịch',
@@ -183,15 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const Color(0xffE3E3E3),
                                   () {
                                     widget.callback(2);
-                                  },
-                                ),
-                                cardHolder(
-                                  'Lịch sử đặt lịch',
-                                  Icons.history,
-                                  const Color(0xffE3E3E3),
-                                  () {
-                                    Get.toNamed(HistoryBookingScreen
-                                        .HistoryBookingScreenRoute);
                                   },
                                 ),
                                 GestureDetector(
@@ -233,14 +224,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                cardHolder(
-                                  'Realmen Member',
-                                  CommunityMaterialIcons.crown,
-                                  const Color(0xffE3E3E3),
-                                  () {
-                                    widget.callback(3);
-                                  },
-                                ),
                                 GestureDetector(
                                   onTap: () {
                                     Get.toNamed(BranchesOverviewScreen
@@ -271,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         const SizedBox(height: 5),
                                         Text(
-                                          'Chi nhánh'.toUpperCase(),
+                                          'Barber'.toUpperCase(),
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
@@ -287,6 +270,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   CommunityMaterialIcons.ticket_percent_outline,
                                   const Color(0xffE3E3E3),
                                   () {},
+                                ),
+                                cardHolder(
+                                  'Realmen Member',
+                                  CommunityMaterialIcons.crown,
+                                  const Color(0xffE3E3E3),
+                                  () {
+                                    widget.callback(3);
+                                  },
+                                ),
+                                cardHolder(
+                                  'Lịch sử đặt lịch',
+                                  Icons.history,
+                                  const Color(0xffE3E3E3),
+                                  () {
+                                    Get.toNamed(HistoryBookingScreen
+                                        .HistoryBookingScreenRoute);
+                                  },
                                 ),
                                 cardHolder(
                                   'Lịch đặt của bạn',
@@ -323,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               const Padding(
                                 padding: EdgeInsets.only(left: 15),
                                 child: Text(
-                                  "Top Thợ Cắt Tóc",
+                                  "Top Stylist",
                                   style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,

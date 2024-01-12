@@ -50,7 +50,7 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "1. Chọn chi nhánh ",
+              "1. Chọn barber ",
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(
@@ -77,7 +77,7 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
                                 .toString()
                                 .runes
                                 .toList())
-                            : 'Xem tất cả danh sách dịch vụ';
+                            : 'Tất cả Barber REALMEN';
                         widget.onBranchSelected(selectedBranch);
                       });
                     }
@@ -152,7 +152,7 @@ class _ChooseBranchBookingState extends State<ChooseBranchBooking> {
   }
 
   bool isActived = true;
-  String buttonText = 'Xem tất cả chi nhánh REALMEN';
+  String buttonText = 'Tất cả Barber REALMEN';
   ChangeNotifierServices selectedServicesProvider = ChangeNotifierServices();
   bool hasSelectedServices = false;
   bool _isDisposed = false;

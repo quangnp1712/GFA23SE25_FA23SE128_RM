@@ -621,8 +621,8 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                       backgroundColor: Colors.transparent,
                                       shadowColor: Colors.transparent,
                                     ),
-                                    child: const Text(
-                                      "HOÀN TẤT",
+                                    child: Text(
+                                      "lưu thay đổi".toUpperCase(),
                                       style: TextStyle(
                                           fontSize: 24,
                                           color: Color(0xffC4C4C4),

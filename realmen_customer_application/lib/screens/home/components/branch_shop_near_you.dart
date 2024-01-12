@@ -34,7 +34,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
               const Padding(
                 padding: EdgeInsets.only(left: 15),
                 child: Text(
-                  "Chi Nhánh Gần Bạn",
+                  "Barber Gần Bạn",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,

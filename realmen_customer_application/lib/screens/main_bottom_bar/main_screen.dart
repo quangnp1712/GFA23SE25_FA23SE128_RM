@@ -102,7 +102,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             CurvedNavigationBarItem(
               child: Icon(Icons.list_alt),
-              label: 'Bảng giá',
+              label: 'Dịch vụ',
             ),
             CurvedNavigationBarItem(
               child: Icon(Icons.calendar_month),
@@ -110,8 +110,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
             CurvedNavigationBarItem(
               // child: Icon(Icons.newspaper),
-              child: Icon(CommunityMaterialIcons.crown),
-              label: 'RM Member',
+              child: Icon(CommunityMaterialIcons.ticket_percent_outline),
+              label: 'Ưu đãi',
             ),
             CurvedNavigationBarItem(
               child: Icon(Icons.perm_identity),

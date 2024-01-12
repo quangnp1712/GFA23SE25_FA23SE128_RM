@@ -101,6 +101,7 @@ export namespace ServiceDataApi {
     values: {
       name: string;
       serviceId: number;
+      price:number
     }[];
   }
 }

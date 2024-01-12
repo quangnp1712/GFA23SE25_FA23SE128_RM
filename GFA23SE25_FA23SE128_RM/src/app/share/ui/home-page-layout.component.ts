@@ -50,17 +50,21 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
           <li
             nz-menu-item
             nzMatchRouter
-            [routerLink]="['/homepage', 'overview']"
+            [routerLink]="['/homepage', 'overview']" *ngIf="role == 'SHOP_OWNER'"
           >
             <span nz-icon nzType="home"></span>
             <span>Tổng quan</span>
           </li>
+
+  <!-- quản lí tài khoản -->
+
           <li nz-submenu nzTitle="Quản lý nhân viên" nzIcon="team">
             <ul>
               <li
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/account-management', 'account-list']"
+                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
               >
                 Danh sách nhân viên
               </li>
@@ -74,12 +78,16 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
               </li>
             </ul>
           </li>
-          <li nz-submenu nzTitle="Quản lý chi nhánh" nzIcon="team">
+
+          <!-- quản lí chi nhánh -->
+
+          <li nz-submenu nzTitle="Quản lý chi nhánh" nzIcon="team" *ngIf="role == 'SHOP_OWNER'">
             <ul>
               <li
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/branch-management', 'branch-list']"
+
               >
                 Danh sách chi nhánh
               </li>
@@ -92,12 +100,16 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
               </li>
             </ul>
           </li>
+
+<!-- quản lí dịch vụ -->
+
           <li nz-submenu nzTitle="Quản lý dịch vụ" nzIcon="team">
             <ul>
               <li
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/service-management', 'service-list']"
+                *ngIf="role == 'SHOP_OWNER' || role == 'BRANCH_MANAGER'"
               >
                 Danh sách dịch vụ
               </li>
@@ -105,20 +117,37 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nz-menu-item
                 [routerLink]="['/service-management', 'create-service']"
                 nzMatchRouter
+                *ngIf="role == 'SHOP_OWNER'"
               >
                 Tạo dịch vụ
               </li>
             </ul>
           </li>
-          <!-- <li
-            nz-menu-item
-            [routerLink]="['/schedule-management', 'schedule']"
-            nzMatchRouter
-          >
-            <span nz-icon nzType="schedule"></span>
-            <span>Quản lý lịch nhân viên</span>
-          </li> -->
-          <li nz-submenu nzTitle="Quản lý doanh thu" nzIcon="money-collect">
+
+          <!-- quản lí booking -->
+
+          <li nz-submenu nzTitle="Quản lý booking" nzIcon="team">
+            <ul>
+              <li
+                nz-menu-item
+                nzMatchRouter
+                [routerLink]="['/booking-manager', 'booking-list']"
+                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
+              >
+                Danh sách booking
+              </li>
+              <li
+                nz-menu-item
+                [routerLink]="['/booking-manager', 'create-booking']"
+                nzMatchRouter
+                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
+              >
+                Tạo booking
+              </li>
+            </ul>
+          </li>
+
+          <li nz-submenu nzTitle="Quản lý doanh thu" nzIcon="money-collect"  *ngIf="role == 'SHOP_OWNER'">
             <ul>
               <li nz-menu-item>Tổng doanh thu</li>
             </ul>

@@ -23,6 +23,7 @@ import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { differenceInCalendarDays, setHours } from 'date-fns';
 
 @Component({
   selector: 'app-account',
@@ -159,6 +160,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
             <nz-form-label class="tw-ml-3" nzRequired>Ngày sinh</nz-form-label>
             <nz-form-control nzErrorTip="Chọn ngày sinh">
               <nz-date-picker
+              [nzDisabledDate]="disabledDate"
                 class="tw-w-[70%]"
                 [formControl]="form.controls.dob"
               ></nz-date-picker>
@@ -215,6 +217,10 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
                 <nz-option
                   nzValue="RECEPTIONIST"
                   nzLabel="Receptionist"
+                ></nz-option>
+                <nz-option
+                  nzValue="BRANCH_MANAGER"
+                  nzLabel="Branch Manager"
                 ></nz-option>
               </nz-select>
             </nz-form-control>
@@ -281,4 +287,10 @@ export class AccountComponent implements OnInit {
     const value = (event.target as HTMLInputElement).value;
     this.aStore.getAddress(value);
   }
+
+  today = new Date();
+
+  disabledDate = (current: Date): boolean =>
+    // Can not select days before today and today
+    differenceInCalendarDays(current, this.today) > -6570;
 }

@@ -154,7 +154,7 @@ import { RouterLink } from '@angular/router';
               >
                 <nz-option
                   *ngFor="let option of vm.serviceData.values"
-                  [nzLabel]="option.name"
+                  [nzLabel]="option.name + ' - '  + option.price + 'VND'"
                   [nzValue]="option.serviceId"
                 ></nz-option>
               </nz-select>

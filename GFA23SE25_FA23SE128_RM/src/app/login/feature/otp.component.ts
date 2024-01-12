@@ -71,15 +71,7 @@ import { SignInApi } from '../data-access/model/sign-in-api.model';
       </nz-form-item>
       <div class="tw-text-center">
         <button
-          nz-button
-          class="tw-mr-1 tw-rounded-full"
-          nzType="primary"
-          (click)="sendOtp()"
-        >
-          Gửi lại
-        </button>
-        <button
-          class="tw-w-[72%] tw-rounded-full tw-bg-gradient-to-r tw-from-gray-600 tw-to-gray-300"
+          class="tw-w-[85%] tw-rounded-full tw-bg-gradient-to-r tw-from-gray-600 tw-to-gray-300"
           nz-button
           nzType="primary"
           (click)="submitForm()"
@@ -89,7 +81,8 @@ import { SignInApi } from '../data-access/model/sign-in-api.model';
         </button>
       </div>
     </form>
-    <div class="tw-ml-5 tw-mt-5">
+    <div class="tw-ml-5 tw-mt-2">
+      <a nzType="primary" (click)="sendOtp()"> Gửi lại otp </a> <br/>
       <a [routerLink]="['/login']"> Nhập lại SĐT? </a>
     </div>
   `,

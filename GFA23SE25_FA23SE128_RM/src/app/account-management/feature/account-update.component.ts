@@ -237,8 +237,7 @@ export class AccountUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.aStore.getAccountData();
     this.aStore.getScheduleData();
-    console.log(this.aStore.accountStaffId);
-    console.log(this.aStore.staffId);
+    this.form.disable()
   }
 
   getAddress(event: Event) {
@@ -254,18 +253,6 @@ export class AccountUpdateComponent implements OnInit {
     this.aStore.getBranchData(branchId);
   }
 
-  current = new Date();
-  mai = new Date('12/22/2023');
-
-  objects = [
-    {
-      type: 'success',
-      content:
-        'This is very long usual event with very very long decription...',
-      title: 'This is title to event with long description',
-      date: this.mai,
-    },
-  ];
   click(){
     console.log(this.aStore.schedule);
 

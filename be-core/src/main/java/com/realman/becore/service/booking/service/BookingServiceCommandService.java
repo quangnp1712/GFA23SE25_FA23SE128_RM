@@ -97,7 +97,9 @@ public class BookingServiceCommandService {
         List<BookingServiceEntity> foundBookingServices = bookingServiceRepository.findAllNotEqualId(bookingId,
                 bookingServiceId);
         List<BookingServiceEntity> updatedBookingServices = foundBookingServices.stream().map(bookingService -> {
-            bookingService.setBookingServiceStatus(EBookingServiceStatus.PROCESSING);
+            if (!bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.FINISHED)) {
+                bookingService.setBookingServiceStatus(EBookingServiceStatus.PROCESSING);
+            }
             return bookingService;
         }).toList();
         bookingServiceRepository.saveAll(updatedBookingServices);

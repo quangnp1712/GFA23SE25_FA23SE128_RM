@@ -80,6 +80,7 @@ public class BookingServiceCommandService {
             bookingServiceRepository.save(foundBookingServiceEntity);
             unlockBookingService(foundBookingServiceEntity.getBookingId(),
                     foundBookingServiceEntity.getBookingServiceId());
+
         }
     }
 

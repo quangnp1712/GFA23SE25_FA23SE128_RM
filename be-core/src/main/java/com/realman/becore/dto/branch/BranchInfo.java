@@ -36,6 +36,8 @@ public interface BranchInfo {
 
     void setAccountId(Long accountId);
 
+    void setThumbnailUrl(String thumbnailUrl);
+
     void setFirstName(String firstName);
 
     void setLastName(String lastName);
@@ -82,6 +84,8 @@ public interface BranchInfo {
     LocalTime getClose();
 
     Long getAccountId();
+
+    String getThumbnailUrl();
 
     String getFirstName();
 

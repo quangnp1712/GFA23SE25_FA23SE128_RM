@@ -23,7 +23,7 @@ public class ShiftCommandService {
     @NonNull
     private final ShiftMapper shiftMapper;
 
-    public void saveAll() {
+    public void saveDefault() {
         List<Shift> shifts = List.of(
                 Shift.builder().shift(EShift.MORNING).startShift(LocalTime.of(6, 0, 0))
                         .endShift(LocalTime.of(14, 0, 0)).build(),

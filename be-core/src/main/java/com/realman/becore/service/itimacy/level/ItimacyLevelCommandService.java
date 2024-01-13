@@ -22,7 +22,7 @@ public class ItimacyLevelCommandService {
         @NonNull
         private final ItimacyLevelMapper itimacyLevelMapper;
 
-        void saveAll() {
+        void saveDefault() {
                 List<ItimacyLevelEntity> itimacyLevelEntityList = itimacyLevelRepository.findAll();
                 if (Objects.isNull(itimacyLevelEntityList) || itimacyLevelEntityList.isEmpty()) {
                         ItimacyLevelEntity unrank = ItimacyLevelEntity.builder()

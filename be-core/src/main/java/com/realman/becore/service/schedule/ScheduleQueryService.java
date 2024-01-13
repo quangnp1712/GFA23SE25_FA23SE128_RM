@@ -21,6 +21,7 @@ public class ScheduleQueryService {
     public List<Schedule> findById(Long staffId) {
         List<Schedule> scheduleList = scheduleRepository.findInfoByStaffId(staffId).stream()
                 .map(scheduleMapper::toDto).toList();
+
         return scheduleList;
     }
 

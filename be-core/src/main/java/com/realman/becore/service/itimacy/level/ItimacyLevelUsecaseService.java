@@ -14,7 +14,7 @@ public class ItimacyLevelUsecaseService {
     private final ItimacyLevelCommandService itimacyLevelCommandService;
 
     @Transactional
-    public void saveAll() {
-        itimacyLevelCommandService.saveAll();
+    public void saveDefault() {
+        itimacyLevelCommandService.saveDefault();
     }
 }

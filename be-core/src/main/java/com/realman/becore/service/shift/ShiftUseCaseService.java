@@ -17,8 +17,8 @@ public class ShiftUseCaseService {
     private final ShiftQueryService shiftQueryService;
 
     @Transactional
-    public void saveAll() {
-        shiftCommandService.saveAll();
+    public void saveDefault() {
+        shiftCommandService.saveDefault();
     }
 
     public Shift findById(Long shiftId) {

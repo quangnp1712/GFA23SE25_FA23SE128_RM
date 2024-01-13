@@ -145,7 +145,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
                     nzType="primary"
                     nzSize="small"
                     [routerLink]="[
-                      '/account-management/update-account',
+                      '/account-management/detail-account',
                       {
                         account: [data.accountId],
                         account1: [data.staff.staffId]

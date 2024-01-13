@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { HomepageLayoutComponent } from '../share/ui/home-page-layout.component';
+import { roleGuard } from '../share/guard/role-guard';
 
 const BRANCH_MANAGEMENT_ROUTES: Route[] = [
   {
@@ -13,16 +14,24 @@ const BRANCH_MANAGEMENT_ROUTES: Route[] = [
       import('./feature/branch-list.component').then(
         (m) => m.BranchListComponent
       ),
+      data: { role: ['SHOP_OWNER'] },
+      canActivate: [roleGuard]
   },
   {
     path: 'create-branch',
     loadComponent: () =>
       import('./feature/branch.component').then((m) => m.BranchComponent),
+    data: { role: ['SHOP_OWNER'] },
+    canActivate: [roleGuard]
   },
   {
     path: ':id',
     loadComponent: () =>
-      import('./feature/branch-update.component').then((m) => m.BranchUpdateComponent),
+      import('./feature/branch-update.component').then(
+        (m) => m.BranchUpdateComponent
+      ),
+      data: { role: ['SHOP_OWNER'] },
+      canActivate: [roleGuard]
   },
 ];
 export default BRANCH_MANAGEMENT_ROUTES;

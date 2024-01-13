@@ -22,6 +22,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { RxLet } from '@rx-angular/template/let';
 import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-update',
@@ -186,17 +187,8 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
       </div>
 
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary" (click)="form.reset()">
-          Làm mới
-        </button>
-        <button
-          nz-button
-          nzType="primary"
-          class="tw-ml-4"
-          (click)="click()"
-          [disabled]="form.invalid"
-        >
-          Cập nhật
+        <button nz-button nzDanger nzType="primary" (click)="click()">
+          Trở lại
         </button>
       </div>
     </div> `,
@@ -229,7 +221,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountUpdateComponent implements OnInit {
-  constructor(public aStore: AccountStore) {}
+  constructor(public aStore: AccountStore, private _router: Router) {}
 
   vm$ = this.aStore.state$;
   form = this.aStore.form;
@@ -254,7 +246,7 @@ export class AccountUpdateComponent implements OnInit {
   }
 
   click(){
-    console.log(this.aStore.schedule);
+    this._router.navigate(['/account-management/account-list'])
 
   }
 }

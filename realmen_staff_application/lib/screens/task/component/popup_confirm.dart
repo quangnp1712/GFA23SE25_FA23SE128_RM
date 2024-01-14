@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -5,7 +7,6 @@ import 'package:get/get.dart';
 
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/screens/task/booking_processing.dart';
 import 'package:realmen_staff_application/screens/task/service_booking_processing.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
@@ -15,7 +16,7 @@ class PopUpConfirm extends StatefulWidget {
   final int? index;
   final int? bookingId;
 
-  PopUpConfirm({
+  const PopUpConfirm({
     Key? key,
     this.service,
     this.index,
@@ -60,7 +61,8 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                         children: [
                           WidgetSpan(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 4),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
                               child: Container(
                                 height: 23,
                                 width: 25,
@@ -71,7 +73,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                                 child: Center(
                                   child: Text(
                                     "${widget.index!}",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -81,7 +83,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                               ),
                             ),
                           ),
-                          WidgetSpan(
+                          const WidgetSpan(
                             child: SizedBox(
                               width: 5,
                             ),
@@ -91,7 +93,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                                 .toString()
                                 .runes
                                 .toList()),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 22,
                               color: Colors.black,
@@ -114,7 +116,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                   decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {
                       Get.back();
@@ -122,7 +124,8 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                     child: Center(
                       child: Text(
                         "quay lại".toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),
@@ -137,13 +140,14 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                         style: BorderStyle.solid,
                       ),
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: btnStartBookingService,
                     child: Center(
                       child: Text(
                         "xác nhận".toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),
@@ -202,6 +206,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
     }
   }
 
+  // ignore: unused_element
   void _successMessage(String? message) {
     try {
       ShowSnackBar.SuccessSnackBar(context, message!);

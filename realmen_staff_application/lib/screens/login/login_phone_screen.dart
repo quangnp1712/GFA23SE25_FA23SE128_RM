@@ -7,7 +7,7 @@ import 'package:realmen_staff_application/models/schedule/login_register/login_p
 import 'package:realmen_staff_application/screens/login/login_otp_screen.dart';
 
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
+import 'package:realmen_staff_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -200,41 +200,41 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   // Logic
   TextEditingController phoneController = TextEditingController();
 
-  // void submitPhone() async {
-  //   String phone = phoneController.text.toString();
-  //   LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
-  //   AuthenticateService authenticateService = AuthenticateService();
-  //   if (phone != null && phone != '') {
-  //     try {
-  //       var result = await authenticateService.loginPhone(loginPhoneModel);
-  //       if (result["data"] == "false" && result['statusCode'] == 200) {
-  //         Get.toNamed(RegisterScreen.RegisterScreenRoute);
-  //       } else if (result["data"] == "true" && result['statusCode'] == 200) {
-  //         Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
-  //         // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-  //       } else {
-  //         _errorMessage("$result['statusCode'] : $result['error']");
-  //       }
-  //     } catch (e) {
-  //       print("Error: $e");
-  //     }
-  //   } else if (phone == null || phone == '') {
-  //     _errorMessage("Xon nhập số điện thoại");
-  //   } else if (phone.length < 8 || phone.length > 11) {
-  //     _errorMessage("Số điện thoại không đúng");
-  //   }
-  // }
-
-  // // No API
   void submitPhone() async {
     String phone = phoneController.text.toString();
-    Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-    try {
-      await SharedPreferencesService.savePhone(phone);
-    } catch (e) {
-      _errorMessage(e.toString());
+    LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+    AuthenticateService authenticateService = AuthenticateService();
+    if (phone != '') {
+      try {
+        var result = await authenticateService.loginPhone(loginPhoneModel);
+        if (result["data"] == "false" && result['statusCode'] == 200) {
+          _errorMessage("Không tìm thấy số điện thoại");
+        } else if (result["data"] == "true" && result['statusCode'] == 200) {
+          Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
+          // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+        } else {
+          _errorMessage("$result['statusCode'] : $result['error']");
+        }
+      } catch (e) {
+        print("Error: $e");
+      }
+    } else if (phone == '') {
+      _errorMessage("Xin nhập số điện thoại");
+    } else if (phone.length < 8 || phone.length > 11) {
+      _errorMessage("Số điện thoại không đúng");
     }
   }
+
+  // // No API
+  // void submitPhone() async {
+  //   String phone = phoneController.text.toString();
+  //   Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+  //   try {
+  //     await SharedPreferencesService.savePhone(phone);
+  //   } catch (e) {
+  //     _errorMessage(e.toString());
+  //   }
+  // }
 
   void _errorMessage(String? message) {
     try {

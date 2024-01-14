@@ -1,25 +1,14 @@
 // ignore_for_file: unused_field, unused_element, sized_box_for_whitespace, avoid_print, camel_case_types
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:realmen_staff_application/models/account/account_info_model.dart';
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/screens/task/component/add_more_service_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/booking_processing_detail.dart';
-import 'package:realmen_staff_application/service/account/account_info_service.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
-import 'package:timeline_tile/timeline_tile.dart';
-
-import 'package:realmen_staff_application/screens/task/component/history_customer_processing.dart';
-import 'package:realmen_staff_application/screens/task/component/popup_confirm.dart';
 
 class BookingProcessingTab extends StatefulWidget {
   const BookingProcessingTab({super.key});
@@ -69,7 +58,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                               // ),
                               color: Colors.grey.shade300),
                           isScrollable: true,
-                          labelPadding: EdgeInsets.only(
+                          labelPadding: const EdgeInsets.only(
                               bottom: 10, left: 20, right: 20, top: 5),
                           tabs: tabs,
                         ),
@@ -89,7 +78,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                     ),
                   )
                 : bookingViews.first)
-            : Center(
+            : const Center(
                 child: Text("Chưa có đơn booking"),
               );
   }

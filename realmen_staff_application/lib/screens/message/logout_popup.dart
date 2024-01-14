@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
+import 'package:realmen_staff_application/service/authentication/authenticate_service.dart';
 
 class LogoutPopup extends StatelessWidget {
   const LogoutPopup({super.key});

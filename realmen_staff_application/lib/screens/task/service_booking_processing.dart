@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_catch_clause, library_private_types_in_public_api, constant_identifier_names, sized_box_for_whitespace, avoid_print, prefer_final_fields
 
 import 'dart:convert';
 import 'dart:io';
@@ -23,7 +23,7 @@ class ServiceBookingProcessingScreen extends StatefulWidget {
   final int? index;
   final String? professional;
 
-  ServiceBookingProcessingScreen({
+  const ServiceBookingProcessingScreen({
     Key? key,
     this.bookingId,
     this.index,
@@ -715,11 +715,10 @@ class _ServiceBookingProcessingScreenState
                                                     ),
                                                   ),
                                                 ),
-                                               
                                               ],
                                             )
                                           : Container(),
-                                           const SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Container(
@@ -978,6 +977,7 @@ class _ServiceBookingProcessingScreenState
   }
 
   // File image
+
   List<File> _images = [];
   int _selectedImageIndex = 0;
   int _currentPage = 0;
@@ -1038,7 +1038,8 @@ class FullScreenImagePage extends StatefulWidget {
   final List<File> images;
   final int initialIndex;
 
-  FullScreenImagePage({required this.images, required this.initialIndex});
+  const FullScreenImagePage(
+      {super.key, required this.images, required this.initialIndex});
 
   @override
   _FullScreenImagePageState createState() => _FullScreenImagePageState();
@@ -1046,7 +1047,6 @@ class FullScreenImagePage extends StatefulWidget {
 
 class _FullScreenImagePageState extends State<FullScreenImagePage> {
   late PageController _pageController;
-  bool _isZoomed = false;
 
   @override
   void initState() {

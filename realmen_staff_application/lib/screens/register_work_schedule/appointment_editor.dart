@@ -1003,8 +1003,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                           _recurrenceProperties!.weekDays =
                                               _days!;
                                           if (_recurrenceProperties!
-                                                  .weekDays.length >
-                                              0) {
+                                              .weekDays.isNotEmpty) {
                                             _recurrenceProperties!.interval =
                                                 _recurrenceProperties!
                                                     .weekDays.length;
@@ -1013,8 +1012,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                     .weekDays.length
                                                     .toString();
                                           } else if (_recurrenceProperties!
-                                                  .weekDays.length ==
-                                              0) {
+                                              .weekDays.isEmpty) {
                                             _recurrenceProperties!.interval = 1;
                                             _countController.text = '1';
                                           }
@@ -1097,7 +1095,8 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                             decoration: BoxDecoration(
                                               color:
                                                   Colors.grey.withOpacity(0.1),
-                                              borderRadius: BorderRadius.only(
+                                              borderRadius:
+                                                  const BorderRadius.only(
                                                 topLeft: Radius.circular(7),
                                                 bottomLeft: Radius.circular(7),
                                               ),
@@ -1546,10 +1545,10 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
     });
   }
 
-  String formatDate(DateTime _selectedDate) {
-    String day = DateFormat('EEEE').format(_selectedDate);
+  String formatDate(DateTime selectedDate) {
+    String day = DateFormat('EEEE').format(selectedDate);
     day = formatDay(day);
-    return "$day, ${DateFormat('dd/MM/yyyy').format(_selectedDate)}";
+    return "$day, ${DateFormat('dd/MM/yyyy').format(selectedDate)}";
   }
 
   String formatDay(String day) {
@@ -1646,7 +1645,6 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
           _rule = _SelectRule.everyMonth;
           break;
         case RecurrenceType.yearly:
-          // TODO: Handle this case.
           break;
       }
     } else {

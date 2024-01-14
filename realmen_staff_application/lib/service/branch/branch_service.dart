@@ -1,4 +1,5 @@
-import 'package:geolocator/geolocator.dart';
+// ignore_for_file: unused_catch_clause
+
 import 'package:realmen_staff_application/global_variable.dart';
 import 'package:realmen_staff_application/models/branch/branch_model.dart';
 import 'package:realmen_staff_application/models/exception/exception_model.dart';
@@ -12,13 +13,12 @@ abstract class IBranchService {
   Future<dynamic> getBranches(String search, int pageSize);
   Future<dynamic> getBranchId(int branchId);
   Future<dynamic> getBranchesByCity();
+  Future<dynamic> getSearchBranches(String search, int pageSize);
 }
 
 class BranchService implements IBranchService {
   @override
   Future getBranchId(int branchId) async {
-    BranchModel branchModel = BranchModel();
-
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse("$getBranchUrl/$branchId");
@@ -90,14 +90,13 @@ class BranchService implements IBranchService {
 
   @override
   Future getBranches(String search, int pageSize) async {
-    BranchesModel branchesModel = BranchesModel();
     int current = 1;
     String sorter = "branchName";
     double lat = 0;
     double lng = 0;
     bool locationPermission =
         await SharedPreferencesService.getLocationPermission();
-    if (search == null && search == '') {
+    if (search == '') {
       return const Iterable<String>.empty();
     } else if (locationPermission) {
       try {
@@ -249,7 +248,6 @@ class BranchService implements IBranchService {
 
   @override
   Future getSearchBranches(String search, int pageSize) async {
-    BranchesModel branchesModel = BranchesModel();
     int current = 1;
     String sorter = "createdAt";
     double lat = 0;
@@ -282,8 +280,8 @@ class BranchService implements IBranchService {
         if (statusCode == 200) {
           final branch = json.decode(responseBody);
           final branches = (branch['content'] as List)
-              ?.map((e) => BranchModel.fromJson(e))
-              ?.toList();
+              .map((e) => BranchModel.fromJson(e))
+              .toList();
 
           return {
             'statusCode': statusCode,
@@ -336,7 +334,7 @@ class BranchService implements IBranchService {
         };
       }
     } else {
-      if (search == null && search == '') {
+      if (search == '') {
         return const Iterable<String>.empty();
       } else {
         try {
@@ -360,8 +358,8 @@ class BranchService implements IBranchService {
           if (statusCode == 200) {
             final branch = json.decode(responseBody);
             final branches = (branch['content'] as List)
-                ?.map((e) => BranchModel.fromJson(e))
-                ?.toList();
+                .map((e) => BranchModel.fromJson(e))
+                .toList();
 
             return {
               'statusCode': statusCode,
@@ -419,10 +417,9 @@ class BranchService implements IBranchService {
 
   @override
   Future getBranchesByCity() async {
-    BranchesModel branchesByCityModel = BranchesModel();
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
-      Uri uri = Uri.parse("$getBranchesByCityUrl");
+      Uri uri = Uri.parse(getBranchesByCityUrl);
       final client = http.Client();
       final response = await client.get(
         uri,

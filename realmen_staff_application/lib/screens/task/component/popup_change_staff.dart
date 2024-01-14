@@ -51,7 +51,7 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
             const SizedBox(
               height: 20,
             ),
-            widget.service != null
+            widget.service.bookingId != null
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,20 +64,21 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                             children: [
                               TextSpan(
                                 text: "- Dịch vụ:".toUpperCase(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
                               ),
-                              WidgetSpan(
+                              const WidgetSpan(
                                 child: SizedBox(
                                   width: 5,
                                 ),
                               ),
                               WidgetSpan(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 4),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
                                   child: Container(
                                     height: 23,
                                     width: 25,
@@ -87,8 +88,8 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "${widget.index!}",
-                                        style: TextStyle(
+                                        "${widget.index}",
+                                        style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
@@ -98,17 +99,17 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                                   ),
                                 ),
                               ),
-                              WidgetSpan(
+                              const WidgetSpan(
                                 child: SizedBox(
                                   width: 5,
                                 ),
                               ),
                               TextSpan(
-                                text: utf8.decode(widget.service!.serviceName
+                                text: utf8.decode(widget.service.serviceName
                                     .toString()
                                     .runes
                                     .toList()),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 22,
                                   color: Colors.black,
@@ -118,7 +119,7 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Padding(
@@ -129,20 +130,20 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                             children: [
                               TextSpan(
                                 text: "- giờ booking:".toUpperCase(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                   color: Colors.black,
                                 ),
                               ),
-                              WidgetSpan(
+                              const WidgetSpan(
                                 child: SizedBox(
                                   width: 5,
                                 ),
                               ),
                               TextSpan(
                                 text: widget.service.startAppointment,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 22,
                                   color: Colors.black,
@@ -152,7 +153,7 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Padding(
@@ -160,7 +161,7 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                         child: Text(
                           "- Đổi ${widget.service.professional}: "
                               .toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Colors.black,
@@ -182,7 +183,7 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                   decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {
                       Get.back();
@@ -190,7 +191,8 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                     child: Center(
                       child: Text(
                         "quay lại".toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),
@@ -205,13 +207,14 @@ class _PopupChangeStaffState extends State<PopupChangeStaff> {
                         style: BorderStyle.solid,
                       ),
                       borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {},
                     child: Center(
                       child: Text(
                         "xác nhận".toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),

@@ -1,15 +1,16 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/screens/task/task_screen.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
 
 class PopUpAcceptGuest extends StatefulWidget {
   final String name;
   final String phone;
   final int bookingId;
-  PopUpAcceptGuest({
+  const PopUpAcceptGuest({
     Key? key,
     required this.name,
     required this.phone,
@@ -242,7 +243,7 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
         if (result['statusCode'] == 200) {
           _successMessage('Nhận khách thành công');
           // Get.toNamed(TaskScreen.TaskScreenRoute);
-          Get.to(() => MainScreen());
+          Get.to(() => const MainScreen());
         } else if (result['statusCode'] == 500) {
           _errorMessage(result['error']);
         } else {

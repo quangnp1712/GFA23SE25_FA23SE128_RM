@@ -55,7 +55,7 @@ class ShowSnackBar {
       width: 85.w,
       padding: const EdgeInsets.all(0),
       content: Container(
-        constraints: BoxConstraints(minHeight: 40, maxHeight: 90),
+        constraints: const BoxConstraints(minHeight: 40, maxHeight: 90),
         // width: 50.w,
         decoration: const BoxDecoration(
           color: Color(0xff4E4C4C),

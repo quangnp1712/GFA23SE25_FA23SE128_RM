@@ -10,7 +10,7 @@ import 'package:realmen_staff_application/models/account/account_info_model.dart
 import 'package:realmen_staff_application/models/autocomplete/autocomplete_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/account/account_info_service.dart';
-import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
+import 'package:realmen_staff_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_staff_application/service/autocomplete/autocomplete_service.dart';
 import 'package:sizer/sizer.dart';
 

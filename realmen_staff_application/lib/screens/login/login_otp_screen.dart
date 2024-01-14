@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:realmen_staff_application/models/schedule/login_register/login_otp_model.dart';
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
+import 'package:realmen_staff_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'package:pinput/pinput.dart';
@@ -188,11 +188,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     String phone = await SharedPreferencesService.getPhone();
     // ignore: unused_local_variable
     String otp = otpController.text.toString();
-    // LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
-    LoginOtpModel loginOtpModel =
-        LoginOtpModel(phone: phone, passCode: "12345");
-    // LoginOtpModel loginOtpModel =
-    //     LoginOtpModel(phone: "0917901486", passCode: "12345");
+    LoginOtpModel loginOtpModel = LoginOtpModel(phone: phone, passCode: otp);
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginOtp(loginOtpModel);

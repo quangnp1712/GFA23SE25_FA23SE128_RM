@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause, non_constant_identifier_names, unused_local_variable, unnecessary_null_comparison, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -278,7 +280,7 @@ class AuthenticateService extends IAuthenticateService {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     await sharedPreferences.clear();
-    Get.to(() => LoginPhoneScreen());
+    Get.to(() => const LoginPhoneScreen());
     return;
   }
 }

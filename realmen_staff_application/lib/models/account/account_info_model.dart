@@ -97,14 +97,14 @@ class StaffModel {
   factory StaffModel.fromJson(Map<String, dynamic> json) {
     return StaffModel(
       accountId: json['accountId'],
-      staffId: json['staffId'] ?? null,
+      staffId: json['staffId'],
       averageRating: json['averageRating'] ?? 0,
       scheduleList: json['scheduleList'] != null && json['scheduleList'] != []
           ? (json['scheduleList'] as List)
               .map((item) => ScheduleModel.fromJson(item))
               .toList()
           : null,
-      professional: json['professional'] ?? null,
+      professional: json['professional'],
     );
   }
 }
@@ -132,14 +132,14 @@ class ScheduleModel {
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     return ScheduleModel(
-      scheduleId: json['scheduleId'] ?? null,
-      staffId: json['staffId'] ?? null,
-      shiftId: json['shiftId'] ?? null,
-      shift: json['shift'] ?? null,
-      workingDate: json['workingDate'] ?? null,
-      start: json['start'] ?? null,
-      end: json['end'] ?? null,
-      scheduleStatus: json['scheduleStatus'] ?? null,
+      scheduleId: json['scheduleId'],
+      staffId: json['staffId'],
+      shiftId: json['shiftId'],
+      shift: json['shift'],
+      workingDate: json['workingDate'],
+      start: json['start'],
+      end: json['end'],
+      scheduleStatus: json['scheduleStatus'],
     );
   }
 }

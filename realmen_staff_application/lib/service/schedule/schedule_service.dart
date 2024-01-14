@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -17,7 +19,6 @@ class ScheduleService extends IScheduleService {
   @override
   Future postSchedule(int accountId, SchedulesModel schedulesModel) async {
     try {
-      ScheduleModel scheduleModel = ScheduleModel();
       Uri uri = Uri.parse("$schedulesListUrl?accountId=$accountId");
       final client = http.Client();
       final String jwtToken = await SharedPreferencesService.getJwt();
@@ -86,10 +87,9 @@ class ScheduleService extends IScheduleService {
   }
 
   @override
+  // ignore: avoid_renaming_method_parameters
   Future getSchedule(int staffId) async {
     try {
-      SchedulesModel schedulesModel = SchedulesModel();
-      ScheduleModel scheduleModel = ScheduleModel();
       Uri uri = Uri.parse("$scheduleListUrl/$staffId");
       final client = http.Client();
       final String jwtToken = await SharedPreferencesService.getJwt();

@@ -1,16 +1,13 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
+// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/screens/task/component/history_customer_waiting.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_accept_guests.dart';
-import 'package:realmen_staff_application/service/authentication/authenticateService.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 
@@ -106,12 +103,12 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 2,
                                         ),
                                         Row(
                                           children: [
-                                            Text(
+                                            const Text(
                                               "   Giờ book: ",
                                               style: TextStyle(
                                                   fontSize: 18,
@@ -124,7 +121,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                   .first
                                                   .startAppointment!
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black),
                                             ),
@@ -211,7 +208,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                         textAlign:
                                                             TextAlign.left,
                                                         maxLines: 1,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight.w500,
@@ -248,7 +245,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                         textAlign:
                                                             TextAlign.left,
                                                         maxLines: 1,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight.w500,
@@ -440,14 +437,14 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                   );
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 50,
                               )
                             ],
                           );
                         }),
                   )
-                : Center(
+                : const Center(
                     child: Text("Chưa có đơn booking"),
                   ),
       ),

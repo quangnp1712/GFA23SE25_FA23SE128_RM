@@ -1,5 +1,6 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_staff_application/service/change_notifier_provider/change_notifier_provider_service.dart';
@@ -68,7 +69,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       content: SizedBox(
         width: double.maxFinite,
         height: 340,
@@ -263,10 +264,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
           Center(
             child: Text(
               txtSelectedDate!,
-              style: TextStyle(color: Colors.black, fontSize: 24),
+              style: const TextStyle(color: Colors.black, fontSize: 24),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(
@@ -351,12 +352,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Container(
             height: 50,
-            margin: EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
                 border: Border.all(
                     width: 1, color: Colors.black54, style: BorderStyle.solid),

@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, constant_identifier_names, unused_field
+// ignore_for_file: must_be_immutable, constant_identifier_names, unused_field, unused_local_variable, sized_box_for_whitespace, prefer_final_fields, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:realmen_staff_application/models/schedule/schedule_model.dart';

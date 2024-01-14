@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'package:realmen_staff_application/global_variable.dart';
 import 'package:realmen_staff_application/models/autocomplete/autocomplete_model.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +16,7 @@ abstract class IAutocompleteService {
 class AutocompleteService extends IAutocompleteService {
   @override
   Future getAutocomplete(String address) async {
+    // ignore: unused_local_variable
     AutocompleteModel autocompleteModel = AutocompleteModel();
     if (address == '') {
       return const Iterable<String>.empty();

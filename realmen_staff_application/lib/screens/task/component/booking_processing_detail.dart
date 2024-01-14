@@ -1,19 +1,15 @@
+// ignore_for_file: sized_box_for_whitespace, avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
-import 'package:realmen_staff_application/models/account/account_info_model.dart';
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
-import 'package:realmen_staff_application/screens/task/booking_processing.dart';
-import 'package:realmen_staff_application/screens/task/component/add_more_service_screen.dart';
-import 'package:realmen_staff_application/screens/task/component/history_customer_processing.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_change_staff.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_confirm.dart';
 import 'package:realmen_staff_application/screens/task/service_booking_processing.dart';
-import 'package:realmen_staff_application/service/account/account_info_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -30,6 +26,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return isLoading
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,73 +144,73 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                           ),
                         ],
                       ),
-                      Center(
-                        child: TextButton(
-                          onPressed: () {
-                            Get.to(const HistoryCustomerProcessingScreen());
-                          },
-                          child: const Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Xem lịch sử",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.blueAccent,
-                                      decoration: TextDecoration.underline,
-                                      decorationStyle:
-                                          TextDecorationStyle.solid),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Center(
+                      //   child: TextButton(
+                      //     onPressed: () {
+                      //       Get.to(const HistoryCustomerProcessingScreen());
+                      //     },
+                      //     child: const Text.rich(
+                      //       TextSpan(
+                      //         children: [
+                      //           TextSpan(
+                      //             text: "Xem lịch sử",
+                      //             style: TextStyle(
+                      //                 fontSize: 18,
+                      //                 color: Colors.blueAccent,
+                      //                 decoration: TextDecoration.underline,
+                      //                 decorationStyle:
+                      //                     TextDecorationStyle.solid),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 30,
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             "Dịch vụ: ",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 23, fontWeight: FontWeight.bold),
                           ),
-                          Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.black54,
-                                border: Border.all(
-                                  color: Colors.black54,
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                borderRadius: BorderRadius.circular(10)),
-                            // margin: const EdgeInsets.all(10),
-                            child: TextButton(
-                              style: const ButtonStyle(
-                                alignment: Alignment.center,
-                                padding: MaterialStatePropertyAll(
-                                  EdgeInsets.symmetric(horizontal: 5),
-                                ),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  Get.to(() => AddMoreServiceScreen(
-                                      widget.booking.bookingServices!));
-                                });
-                              },
-                              child: const Center(
-                                child: Text(
-                                  " + Thêm dịch vụ ",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   height: 40,
+                          //   decoration: BoxDecoration(
+                          //       color: Colors.black54,
+                          //       border: Border.all(
+                          //         color: Colors.black54,
+                          //         width: 1,
+                          //         style: BorderStyle.solid,
+                          //       ),
+                          //       borderRadius: BorderRadius.circular(10)),
+                          //   // margin: const EdgeInsets.all(10),
+                          //   child: TextButton(
+                          //     style: const ButtonStyle(
+                          //       alignment: Alignment.center,
+                          //       padding: MaterialStatePropertyAll(
+                          //         EdgeInsets.symmetric(horizontal: 5),
+                          //       ),
+                          //     ),
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         Get.to(() => AddMoreServiceScreen(
+                          //             widget.booking.bookingServices!));
+                          //       });
+                          //     },
+                          //     child: const Center(
+                          //       child: Text(
+                          //         " + Thêm dịch vụ ",
+                          //         style: TextStyle(
+                          //             fontSize: 20, color: Colors.white),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const Padding(
@@ -935,6 +932,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
 
   String professional = '';
 
+  // ignore: unused_element
   void _errorMessage(String? message) {
     try {
       ShowSnackBar.ErrorSnackBar(context, message!);

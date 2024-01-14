@@ -4,17 +4,13 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:get/get.dart';
-import 'package:realmen_staff_application/models/account/account_info_model.dart';
 
 import 'package:realmen_staff_application/screens/login/login_phone_screen.dart';
-import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/profile/profile_screen.dart';
 import 'package:realmen_staff_application/screens/register_work_schedule/register_work_schedule.dart';
 import 'package:realmen_staff_application/screens/task/task_screen.dart';
 import 'package:realmen_staff_application/screens/work_schedule/work_schedule.dart';
-import 'package:realmen_staff_application/service/account/account_info_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
-import 'package:sizer/sizer.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);

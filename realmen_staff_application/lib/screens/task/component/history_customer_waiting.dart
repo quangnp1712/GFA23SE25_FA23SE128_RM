@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, sized_box_for_whitespace, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

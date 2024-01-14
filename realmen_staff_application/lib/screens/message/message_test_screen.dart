@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 

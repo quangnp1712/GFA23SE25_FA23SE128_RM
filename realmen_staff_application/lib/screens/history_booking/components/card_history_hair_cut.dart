@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_staff_application/screens/history_booking/detail_history_hair_cut_screen.dart';
@@ -89,7 +91,7 @@ class _CardHistoryHairCutState extends State<CardHistoryHairCut> {
                                           DetailHistoryBookingScreen
                                               .DetailHistoryBookingScreenRoute),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.black,
+                                        backgroundColor: Colors.black,
                                       ),
                                       child: const Text(
                                         'Xem chi tiết ->',

@@ -305,25 +305,25 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
       otpController = TextEditingController();
     });
 
-    // String phone = await SharedPreferencesService.getPhone();
-    // LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
-    // AuthenticateService authenticateService = AuthenticateService();
-    // if (phone.isNotEmpty && phone != '') {
-    //   try {
-    //     var result = await authenticateService.loginPhone(loginPhoneModel);
-    //     if (result['statusCode'] == 200) {
-    //       _successMessage("Gửi lại mã OTP thành công");
-    //     } else if (result['statusCode'] == 500) {
-    //       _errorMessage("${result['error']}");
-    //     } else {
-    //       _errorMessage("Gửi lại mã OTP thất bại");
-    //     }
-    //   } catch (e) {
-    //     _errorMessage("Gửi lại mã OTP thất bại");
-    //   }
-    // } else {
-    //   _errorMessage("Gửi lại mã OTP thất bại");
-    //   Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-    // }
+    String phone = await SharedPreferencesService.getPhone();
+    LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+    AuthenticateService authenticateService = AuthenticateService();
+    if (phone.isNotEmpty && phone != '') {
+      try {
+        var result = await authenticateService.loginPhone(loginPhoneModel);
+        if (result['statusCode'] == 200) {
+          _successMessage("Gửi lại mã OTP thành công");
+        } else if (result['statusCode'] == 500) {
+          _errorMessage("${result['error']}");
+        } else {
+          _errorMessage("Gửi lại mã OTP thất bại");
+        }
+      } catch (e) {
+        _errorMessage("Gửi lại mã OTP thất bại");
+      }
+    } else {
+      _errorMessage("Gửi lại mã OTP thất bại");
+      Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+    }
   }
 }

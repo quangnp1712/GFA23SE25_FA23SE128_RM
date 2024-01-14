@@ -531,7 +531,6 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         int current = 1;
         int totalPages = 0;
         List<AccountInfoModel> accounts = [];
-        TimeSlotService timeSlotService = TimeSlotService();
         massuerIdList = [];
 
         // set appointmentDate
@@ -554,6 +553,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               for (var massuer in massuers) {
                 int staffId = massuer.staff!.staffId!;
                 String chosenDate = appointmentDate;
+                // ignore: unnecessary_null_comparison
                 if (chosenDate != null && staffId != null) {
                   try {
                     TimeSlotService timeSlotService = TimeSlotService();

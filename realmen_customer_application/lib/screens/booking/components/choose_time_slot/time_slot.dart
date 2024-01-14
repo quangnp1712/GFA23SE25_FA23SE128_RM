@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
-import 'package:realmen_customer_application/models/account/staff_model.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_stylist_date_time/time-slot/time_slot.dart';
-import 'package:realmen_customer_application/screens/booking/components/on_off_switch.dart';
 
 class ChooseTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;

@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:realmen_customer_application/screens/booking/booking_screen.dart';
 import 'package:realmen_customer_application/screens/home/home_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
-import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
 import 'package:realmen_customer_application/screens/promotion/promotion_screen.dart';
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';

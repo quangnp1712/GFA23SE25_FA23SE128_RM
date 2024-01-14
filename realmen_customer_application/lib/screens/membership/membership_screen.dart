@@ -12,7 +12,7 @@ import 'package:realmen_customer_application/service/account/account_service.dar
 import 'package:sizer/sizer.dart';
 
 class MembershipScreen extends StatefulWidget {
-  MembershipScreen({super.key});
+  const MembershipScreen({super.key});
 
   @override
   State<MembershipScreen> createState() => _MembershipScreenState();

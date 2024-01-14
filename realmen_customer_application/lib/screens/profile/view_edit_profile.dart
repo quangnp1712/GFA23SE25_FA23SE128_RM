@@ -623,7 +623,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                     ),
                                     child: Text(
                                       "lưu thay đổi".toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 24,
                                           color: Color(0xffC4C4C4),
                                           fontWeight: FontWeight.w700),

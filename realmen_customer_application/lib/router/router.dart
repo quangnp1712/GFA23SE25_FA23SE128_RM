@@ -195,7 +195,7 @@ class RouteGenerator {
                   if (snapshot.hasData && snapshot.data!) {
                     return const LoginPhoneScreen();
                   } else if (snapshot.data == false) {
-                    return MembershipScreen();
+                    return const MembershipScreen();
                   } else {
                     return const LoginPhoneScreen();
                   }

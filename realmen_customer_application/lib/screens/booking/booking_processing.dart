@@ -117,7 +117,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                                               const EdgeInsets.only(top: 30),
                                           height: 50,
                                           width: 50,
-                                          child: Center(
+                                          child: const Center(
                                             child: Text(
                                                 "Bạn chưa có lịch đặt nào"),
                                           ),
@@ -571,7 +571,6 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                     DateTime(now.year, now.month, now.day, 0);
                 DateTime appointmentDate = DateTime.parse(
                     bookingModel.content!.first.appointmentDate!.toString());
-                bool check = appointmentDate.isAfter(nowFullTime);
                 if (nowFullTime.isAtSameMomentAs(appointmentDate) ||
                     appointmentDate.isAfter(nowFullTime)) {
                   booking = bookingModel.content!.first;

@@ -220,12 +220,12 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                 children: [
                                                                   Container(
                                                                     constraints:
-                                                                        BoxConstraints(
+                                                                        const BoxConstraints(
                                                                             maxWidth:
                                                                                 200),
                                                                     child: Text(
                                                                       "${bookings[index].bookingCode}",
-                                                                      style: TextStyle(
+                                                                      style: const TextStyle(
                                                                           overflow:
                                                                               TextOverflow.clip),
                                                                     ),

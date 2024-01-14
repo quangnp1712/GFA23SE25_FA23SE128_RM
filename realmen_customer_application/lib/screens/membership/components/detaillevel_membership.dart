@@ -24,7 +24,7 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Container(
@@ -40,8 +40,8 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
+            const Padding(
+              padding: EdgeInsets.all(12.0),
               child: Column(
                 children: [
                   // for (var offer in offers)

@@ -4,10 +4,8 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
-import 'package:realmen_customer_application/models/account/staff_model.dart';
 import 'package:realmen_customer_application/models/time_slot/time_slot_model.dart';
 import 'package:realmen_customer_application/service/timeslot/time_slot_service.dart';
 
@@ -399,6 +397,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
       'date': "$day, ${DateFormat('dd/MM/yyyy').format(date)}",
       'type':
           day == "Thứ bảy" || day == "Chủ nhật" ? "Cuối tuần" : "Ngày thường",
+      // ignore: unnecessary_string_interpolations
       'chosenDate': "${DateFormat('yyyy-MM-dd').format(date)}"
     };
   }
@@ -687,6 +686,7 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
     super.didUpdateWidget(oldWidget);
   }
 
+  // ignore: unused_field
   bool _isDisposed = false;
   @override
   void dispose() {

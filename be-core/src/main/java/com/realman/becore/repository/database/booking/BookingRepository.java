@@ -67,4 +67,31 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             WHERE bs.staffId = :staffId
             """)
     List<BookingInfo> findInfoByStaffId(Long staffId);
+
+    @Query("""
+            SELECT
+                b.bookingId AS bookingId,
+                a.accountId AS accountId,
+                be.branchId AS branchId,
+                b.bookingCode AS bookingCode,
+                CONCAT(a.firstName, ' ', a.lastName) AS bookingOwnerName,
+                a.phone AS bookingOwnerPhone,
+                be.branchName AS branchName,
+                be.branchAddress AS branchAddress,
+                b.appointmentDate AS appointmentDate,
+                b.bookingStatus AS bookingStatus,
+                SUM(bsr.branchServicePrice) AS totalBookingPrice,
+                CASE
+                    WHEN bs.bookingServiceStatus != 1 THEN FALSE
+                    ELSE TRUE
+                END AS allowProcess
+            FROM BookingEntity b
+            INNER JOIN AccountEntity a ON a.accountId = b.accountId
+            INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
+            INNER JOIN ShopServiceEntity sh ON bs.serviceId = sh.serviceId
+            INNER JOIN BranchEntity be ON be.branchId = b.branchId
+            INNER JOIN BranchServiceEntity bsr ON be.branchId = bsr.branchId
+            WHERE bs.bookingServiceId = :bookingServiceId
+            """)
+    Optional<BookingInfo> findByBookingServiceId(Long bookingServiceId);
 }

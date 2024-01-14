@@ -37,4 +37,8 @@ public class BookingUseCaseService {
     public List<BookingStaff> findByStaffId(Long staffId) {
         return bookingQueryService.findByStaffId(staffId);
     }
+
+    public Booking findByBookingServiceId(Long bookingServiceId) {
+        return bookingQueryService.findByBookingServiceId(bookingServiceId);
+    }
 }

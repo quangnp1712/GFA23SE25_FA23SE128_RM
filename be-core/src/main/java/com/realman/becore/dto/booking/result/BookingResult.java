@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record BookingResult(
         Long bookingResultId,
-        Long bookingId,
+        Long bookingServiceId,
         String bookingResultImg) {
 
 }

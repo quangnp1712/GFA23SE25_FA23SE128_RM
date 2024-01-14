@@ -20,8 +20,8 @@ public class BookingResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingResultId;
 
-    @Column(name = "booking_id", nullable = false)
-    private Long bookingId;
+    @Column(name = "booking_service_id", nullable = false)
+    private Long bookingServiceId;
 
     @Column(name = "booking_result_image", nullable = false)
     private String bookingResultImg;

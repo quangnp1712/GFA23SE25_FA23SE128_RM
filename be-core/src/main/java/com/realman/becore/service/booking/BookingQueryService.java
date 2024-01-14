@@ -52,4 +52,12 @@ public class BookingQueryService {
         List<BookingInfo> bookingInfos = bookingRepository.findInfoByStaffId(staffId);
         return bookingInfos.stream().map(bookingStaffMapper::toDto).toList();
     }
+
+    public Booking findByBookingServiceId(Long bookingServiceId) {
+        BookingInfo foundBooking = bookingRepository.findByBookingServiceId(bookingServiceId)
+                .orElseThrow(() -> new ResourceNotFoundException());
+        List<BookingService> bookingServices = bookingServiceUseCaseService
+                .findByBookingId(foundBooking.getBookingId());
+        return bookingMapper.toDto(foundBooking, bookingServices);
+    }
 }

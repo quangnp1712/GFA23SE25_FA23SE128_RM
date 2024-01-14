@@ -10,6 +10,7 @@ import com.realman.becore.dto.booking.Booking;
 import com.realman.becore.service.booking.BookingUseCaseService;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.PageRequestCustom;
+import com.realman.becore.util.response.ValueResponse;
 
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -36,6 +37,12 @@ public class BookingsController implements BookingsAPI {
                 .map(bookingModelMapper::toModel);
         return new PageImplResponse<>(bookingResponses.getContent(), bookingResponses.getTotalElements(),
                 bookingResponses.getTotalPages(), bookingResponses.getSize(), pageRequestCustom.current());
+    }
+
+    @Override
+    public ValueResponse<BookingResponse> findByBookingServiceId(Long bookingServiceId) {
+        Booking booking = bookingUseCaseService.findByBookingServiceId(bookingServiceId);
+        return new ValueResponse<BookingResponse>(bookingModelMapper.toModel(booking));
     }
 
 }

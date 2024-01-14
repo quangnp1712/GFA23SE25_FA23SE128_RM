@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.realman.becore.controller.api.booking.models.BookingRequest;
 import com.realman.becore.controller.api.booking.models.BookingResponse;
 import com.realman.becore.util.response.PageImplResponse;
+import com.realman.becore.util.response.ValueResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,4 +28,8 @@ public interface BookingsAPI {
             @RequestParam(value = "accountId") Long accountId,
             @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
             @RequestParam(required = false, value = "pageRequest", defaultValue = "20") Integer pageSize);
+
+    @GetMapping("/service")
+    ValueResponse<BookingResponse> findByBookingServiceId(
+            @RequestParam(value = "bookingServiceId") Long bookingServiceId);
 }

@@ -6,4 +6,8 @@ public class ResourceInvalidException extends RuntimeException {
     public ResourceInvalidException() {
         super(EErrorMessage.RESOURCE_INVALID.getMessage());
     }
+
+    public ResourceInvalidException(String msg) {
+        super(msg);
+    }
 }

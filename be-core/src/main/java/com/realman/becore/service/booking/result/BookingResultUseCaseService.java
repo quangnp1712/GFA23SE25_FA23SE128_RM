@@ -19,8 +19,8 @@ public class BookingResultUseCaseService {
     private final BookingResultQueryService bookingResultQueryService;
 
     @Transactional
-    public void saveAll(List<BookingResult> bookingResults) {
-        bookingResultCommandService.saveAll(bookingResults);
+    public void saveAll(Long bookingServiceId, List<BookingResult> bookingResults) {
+        bookingResultCommandService.saveAll(bookingServiceId, bookingResults);
     }
 
     public List<BookingResult> findByBookingId(Long bookingId) {

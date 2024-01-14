@@ -3,6 +3,7 @@ package com.realman.becore.dto.booking.service;
 import java.time.LocalTime;
 
 import com.realman.becore.dto.enums.EBookingServiceStatus;
+import com.realman.becore.dto.enums.EBookingServiceType;
 import com.realman.becore.dto.enums.EProfessional;
 
 import java.time.Duration;
@@ -42,7 +43,11 @@ public interface BookingServiceInfo {
 
     void setBookingServiceStatus(EBookingServiceStatus bookingServiceStatus);
 
+    void setBookingServiceType(EBookingServiceType bookingServiceType);
+
     void setAllowUpdate(Boolean allowUpdate);
+
+    void setAllowProcess(Boolean allowProcess);
 
     void setCusPhone(String cusPhone);
 
@@ -82,7 +87,11 @@ public interface BookingServiceInfo {
 
     EBookingServiceStatus getBookingServiceStatus();
 
+    EBookingServiceType getBookingServiceType();
+
     Boolean getAllowUpdate();
+
+    Boolean getAllowProcess();
 
     String getCusPhone();
 

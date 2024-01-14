@@ -11,7 +11,7 @@ public interface BookingResultRepository extends JpaRepository<BookingResultEnti
     @Query("""
             SELECT br
             FROM BookingResultEntity br
-            WHERE br.bookingId = :bookingId
+            WHERE br.bookingServiceId = :bookingServiceId
             """)
-    List<BookingResultEntity> findByBookingId(Long bookingId);
+    List<BookingResultEntity> findByBookingId(Long bookingServiceId);
 }

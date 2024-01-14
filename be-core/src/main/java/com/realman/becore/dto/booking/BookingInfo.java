@@ -37,6 +37,8 @@ public interface BookingInfo {
 
     void setTotalBookingPrice(Long totalBookingPrice);
 
+    void setAllowProcess(Boolean allowProcess);
+
     Long getBookingId();
 
     Long getBookingServiceId();
@@ -66,4 +68,6 @@ public interface BookingInfo {
     EBookingServiceStatus getBookingServiceStatus();
 
     Long getTotalBookingPrice();
+
+    Boolean getAllowProcess();
 }

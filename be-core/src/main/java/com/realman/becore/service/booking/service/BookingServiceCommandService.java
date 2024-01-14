@@ -1,13 +1,11 @@
 package com.realman.becore.service.booking.service;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import java.time.LocalTime;
-
 import com.realman.becore.controller.api.booking.service.models.AccountId;
 import com.realman.becore.controller.api.booking.service.models.BookingServiceId;
+import com.realman.becore.dto.booking.result.BookingResult;
 import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.dto.booking.service.BookingServiceInfo;
 import com.realman.becore.dto.booking.service.BookingServiceMapper;
@@ -17,6 +15,7 @@ import com.realman.becore.error_handlers.exceptions.ResourceInvalidException;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.booking.service.BookingServiceEntity;
 import com.realman.becore.repository.database.booking.service.BookingServiceRepository;
+import com.realman.becore.service.booking.result.BookingResultCommandService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class BookingServiceCommandService {
     @NonNull
     private final BookingServiceRepository bookingServiceRepository;
+    @NonNull
+    private final BookingResultCommandService bookingResultCommandService;
     @NonNull
     private final BookingServiceMapper bookingServiceMapper;
 
@@ -60,6 +61,13 @@ public class BookingServiceCommandService {
                 .findInfoById(bookingServiceId.value(), accountId.value())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
+            List<BookingServiceEntity> otherBookingServices = bookingServiceRepository
+                    .findOtherByBookingId(bookingInfo.getBookingId(), bookingInfo.getBookingServiceId());
+            if (otherBookingServices.stream()
+                    .filter(b -> !b.getBookingServiceStatus().equals(EBookingServiceStatus.CONFIRM)).findAny()
+                    .isPresent()) {
+                throw new ResourceInvalidException("Có dịch vụ chưa được confirm");
+            }
             BookingServiceEntity foundBookingServiceEntity = bookingServiceMapper.toEntity(bookingInfo);
             foundBookingServiceEntity.setBookingServiceStatus(EBookingServiceStatus.PROCESSING);
             foundBookingServiceEntity.setActualStartAppointment(LocalTime.now());
@@ -69,7 +77,8 @@ public class BookingServiceCommandService {
         }
     }
 
-    public void finishService(BookingServiceId bookingServiceId, AccountId accountId) {
+    public void finishService(BookingServiceId bookingServiceId, List<BookingResult> bookingResults,
+            AccountId accountId) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
                 .findInfoById(bookingServiceId.value(), accountId.value())
                 .orElseThrow(ResourceNotFoundException::new);
@@ -80,7 +89,28 @@ public class BookingServiceCommandService {
             bookingServiceRepository.save(foundBookingServiceEntity);
             unlockBookingService(foundBookingServiceEntity.getBookingId(),
                     foundBookingServiceEntity.getBookingServiceId());
+            bookingResultCommandService.saveAll(bookingServiceId.value(), bookingResults);
+        }
+    }
 
+    public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
+        BookingServiceInfo bookingInfo = bookingServiceRepository
+                .findInfoById(bookingServiceId.value(), accountId.value())
+                .orElseThrow(ResourceNotFoundException::new);
+        if (bookingInfo.getAllowUpdate()) {
+            BookingServiceEntity foundBookingService = bookingServiceMapper.toEntity(bookingInfo);
+            foundBookingService.setBookingServiceStatus(EBookingServiceStatus.CONFIRM);
+            List<BookingServiceEntity> otherBookingServices = bookingServiceRepository
+                    .findOtherByBookingId(foundBookingService.getBookingId(), bookingServiceId.value());
+            List<BookingServiceEntity> updateBookingServices = otherBookingServices.stream()
+                    .map(bs -> {
+                        if (bs.getBookingServiceStatus().equals(EBookingServiceStatus.ONGOING)) {
+                            bs.setBookingServiceStatus(EBookingServiceStatus.REQUEST_CONFIRM);
+                        }
+                        return bs;
+                    }).toList();
+            bookingServiceRepository.save(foundBookingService);
+            bookingServiceRepository.saveAll(updateBookingServices);
         }
     }
 

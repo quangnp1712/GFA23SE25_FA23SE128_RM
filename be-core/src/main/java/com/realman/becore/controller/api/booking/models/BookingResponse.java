@@ -7,16 +7,17 @@ import com.realman.becore.controller.api.booking.service.models.BookingServiceRe
 import com.realman.becore.dto.enums.EBookingStatus;
 
 public record BookingResponse(
-        Long bookingId,
-        Long accountId,
-        Long branchId,
-        String bookingCode,
-        String bookingOwnerName,
-        String bookingOwnerPhone,
-        String branchAddress,
-        String branchName,
-        LocalDate appointmentDate,
-        List<BookingServiceResponse> bookingServices,
-        Long totalBookingPrice,
-        EBookingStatus bookingStatus) {
+                Long bookingId,
+                Long accountId,
+                Long branchId,
+                String bookingCode,
+                String bookingOwnerName,
+                String bookingOwnerPhone,
+                String branchAddress,
+                String branchName,
+                LocalDate appointmentDate,
+                List<BookingServiceResponse> bookingServices,
+                Long totalBookingPrice,
+                EBookingStatus bookingStatus,
+                Boolean allowProcess) {
 }

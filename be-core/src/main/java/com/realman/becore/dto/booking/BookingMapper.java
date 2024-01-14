@@ -16,4 +16,6 @@ public interface BookingMapper {
     BookingEntity toEntity(Booking dto, String bookingCode, EBookingStatus bookingStatus);
 
     Booking toDto(BookingInfo info, List<BookingService> bookingServices);
+
+    Booking toDto(BookingInfo info, List<BookingService> bookingServices, Boolean allowProcess);
 }

@@ -27,8 +27,7 @@ public record BookingServiceResponse(
         EProfessional professional,
         EBookingServiceType bookingServiceType,
         String bookingServiceTypeText,
-        Boolean allowUpdate,
-        Boolean allowProcess) {
+        Boolean allowUpdate) {
     public String durationText() {
         StringBuilder builder = new StringBuilder();
         if (Objects.nonNull(duration)) {
@@ -41,6 +40,6 @@ public record BookingServiceResponse(
     }
 
     public String bookingServiceTypeText() {
-        return bookingServiceType.getText();
+        return Objects.nonNull(bookingServiceType) ? bookingServiceType.getText() : null;
     }
 }

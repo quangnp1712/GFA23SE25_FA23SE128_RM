@@ -80,11 +80,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 be.branchAddress AS branchAddress,
                 b.appointmentDate AS appointmentDate,
                 b.bookingStatus AS bookingStatus,
-                SUM(bsr.branchServicePrice) AS totalBookingPrice,
-                CASE
-                    WHEN bs.bookingServiceStatus != 1 THEN FALSE
-                    ELSE TRUE
-                END AS allowProcess
+                SUM(bsr.branchServicePrice) AS totalBookingPrice
             FROM BookingEntity b
             INNER JOIN AccountEntity a ON a.accountId = b.accountId
             INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
@@ -94,4 +90,23 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             WHERE bs.bookingServiceId = :bookingServiceId
             """)
     Optional<BookingInfo> findByBookingServiceId(Long bookingServiceId);
+
+    @Query("""
+            SELECT
+                CASE WHEN COUNT(bs) > 1 THEN
+                    CASE WHEN bs.bookingServiceId != :bookingServiceId THEN
+                        CASE WHEN bs.bookingServiceStatus != 1 THEN FALSE
+                            ELSE TRUE
+                        ENd
+                    END
+                    ELSE CASE WHEN bs.bookingServiceStatus != 1 THEN FALSE
+                        ELSE TRUE
+                    END
+                END
+            FROM BookingEntity b
+            INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
+            WHERE b.bookingId = :bookingId
+            GROUP BY bs
+            """)
+    List<Boolean> hasBookingContainBookingServiceStatus(Long bookingServiceId, Long bookingId);
 }

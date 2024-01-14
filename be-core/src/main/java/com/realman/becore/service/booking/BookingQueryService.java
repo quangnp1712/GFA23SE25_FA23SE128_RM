@@ -56,8 +56,11 @@ public class BookingQueryService {
     public Booking findByBookingServiceId(Long bookingServiceId) {
         BookingInfo foundBooking = bookingRepository.findByBookingServiceId(bookingServiceId)
                 .orElseThrow(() -> new ResourceNotFoundException());
+        List<Boolean> allowProcess = bookingRepository
+                .hasBookingContainBookingServiceStatus(bookingServiceId, foundBooking.getBookingId());
         List<BookingService> bookingServices = bookingServiceUseCaseService
                 .findByBookingId(foundBooking.getBookingId());
-        return bookingMapper.toDto(foundBooking, bookingServices);
+        return bookingMapper.toDto(foundBooking, bookingServices,
+                allowProcess.stream().filter(t -> t == false).findAny().orElse(true));
     }
 }

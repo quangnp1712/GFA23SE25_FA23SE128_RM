@@ -47,8 +47,6 @@ public interface BookingServiceInfo {
 
     void setAllowUpdate(Boolean allowUpdate);
 
-    void setAllowProcess(Boolean allowProcess);
-
     void setCusPhone(String cusPhone);
 
     void setProfessional(EProfessional professional);
@@ -90,8 +88,6 @@ public interface BookingServiceInfo {
     EBookingServiceType getBookingServiceType();
 
     Boolean getAllowUpdate();
-
-    Boolean getAllowProcess();
 
     String getCusPhone();
 

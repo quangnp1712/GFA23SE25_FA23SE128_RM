@@ -15,6 +15,6 @@ export const roleGuard: CanActivateFn = (route, state) => {
   if (isHavePermissions) {
     return true;
   } else {
-    return _router.createUrlTree(['/not-found']);
+    return _router.createUrlTree(['/none']);
   }
 };

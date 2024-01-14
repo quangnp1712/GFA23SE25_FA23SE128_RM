@@ -50,7 +50,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
           <li
             nz-menu-item
             nzMatchRouter
-            [routerLink]="['/homepage', 'overview']" *ngIf="role == 'SHOP_OWNER'"
+            [routerLink]="['/homepage', 'overview']"
           >
             <span nz-icon nzType="home"></span>
             <span>Tổng quan</span>
@@ -64,7 +64,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/account-management', 'account-list']"
-                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
+                *ngIf="role == 'SHOP_OWNER' || role == 'STAFF' || role == 'BRANCH_MANAGER'"
               >
                 Danh sách nhân viên
               </li>
@@ -103,7 +103,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 <!-- quản lí dịch vụ -->
 
-          <li nz-submenu nzTitle="Quản lý dịch vụ" nzIcon="team">
+          <li nz-submenu nzTitle="Quản lý dịch vụ" nzIcon="team" *ngIf="role == 'SHOP_OWNER' || role == 'BRANCH_MANAGER'">
             <ul>
               <li
                 nz-menu-item
@@ -132,7 +132,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/booking-manager', 'booking-list']"
-                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
+                *ngIf="role == 'SHOP_OWNER' || role == 'STAFF' || role == 'BRANCH_MANAGER'"
               >
                 Danh sách booking
               </li>
@@ -140,7 +140,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nz-menu-item
                 [routerLink]="['/booking-manager', 'create-booking']"
                 nzMatchRouter
-                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
+                *ngIf="role == 'SHOP_OWNER' || role == 'STAFF' || role == 'BRANCH_MANAGER'"
               >
                 Tạo booking
               </li>

@@ -8,39 +8,43 @@ import BRANCH_MANAGEMENT_ROUTES from './branch-management/branch-management.rout
 import SERVICE_MANAGEMENT_ROUTES from './service-management/service-management.routes';
 import SCHEDULE_MANAGEMENT_ROUTES from './schedule-management/schedule.routes';
 import { NotFoundComponent } from './share/ui/not-found.component';
+import { roleGuard } from './share/guard/role-guard';
 
 const routes: Routes = [
-  {path: '', loadChildren: () => LOGIN_ROUTES},
-  {path: '', component: HomepageLayoutComponent, children: [
-    {
-      path: "homepage",
-      loadChildren: () => HOME_PAGE_ROUTES
-    },
-    {
-      path: "account-management",
-      loadChildren: () => ACCOUNT_MANAGEMENT_ROUTES
-    },
-    {
-      path: "branch-management",
-      loadChildren: () => BRANCH_MANAGEMENT_ROUTES
-    },
-    {
-      path: "service-management",
-      loadChildren: () => SERVICE_MANAGEMENT_ROUTES
-    },
-    {
-      path: "schedule-management",
-      loadChildren: () => SCHEDULE_MANAGEMENT_ROUTES
-    },
-    {
-      path: "not-found",
-      component: NotFoundComponent
-    }
-  ]},
+  { path: '', loadChildren: () => LOGIN_ROUTES },
+  {
+    path: '',
+    component: HomepageLayoutComponent,
+    children: [
+      {
+        path: 'homepage',
+        loadChildren: () => HOME_PAGE_ROUTES,
+      },
+      {
+        path: 'account-management',
+        loadChildren: () => ACCOUNT_MANAGEMENT_ROUTES,
+      },
+      {
+        path: 'branch-management',
+        loadChildren: () => BRANCH_MANAGEMENT_ROUTES,
+      },
+      {
+        path: 'service-management',
+        loadChildren: () => SERVICE_MANAGEMENT_ROUTES,
+      },
+      {
+        path: 'schedule-management',
+        loadChildren: () => SCHEDULE_MANAGEMENT_ROUTES,
+      },
+    ],
+    data: { role: ['SHOP_OWNER', 'STAFF', 'BRANCH_MANAGER'] },
+    canActivate: [roleGuard],
+  },
+  { path: 'none', component: NotFoundComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

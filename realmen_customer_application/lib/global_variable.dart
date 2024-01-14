@@ -33,3 +33,6 @@ final getServices = "${dotenv.env["DOMAIN"]}/${dotenv.env["GET_SERVICE"]}";
 
 // Booking API
 final bookingUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BOOKING"]}";
+
+// TimeSlot API
+final timeslotUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["TIMESLOT"]}";

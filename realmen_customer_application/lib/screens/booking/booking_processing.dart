@@ -105,26 +105,45 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                                     )
                                   ],
                                 )
-                              : Column(
-                                  children: [
-                                    _buildInfoUser(),
-                                    _buildService(),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 10),
-                                      child: Divider(
-                                        color: Colors.black,
-                                        height: 2,
-                                        thickness: 1,
-                                      ),
-                                    ),
-                                    _buildTotalMoney(),
-                                    _buildButton(),
-                                    const SizedBox(
-                                      height: 10,
+                              : booking.bookingId == null
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 30),
+                                          height: 50,
+                                          width: 50,
+                                          child: Center(
+                                            child: Text(
+                                                "Bạn chưa có lịch đặt nào"),
+                                          ),
+                                        )
+                                      ],
                                     )
-                                  ],
-                                ),
+                                  : Column(
+                                      children: [
+                                        _buildInfoUser(),
+                                        _buildService(),
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 10),
+                                          child: Divider(
+                                            color: Colors.black,
+                                            height: 2,
+                                            thickness: 1,
+                                          ),
+                                        ),
+                                        _buildTotalMoney(),
+                                        _buildButton(),
+                                        const SizedBox(
+                                          height: 10,
+                                        )
+                                      ],
+                                    ),
                         ],
                       ),
                     ),
@@ -147,6 +166,28 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Code: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Text(
+                booking.bookingCode ?? " ",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),
+              ),
+            ],
+          ),
           // Ngày và giờ
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -227,7 +268,34 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
               ),
             ],
           ),
-
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 130,
+                child: Text(
+                  "Massuer: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 220,
+                child: Text(
+                  massuer,
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 12),
           // Barber Shop:
           Row(
@@ -273,7 +341,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Dich Vu: ",
+                "Dịch Vụ: ",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
@@ -379,7 +447,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Tổng Hóa Đơn:",
+                "Tạm Tính:",
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -446,6 +514,12 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
       for (var service in booking.bookingServices!) {
         if (service.servicePrice != null) {
           total += double.parse(service.servicePrice.toString());
+          if (service.staffName != null) {
+          } else if (service.professional == "MASSEUR") {
+            massuer = utf8.decode(service.staffName!.toString().runes.toList());
+          } else {
+            stylist = utf8.decode(service.staffName!.toString().runes.toList());
+          }
         } else {
           total = 0;
         }
@@ -474,7 +548,8 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
 
   bool isLoading = true;
   BookingContent booking = BookingContent();
-  String stylist = 'Đang đợi update APi';
+  String stylist = '';
+  String massuer = '';
   Future<void> getBookingPending() async {
     if (!_isDisposed && mounted) {
       try {
@@ -484,22 +559,36 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         if (accountId != 0) {
           do {
             BookingModel bookingModel = BookingModel();
-            final result = await BookingService().getBooking(accountId, 1, 1);
+            final result =
+                await BookingService().getBooking(accountId, current, 1);
             if (result['statusCode'] == 200) {
               bookingModel = result['data'] as BookingModel;
               current = result['current'];
               totalPages = result['totalPages'];
               if (bookingModel.content!.isNotEmpty) {
-                booking = bookingModel.content!.first;
-                DateTime date = DateTime.parse(booking.appointmentDate!);
-                booking.appointmentDate = formatDate(date);
+                DateTime now = DateTime.now();
+                DateTime nowFullTime =
+                    DateTime(now.year, now.month, now.day, 0);
+                DateTime appointmentDate = DateTime.parse(
+                    bookingModel.content!.first.appointmentDate!.toString());
+                bool check = appointmentDate.isAfter(nowFullTime);
+                if (nowFullTime.isAtSameMomentAs(appointmentDate) ||
+                    appointmentDate.isAfter(nowFullTime)) {
+                  booking = bookingModel.content!.first;
+                  DateTime date = DateTime.parse(booking.appointmentDate!);
+                  booking.appointmentDate = formatDate(date);
 
-                if (!_isDisposed && mounted) {
-                  setState(() {
-                    booking;
-                    calTotal();
-                  });
+                  if (!_isDisposed && mounted) {
+                    setState(() {
+                      booking;
+                      calTotal();
+                    });
+                  }
+                  break;
+                } else {
+                  current++;
                 }
+
                 // if (booking.bookingStatus == 'PENDING') {
                 //   if (!_isDisposed && mounted) {
                 //     setState(() {
@@ -508,8 +597,6 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                 //     });
                 //   }
                 // }
-
-                break;
               } else {
                 // if (!_isDisposed && mounted) {
                 //   setState(() {
@@ -532,6 +619,13 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
               break;
             }
           } while (current <= totalPages);
+          if (booking.bookingId == null) {
+            if (!_isDisposed && mounted) {
+              setState(() {
+                isLoading = false;
+              });
+            }
+          }
         }
       } on Exception catch (e) {
         print(e.toString());

@@ -310,11 +310,11 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   _onBooking() {
     if (selectedBranch.branchId == null) {
       _errorMessage("Xin chọn chi nhánh");
-    } else if (selectedService == []) {
+    } else if (selectedService.isEmpty) {
       _errorMessage("Xin chọn dịch vụ");
     } else if (selectedDate == null) {
       _errorMessage("Xin chọn ngày");
-    } else if (selectedTime == null) {
+    } else if (selectedTime == null || selectedTime == "") {
       _errorMessage("Xin chọn giờ");
     } else {
       Get.to(() => BookingHaircutTemporary(

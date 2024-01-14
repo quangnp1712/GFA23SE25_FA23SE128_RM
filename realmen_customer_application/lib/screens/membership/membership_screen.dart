@@ -12,8 +12,7 @@ import 'package:realmen_customer_application/service/account/account_service.dar
 import 'package:sizer/sizer.dart';
 
 class MembershipScreen extends StatefulWidget {
-  Function callback;
-  MembershipScreen(this.callback, {super.key});
+  MembershipScreen({super.key});
 
   @override
   State<MembershipScreen> createState() => _MembershipScreenState();
@@ -66,7 +65,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                                     iconSize: 22,
                                     icon: const Icon(Icons.keyboard_arrow_left),
                                     onPressed: () {
-                                      widget.callback(0);
+                                      Get.back();
                                     },
                                   ),
                                 ),

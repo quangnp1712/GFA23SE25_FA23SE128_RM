@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, constant_identifier_names, avoid_print, use_build_context_synchronously, prefer_conditional_assignment
 
 import 'dart:convert';
 import 'dart:math';
@@ -98,38 +98,40 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                           Stack(
                             children: [
                               Container(
-                                  height: 180,
+                                  height: 160,
                                   decoration:
                                       const BoxDecoration(color: Colors.black)),
                               Image.asset(
                                 "assets/images/Logo-White-NoBG-O-15.png",
                                 width: 360,
-                                height: 180,
+                                height: 160,
                               ),
                               Container(
-                                height: 180,
+                                height: 160,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: const Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
-                                      "HỆ THỐNG CHI NHÁNH CỦA REALMEN",
-                                      style: TextStyle(
+                                      "các barber CỦA REALMEN".toUpperCase(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18,
                                       ),
                                     ),
                                     Text(
-                                      "Tính đến hiện tại, chuỗi barber tóc nam RealMen có 99 barber tại những vị trí đắc địa nhất TP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận. Hãy tìm đến barber RealMen gần bạn nhất để tận hưởng trải nghiệm cắt tóc nam đỉnh cao!",
+                                      "Tận hưởng trải nghiệm cắt tóc nam đỉnh \ncao tại hơn $count barber RealMen trải dài khắp \n${city1 ?? ""}${city2 != null ? ', $city2 ' : ''} ${city1 != null || city2 != null ? 'và ' : ''}các tỉnh lân cận!",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
+                                        height: 1.4,
                                       ),
+                                      // textAlign: TextAlign.justify,
                                     )
                                   ],
                                 ),
@@ -241,7 +243,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                             left: 15,
                                             right: 15),
                                         hintText:
-                                            "Tìm kiếm tên chi nhánh và địa điểm",
+                                            "Tìm kiếm chi nhánh và địa điểm",
                                         hintStyle: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w400,
@@ -292,7 +294,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Icon(Icons.location_on),
-                                      Text("Tìm chi nhánh gần anh"),
+                                      Text("Chi nhánh gần anh"),
                                     ],
                                   ),
                                 ),
@@ -589,6 +591,9 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
   List<BranchModel>? branchesForCity;
   String? cityController;
   List<String> cities = [];
+  int count = 0;
+  String? city1;
+  String? city2;
   Future<void> getBranchesByCity() async {
     if (!_isDisposed) {
       try {
@@ -598,6 +603,15 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           branchesByCityModel = result['data'] as BranchesModel;
           try {
             if (branchesByCityModel != null) {
+              for (BranchesValuesModel branch in branchesByCityModel!.values!) {
+                count = count + branch.branch!;
+                if (city1 == null) {
+                  city1 = utf8.decode(branch.city.toString().runes.toList());
+                }
+                if (city2 == null) {
+                  city2 = utf8.decode(branch.city.toString().runes.toList());
+                }
+              }
               getBranches(widget.city, false);
               cities.add("Thành Phố/Tỉnh");
               if (branchesByCityModel?.values != null) {

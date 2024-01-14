@@ -689,7 +689,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
         stylists = [];
         final result = await accountService.getStaff(3, current, null, false);
         if (result['statusCode'] == 200) {
-          stylists = result['data'] as List<AccountInfoModel>;
+          stylists.addAll(result['data'] as List<AccountInfoModel>);
           massuers = List<AccountInfoModel>.from(stylists);
           current = result['current'];
           totalPages = result['totalPages'];
@@ -728,6 +728,9 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
             });
           }
           current++;
+          // if (stylists.length < 3) {
+          //   checkLoadMore();
+          // }
         } else if (result['statusCode'] == 500) {
           _errorMessage(result['error']);
         } else {
@@ -736,6 +739,13 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");
+        if (!_isDisposed && mounted) {
+          setState(() {
+            stylists;
+            massuers;
+            isLoading = false;
+          });
+        }
       }
     }
   }

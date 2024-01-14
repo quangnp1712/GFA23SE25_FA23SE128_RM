@@ -55,7 +55,7 @@ class ShowSnackBar {
       width: 85.w,
       padding: const EdgeInsets.all(0),
       content: Container(
-        height: 40,
+        constraints: BoxConstraints(minHeight: 40),
         // width: 50.w,
         decoration: const BoxDecoration(
           color: Color(0xff4E4C4C),
@@ -80,7 +80,7 @@ class ShowSnackBar {
               width: 72.w,
               child: Text(
                 message,
-                maxLines: 1,
+                maxLines: 2,
                 style: const TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Colors.white,

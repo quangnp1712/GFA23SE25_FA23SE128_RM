@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names, avoid_print
+// ignore_for_file: constant_identifier_names, avoid_print, prefer_conditional_assignment
 
 import 'dart:convert';
 
@@ -90,38 +90,40 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
                         Stack(
                           children: [
                             Container(
-                                height: 180,
+                                height: 160,
                                 decoration:
                                     const BoxDecoration(color: Colors.black)),
                             Image.asset(
                               "assets/images/Logo-White-NoBG-O-15.png",
                               width: 360,
-                              height: 180,
+                              height: 160,
                             ),
                             Container(
-                              height: 180,
+                              height: 160,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
-                              child: const Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
-                                    "HỆ THỐNG CHI NHÁNH CỦA REALMEN",
-                                    style: TextStyle(
+                                    "các barber CỦA REALMEN".toUpperCase(),
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 18,
                                     ),
                                   ),
                                   Text(
-                                    "Tính đến hiện tại, chuỗi barber tóc nam RealMen có 99 barber tại những vị trí đắc địa nhất TP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận. Hãy tìm đến barber RealMen gần bạn nhất để tận hưởng trải nghiệm cắt tóc nam đỉnh cao!",
+                                    "Tận hưởng trải nghiệm cắt tóc nam đỉnh \ncao tại hơn $count barber RealMen trải dài khắp \n${city1 ?? ""}${city2 != null ? ', $city2 ' : ''} ${city1 != null || city2 != null ? 'và ' : ''}các tỉnh lân cận!",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16,
+                                      height: 1.4,
                                     ),
+                                    // textAlign: TextAlign.justify,
                                   )
                                 ],
                               ),
@@ -374,6 +376,9 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
 
   String image = "assets/images/branch1.png";
   BranchesModel? branchesByCityModel = BranchesModel();
+  int count = 0;
+  String? city1;
+  String? city2;
   Future<void> getBranchesByCity() async {
     if (!_isDisposed) {
       try {
@@ -381,8 +386,19 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
         final result = await branchService.getBranchesByCity();
         if (result['statusCode'] == 200) {
           branchesByCityModel = result['data'] as BranchesModel;
+          for (BranchesValuesModel branch in branchesByCityModel!.values!) {
+            count = count + branch.branch!;
+            if (city1 == null) {
+              city1 = utf8.decode(branch.city.toString().runes.toList());
+            } else if (city2 == null) {
+              city2 = utf8.decode(branch.city.toString().runes.toList());
+            }
+          }
           setState(() {
             branchesByCityModel;
+            count;
+            city1;
+            city2;
           });
         } else {
           print("$result['statusCode'] : $result['error']");

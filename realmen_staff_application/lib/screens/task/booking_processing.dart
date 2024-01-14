@@ -161,25 +161,24 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                     }
                   }
                 }
-                if (checkBSForThisAcc) {
-                  tabs = [];
-                  for (var booking in bookingViews) {
-                    Widget tab = Container(
-                      width: 55.2,
-                      // color: Colors.amberAccent,
-                      child: Tab(
-                        height: 20,
-                        child: Text(
-                          '${bookingViews.indexOf(booking) + 1}',
-                          style: GoogleFonts.quicksand(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
+
+                tabs = [];
+                for (var booking in bookingViews) {
+                  Widget tab = Container(
+                    width: 55.2,
+                    // color: Colors.amberAccent,
+                    child: Tab(
+                      height: 20,
+                      child: Text(
+                        '${bookingViews.indexOf(booking) + 1}',
+                        style: GoogleFonts.quicksand(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                    );
-                    tabs.add(tab);
-                  }
+                    ),
+                  );
+                  tabs.add(tab);
                 }
               }
             } else if (result['statusCode'] == 500) {

@@ -13,6 +13,7 @@ import 'package:realmen_customer_application/screens/login/login_otp_screen.dart
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/login/register_screen.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 
 import 'package:realmen_customer_application/screens/profile/view_edit_profile.dart';
 import 'package:realmen_customer_application/screens/splash/splash_screen.dart';
@@ -180,6 +181,21 @@ class RouteGenerator {
                     return const LoginPhoneScreen();
                   } else if (snapshot.data == false) {
                     return BookingHaircutTemporary();
+                  } else {
+                    return const LoginPhoneScreen();
+                  }
+                });
+          }),
+      GetPage(
+          name: MembershipScreen.MembershipScreenRoute,
+          page: () {
+            return FutureBuilder(
+                future: SharedPreferencesService.checkJwtExpired(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return const LoginPhoneScreen();
+                  } else if (snapshot.data == false) {
+                    return MembershipScreen();
                   } else {
                     return const LoginPhoneScreen();
                   }

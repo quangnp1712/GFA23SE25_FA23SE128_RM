@@ -1,7 +1,10 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
@@ -234,13 +237,12 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                                         Colors.white,
                                                     radius: 20,
                                                     child: ClipOval(
-                                                      child: Image.asset(
-                                                        stylist.thumbnailUrl !=
-                                                                null
-                                                            ? stylist
-                                                                .thumbnailUrl!
-                                                            : "assets/images/s4.jpg",
-                                                        scale: 1,
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: stylist
+                                                            .thumbnailUrl!,
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            const CircularProgressIndicator(),
                                                         fit: BoxFit.cover,
                                                         width: 70,
                                                         height: 70,
@@ -465,5 +467,49 @@ class _ChooseStylistState extends State<ChooseStylist> {
   @override
   void initState() {
     super.initState();
+    setImage();
+  }
+
+  bool _isDisposed = false;
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  final storage = FirebaseStorage.instance;
+
+  List<String> urlList = [
+    "1.jpg",
+    "2.jpg",
+    "3.jpg",
+    "4.jpg",
+  ];
+  Future<void> setImage() async {
+    if (!_isDisposed && mounted) {
+      try {
+        for (var staff in widget.accountStaffList!) {
+          try {
+            if (staff.accountId == 2) {
+              staff.thumbnailUrl = "1.jpg";
+            } else if (staff.accountId == 7) {
+              staff.thumbnailUrl = "2.jpg";
+            } else if (staff.accountId == 8) {
+              staff.thumbnailUrl = "3.jpg";
+            }
+            var reference = storage.ref('stylist/${staff.thumbnailUrl}');
+            staff.thumbnailUrl = await reference.getDownloadURL();
+          } catch (e) {
+            final random = Random();
+            var randomUrl = random.nextInt(urlList.length);
+            var reference = storage.ref('stylist/${urlList[randomUrl]}');
+            staff.thumbnailUrl = await reference.getDownloadURL();
+          }
+        }
+      } on Exception catch (e) {
+        print(e.toString());
+        print("Error: $e");
+      }
+    }
   }
 }

@@ -98,7 +98,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                 ),
                                 // Combo
                                 const SizedBox(
-                                  height: 30,
+                                  height: 10,
                                 ),
 
                                 Row(
@@ -593,13 +593,13 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 25,
+                                  height: 10,
                                 ),
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 20),
                                   width: 70.w,
-                                  height: 40,
+                                  height: 50,
                                   decoration: BoxDecoration(
                                     gradient: const LinearGradient(
                                         begin: Alignment.topLeft,

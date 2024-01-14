@@ -6,8 +6,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/time_slot/time_slot_model.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_customer_application/service/account/account_service.dart';
+import 'package:realmen_customer_application/service/timeslot/time_slot_service.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
@@ -414,7 +416,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Tổng Hóa Đơn::",
+                "Tạm tính:",
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -529,6 +531,13 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         int current = 1;
         int totalPages = 0;
         List<AccountInfoModel> accounts = [];
+        TimeSlotService timeSlotService = TimeSlotService();
+        massuerIdList = [];
+
+        // set appointmentDate
+        String selectedDate = widget.date.split(', ')[1];
+        DateTime date = DateFormat("dd/MM/yyyy", "vi").parse(selectedDate);
+        appointmentDate = DateFormat("yyyy-MM-dd").format(date);
         do {
           AccountService accountService = AccountService();
           final int branchId = widget.branch!.branchId!;
@@ -541,11 +550,39 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             massuers = List<AccountInfoModel>.from(accounts);
             massuers.removeWhere(
                 (massuer) => massuer.staff!.professional == 'STYLIST');
-
+            if (massuers.isNotEmpty) {
+              for (var massuer in massuers) {
+                int staffId = massuer.staff!.staffId!;
+                String chosenDate = appointmentDate;
+                if (chosenDate != null && staffId != null) {
+                  try {
+                    TimeSlotService timeSlotService = TimeSlotService();
+                    final result =
+                        await timeSlotService.getTimeSlot(chosenDate, staffId);
+                    if (result['statusCode'] == 200) {
+                      List<TimeSlotModel> timeSlotModel = result['data'];
+                      List<TimeSlotModel> timeSlotGrid = timeSlotModel
+                          .where(
+                              (element) => element.time == '${widget.time}:00')
+                          .toList();
+                      timeSlotGrid;
+                      if (timeSlotGrid.isNotEmpty) {
+                        if (timeSlotGrid.first.isAvailable!) {
+                          massuerIdList.add(massuer.staff!.staffId!);
+                        }
+                      }
+                    } else {
+                      print(result['error']);
+                    }
+                  } catch (e) {
+                    print(e.toString());
+                  }
+                }
+              }
+            }
             if (!_isDisposed && mounted) {
               setState(() {
                 massuers;
-                massuerIdList;
               });
             }
             current++;
@@ -559,9 +596,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
         } while (current <= totalPages);
 
         if (!_isDisposed && mounted) {
-          setState(() {
-            setInforBooking();
-          });
+          setInforBooking();
         }
       } on Exception catch (e) {
         print(e.toString());
@@ -585,44 +620,15 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
 
       const int staffIdNull = 0;
       final random = Random();
-      // massuerId = massuerIdList[random.nextInt(massuerIdList.length)];
+      if (massuerIdList.isNotEmpty) {
+        massuerId = massuerIdList[random.nextInt(massuerIdList.length)];
+      }
       try {
         final result = await categoryServices.getCategoryServiceList();
         if (result['statusCode'] == 200) {
           final List<CategoryModel> categoryList = result['data'].values;
           final List<BranchServiceModel> copyServiceList =
               List<BranchServiceModel>.from(widget.service!);
-
-          for (var category in categoryList) {
-            if (category.serviceList != null) {
-              for (var cservice in category.serviceList!) {}
-            }
-          }
-
-          //
-          if (massuers.isNotEmpty) {
-            String selectedDate = widget.date.split(', ')[1];
-            DateTime date = DateFormat("dd/MM/yyyy", "vi").parse(selectedDate);
-            appointmentDate = DateFormat("yyyy-MM-dd").format(date);
-            List<BookingServiceModel> copyBookingServices =
-                List<BookingServiceModel>.from(bookingServices);
-            copyBookingServices = copyBookingServices
-                .where((bookingService) => bookingService.staffId == massuerId)
-                .toList();
-
-            for (var massuer in massuers) {
-              bool checkSchedule = false;
-              bool checkBooking = false;
-              if (massuer.staff!.scheduleList != null) {
-                if (massuer.staff!.scheduleList!.any(
-                    (schedule) => schedule.workingDate == appointmentDate)) {
-                  massuer.staff!.scheduleList!.map((schedule) {
-                    if (schedule.workingDate == appointmentDate) {}
-                  });
-                }
-              }
-            }
-          }
 
           for (var caterogy in categoryList) {
             if (caterogy.serviceList != null) {
@@ -659,19 +665,11 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                   // kiểm tra time cua massuer
                   if (caterogy.categoryId == 1) {
                     // xử lý masuer
-                    for (var massuer in massuers) {
-                      bool checkSchedule = false;
-                      bool checkBooking = false;
-                      if (massuer.staff!.scheduleList != null) {
-                        if (massuer.staff!.scheduleList!.any((schedule) =>
-                            schedule.workingDate == appointmentDate)) {
-                          massuer.staff!.scheduleList!.map((schedule) {
-                            if (schedule.workingDate == appointmentDate) {}
-                          });
-                        }
-                      }
-                    }
+
                     staffId = massuerId;
+                    if (staffId == 0) {
+                      bookingServiceType = "PICKUP_STYLIST";
+                    }
                   } else {
                     if (widget.stylist != null) {
                       staffId = widget.stylist!.staff!.staffId!;
@@ -728,6 +726,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               branchId: branchId,
               accountId: accountId,
               bookingServices: bookingServices);
+
           try {
             final result = await BookingService().postBooking(postBooking);
             if (result['statusCode'] == 200) {

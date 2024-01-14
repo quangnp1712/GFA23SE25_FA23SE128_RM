@@ -22,8 +22,11 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 30,
+            ),
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -41,55 +44,55 @@ class _DetailLevelMembershipState extends State<DetailLevelMembership> {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  for (var offer in offers)
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Icon
-                            const Icon(
-                              Icons.card_giftcard,
-                              color: Colors.red,
-                              size: 24,
-                            ),
-                            // Mô tả ưu đãi
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  offer.name,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              offer.description, //Thông tin về ưu đãi
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Divider(
-                          color: Colors.black,
-                          height: 2,
-                          thickness: 1,
-                        ),
-                      ],
-                    ),
+                  // for (var offer in offers)
+                  //   Column(
+                  //     children: [
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           // Icon
+                  //           const Icon(
+                  //             Icons.card_giftcard,
+                  //             color: Colors.red,
+                  //             size: 24,
+                  //           ),
+                  //           // Mô tả ưu đãi
+                  //           Expanded(
+                  //             child: Container(
+                  //               padding: const EdgeInsets.all(10),
+                  //               child: Text(
+                  //                 offer.name,
+                  //                 style: const TextStyle(
+                  //                   fontSize: 24,
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         children: [
+                  //           Text(
+                  //             offer.description, //Thông tin về ưu đãi
+                  //             style: const TextStyle(
+                  //               fontSize: 16,
+                  //               fontWeight: FontWeight.w400,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 20,
+                  //       ),
+                  //       const Divider(
+                  //         color: Colors.black,
+                  //         height: 2,
+                  //         thickness: 1,
+                  //       ),
+                  //     ],
+                  //   ),
                 ],
               ),
             ),

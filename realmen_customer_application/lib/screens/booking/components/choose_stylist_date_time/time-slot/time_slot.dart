@@ -4,9 +4,12 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
 import 'package:realmen_customer_application/models/account/staff_model.dart';
+import 'package:realmen_customer_application/models/time_slot/time_slot_model.dart';
+import 'package:realmen_customer_application/service/timeslot/time_slot_service.dart';
 
 class ChooseDateAndTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;
@@ -195,6 +198,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                                     isCurrentDate =
                                         _isCurrentDate(dateSeleted!['date']);
                                     widget.onDateSelected(dateSeleted);
+                                    getTimeSlot(dateSeleted!['chosenDate']);
                                   });
 
                                   timeSlotKey.currentState?.rebuildTimeslot();
@@ -240,7 +244,8 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                     isCurrentDate: isCurrentDate,
                     onTimeSelected: widget.onTimeSelected,
                     onDateSelected: widget.onDateSelected,
-                    stylistSelected: widget.stylistSelected),
+                    stylistSelected: widget.stylistSelected,
+                    timeSlotModel: timeSlotModel),
               ),
             ],
           )
@@ -265,12 +270,11 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   void initState() {
     super.initState();
     getDate();
+    dateController = listDate?.first['id'].toString();
+    dateSeleted = listDate?.first;
+    type = listDate!.first['type'].toString();
+    getTimeSlot(dateSeleted!['chosenDate']);
 
-    setState(() {
-      dateController = listDate?.first['id'].toString();
-      dateSeleted = listDate?.first;
-      type = listDate!.first['type'].toString();
-    });
     // widget.onDateSelected(dateController);
   }
 
@@ -285,6 +289,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   @override
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
     getDate();
+
     if (widget.isChangeStylist != null && widget.isChangeStylist! == true) {
       if (listDate!.isNotEmpty) {
         dateController = listDate?.first['id'].toString();
@@ -296,11 +301,12 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
           widget.isChangeStylist = false;
           isCurrentDate = _isCurrentDate(dateSeleted!['date']);
         });
+        getTimeSlot(dateSeleted!['chosenDate']);
       }
 
       build(context);
     }
-    print("didUpdateWidget: $dateSeleted");
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -311,6 +317,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   Map<String, dynamic>? dateSeleted;
   String type = "Ngày thường";
   List<Map<String, dynamic>>? listDate = [];
+  bool isLoading = true;
 
   getDate() {
     DateTime now = DateTime.now();
@@ -321,6 +328,8 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
           'id': i.toString(),
           'date': formatDate(now.add(Duration(days: i)))['date'],
           'type': formatDate(now.add(Duration(days: i)))['type'],
+          'chosenDate':
+              "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
         });
       }
     } else {
@@ -342,37 +351,23 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 
           // bool checkBetween = checkIsAfter && checkIsBefore;
 
-          //
-          List<BookingAppointmentModel>? appointments;
-
           // lấy những ca làm trong 3 ngày
           if (DateTime.parse(schedule.value.workingDate!) ==
                   DateTime(now.year, now.month, now.day, 0) ||
               (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
                   DateTime.parse(schedule.value.workingDate!)
                       .isBefore(now.add(const Duration(days: 2))))) {
-            // appointmentDate == workingDate
-            if (widget.stylistSelected?.staff!.bookingList != null) {
-              appointments = widget.stylistSelected?.staff!.bookingList!
-                  .where((booking) =>
-                      booking.appointmentDate == schedule.value.workingDate!)
-                  .toList();
-              appointments = widget.stylistSelected?.staff!.bookingList!
-                  .where(
-                      (booking) => booking.bookingServiceStatus != "FINISHED")
-                  .toList();
-            }
-
             listDate?.add({
               'id': schedule.key.toString(),
               'date': formatDate(
                   DateTime.parse(schedule.value.workingDate!))['date'],
               'type': formatDate(
                   DateTime.parse(schedule.value.workingDate!))['type'],
+              'chosenDate': formatDate(
+                  DateTime.parse(schedule.value.workingDate!))['chosenDate'],
               'start': schedule.value.startShift,
               'end': schedule.value.endShift,
-              'dateTime': DateTime.parse(schedule.value.workingDate!),
-              'bookingList': appointments,
+              'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
             });
           }
         }).toList();
@@ -388,7 +383,10 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
         listDate?.add({
           'date': formatDate(now.add(const Duration(days: 1)))['date'],
           'type': formatDate(now.add(const Duration(days: 1)))['type'],
+          'chosenDate':
+              "${formatDate(now.add(const Duration(days: 1)))['chosenDate']}",
         });
+
         print(e.toString());
       }
     }
@@ -400,7 +398,8 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     return {
       'date': "$day, ${DateFormat('dd/MM/yyyy').format(date)}",
       'type':
-          day == "Thứ bảy" || day == "Chủ nhật" ? "Cuối tuần" : "Ngày thường"
+          day == "Thứ bảy" || day == "Chủ nhật" ? "Cuối tuần" : "Ngày thường",
+      'chosenDate': "${DateFormat('yyyy-MM-dd').format(date)}"
     };
   }
 
@@ -427,12 +426,44 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     'saturday': 'Thứ bảy',
     'sunday': 'Chủ nhật'
   };
+  List<TimeSlotModel> timeSlotModel = [];
+  Future<void> getTimeSlot(dateSeleted) async {
+    if (!_isDisposed && mounted) {
+      final chosenDate = dateSeleted;
+      final staffId = widget.stylistSelected?.staff!.staffId;
+      if (chosenDate != null && staffId != null) {
+        try {
+          TimeSlotService timeSlotService = TimeSlotService();
+          final result = await timeSlotService.getTimeSlot(chosenDate, staffId);
+          if (result['statusCode'] == 200) {
+            timeSlotModel = result['data'];
+            if (!_isDisposed && mounted) {
+              setState(() {
+                timeSlotModel;
+              });
+            }
+          } else {
+            print(result['error']);
+            if (!_isDisposed && mounted) {
+              setState(() {});
+            }
+          }
+        } catch (e) {
+          print(e.toString());
+          if (_isDisposed && mounted) {
+            setState(() {});
+          }
+        }
+      }
+    }
+  }
 }
 
 class TimeSlot extends StatefulWidget {
   const TimeSlot(
       {super.key,
       required this.dateSeleted,
+      required this.timeSlotModel,
       required this.onTimeSelected,
       required this.onDateSelected,
       required this.isCurrentDate,
@@ -442,6 +473,7 @@ class TimeSlot extends StatefulWidget {
   final void Function(dynamic time) onTimeSelected;
   final void Function(dynamic time) onDateSelected;
   final AccountInfoModel? stylistSelected;
+  final List<TimeSlotModel> timeSlotModel;
 
   @override
   _TimeSlotState createState() => _TimeSlotState();
@@ -512,7 +544,8 @@ class _TimeSlotState extends State<TimeSlot> {
                 isCurrentDate: widget.isCurrentDate,
                 selectedTimeSlot: _selectedTimeSlot,
                 onTimeSlotSelected: _onTimeSlotSelected,
-                stylistSelected: widget.stylistSelected),
+                stylistSelected: widget.stylistSelected,
+                timeSlotModel: widget.timeSlotModel),
           ),
         ),
       ],
@@ -538,7 +571,7 @@ class _TimeSlotState extends State<TimeSlot> {
 class TimeSlotGrid extends StatefulWidget {
   final Map<String, dynamic>? dateSeleted;
   final bool isCurrentDate;
-
+  List<TimeSlotModel> timeSlotModel;
   final String selectedTimeSlot;
   final void Function(String timeSlot) onTimeSlotSelected;
   AccountInfoModel? stylistSelected;
@@ -549,6 +582,7 @@ class TimeSlotGrid extends StatefulWidget {
       required this.isCurrentDate,
       required this.selectedTimeSlot,
       required this.onTimeSlotSelected,
+      required this.timeSlotModel,
       required this.stylistSelected})
       : super(key: key);
 
@@ -558,9 +592,42 @@ class TimeSlotGrid extends StatefulWidget {
 
 class _TimeSlotGridState extends State<TimeSlotGrid> {
   @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final formatter = DateFormat('HH:mm');
+    final currentTime = formatter.format(now);
+    return isLoading
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 30),
+                height: 50,
+                width: 50,
+                child: const CircularProgressIndicator(),
+              )
+            ],
+          )
+        : GridView.builder(
+            scrollDirection: Axis.horizontal,
+            controller: scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 1 / 1.5),
+            itemCount: timeSlotCards.length,
+            itemBuilder: (BuildContext context, int index) {
+              return timeSlotCards[index];
+            },
+          );
+  }
+
+  @override
   void initState() {
     super.initState();
-    timeSlots = generateTimeSlots();
+    getTimeSlotCard();
 
     Future.delayed(Duration.zero, () {
       // Gọi sau khi build xong
@@ -576,151 +643,160 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
             scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
           }
         }
+      } else if (scrollListIndex.isNotEmpty) {
+        final scrollIndex = scrollListIndex.first;
+        scrollToIndex(scrollIndex);
       } else {
         for (int i = 0; i < timeSlots.length; i++) {
           scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
         }
-      }
-
-      if (scrollListIndex.isNotEmpty) {
-        final scrollIndex = scrollListIndex.first;
-        scrollToIndex(scrollIndex);
       }
     });
   }
 
   @override
   void didUpdateWidget(TimeSlotGrid oldWidget) {
+    getTimeSlotCard();
+
+    Future.delayed(Duration.zero, () {
+      // Gọi sau khi build xong
+      final now = DateTime.now();
+      final formatter = DateFormat('HH:mm');
+      final currentTime = formatter.format(now);
+      // List<int> scrollListIndex = [];
+      // if (widget.isCurrentDate) {
+      //   for (int i = 0; i < timeSlots.length; i++) {
+      //     final timeSlot = timeSlots[i];
+      //     final isSelectable = timeSlot.compareTo(currentTime) >= 0;
+      //     if (isSelectable) {
+      //       scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
+      //     }
+      //   }
+      // } else {
+      //   for (int i = 0; i < timeSlots.length; i++) {
+      //     scrollListIndex.add(timeSlots.indexOf(timeSlots[i]));
+      //   }
+      // }
+
+      // if (scrollListIndex.isNotEmpty) {
+      //   final scrollIndex = scrollListIndex.first;
+      //   scrollToIndex(scrollIndex);
+      // }
+    });
     build(context);
     super.didUpdateWidget(oldWidget);
   }
 
+  bool _isDisposed = false;
   @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final formatter = DateFormat('HH:mm');
-    final currentTime = formatter.format(now);
-    return GridView.builder(
-      scrollDirection: Axis.horizontal,
-      controller: scrollController,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          childAspectRatio: 1 / 1.5),
-      itemCount: timeSlots.length,
-      itemBuilder: (BuildContext context, int index) {
-        final timeSlot = timeSlots[index];
-        final isSelected = timeSlot == widget.selectedTimeSlot;
-
-        // kiểm tra được chọn hay không
-        // TRUE chọn
-
-        bool isSelectable = checkTimeSlotSelected(timeSlot);
-
-        // kiểm tra ngày hôm nay
-        if (widget.isCurrentDate) {
-          isSelectable = timeSlot.compareTo(currentTime) >= 0 && isSelectable;
-        } else {
-          isSelectable;
-        }
-
-        return TimeSlotCard(
-          dateSeleted: widget.dateSeleted,
-          timeSlot: timeSlot,
-          isSelected: isSelected,
-          isSelectable: isSelectable,
-          onSelected: widget.onTimeSlotSelected,
-        );
-      },
-    );
+  void dispose() {
+    _isDisposed = true; // Đánh dấu widget đã bị dispose
+    super.dispose();
   }
 
+  bool isLoading = true;
   // isSelectable true là chọn đc
   bool checkTimeSlotSelected(dynamic timeSlot) {
     bool result = false;
-
-    try {
-      // check ca lam
-      if (widget.dateSeleted?['start'] != null &&
-          widget.dateSeleted?['end'] != null) {
-        // start < timeSlot < end
-        var startShift =
-            widget.dateSeleted!['start'].toString().substring(0, 5);
-
-        // timeSlot > start => true
-        final start = timeSlot.compareTo(
-                widget.dateSeleted!['start'].toString().substring(0, 5)) >=
-            0;
-        var endShift = widget.dateSeleted!['end'].toString().substring(0, 5);
-        // timeSlot < end
-        final end = timeSlot.compareTo(
-                widget.dateSeleted!['end'].toString().substring(0, 5)) <=
-            0;
-
-        if (start && end) {
-          result = true;
-
-          // check booking
-          if (widget.dateSeleted?['bookingList'] != null) {
-            for (BookingAppointmentModel appointment
-                in widget.dateSeleted?['bookingList']) {
-              //  DTstart = DTstart.subtract(const Duration(minutes: 20));
-              // DateTime DTend = DateTime.parse(
-              // "2023-01-01 ${appointment.endAppointment.toString()}");
-              // DTend = DTend.add(const Duration(minutes: 20));
-              // DTtimeSlot > DTstart
-              // final checkAfter = DTtimeSlot.isAfter(DTstart) ||
-              //     DTtimeSlot.isAtSameMomentAs(DTstart);
-              // final checkBefore = DTtimeSlot.isBefore(DTend) ||
-              //     DTtimeSlot.isAtSameMomentAs(DTend);
-
-              // final check =
-              //     DTtimeSlot.isAfter(DTstart) && DTtimeSlot.isBefore(DTend);
-
-              final startAppointment = timeSlot.compareTo(appointment
-                      .startAppointment
-                      .toString()
-                      .substring(0, 5)) >=
-                  0;
-              final endAppointment = timeSlot.compareTo(
-                      appointment.endAppointment.toString().substring(0, 5)) <=
-                  0;
-              if (startAppointment && endAppointment) {
-                result = false;
-              }
-
-              DateTime DTtimeSlot = DateTime.parse("2023-01-01 $timeSlot:00");
-              DateTime DTtimeSlotAdd20M =
-                  DTtimeSlot.add(const Duration(minutes: 20));
-              DateTime DTstart = DateTime.parse(
-                  "2023-01-01 ${appointment.startAppointment.toString()}");
-
-              //              DTstart <= DTtimeSlotAdd20M
-              bool checkBefore = DTstart.isBefore(DTtimeSlotAdd20M);
-              // DTtimeSlot <= DTstart
-              bool checkAfter = DTstart.isAfter(DTtimeSlot);
-              if ((DTstart.isBefore(DTtimeSlotAdd20M) ||
-                      DTstart.isAtSameMomentAs(DTtimeSlotAdd20M)) &&
-                  ((DTstart.isAfter(DTtimeSlot) ||
-                      DTstart.isAtSameMomentAs(DTtimeSlot)))) {
-                return false;
-              }
-            }
-          }
-          return result;
+    if (widget.timeSlotModel.isNotEmpty) {
+      try {
+        List<TimeSlotModel> timeSlotGrid = widget.timeSlotModel
+            .where((element) => element.time == '$timeSlot:00')
+            .toList();
+        timeSlotGrid;
+        if (timeSlotGrid.isNotEmpty) {
+          result = timeSlotGrid.first.isAvailable!;
         } else {
-          return false;
+          result = false;
         }
-      } else {
-        result = true;
-
         return result;
+      } catch (e) {
+        return false;
       }
-      // ignore: unused_catch_clause
-    } on Exception catch (e) {
-      return false;
+    } else {
+      return true;
     }
+    // try {
+    //   // check ca lam
+    //   if (widget.dateSeleted?['start'] != null &&
+    //       widget.dateSeleted?['end'] != null) {
+    //     // start < timeSlot < end
+    //     var startShift =
+    //         widget.dateSeleted!['start'].toString().substring(0, 5);
+
+    //     // timeSlot > start => true
+    //     final start = timeSlot.compareTo(
+    //             widget.dateSeleted!['start'].toString().substring(0, 5)) >=
+    //         0;
+    //     var endShift = widget.dateSeleted!['end'].toString().substring(0, 5);
+    //     // timeSlot < end
+    //     final end = timeSlot.compareTo(
+    //             widget.dateSeleted!['end'].toString().substring(0, 5)) <=
+    //         0;
+
+    //     if (start && end) {
+    //       result = true;
+
+    //       // check booking
+    //       if (widget.dateSeleted?['bookingList'] != null) {
+    //         for (BookingAppointmentModel appointment
+    //             in widget.dateSeleted?['bookingList']) {
+    //           //  DTstart = DTstart.subtract(const Duration(minutes: 20));
+    //           // DateTime DTend = DateTime.parse(
+    //           // "2023-01-01 ${appointment.endAppointment.toString()}");
+    //           // DTend = DTend.add(const Duration(minutes: 20));
+    //           // DTtimeSlot > DTstart
+    //           // final checkAfter = DTtimeSlot.isAfter(DTstart) ||
+    //           //     DTtimeSlot.isAtSameMomentAs(DTstart);
+    //           // final checkBefore = DTtimeSlot.isBefore(DTend) ||
+    //           //     DTtimeSlot.isAtSameMomentAs(DTend);
+
+    //           // final check =
+    //           //     DTtimeSlot.isAfter(DTstart) && DTtimeSlot.isBefore(DTend);
+
+    //           final startAppointment = timeSlot.compareTo(appointment
+    //                   .startAppointment
+    //                   .toString()
+    //                   .substring(0, 5)) >=
+    //               0;
+    //           final endAppointment = timeSlot.compareTo(
+    //                   appointment.endAppointment.toString().substring(0, 5)) <=
+    //               0;
+    //           if (startAppointment && endAppointment) {
+    //             result = false;
+    //           }
+
+    //           DateTime DTtimeSlot = DateTime.parse("2023-01-01 $timeSlot:00");
+    //           DateTime DTtimeSlotAdd20M =
+    //               DTtimeSlot.add(const Duration(minutes: 20));
+    //           DateTime DTstart = DateTime.parse(
+    //               "2023-01-01 ${appointment.startAppointment.toString()}");
+
+    //           //              DTstart <= DTtimeSlotAdd20M
+    //           bool checkBefore = DTstart.isBefore(DTtimeSlotAdd20M);
+    //           // DTtimeSlot <= DTstart
+    //           bool checkAfter = DTstart.isAfter(DTtimeSlot);
+    //           if ((DTstart.isBefore(DTtimeSlotAdd20M) ||
+    //                   DTstart.isAtSameMomentAs(DTtimeSlotAdd20M)) &&
+    //               ((DTstart.isAfter(DTtimeSlot) ||
+    //                   DTstart.isAtSameMomentAs(DTtimeSlot)))) {
+    //             return false;
+    //           }
+    //         }
+    //       }
+    //       return result;
+    //     } else {
+    //       return false;
+    //     }
+    //   } else {
+    //     result = true;
+
+    //     return result;
+    //   }
+    //   // ignore: unused_catch_clause
+    // } on Exception catch (e) {
+    //   return false;
+    // }
   }
 
   List<String> timeSlots = [];
@@ -741,6 +817,43 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
       }
     }
     return timeSlots;
+  }
+
+  List<TimeSlotCard> timeSlotCards = [];
+  void getTimeSlotCard() {
+    isLoading = true;
+    timeSlotCards = [];
+    timeSlots = generateTimeSlots();
+    final now = DateTime.now();
+    final formatter = DateFormat('HH:mm');
+    final currentTime = formatter.format(now);
+    for (var timeSlot in timeSlots) {
+      final isSelected = timeSlot == widget.selectedTimeSlot;
+
+      // kiểm tra được chọn hay không
+      // TRUE chọn
+      bool isSelectable = false;
+      bool checkTimeSlot = checkTimeSlotSelected(timeSlot);
+
+      // kiểm tra ngày hôm nay
+      if (widget.isCurrentDate) {
+        //
+        bool check = timeSlot.compareTo(currentTime) >= 0;
+        isSelectable = check && checkTimeSlot;
+      } else {
+        isSelectable = checkTimeSlot;
+      }
+
+      TimeSlotCard timeSlotCard = TimeSlotCard(
+        dateSeleted: widget.dateSeleted,
+        timeSlot: timeSlot,
+        isSelected: isSelected,
+        isSelectable: isSelectable,
+        onSelected: widget.onTimeSlotSelected,
+      );
+      timeSlotCards.add(timeSlotCard);
+    }
+    isLoading = false;
   }
 }
 

@@ -14,6 +14,7 @@ import 'package:realmen_customer_application/screens/home/components/recoment_se
 import 'package:realmen_customer_application/screens/home/components/top_barber.dart';
 import 'package:realmen_customer_application/screens/home/components/branch_shop_near_you.dart';
 import 'package:realmen_customer_application/screens/list_branch/branches_overview.dart';
+import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/account/account_service.dart';
 import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
@@ -254,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         const SizedBox(height: 5),
                                         Text(
-                                          'Barber'.toUpperCase(),
+                                          'Chi nhánh'.toUpperCase(),
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
@@ -276,7 +277,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   CommunityMaterialIcons.crown,
                                   const Color(0xffE3E3E3),
                                   () {
-                                    widget.callback(3);
+                                    Get.toNamed(
+                                        MembershipScreen.MembershipScreenRoute);
                                   },
                                 ),
                                 cardHolder(

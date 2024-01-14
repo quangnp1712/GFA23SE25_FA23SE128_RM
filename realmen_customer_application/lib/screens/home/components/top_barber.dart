@@ -27,7 +27,7 @@ class _barberTopState extends State<barberTop> {
       child: GridView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemCount: staffList.length,
+          itemCount: staffList.length >= 5 ? 5 : staffList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
             mainAxisSpacing: 1.0,
@@ -242,13 +242,14 @@ class _barberTopState extends State<barberTop> {
       try {
         int current = 1;
         int totalPages = 0;
+        staffList = [];
         do {
           AccountService accountService = AccountService();
-          staffList = [];
+
           final result =
               await accountService.getStaff(5, current, null, callBack);
           if (result['statusCode'] == 200) {
-            staffList = result['data'] as List<AccountInfoModel>;
+            staffList.addAll(result['data'] as List<AccountInfoModel>);
             current = result['current'];
             totalPages = result['totalPages'];
             staffList

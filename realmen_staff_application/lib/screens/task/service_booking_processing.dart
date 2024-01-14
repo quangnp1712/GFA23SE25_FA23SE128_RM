@@ -454,278 +454,272 @@ class _ServiceBookingProcessingScreenState
                                           ],
                                         ),
                                       ),
-                                      Text(
-                                        "Ảnh chụp sau cắt: ".toUpperCase(),
-                                        textAlign: TextAlign.start,
-                                        style: const TextStyle(
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        child: Divider(
-                                          color: Colors.black,
-                                          height: 2,
-                                          thickness: 1,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          constraints: const BoxConstraints(
-                                              minHeight: 100),
-                                          child: Column(
-                                            children: [
-                                              _images.isNotEmpty
-                                                  ? Column(
+                                      widget.professional == "STYLIST"
+                                          ? Column(
+                                              children: [
+                                                Text(
+                                                  "Ảnh chụp sau cắt: "
+                                                      .toUpperCase(),
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(
+                                                      fontSize: 23,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                  ),
+                                                  child: Divider(
+                                                    color: Colors.black,
+                                                    height: 2,
+                                                    thickness: 1,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            minHeight: 100),
+                                                    child: Column(
                                                       children: [
-                                                        Container(
-                                                          height: 200,
-                                                          // width: 300,
+                                                        _images.isNotEmpty
+                                                            ? Column(
+                                                                children: [
+                                                                  Container(
+                                                                    height: 200,
+                                                                    // width: 300,
 
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              IconButton(
-                                                                icon: const Icon(
-                                                                    Icons
-                                                                        .arrow_back),
-                                                                onPressed: () {
-                                                                  if (_currentPage >
-                                                                      0) {
-                                                                    _pageController
-                                                                        .previousPage(
-                                                                      duration: const Duration(
-                                                                          milliseconds:
-                                                                              300),
-                                                                      curve: Curves
-                                                                          .ease,
-                                                                    );
-                                                                  }
-                                                                },
-                                                              ),
-                                                              Expanded(
-                                                                child: PageView
-                                                                    .builder(
-                                                                  controller:
-                                                                      _pageController,
-                                                                  itemCount:
-                                                                      _images
-                                                                          .length,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    return GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        _showFullScreenImage(
-                                                                            context,
-                                                                            index);
-                                                                      },
-                                                                      child:
-                                                                          Hero(
-                                                                        tag:
-                                                                            'selectedImage$index',
-                                                                        child: Image.file(
-                                                                            _images[index]),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        IconButton(
+                                                                          icon:
+                                                                              const Icon(Icons.arrow_back),
+                                                                          onPressed:
+                                                                              () {
+                                                                            if (_currentPage >
+                                                                                0) {
+                                                                              _pageController.previousPage(
+                                                                                duration: const Duration(milliseconds: 300),
+                                                                                curve: Curves.ease,
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                        Expanded(
+                                                                          child:
+                                                                              PageView.builder(
+                                                                            controller:
+                                                                                _pageController,
+                                                                            itemCount:
+                                                                                _images.length,
+                                                                            itemBuilder:
+                                                                                (context, index) {
+                                                                              return GestureDetector(
+                                                                                onTap: () {
+                                                                                  _showFullScreenImage(context, index);
+                                                                                },
+                                                                                child: Hero(
+                                                                                  tag: 'selectedImage$index',
+                                                                                  child: Image.file(_images[index]),
+                                                                                ),
+                                                                              );
+                                                                            },
+                                                                            onPageChanged:
+                                                                                (int page) {
+                                                                              setState(() {
+                                                                                _currentPage = page;
+                                                                              });
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                        IconButton(
+                                                                          icon:
+                                                                              const Icon(Icons.arrow_forward),
+                                                                          onPressed:
+                                                                              () {
+                                                                            if (_currentPage <
+                                                                                _images.length - 1) {
+                                                                              _pageController.nextPage(
+                                                                                duration: const Duration(milliseconds: 300),
+                                                                                curve: Curves.ease,
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Container(
+                                                                    height: 170,
+                                                                    child: GridView
+                                                                        .builder(
+                                                                      physics:
+                                                                          const NeverScrollableScrollPhysics(),
+                                                                      gridDelegate:
+                                                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                        crossAxisCount:
+                                                                            4,
+                                                                        mainAxisSpacing:
+                                                                            5.0,
+                                                                        crossAxisSpacing:
+                                                                            4.0,
+                                                                        childAspectRatio:
+                                                                            4 / 8,
                                                                       ),
-                                                                    );
-                                                                  },
-                                                                  onPageChanged:
-                                                                      (int
-                                                                          page) {
-                                                                    setState(
-                                                                        () {
-                                                                      _currentPage =
-                                                                          page;
-                                                                    });
-                                                                  },
-                                                                ),
-                                                              ),
-                                                              IconButton(
-                                                                icon: const Icon(
-                                                                    Icons
-                                                                        .arrow_forward),
-                                                                onPressed: () {
-                                                                  if (_currentPage <
-                                                                      _images.length -
-                                                                          1) {
-                                                                    _pageController
-                                                                        .nextPage(
-                                                                      duration: const Duration(
-                                                                          milliseconds:
-                                                                              300),
-                                                                      curve: Curves
-                                                                          .ease,
-                                                                    );
-                                                                  }
-                                                                },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Container(
-                                                          height: 170,
-                                                          child:
-                                                              GridView.builder(
-                                                            physics:
-                                                                const NeverScrollableScrollPhysics(),
-                                                            gridDelegate:
-                                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount: 4,
-                                                              mainAxisSpacing:
-                                                                  5.0,
-                                                              crossAxisSpacing:
-                                                                  4.0,
-                                                              childAspectRatio:
-                                                                  4 / 8,
-                                                            ),
-                                                            shrinkWrap: true,
-                                                            itemCount:
-                                                                _images.length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return GestureDetector(
-                                                                onTap: () {
-                                                                  // Set the current page of PageView to the selected image
-                                                                  if (_currentPage >
-                                                                      0) {
-                                                                    _pageController
-                                                                        .animateToPage(
-                                                                      index,
-                                                                      duration: const Duration(
-                                                                          milliseconds:
-                                                                              300),
-                                                                      curve: Curves
-                                                                          .ease,
-                                                                    );
-                                                                  } else if (_currentPage <
-                                                                      _images.length -
-                                                                          1) {
-                                                                    _pageController
-                                                                        .animateToPage(
-                                                                      index,
-                                                                      duration: const Duration(
-                                                                          milliseconds:
-                                                                              300),
-                                                                      curve: Curves
-                                                                          .ease,
-                                                                    );
-                                                                  }
-                                                                },
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemCount:
+                                                                          _images
+                                                                              .length,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            // Set the current page of PageView to the selected image
+                                                                            if (_currentPage >
+                                                                                0) {
+                                                                              _pageController.animateToPage(
+                                                                                index,
+                                                                                duration: const Duration(milliseconds: 300),
+                                                                                curve: Curves.ease,
+                                                                              );
+                                                                            } else if (_currentPage <
+                                                                                _images.length - 1) {
+                                                                              _pageController.animateToPage(
+                                                                                index,
+                                                                                duration: const Duration(milliseconds: 300),
+                                                                                curve: Curves.ease,
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                          child:
+                                                                              Image.file(
+                                                                            _images[index],
+                                                                            fit:
+                                                                                BoxFit.contain,
+                                                                            // height: 120,
+                                                                            height:
+                                                                                MediaQuery.of(context).size.height / 7.3,
+                                                                            alignment:
+                                                                                Alignment.topCenter,
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            : Container(),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        border: Border
+                                                                            .all(
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          width:
+                                                                              1,
+                                                                          style:
+                                                                              BorderStyle.solid,
+                                                                        ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10)),
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10),
                                                                 child:
-                                                                    Image.file(
-                                                                  _images[
-                                                                      index],
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                  // height: 120,
-                                                                  height: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .height /
-                                                                      7.3,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .topCenter,
+                                                                    TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    _pickImages();
+                                                                  },
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      "Chụp ảnh",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              );
-                                                            },
-                                                          ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        border: Border
+                                                                            .all(
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          width:
+                                                                              1,
+                                                                          style:
+                                                                              BorderStyle.solid,
+                                                                        ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10)),
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10),
+                                                                child:
+                                                                    TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    _removeImage(
+                                                                        _currentPage);
+                                                                  },
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      "Xóa ảnh",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
-                                                    )
-                                                  : Container(),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                            color:
-                                                                Colors.black54,
-                                                            width: 1,
-                                                            style: BorderStyle
-                                                                .solid,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                              10),
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          _pickImages();
-                                                        },
-                                                        child: const Center(
-                                                          child: Text(
-                                                            "Chụp ảnh",
-                                                            style: TextStyle(
-                                                                fontSize: 20),
-                                                          ),
-                                                        ),
-                                                      ),
                                                     ),
                                                   ),
-                                                  Expanded(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                            color:
-                                                                Colors.black54,
-                                                            width: 1,
-                                                            style: BorderStyle
-                                                                .solid,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                              10),
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          _removeImage(
-                                                              _currentPage);
-                                                        },
-                                                        child: const Center(
-                                                          child: Text(
-                                                            "Xóa ảnh",
-                                                            style: TextStyle(
-                                                                fontSize: 20),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
+                                                ),
+                                               
+                                              ],
+                                            )
+                                          : Container(),
+                                           const SizedBox(
                                         height: 10,
                                       ),
                                       Container(
@@ -896,7 +890,8 @@ class _ServiceBookingProcessingScreenState
       Duration difference = now.difference(actualStartTime);
       int seconds = difference.inSeconds % 60;
       int minutes = (difference.inSeconds ~/ 60) % 60;
-      int hours = difference.inHours;
+      // int hours = difference.inHours;
+      int hours = 0;
       String text =
           '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       return Text(

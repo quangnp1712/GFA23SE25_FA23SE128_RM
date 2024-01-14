@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, constant_identifier_names, avoid_print, use_build_context_synchronously, duplicate_ignore
+// ignore_for_file: prefer_const_constructors_in_immutables, constant_identifier_names, avoid_print, use_build_context_synchronously, duplicate_ignore, prefer_conditional_assignment
 
 import 'dart:convert';
 import 'dart:math';
@@ -118,16 +118,15 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
-                                      "HỆ THỐNG barber CỦA REALMEN"
-                                          .toUpperCase(),
+                                      "các barber CỦA REALMEN".toUpperCase(),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 18,
                                       ),
                                     ),
-                                    const Text(
-                                      "Tận hưởng trải nghiệm cắt tóc nam đỉnh \ncao tại hơn 99 barber RealMen trải dài khắp \nTP. Hồ Chí Minh, Hà Nội và các tỉnh lân cận!",
+                                    Text(
+                                      "Tận hưởng trải nghiệm cắt tóc nam đỉnh \ncao tại hơn $count barber RealMen trải dài khắp \n${city1 ?? ""}${city2 != null ? ', $city2 ' : ''} ${city1 != null || city2 != null ? 'và ' : ''}các tỉnh lân cận!",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
@@ -604,6 +603,8 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   List<BranchModel>? branchesForCity = [];
   String? cityController; // dropdown chọn city
   List<String> cities = [];
+  String? city1;
+  String? city2;
   final ScrollController _scrollController = ScrollController();
 
   Future<void> getBranchesByCity() async {
@@ -615,6 +616,15 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           branchesByCityModel = result['data'] as BranchesModel;
           try {
             if (branchesByCityModel != null) {
+              for (BranchesValuesModel branch in branchesByCityModel!.values!) {
+                count = count + branch.branch!;
+                if (city1 == null) {
+                  city1 = utf8.decode(branch.city.toString().runes.toList());
+                }
+                if (city2 == null) {
+                  city2 = utf8.decode(branch.city.toString().runes.toList());
+                }
+              }
               if (cityController != null) {
                 getBranches(cityController!, false);
               }
@@ -635,6 +645,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
             setState(() {
               cities;
               isLoading = false;
+              count;
+              city1;
+              city2;
             });
           }
         } else {
@@ -956,4 +969,6 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
       await searchBranchesWithLocation();
     }
   }
+
+  int count = 0;
 }

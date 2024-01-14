@@ -11,6 +11,7 @@ import 'package:realmen_customer_application/screens/home/home_screen.dart';
 import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/membership/membership_screen.dart';
 import 'package:realmen_customer_application/screens/profile/profile_screen.dart';
+import 'package:realmen_customer_application/screens/promotion/promotion_screen.dart';
 import 'package:realmen_customer_application/screens/service_price_list/service_price_list_screen.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 
@@ -29,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
 
   late final HomeScreen homeScreen;
   late final ServicePriceListScreen servicePriceListScreen;
-  late final MembershipScreen membershipScreen;
+  late final PromotionScreen promotionScreen;
   late final BookingScreen bookingScreen;
   late final ProfileScreen profileScreen;
 
@@ -44,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
     homeScreen = HomeScreen(setPage);
     servicePriceListScreen = ServicePriceListScreen(setPage);
     bookingScreen = BookingScreen(setPage);
-    membershipScreen = MembershipScreen(setPage);
+    promotionScreen = PromotionScreen(setPage);
     profileScreen = ProfileScreen(setPage);
     super.initState();
   }
@@ -76,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
         case 2:
           return bookingScreen;
         case 3:
-          return membershipScreen;
+          return promotionScreen;
         case 4:
           return profileScreen;
       }

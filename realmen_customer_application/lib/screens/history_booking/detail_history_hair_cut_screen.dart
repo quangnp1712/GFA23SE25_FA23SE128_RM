@@ -76,7 +76,7 @@ class _DetailHistoryBookingScreenState
                                     height: 50,
                                     child: Center(
                                       child: Text(
-                                        "chi tiết hóa đơn".toUpperCase(),
+                                        "chi tiết đặt lịch".toUpperCase(),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 24,
@@ -114,7 +114,6 @@ class _DetailHistoryBookingScreenState
                                         thickness: 1,
                                       ),
                                     ),
-                                    // _buildButton(),
                                     _buildTotalMoney(),
                                   ],
                                 ),
@@ -153,14 +152,14 @@ class _DetailHistoryBookingScreenState
                   ),
                 ),
               ),
-              Text(
-                widget.booking!.bookingCode ?? " ",
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 17),
-              ),
+              // Text(
+              //   widget.booking!.bookingCode ?? " ",
+              //   textAlign: TextAlign.left,
+              //   style: const TextStyle(
+              //       color: Colors.black,
+              //       fontWeight: FontWeight.w500,
+              //       fontSize: 17),
+              // ),
             ],
           ),
 
@@ -204,7 +203,9 @@ class _DetailHistoryBookingScreenState
                 ),
               ),
               Text(
-                widget.booking!.bookingServices!.first.startAppointment ?? "",
+                widget.booking!.bookingServices != null
+                    ? widget.booking!.bookingServices!.first.startAppointment!
+                    : "",
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Colors.black,
@@ -321,7 +322,7 @@ class _DetailHistoryBookingScreenState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Dich Vu: ",
+                "Dịch Vụ: ",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
@@ -335,46 +336,50 @@ class _DetailHistoryBookingScreenState
             thickness: 1,
           ),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: widget.booking!.bookingServices!
-              .length, // The number of items in the list
-          itemBuilder: (context, index) {
-            // Return a Card widget for each item in the list
-            return Padding(
-              padding:
-                  const EdgeInsets.only(top: 7, bottom: 7, left: 12, right: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 280),
-                    child: Expanded(
-                      child: Text(
-                        utf8.decode(widget
-                            .booking!.bookingServices![index].serviceName
-                            .toString()
-                            .runes
-                            .toList()),
-                        style: const TextStyle(fontSize: 17),
-                        maxLines: 2,
-                      ),
+        widget.booking!.bookingServices != null
+            ? ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.booking!.bookingServices!
+                    .length, // The number of items in the list
+                itemBuilder: (context, index) {
+                  // Return a Card widget for each item in the list
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        top: 7, bottom: 7, left: 12, right: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 280),
+                          child: Expanded(
+                            child: Text(
+                              utf8.decode(widget
+                                  .booking!.bookingServices![index].serviceName
+                                  .toString()
+                                  .runes
+                                  .toList()),
+                              style: const TextStyle(fontSize: 17),
+                              maxLines: 2,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          widget.booking!.bookingServices![index]
+                                      .servicePrice !=
+                                  null
+                              ? formatter.format(widget.booking!
+                                  .bookingServices![index].servicePrice)
+                              : '0',
+                          style: const TextStyle(fontSize: 17),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    widget.booking!.bookingServices![index].servicePrice != null
-                        ? formatter.format(widget
-                            .booking!.bookingServices![index].servicePrice)
-                        : '0',
-                    style: const TextStyle(fontSize: 17),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+                  );
+                },
+              )
+            : Container(),
       ],
     );
   }
@@ -462,7 +467,8 @@ class _DetailHistoryBookingScreenState
       for (var service in widget.booking!.bookingServices!) {
         if (service.servicePrice != null) {
           total += double.parse(service.servicePrice.toString());
-          if (service.professional == "MASSEUR") {
+          if (service.staffName != null) {
+          } else if (service.professional == "MASSEUR") {
             massuer = utf8.decode(service.staffName!.toString().runes.toList());
           } else {
             stylist = utf8.decode(service.staffName!.toString().runes.toList());

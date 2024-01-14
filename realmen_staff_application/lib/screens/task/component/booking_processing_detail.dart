@@ -886,10 +886,6 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
           }
         }
 
-        // checkServiceBookingIsProcessing
-        checkServiceBookingIsProcessing = widget.booking.bookingServices!
-            .any((service) => service.bookingServiceStatus == "PROCESSING");
-
         // checkBookingIsDone
         if (isStylistServicesDone == "HOÀN THÀNH" &&
             isMasseurServicesDone == "HOÀN THÀNH") {
@@ -902,7 +898,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
         //kiểm tra dv của staff đó đã xong chưa
         // checkBookingIsDone = true kiểm tra cả đơn đó xong chưa
 
-        if (checkServiceBookingIsProcessing) {
+        if (professional == "STYLIST" && isStylistServicesDone == "ĐANG LÀM") {
+          btn = btnStatus[1];
+        } else if (professional == "MASSEUR" &&
+            isMasseurServicesDone == "ĐANG LÀM") {
           btn = btnStatus[1];
         } else {
           if (professional == "MASSEUR" &&

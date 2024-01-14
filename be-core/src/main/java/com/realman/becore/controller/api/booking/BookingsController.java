@@ -7,6 +7,7 @@ import com.realman.becore.controller.api.booking.models.BookingModelMapper;
 import com.realman.becore.controller.api.booking.models.BookingRequest;
 import com.realman.becore.controller.api.booking.models.BookingResponse;
 import com.realman.becore.dto.booking.Booking;
+import com.realman.becore.dto.booking.BookingSearchCriteria;
 import com.realman.becore.service.booking.BookingUseCaseService;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.PageRequestCustom;
@@ -31,9 +32,11 @@ public class BookingsController implements BookingsAPI {
     }
 
     @Override
-    public PageImplResponse<BookingResponse> findAll(Long accountId, Integer current, Integer pageSize) {
+    public PageImplResponse<BookingResponse> findAll(Long accountId, Long branchId, Integer current, Integer pageSize) {
         PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
-        Page<BookingResponse> bookingResponses = bookingUseCaseService.findAll(accountId, pageRequestCustom)
+        BookingSearchCriteria searchCriteria = BookingSearchCriteria.builder().branchId(branchId).build();
+        Page<BookingResponse> bookingResponses = bookingUseCaseService
+                .findAll(searchCriteria, accountId, pageRequestCustom)
                 .map(bookingModelMapper::toModel);
         return new PageImplResponse<>(bookingResponses.getContent(), bookingResponses.getTotalElements(),
                 bookingResponses.getTotalPages(), bookingResponses.getSize(), pageRequestCustom.current());

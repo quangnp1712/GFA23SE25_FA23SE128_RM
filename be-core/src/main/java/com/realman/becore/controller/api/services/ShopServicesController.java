@@ -36,10 +36,10 @@ public class ShopServicesController implements ShopServicesAPI {
     }
 
     @Override
-    public PageImplResponse<ShopServiceResponse> findAll(String search,
+    public PageImplResponse<ShopServiceResponse> findAll(String search, Long branchId,
             @Min(1) Integer current, String sorter, Integer pageSize) {
         PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
-        ShopServiceSearchCriteria searchCriteria = ShopServiceSearchCriteria.of(search);
+        ShopServiceSearchCriteria searchCriteria = ShopServiceSearchCriteria.of(search, branchId);
         Page<ShopService> shopServices = shopServiceUseCaseService.findAll(searchCriteria, pageRequestCustom);
         Page<ShopServiceResponse> responses = shopServices.map(shopServiceModelMapper::toModel);
         return new PageImplResponse<>(responses.getContent(), responses.getTotalElements(), responses.getTotalPages(),

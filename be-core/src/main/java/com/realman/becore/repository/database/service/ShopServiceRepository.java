@@ -32,8 +32,10 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
             LEFT JOIN BranchServiceEntity bs ON bs.serviceId = s.serviceId
             LEFT JOIN BranchEntity b ON b.branchId = bs.branchId
             INNER JOIN CategoryEntity c ON c.categoryId = s.categoryId
-            WHERE :#{#searchCriteria.hasSearchEmpty()} = TRUE
-                    OR (LOWER(s.serviceName) LIKE %:#{#searchCriteria.search}%)
+            WHERE (:#{#searchCriteria.hasSearchEmpty()} = TRUE
+                    OR LOWER(s.serviceName) LIKE %:#{#searchCriteria.search}%)
+                    AND (:#{#searchCriteria.hasBranchIdEmpty()} = TRUE
+                            OR b.branchId = :#{#searchCriteria.branchId})
             """)
     Page<ShopServiceInfo> findAllInfo(ShopServiceSearchCriteria searchCriteria, Pageable pageable);
 

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.realman.becore.dto.booking.BookingInfo;
+import com.realman.becore.dto.booking.BookingSearchCriteria;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,8 +52,9 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             FROM BookingEntity b
             INNER JOIN AccountEntity a ON a.accountId = b.accountId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId
+            WHERE :#{#searhCriteria.hasBranchIdEmpty()} = TRUE OR b.branchId = :#{#searchCriteria.branchId}
             """)
-    Page<BookingInfo> findAllInfo(Pageable pageable);
+    Page<BookingInfo> findAllInfo(BookingSearchCriteria searchCriteria, Pageable pageable);
 
     @Query("""
             SELECT

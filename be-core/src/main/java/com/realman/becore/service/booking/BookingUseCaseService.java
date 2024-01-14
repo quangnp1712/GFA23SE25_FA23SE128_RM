@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.realman.becore.controller.api.booking.models.BookingId;
 import com.realman.becore.dto.booking.Booking;
+import com.realman.becore.dto.booking.BookingSearchCriteria;
 import com.realman.becore.dto.staff.booking.BookingStaff;
 import com.realman.becore.util.response.PageRequestCustom;
 
@@ -30,8 +31,9 @@ public class BookingUseCaseService {
         return bookingQueryService.findById(bookingId);
     }
 
-    public Page<Booking> findAll(Long accountId, PageRequestCustom pageRequestCustom) {
-        return bookingQueryService.findAll(accountId, pageRequestCustom);
+    public Page<Booking> findAll(BookingSearchCriteria searchCriteria, Long accountId,
+            PageRequestCustom pageRequestCustom) {
+        return bookingQueryService.findAll(searchCriteria, accountId, pageRequestCustom);
     }
 
     public List<BookingStaff> findByStaffId(Long staffId) {

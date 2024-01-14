@@ -20,16 +20,17 @@ import jakarta.validation.constraints.Min;
 @PreAuthorize("hasAnyAuthority({'booking:add', 'booking:view'})")
 @RequestMapping("/v1/booking")
 public interface BookingsAPI {
-    @PostMapping
-    void save(@RequestBody @Valid BookingRequest booking);
+        @PostMapping
+        void save(@RequestBody @Valid BookingRequest booking);
 
-    @GetMapping
-    PageImplResponse<BookingResponse> findAll(
-            @RequestParam(value = "accountId") Long accountId,
-            @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
-            @RequestParam(required = false, value = "pageRequest", defaultValue = "20") Integer pageSize);
+        @GetMapping
+        PageImplResponse<BookingResponse> findAll(
+                        @RequestParam(value = "accountId") Long accountId,
+                        @RequestParam(required = false, value = "branchId", defaultValue = "") Long branchId,
+                        @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
+                        @RequestParam(required = false, value = "pageRequest", defaultValue = "20") Integer pageSize);
 
-    @GetMapping("/service")
-    ValueResponse<BookingResponse> findByBookingServiceId(
-            @RequestParam(value = "bookingServiceId") Long bookingServiceId);
+        @GetMapping("/service")
+        ValueResponse<BookingResponse> findByBookingServiceId(
+                        @RequestParam(value = "bookingServiceId") Long bookingServiceId);
 }

@@ -12,7 +12,8 @@ public enum EBookingServiceStatus {
     PROCESSING(3),
     FINISHED(4),
     PENDING(5),
-    LOCKED(6);
+    LOCKED(6),
+    CANCLED(7);
 
     private final Integer value;
 }

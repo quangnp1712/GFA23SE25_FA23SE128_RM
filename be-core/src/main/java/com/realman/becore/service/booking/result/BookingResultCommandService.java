@@ -20,9 +20,9 @@ public class BookingResultCommandService {
     @NonNull
     private final BookingResultMapper bookingResultMapper;
 
-    public void saveAll(Long bookingServiceId, List<BookingResult> bookingResults) {
+    public void saveAll(List<BookingResult> bookingResults) {
         List<BookingResultEntity> saveBookingResults = bookingResults.stream()
-                .map(b -> bookingResultMapper.toEntity(b, bookingServiceId)).toList();
+                .map(b -> bookingResultMapper.toEntity(b)).toList();
         bookingResultRepository.saveAll(saveBookingResults);
     }
 }

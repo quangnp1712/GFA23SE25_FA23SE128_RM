@@ -1,8 +1,10 @@
 package com.realman.becore.dto.booking.service;
 
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import com.realman.becore.dto.booking.result.BookingResult;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
 import com.realman.becore.dto.enums.EBookingServiceType;
 import com.realman.becore.repository.database.booking.service.BookingServiceEntity;
@@ -15,7 +17,7 @@ public interface BookingServiceMapper {
     BookingServiceEntity toEntity(BookingService dto, Long bookingId,
             EBookingServiceStatus bookingServiceStatus, EBookingServiceType bookingServiceType);
 
-    BookingService toDto(BookingServiceInfo info);
+    BookingService toDto(BookingServiceInfo info, List<BookingResult> bookingResults);
 
     BookingServiceEntity toEntity(BookingServiceInfo info);
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.realman.becore.controller.api.booking.service.models.AccountId;
+import com.realman.becore.controller.api.booking.service.models.BookingResultRequest;
 import com.realman.becore.controller.api.booking.service.models.BookingServiceId;
-import com.realman.becore.dto.booking.result.BookingResult;
 import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.util.response.PageRequestCustom;
 
@@ -29,8 +29,14 @@ public class BookingServiceUseCaseService {
     }
 
     @Transactional
-    public void endService(BookingServiceId bookingServiceId, List<BookingResult> bookingResults, AccountId accountId) {
-        bookingServiceCommandService.finishService(bookingServiceId, bookingResults, accountId);
+    public void cancelBookingService(Long bookingServiceId) {
+        bookingServiceCommandService.cancelBookingService(bookingServiceId);
+    }
+
+    @Transactional
+    public void endService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequest,
+            AccountId accountId) {
+        bookingServiceCommandService.finishService(bookingServiceId, bookingResultRequest, accountId);
     }
 
     public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
@@ -48,4 +54,5 @@ public class BookingServiceUseCaseService {
     public Page<BookingService> findByStaffId(Long staffId, PageRequestCustom pageRequestCustom) {
         return bookingServiceQueryService.findByStaffId(staffId, pageRequestCustom);
     }
+
 }

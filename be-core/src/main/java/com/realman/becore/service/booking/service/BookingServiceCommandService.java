@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import com.realman.becore.controller.api.booking.service.models.AccountId;
+import com.realman.becore.controller.api.booking.service.models.BookingResultRequest;
 import com.realman.becore.controller.api.booking.service.models.BookingServiceId;
 import com.realman.becore.dto.booking.result.BookingResult;
 import com.realman.becore.dto.booking.service.BookingService;
@@ -77,7 +78,7 @@ public class BookingServiceCommandService {
         }
     }
 
-    public void finishService(BookingServiceId bookingServiceId, List<BookingResult> bookingResults,
+    public void finishService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequests,
             AccountId accountId) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
                 .findInfoById(bookingServiceId.value(), accountId.value())
@@ -89,7 +90,13 @@ public class BookingServiceCommandService {
             bookingServiceRepository.save(foundBookingServiceEntity);
             unlockBookingService(foundBookingServiceEntity.getBookingId(),
                     foundBookingServiceEntity.getBookingServiceId());
-            bookingResultCommandService.saveAll(bookingServiceId.value(), bookingResults);
+            List<BookingResult> bookingResults = bookingResultRequests.bookingResultImgs().stream().map(
+                    b -> BookingResult.builder()
+                            .bookingResultImg(b)
+                            .bookingServiceId(bookingServiceId.value())
+                            .build())
+                    .toList();
+            bookingResultCommandService.saveAll(bookingResults);
         }
     }
 
@@ -112,6 +119,18 @@ public class BookingServiceCommandService {
             bookingServiceRepository.save(foundBookingService);
             bookingServiceRepository.saveAll(updateBookingServices);
         }
+    }
+
+    public void cancelBookingService(Long bookingServiceId) {
+        BookingServiceEntity bookingService = bookingServiceRepository.findById(bookingServiceId)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (!bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.ONGOING) &&
+                !bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.CONFIRM) &&
+                !bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.REQUEST_CONFIRM)) {
+            throw new ResourceInvalidException();
+        }
+        bookingService.setBookingServiceStatus(EBookingServiceStatus.CANCLED);
+        bookingServiceRepository.save(bookingService);
     }
 
     private void lockBookingService(Long bookingId, Long bookingServiceId) {

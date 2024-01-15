@@ -69,4 +69,8 @@ public class BranchUseCaseService {
     public BranchForAccount findBranchForAccount(Long branchId) {
         return branchQueryService.findBranchForAccount(branchId);
     }
+
+    public Branch findByAccountId(Long accountId) {
+        return branchQueryService.findByAccountId(accountId);
+    }
 }

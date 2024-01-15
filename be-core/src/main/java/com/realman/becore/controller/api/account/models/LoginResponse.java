@@ -8,12 +8,13 @@ import lombok.Builder;
 
 @Builder
 public record LoginResponse(
-        Long accountId,
-        Long branchId,
-        Long staffId,
-        String phone,
-        String jwtToken,
-        ERole role,
-        LocalDateTime expTime) {
+                Long accountId,
+                Long branchId,
+                Long customerId,
+                Long staffId,
+                String phone,
+                String jwtToken,
+                ERole role,
+                LocalDateTime expTime) {
 
 }

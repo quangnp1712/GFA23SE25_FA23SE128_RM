@@ -63,7 +63,7 @@ public class ShopServiceQueryService {
                                 .stream().collect(Collectors.groupingBy(ServiceDisplay::serviceId));
                 List<ShopService> categoryList = shopServiceRepository.findByCategoryId(categoryId).stream()
                                 .map(shopService -> shopServiceMapper
-                                                .toDtoServiceDisplayList(shopService,
+                                                .toDto(shopService,
                                                                 serviceDisplayMap.get(shopService.getServiceId())))
                                 .toList();
                 return categoryList;
@@ -74,7 +74,7 @@ public class ShopServiceQueryService {
                                 .stream().collect(Collectors.groupingBy(ServiceDisplay::serviceId));
                 List<ShopService> categoryList = shopServiceRepository.findAll().stream()
                                 .map(shopService -> shopServiceMapper
-                                                .toDtoServiceDisplayList(shopService,
+                                                .toDto(shopService,
                                                                 serviceDisplayMap.get(shopService.getServiceId())))
                                 .toList();
                 return categoryList;

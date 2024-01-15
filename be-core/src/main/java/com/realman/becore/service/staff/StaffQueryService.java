@@ -9,6 +9,7 @@ import com.realman.becore.dto.schedule.Schedule;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.dto.staff.StaffMapper;
 import com.realman.becore.dto.staff.booking.BookingStaff;
+import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.staff.StaffEntity;
 import com.realman.becore.repository.database.staff.StaffRepository;
 import com.realman.becore.service.booking.BookingUseCaseService;
@@ -38,5 +39,10 @@ public class StaffQueryService {
         }
         return staffMapper.toDto(null, List.<Schedule>of(), List.<BookingStaff>of());
 
+    }
+
+    public Staff findById(Long staffId) {
+        StaffEntity staff = staffRepository.findById(staffId).orElseThrow(ResourceNotFoundException::new);
+        return staffMapper.toDto(staff);
     }
 }

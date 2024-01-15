@@ -28,7 +28,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 b.bookingStatus AS bookingStatus,
                 SUM(bsr.branchServicePrice) AS totalBookingPrice
             FROM BookingEntity b
-            INNER JOIN AccountEntity a ON a.accountId = b.accountId
+            INNER JOIN CustomerEntity cu ON b.customerId = cu.customerId
+            INNER JOIN AccountEntity a ON cu.accountId = a.accountId
             INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
             INNER JOIN ShopServiceEntity sh ON bs.serviceId = sh.serviceId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId
@@ -40,7 +41,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     @Query("""
             SELECT
                 b.bookingId AS bookingId,
-                a.accountId AS accountId,
+                cu.customerId AS customerId,
                 be.branchId AS branchId,
                 b.bookingCode AS bookingCode,
                 CONCAT(a.firstName, ' ', a.lastName) AS bookingOwnerName,
@@ -50,9 +51,11 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 b.appointmentDate AS appointmentDate,
                 b.bookingStatus AS bookingStatus
             FROM BookingEntity b
-            INNER JOIN AccountEntity a ON a.accountId = b.accountId
+            INNER JOIN CustomerEntity cu ON b.customerId = cu.customerId
+            INNER JOIN AccountEntity a ON cu.accountId = a.accountId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId
-            WHERE :#{#searhCriteria.hasBranchIdEmpty()} = TRUE OR b.branchId = :#{#searchCriteria.branchId}
+            WHERE :#{#searchCriteria.hasBranchIdEmpty()} = TRUE OR b.branchId = :#{#searchCriteria.branchId}
+                AND :#{#searchCriteria.hasCustomerIdEmpty()} = TRUE OR cu.customerId = :#{#searchCriteria.customerId}
             """)
     Page<BookingInfo> findAllInfo(BookingSearchCriteria searchCriteria, Pageable pageable);
 
@@ -84,7 +87,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 b.bookingStatus AS bookingStatus,
                 SUM(bsr.branchServicePrice) AS totalBookingPrice
             FROM BookingEntity b
-            INNER JOIN AccountEntity a ON a.accountId = b.accountId
+            INNER JOIN CustomerEntity cu ON b.customerId = cu.customerId
+            INNER JOIN AccountEntity a ON cu.accountId = a.accountId
             INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
             INNER JOIN ShopServiceEntity sh ON bs.serviceId = sh.serviceId
             INNER JOIN BranchEntity be ON be.branchId = b.branchId

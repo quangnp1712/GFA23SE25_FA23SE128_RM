@@ -7,8 +7,8 @@ import java.util.List;
 
 @Builder
 public record Category(
-        Long categoryId,
-        String name,
-        ECategoryType categoryType,
-        List<ShopService> serviceList) {
+                Long categoryId,
+                String categoryName,
+                ECategoryType categoryType,
+                List<ShopService> serviceList) {
 }

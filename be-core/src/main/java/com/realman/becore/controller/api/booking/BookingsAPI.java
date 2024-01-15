@@ -27,6 +27,7 @@ public interface BookingsAPI {
         PageImplResponse<BookingResponse> findAll(
                         @RequestParam(value = "accountId") Long accountId,
                         @RequestParam(required = false, value = "branchId", defaultValue = "") Long branchId,
+                        @RequestParam(required = false, value = "customerId", defaultValue = "") Long customerId,
                         @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
                         @RequestParam(required = false, value = "pageRequest", defaultValue = "20") Integer pageSize);
 

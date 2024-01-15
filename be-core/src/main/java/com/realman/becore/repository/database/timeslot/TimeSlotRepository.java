@@ -17,7 +17,7 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> 
                 sh.shiftId AS shiftId,
                 ts.time AS time,
                 CASE
-                    WHEN b.appointmentDate = :chosenDate THEN
+                    WHEN b.appointmentDate = :chosenDate AND bs.bookingServiceStatus = 0 OR bs.bookingServiceStatus = 1 THEN
                         CASE
                             WHEN ts.time BETWEEN bs.startAppointment AND bs.endAppointment THEN FALSE
                             ELSE TRUE
@@ -28,7 +28,7 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlotEntity, Long> 
             INNER JOIN ShiftEntity sh ON ts.shiftId = sh.shiftId
             LEFT JOIN ScheduleEntity sc ON sh.shiftId = sc.shiftId
             LEFT JOIN StaffEntity st ON sc.staffId = st.staffId
-            LEFT JOIN BookingServiceEntity bs ON bs.staffId = st.staffId AND (bs.bookingServiceStatus = 0 OR bs.bookingServiceStatus = 1)
+            LEFT JOIN BookingServiceEntity bs ON bs.staffId = st.staffId
             LEFT JOIN BookingEntity b ON bs.bookingId = b.bookingId
             WHERE st.staffId = :staffId AND sc.workingDate = :chosenDate
             """)

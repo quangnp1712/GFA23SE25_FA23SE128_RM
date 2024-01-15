@@ -14,5 +14,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @PreAuthorize("hasAuthority('schedule:view')")
 public interface ScheduleAPI {
     @GetMapping
-    ListResponse<ScheduleResponse> findByAccountId(@PathVariable Long staffId);
+    ListResponse<ScheduleResponse> findByStaffId(@PathVariable Long staffId);
 }

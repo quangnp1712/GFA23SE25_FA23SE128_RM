@@ -21,7 +21,7 @@ public class ScheduleController implements ScheduleAPI {
     private final ScheduleModelMapper scheduleModelMapper;
 
     @Override
-    public ListResponse<ScheduleResponse> findByAccountId(Long staffId) {
+    public ListResponse<ScheduleResponse> findByStaffId(Long staffId) {
         List<Schedule> scheduleList = scheduleUseCaseService.findById(staffId);
         List<ScheduleResponse> responses = scheduleList.stream().map(scheduleModelMapper::toModel).toList();
         return new ListResponse<>(responses);

@@ -11,7 +11,7 @@ public interface BookingInfo {
 
     void setBookingServiceId(Long bookingServiceId);
 
-    void setAccountId(Long accountId);
+    void setCustomerId(Long customerId);
 
     void setBranchId(Long branchId);
 
@@ -41,7 +41,7 @@ public interface BookingInfo {
 
     Long getBookingServiceId();
 
-    Long getAccountId();
+    Long getCustomerId();
 
     Long getBranchId();
 

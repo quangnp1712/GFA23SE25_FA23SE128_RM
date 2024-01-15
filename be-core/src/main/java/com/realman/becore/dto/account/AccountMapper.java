@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchInfo;
+import com.realman.becore.dto.customer.Customer;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.repository.database.account.AccountEntity;
 
@@ -18,8 +19,14 @@ public interface AccountMapper {
 
     Account toDto(AccountEntity entity);
 
+    // @Mapping(source = "entity.accountId", target = "accountId")
+    // Account toDto(AccountEntity entity, Staff staff);
+
     @Mapping(source = "entity.accountId", target = "accountId")
-    Account toDto(AccountEntity entity, Staff staff);
+    Account toDto(AccountEntity entity, Staff staff, Branch branch);
+
+    @Mapping(source = "entity.accountId", target = "accountId")
+    Account toDto(AccountEntity entity, Customer customer);
 
     Account fromInfo(AccountInfo info);
 

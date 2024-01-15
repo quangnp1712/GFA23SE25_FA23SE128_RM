@@ -20,8 +20,8 @@ public class ScheduleUseCaseService {
     private final ScheduleQueryService scheduleQueryService;
 
     @Transactional
-    public void save(Long accountId, List<Schedule> schedules) {
-        scheduleCommandService.save(accountId, schedules);
+    public void save(Long staffId, List<Schedule> schedules) {
+        scheduleCommandService.save(staffId, schedules);
     }
 
     @Transactional

@@ -16,5 +16,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @PreAuthorize("hasAnyAuthority({'schedule:add', 'schedule:view'})")
 public interface SchedulesAPI {
     @PostMapping
-    void save(Long accountId,@RequestBody List<ScheduleRequest> scheduleRequestList);
+    void save(Long staffId, @RequestBody List<ScheduleRequest> scheduleRequestList);
 }

@@ -21,7 +21,6 @@ public class CustomerQueryService {
     private final CustomerMapper customerMapper;
 
     public Customer findByAccountId(Long accountId) {
-
         CustomerEntity customerEntity = customerRepositoty.findByAccountId(accountId)
                 .orElseThrow(ResourceNotFoundException::new);
         return customerMapper.toDto(customerEntity);

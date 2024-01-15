@@ -10,7 +10,6 @@ import com.realman.becore.service.schedule.ScheduleUseCaseService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
 @RequiredArgsConstructor
 public class SchedulesController implements SchedulesAPI {
@@ -18,13 +17,11 @@ public class SchedulesController implements SchedulesAPI {
     private final ScheduleUseCaseService scheduleUseCaseService;
     @NonNull
     private final ScheduleModelMapper scheduleModelMapper;
-    
+
     @Override
-    public void save(Long accountId, List<ScheduleRequest> scheduleRequestList) {
+    public void save(Long staffId, List<ScheduleRequest> scheduleRequestList) {
         List<Schedule> schedules = scheduleRequestList.stream().map(scheduleModelMapper::toDto).toList();
-        scheduleUseCaseService.save(accountId, schedules);
+        scheduleUseCaseService.save(staffId, schedules);
     }
 
-
-    
 }

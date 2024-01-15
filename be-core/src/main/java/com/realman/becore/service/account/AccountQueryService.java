@@ -14,6 +14,8 @@ import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.account.AccountSearchCriteria;
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchId;
+import com.realman.becore.dto.customer.Customer;
+import com.realman.becore.dto.enums.ERole;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.account.AccountEntity;
@@ -44,8 +46,16 @@ public class AccountQueryService {
                 AccountEntity entity = accountRepository
                                 .findByPhone(phone)
                                 .orElseThrow(ResourceNotFoundException::new);
-                Staff staff = staffUsercaseService.findByAccountId(entity.getAccountId());
-                return accountMapper.toDto(entity, staff);
+                Account account = accountMapper.toDto(entity);
+                if (entity.getRole().equals(ERole.STAFF)) {
+                        Staff staff = staffUsercaseService.findByAccountId(entity.getAccountId());
+                        Branch branch = branchUseCaseService.findByAccountId(entity.getAccountId());
+                        account = accountMapper.toDto(entity, staff, branch);
+                } else if (entity.getRole().equals(ERole.CUSTOMER)) {
+                        Customer customer = customerUserCaseService.findByAccountId(entity.getAccountId());
+                        account = accountMapper.toDto(entity, customer);
+                }
+                return account;
         }
 
         public Boolean isAccountExist(String phone) {

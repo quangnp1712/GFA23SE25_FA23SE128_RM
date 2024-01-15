@@ -36,6 +36,12 @@ public class CategoryQueryService {
     return categories;
   }
 
+  public Map<Long, Category> categoryMapById() {
+    Map<Long, Category> categories = categoryRepository.findAll().stream().map(categoryMapper::toDto)
+        .collect(Collectors.toMap(t -> t.categoryId(), t -> t));
+    return categories;
+  }
+
   public Category findById(Long categoryId) {
     CategoryEntity categoryEntity = categoryRepository.findById(categoryId)
         .orElseThrow(ResourceNotFoundException::new);

@@ -106,6 +106,7 @@ public class OTPCommandService {
         LocalDateTime expiredTime = jwtConfiguration.expireTime();
         return LoginResponse.builder()
                 .accountId(account.accountId())
+                .customerId(Objects.nonNull(account.customer()) ? account.customer().customerId() : null)
                 .staffId(Objects.nonNull(account.staff()) ? account.staff().staffId() : null)
                 .branchId(Objects.nonNull(account.branch()) ? account.branch().branchId() : null)
                 .phone(account.phone())

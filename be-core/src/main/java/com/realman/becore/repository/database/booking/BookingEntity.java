@@ -23,7 +23,7 @@ public class BookingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
-    private Long accountId;
+    private Long customerId;
     private Long branchId;
     private String bookingCode;
     @Temporal(TemporalType.DATE)

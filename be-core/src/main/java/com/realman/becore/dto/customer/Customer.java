@@ -4,9 +4,9 @@ import lombok.Builder;
 
 @Builder
 public record Customer(
-        Long accountId,
-        Long customerId,
-        Long serviceCount,
-        Long profitProvided) {
+                Long customerId,
+                Long accountId,
+                Long serviceCount,
+                Long profitProvided) {
 
 }

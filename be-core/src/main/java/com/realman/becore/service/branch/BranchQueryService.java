@@ -212,6 +212,12 @@ public class BranchQueryService {
                 return branchMapper.toDto(info);
         }
 
+        public Branch findByAccountId(Long accountId) {
+                BranchEntity foundBranch = branchRepository.findByAccountId(accountId)
+                                .orElseThrow(ResourceNotFoundException::new);
+                return branchMapper.toDto(foundBranch);
+        }
+
         private Double calculateDistance(Double originLat, Double originLng,
                         Double desLat, Double desLng) {
                 Double distance = Math.sqrt(Math.pow((desLat - originLat), 2.0)

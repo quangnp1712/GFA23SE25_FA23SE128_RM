@@ -32,9 +32,11 @@ public class BookingsController implements BookingsAPI {
     }
 
     @Override
-    public PageImplResponse<BookingResponse> findAll(Long accountId, Long branchId, Integer current, Integer pageSize) {
+    public PageImplResponse<BookingResponse> findAll(Long accountId, Long branchId, Long customerId, Integer current,
+            Integer pageSize) {
         PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
-        BookingSearchCriteria searchCriteria = BookingSearchCriteria.builder().branchId(branchId).build();
+        BookingSearchCriteria searchCriteria = BookingSearchCriteria.builder().branchId(branchId)
+                .customerId(customerId).build();
         Page<BookingResponse> bookingResponses = bookingUseCaseService
                 .findAll(searchCriteria, accountId, pageRequestCustom)
                 .map(bookingModelMapper::toModel);

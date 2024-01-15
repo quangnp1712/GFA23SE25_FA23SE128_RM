@@ -69,6 +69,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             FROM BookingServiceEntity bs
             LEFT JOIN StaffEntity s ON s.staffId = bs.staffId
             LEFT JOIN AccountEntity a ON a.accountId = s.accountId
+            LEFT JOIN CustomerEntity cu ON a.accountId = cu.accountId
             INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
             INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
             INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId

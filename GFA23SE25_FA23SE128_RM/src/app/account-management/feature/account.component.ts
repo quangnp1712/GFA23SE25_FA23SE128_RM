@@ -129,7 +129,7 @@ import { differenceInCalendarDays, setHours } from 'date-fns';
                   !control.hasError('trimRequired')
                 "
               >
-                Sđt gồm 10 số hoặc hơn
+                Sđt gồm 10 số
               </ng-container>
               <ng-container
                 *ngIf="
@@ -137,7 +137,7 @@ import { differenceInCalendarDays, setHours } from 'date-fns';
                   !control.hasError('minlength')
                 "
               >
-                Sđt ít hơn 12 số
+              Sđt gồm 10 số
               </ng-container>
             </ng-template>
           </nz-form-item>

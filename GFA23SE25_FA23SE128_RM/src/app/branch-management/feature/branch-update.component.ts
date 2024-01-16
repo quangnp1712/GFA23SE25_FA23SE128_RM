@@ -95,7 +95,10 @@ import { RouterLink } from '@angular/router';
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian mở cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng chọn giờ mở cửa" class="tw-w-[70%]">
+            <nz-form-control
+              nzErrorTip="Vui lòng chọn giờ mở cửa"
+              class="tw-w-[70%]"
+            >
               <nz-time-picker
                 [nzFormat]="'HH:mm'"
                 class="tw-rounded-md tw-w-[100%]"
@@ -108,7 +111,10 @@ import { RouterLink } from '@angular/router';
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian đóng cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng chọn giờ đóng cửa" class="tw-w-[70%]">
+            <nz-form-control
+              nzErrorTip="Vui lòng chọn giờ đóng cửa"
+              class="tw-w-[70%]"
+            >
               <nz-time-picker
                 nzFormat="HH:mm"
                 class="tw-rounded-md tw-w-[100%]"
@@ -119,7 +125,7 @@ import { RouterLink } from '@angular/router';
 
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Hotline</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập số điện thoại">
+            <nz-form-control [nzErrorTip]="phoneErrorTpl">
               <input
                 class="tw-rounded-md tw-w-[70%]"
                 nz-input
@@ -127,6 +133,27 @@ import { RouterLink } from '@angular/router';
                 placeholder="Nhập số điện thoại"
                 [formControl]="buStore.form.controls.phone"
               />
+              <ng-template #phoneErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('trimRequired')">
+                  Vui lòng nhập sđt
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('minlength') &&
+                    !control.hasError('trimRequired')
+                  "
+                >
+                  Sđt gồm 10 số
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('maxlength') &&
+                    !control.hasError('minlength')
+                  "
+                >
+                  Sđt gồm 10 số
+                </ng-container>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
 
@@ -134,13 +161,34 @@ import { RouterLink } from '@angular/router';
             <nz-form-label class="tw-ml-3" nzRequired
               >Số lượng nhân viên</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
+            <nz-form-control [nzErrorTip]="numberStaffErrorTpl">
               <input
                 nz-input
                 appOnlyNumber
                 class="tw-rounded-md tw-w-[70%]"
                 [formControl]="buStore.form.controls.numberStaffs"
               />
+              <ng-template #numberStaffErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('trimRequired')">
+                Vui lòng nhập số lượng nhân viên
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  control.hasError('min') &&
+                  !control.hasError('trimRequired')
+                "
+              >
+                số lượng nhân viên > 0
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  control.hasError('max') &&
+                  !control.hasError('minlength')
+                "
+              >
+              số lượng nhân viên < 101
+              </ng-container>
+            </ng-template>
             </nz-form-control>
           </nz-form-item>
 
@@ -154,7 +202,7 @@ import { RouterLink } from '@angular/router';
               >
                 <nz-option
                   *ngFor="let option of vm.serviceData.values"
-                  [nzLabel]="option.name + ' - '  + option.price + 'VND'"
+                  [nzLabel]="option.name + ' - ' + option.price + 'VND'"
                   [nzValue]="option.serviceId"
                 ></nz-option>
               </nz-select>
@@ -186,7 +234,14 @@ import { RouterLink } from '@angular/router';
         <nz-divider></nz-divider>
       </form>
       <div class="tw-text-center">
-        <button nz-button nzDanger nzType="primary" [routerLink]="['/branch-management', 'branch-list']">trở lại</button>
+        <button
+          nz-button
+          nzDanger
+          nzType="primary"
+          [routerLink]="['/branch-management', 'branch-list']"
+        >
+          trở lại
+        </button>
         <button
           nz-button
           nzType="primary"
@@ -210,17 +265,22 @@ export class BranchUpdateComponent implements OnInit {
   vm$ = this.buStore.state$;
   addModel!: BranchApi.Request;
 
-
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.buStore.getAddress(value);
   }
 
   updateBranch() {
-    this.buStore.form.controls.branchServiceList.reset()
-    this.buStore.form.controls.serviceArray.value.forEach(value =>
-    this.buStore.form.controls.branchServiceList.value.push({serviceId: value, price: 0})
-    )
-    this.buStore.updateBranch({id: this.buStore.form.controls.branchId.getRawValue(), model: this.buStore.form.getRawValue()})
+    this.buStore.form.controls.branchServiceList.reset();
+    this.buStore.form.controls.serviceArray.value.forEach((value) =>
+      this.buStore.form.controls.branchServiceList.value.push({
+        serviceId: value,
+        price: 0,
+      })
+    );
+    this.buStore.updateBranch({
+      id: this.buStore.form.controls.branchId.getRawValue(),
+      model: this.buStore.form.getRawValue(),
+    });
   }
 }

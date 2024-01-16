@@ -73,7 +73,7 @@ export class BranchStore
     branchName: this._fb.control('', trimRequired),
     phone: this._fb.control('', [
       Validators.minLength(10),
-      Validators.maxLength(11),
+      Validators.maxLength(10),
       trimRequired,
     ]),
     address: this._fb.control('', trimRequired),

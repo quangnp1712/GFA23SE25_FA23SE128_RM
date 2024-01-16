@@ -94,7 +94,10 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian mở cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Chọn thời gian mở cửa" class="tw-w-[70%]">
+            <nz-form-control
+              nzErrorTip="Chọn thời gian mở cửa"
+              class="tw-w-[70%]"
+            >
               <nz-time-picker
                 nzFormat="HH:mm"
                 class=" tw-w-[100%]"
@@ -108,7 +111,10 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
             <nz-form-label class="tw-ml-3" nzRequired
               >Thời gian đóng cửa</nz-form-label
             >
-            <nz-form-control nzErrorTip="Chọn thời gian đóng cửa" class="tw-w-[70%]">
+            <nz-form-control
+              nzErrorTip="Chọn thời gian đóng cửa"
+              class="tw-w-[70%]"
+            >
               <nz-time-picker
                 nzFormat="HH:mm"
                 class=" tw-w-[100%]"
@@ -120,7 +126,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
           <!-- so dien thoai -->
           <nz-form-item nz-col nzSpan="12" class="">
             <nz-form-label class="tw-ml-3" nzRequired>Hotline</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập số điện thoại">
+            <nz-form-control [nzErrorTip]="phoneErrorTpl">
               <input
                 class=" tw-w-[70%]"
                 nz-input
@@ -128,6 +134,27 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
                 placeholder="Nhập số điện thoại"
                 [formControl]="bStore.form.controls.phone"
               />
+              <ng-template #phoneErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('trimRequired')">
+                  Vui lòng nhập sđt
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('minlength') &&
+                    !control.hasError('trimRequired')
+                  "
+                >
+                  Sđt gồm 10 số
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('maxlength') &&
+                    !control.hasError('minlength')
+                  "
+                >
+                  Sđt gồm 10 số
+                </ng-container>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
           <!-- so luong nhan vien -->
@@ -135,13 +162,32 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
             <nz-form-label class="tw-ml-3" nzRequired
               >Số lượng nhân viên</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
+            <nz-form-control [nzErrorTip]="numberStaffErrorTpl">
               <input
                 nz-input
                 appOnlyNumber
                 class=" tw-w-[70%]"
                 [formControl]="bStore.form.controls.numberStaffs"
               />
+              <ng-template #numberStaffErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('trimRequired')">
+                  Vui lòng nhập số lượng nhân viên
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('min') && !control.hasError('trimRequired')
+                  "
+                >
+                  số lượng nhân viên > 0
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('max') && !control.hasError('minlength')
+                  "
+                >
+                  số lượng nhân viên < 101
+                </ng-container>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
 
@@ -156,7 +202,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
               >
                 <nz-option
                   *ngFor="let option of vm.serviceData.values"
-                  [nzLabel]="option.name + ' - '  + option.price + 'VND'"
+                  [nzLabel]="option.name + ' - ' + option.price + 'VND'"
                   [nzValue]="option.serviceId"
                 ></nz-option>
               </nz-select>
@@ -218,9 +264,12 @@ export class BranchComponent {
   addModel!: BranchApi.Request;
 
   addBranch() {
-    this.bStore.form.controls.serviceArray.value.forEach(value =>
-      this.bStore.form.controls.branchServiceList.value.push({serviceId: value, price: 0})
-      )
+    this.bStore.form.controls.serviceArray.value.forEach((value) =>
+      this.bStore.form.controls.branchServiceList.value.push({
+        serviceId: value,
+        price: 0,
+      })
+    );
     this.addModel = this.bStore.form.getRawValue();
     this.bStore.addBranch({ model: this.addModel });
   }

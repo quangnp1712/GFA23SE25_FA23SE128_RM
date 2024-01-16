@@ -96,7 +96,7 @@ export class AccountStore extends ComponentStore<AccountState> {
     phone: this._fb.control('', [
       trimRequired,
       Validators.minLength(10),
-      Validators.maxLength(12),
+      Validators.maxLength(10),
     ]),
     professional: this._fb.control(''),
     branch: this._fb.control(-1),

@@ -186,6 +186,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                 bookingId: widget.bookingId,
                 professional: widget.service!.professional,
                 index: widget.index,
+                service: widget.service,
               ));
         } else {
           _errorMessage(result['message']);

@@ -2,7 +2,7 @@ class BookingModel {
   // To json
   String? appointmentDate;
   int? branchId;
-  int? accountId;
+  int? customerId;
   List<BookingServiceModel>? bookingServices;
 
   // From Json
@@ -16,7 +16,7 @@ class BookingModel {
     // To json
     this.appointmentDate,
     this.branchId,
-    this.accountId,
+    this.customerId,
     this.bookingServices,
 
     // From Json
@@ -31,7 +31,7 @@ class BookingModel {
     return {
       'appointmentDate': appointmentDate,
       'branchId': branchId,
-      'accountId': accountId,
+      'customerId': customerId,
       'bookingServices': bookingServices != null
           ? bookingServices!.map((service) => service.toJson()).toList()
           : [],
@@ -55,7 +55,7 @@ class BookingModel {
 
 class BookingContent {
   int? bookingId;
-  int? accountId;
+  int? customerId;
   int? branchId;
   String? bookingCode;
   String? bookingOwnerName;
@@ -68,7 +68,7 @@ class BookingContent {
 
   BookingContent({
     this.bookingId,
-    this.accountId,
+    this.customerId,
     this.branchId,
     this.bookingCode,
     this.bookingOwnerName,
@@ -83,7 +83,7 @@ class BookingContent {
   factory BookingContent.fromJson(Map<String, dynamic> json) {
     return BookingContent(
       bookingId: json['bookingId'],
-      accountId: json['accountId'],
+      customerId: json['customerId'],
       branchId: json['branchId'],
       bookingCode: json['bookingCode'],
       bookingOwnerName: json['bookingOwnerName'],

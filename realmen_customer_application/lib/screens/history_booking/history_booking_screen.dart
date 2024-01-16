@@ -109,213 +109,220 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                   // ignore: avoid_unnecessary_containers
                                   child: Container(
                                     // height: 85.8.h,
-                                    child: ListView.builder(
-                                      // controller: _scrollController,
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: bookings
-                                          .length, // Số lượng thẻ lịch sử cắt tóc
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          child: Column(
+                                    child: bookings.isEmpty
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(12.0),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 30),
+                                                child: const Center(
+                                                  child: Text(
+                                                    "Bạn chưa có lịch đặt nào",
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        : ListView.builder(
+                                            // controller: _scrollController,
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: bookings
+                                                .length, // Số lượng thẻ lịch sử cắt tóc
+                                            itemBuilder: (context, index) {
+                                              return Card(
                                                 child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.home,
-                                                          color: Colors.red,
-                                                          size: 26,
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(10),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  utf8.decode(bookings[
-                                                                          index]
-                                                                      .branchName
-                                                                      .toString()
-                                                                      .runes
-                                                                      .toList()),
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        17,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    height: 2),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      bookings[index]
-                                                                              .appointmentDate ??
-                                                                          "",
-                                                                      style: const TextStyle(
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12.0),
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              const Icon(
+                                                                Icons.home,
+                                                                color:
+                                                                    Colors.red,
+                                                                size: 26,
+                                                              ),
+                                                              Expanded(
+                                                                child:
+                                                                    Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          10),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        utf8.decode(bookings[index]
+                                                                            .branchName
+                                                                            .toString()
+                                                                            .runes
+                                                                            .toList()),
+                                                                        style:
+                                                                            const TextStyle(
                                                                           fontSize:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.black54),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                        width:
-                                                                            10),
-                                                                    bookings[index].bookingServices !=
-                                                                            null
-                                                                        ? Text(
-                                                                            bookings[index].bookingServices!.first.startAppointment.toString(),
+                                                                              17,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          height:
+                                                                              2),
+                                                                      Row(
+                                                                        children: [
+                                                                          Text(
+                                                                            bookings[index].appointmentDate ??
+                                                                                "",
                                                                             style:
                                                                                 const TextStyle(fontSize: 16, color: Colors.black54),
-                                                                          )
-                                                                        : Container(),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Image.asset(
-                                                          "assets/images/default.png",
-                                                          height: 170,
-                                                          width: 120,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                        Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(9),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Container(
-                                                                    constraints:
-                                                                        const BoxConstraints(
-                                                                            maxWidth:
-                                                                                200),
-                                                                    child: Text(
-                                                                      "${bookings[index].bookingCode}",
-                                                                      style: const TextStyle(
-                                                                          overflow:
-                                                                              TextOverflow.clip),
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          10),
-                                                                  Row(
-                                                                    children: [
-                                                                      const Text(
-                                                                          "Stylist:"),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              2),
-                                                                      Text(
-                                                                          stylist)
-                                                                    ],
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          10),
-                                                                  Row(
-                                                                    children: [
-                                                                      const Text(
-                                                                          "Massuer:"),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              2),
-                                                                      Text(
-                                                                          massuer)
-                                                                    ],
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          10),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     const Text(
-                                                                  //         "Tổng hóa đơn:"),
-                                                                  //     const SizedBox(
-                                                                  //         width:
-                                                                  //             2),
-                                                                  //     totals[index]['bookingId'] ==
-                                                                  //             bookings[index].bookingId
-                                                                  //         ? Text(
-                                                                  //             formatter.format(totals[index]['total']),
-                                                                  //           )
-                                                                  //         : const Text("0"),
-                                                                  //   ],
-                                                                  // ),
-                                                                  const SizedBox(
-                                                                      height:
-                                                                          25),
-                                                                  ElevatedButton(
-                                                                    onPressed: () =>
-                                                                        Get.to(() =>
-                                                                            DetailHistoryBookingScreen(booking: bookings[index])),
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .black,
-                                                                    ),
-                                                                    child:
-                                                                        const Text(
-                                                                      'Xem chi tiết ->',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
+                                                                          ),
+                                                                          const SizedBox(
+                                                                              width: 10),
+                                                                          bookings[index].bookingServices != null
+                                                                              ? Text(
+                                                                                  bookings[index].bookingServices!.first.startAppointment.toString(),
+                                                                                  style: const TextStyle(fontSize: 16, color: Colors.black54),
+                                                                                )
+                                                                              : Container(),
+                                                                        ],
                                                                       ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/images/default.png",
+                                                                height: 170,
+                                                                width: 120,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                              Column(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            9),
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Container(
+                                                                          constraints:
+                                                                              const BoxConstraints(maxWidth: 200),
+                                                                          child:
+                                                                              Text(
+                                                                            "${bookings[index].bookingCode}",
+                                                                            style:
+                                                                                const TextStyle(overflow: TextOverflow.clip),
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                10),
+                                                                        Row(
+                                                                          children: [
+                                                                            const Text("Stylist:"),
+                                                                            const SizedBox(width: 2),
+                                                                            Text(stylist)
+                                                                          ],
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                10),
+                                                                        Row(
+                                                                          children: [
+                                                                            const Text("Massuer:"),
+                                                                            const SizedBox(width: 2),
+                                                                            Text(massuer)
+                                                                          ],
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                10),
+                                                                        // Row(
+                                                                        //   children: [
+                                                                        //     const Text(
+                                                                        //         "Tổng hóa đơn:"),
+                                                                        //     const SizedBox(
+                                                                        //         width:
+                                                                        //             2),
+                                                                        //     totals[index]['bookingId'] ==
+                                                                        //             bookings[index].bookingId
+                                                                        //         ? Text(
+                                                                        //             formatter.format(totals[index]['total']),
+                                                                        //           )
+                                                                        //         : const Text("0"),
+                                                                        //   ],
+                                                                        // ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                25),
+                                                                        ElevatedButton(
+                                                                          onPressed: () =>
+                                                                              Get.to(() => DetailHistoryBookingScreen(booking: bookings[index])),
+                                                                          style:
+                                                                              ElevatedButton.styleFrom(
+                                                                            backgroundColor:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          child:
+                                                                              const Text(
+                                                                            'Xem chi tiết ->',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
-                                              ),
-                                            ],
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
                                   ),
                                 ),
                               ],
@@ -390,11 +397,12 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
     if (!_isDisposed && mounted) {
       try {
         int accountId = await SharedPreferencesService.getAccountId();
+        int customerId = await SharedPreferencesService.getCusomterId();
         if (accountId != 0) {
           BookingModel bookingModel = BookingModel();
 
-          final result =
-              await BookingService().getBooking(accountId, current, 4);
+          final result = await BookingService()
+              .getBooking(accountId, customerId, current, 4);
           if (result['statusCode'] == 200) {
             bookingModel = result['data'] as BookingModel;
             currentResult = result['current'];
@@ -415,7 +423,8 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                       } else {
                         total = 0;
                       }
-                      if (service.professional == "MASSEUR") {
+                      if (service.staffName == null) {
+                      } else if (service.professional == "MASSEUR") {
                         massuer = utf8.decode(
                             service.staffName!.toString().runes.toList());
                       } else {
@@ -440,7 +449,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                 setState(() {
                   bookings;
                   totals;
-                  isLoading = false;
+
                   // current;
                 });
               }
@@ -448,12 +457,14 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
               if (!_isDisposed && mounted) {
                 setState(() {
                   bookings;
+
                   // current;
                 });
               }
             }
           } else if (result['statusCode'] == 500) {
             _errorMessage(result['error']);
+            isLoading = false;
           } else if (result['statusCode'] == 403) {
             _errorMessage(result['error']);
             AuthenticateService authenticateService = AuthenticateService();
@@ -467,6 +478,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
         print("Error: $e");
       }
     }
+    isLoading = false;
   }
 
   void checkLoadMore() async {

@@ -247,6 +247,8 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
                                 value: progress.progress,
                               ),
                             ),
+                            errorWidget: (context, url, error) =>
+                                Image.asset('assets/images/s1.jpg'),
                           ),
                         ),
                       ),
@@ -686,7 +688,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
     if (!_isDisposed && mounted) {
       try {
         AccountService accountService = AccountService();
-        stylists = [];
+
         final result = await accountService.getStaff(3, current, null, false);
         if (result['statusCode'] == 200) {
           stylists.addAll(result['data'] as List<AccountInfoModel>);
@@ -715,8 +717,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
             } catch (e) {
               final random = Random();
               var randomUrl = random.nextInt(urlBranchList.length);
-              var reference =
-                  storage.ref('stylist/${urlBranchList[randomUrl]}');
+              var reference = storage.ref('branch/${urlBranchList[randomUrl]}');
               staff.branch!.thumbnailUrl = await reference.getDownloadURL();
             }
           }
@@ -728,9 +729,9 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
             });
           }
           current++;
-          // if (stylists.length < 3) {
-          //   checkLoadMore();
-          // }
+          if (stylists.length < 3 && current <= totalPages) {
+            await getStaff(current);
+          }
         } else if (result['statusCode'] == 500) {
           _errorMessage(result['error']);
         } else {
@@ -748,6 +749,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
         }
       }
     }
+    isLoading = false;
   }
 
   void _errorMessage(String? message) {

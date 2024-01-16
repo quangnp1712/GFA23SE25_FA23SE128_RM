@@ -316,12 +316,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                         indicator: Container(
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: masseurServices[index]
-                                                            .bookingServiceStatus ==
+                                            color: masseurServices[index].bookingServiceStatus ==
                                                         "ONGOING" ||
                                                     masseurServices[index]
                                                             .bookingServiceStatus ==
-                                                        "LOCKED"
+                                                        "LOCKED" ||
+                                                    masseurServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "CONFIRM"
                                                 ? Colors.grey.shade300
                                                 : (masseurServices[index]
                                                             .bookingServiceStatus ==
@@ -381,12 +383,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                       vertical: 5),
                                               decoration: BoxDecoration(
                                                 // color: Color(0xff207A20),
-                                                color: masseurServices[index]
-                                                                .bookingServiceStatus ==
+                                                color: masseurServices[index].bookingServiceStatus ==
                                                             "ONGOING" ||
                                                         masseurServices[index]
                                                                 .bookingServiceStatus ==
-                                                            "LOCKED"
+                                                            "LOCKED" ||
+                                                        masseurServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "CONFIRM"
                                                     ? Colors.white
                                                     : (masseurServices[index]
                                                                 .bookingServiceStatus ==
@@ -405,7 +409,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                               "ONGOING" ||
                                                           masseurServices[index]
                                                                   .bookingServiceStatus ==
-                                                              "LOCKED"
+                                                              "LOCKED" ||
+                                                          masseurServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "CONFIRM"
                                                       ? "CHƯA LÀM"
                                                       : (masseurServices[index]
                                                                   .bookingServiceStatus ==
@@ -529,12 +536,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                         indicator: Container(
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: stylistServices[index]
-                                                            .bookingServiceStatus ==
+                                            color: stylistServices[index].bookingServiceStatus ==
                                                         "ONGOING" ||
                                                     stylistServices[index]
                                                             .bookingServiceStatus ==
-                                                        "LOCKED"
+                                                        "LOCKED" ||
+                                                    stylistServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "CONFIRM"
                                                 ? Colors.grey.shade300
                                                 : (stylistServices[index]
                                                             .bookingServiceStatus ==
@@ -594,12 +603,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                       vertical: 5),
                                               decoration: BoxDecoration(
                                                 // color: Color(0xff207A20),
-                                                color: stylistServices[index]
-                                                                .bookingServiceStatus ==
+                                                color: stylistServices[index].bookingServiceStatus ==
                                                             "ONGOING" ||
                                                         stylistServices[index]
                                                                 .bookingServiceStatus ==
-                                                            "LOCKED"
+                                                            "LOCKED" ||
+                                                        stylistServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "CONFIRM"
                                                     ? Colors.white
                                                     : (stylistServices[index]
                                                                 .bookingServiceStatus ==
@@ -618,7 +629,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                               "ONGOING" ||
                                                           stylistServices[index]
                                                                   .bookingServiceStatus ==
-                                                              "LOCKED"
+                                                              "LOCKED" ||
+                                                          stylistServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "CONFIRM"
                                                       ? "CHƯA LÀM"
                                                       : (stylistServices[index]
                                                                   .bookingServiceStatus ==
@@ -655,72 +669,112 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    children: [
-                      btn.key == 0
-                          ? Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.black45,
-                                  border: Border.all(
-                                    color: Colors.black54,
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: TextButton(
-                                onPressed: () {
-                                  _btnLeft();
-                                },
-                                child: Center(
-                                  child: Text(
-                                    "đổi $professional".toUpperCase(),
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 20),
+              checkAllowUpdate
+                  ? Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          children: [
+                            // btn.key == 0
+                            //     ? Container(
+                            //         margin: const EdgeInsets.symmetric(horizontal: 5),
+                            //         decoration: BoxDecoration(
+                            //             color: Colors.black45,
+                            //             border: Border.all(
+                            //               color: Colors.black54,
+                            //               width: 1,
+                            //               style: BorderStyle.solid,
+                            //             ),
+                            //             borderRadius: BorderRadius.circular(10)),
+                            //         child: TextButton(
+                            //           onPressed: () {
+                            //             _btnLeft();
+                            //           },
+                            //           child: Center(
+                            //             child: Text(
+                            //               "đổi $professional".toUpperCase(),
+                            //               style: const TextStyle(
+                            //                   color: Colors.white, fontSize: 20),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       )
+                            //     : const SizedBox(
+                            //         height: 0,
+                            //         width: 0,
+                            //       ),
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    border: Border.all(
+                                      color: Colors.black54,
+                                      width: 1,
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                // margin: const EdgeInsets.all(10),
+                                child: TextButton(
+                                  onPressed: () {
+                                    _btnRight();
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      btn.value!,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
                                   ),
                                 ),
                               ),
-                            )
-                          : const SizedBox(
-                              height: 0,
-                              width: 0,
                             ),
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              border: Border.all(
-                                color: Colors.black54,
-                                width: 1,
-                                style: BorderStyle.solid,
-                              ),
-                              borderRadius: BorderRadius.circular(10)),
-                          // margin: const EdgeInsets.all(10),
-                          child: TextButton(
-                            onPressed: () {
-                              _btnRight();
-                            },
-                            child: Center(
-                              child: Text(
-                                btn.value!,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                            ),
-                          ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.black54,
+                                      width: 1,
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                // margin: const EdgeInsets.all(10),
+                                child: TextButton(
+                                  onPressed: () {},
+                                  child: Center(
+                                    child: Text(
+                                      "Vui lòng chờ nhân viên khác \nxong việc!",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
             ],
           );
   }
@@ -770,24 +824,30 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
           builder: (context) {
             if (professional == "MASSEUR") {
               for (var service in masseurServices) {
-                if (service.bookingServiceStatus == "ONGOING") {
-                  index = masseurServices.indexOf(service) + 1;
-                  return PopUpConfirm(
-                    service: service,
-                    index: index,
-                    bookingId: widget.booking.bookingId,
-                  );
+                if (service.staffId == staffId) {
+                  if (service.bookingServiceStatus == "ONGOING" ||
+                      service.bookingServiceStatus == "CONFIRM") {
+                    index = masseurServices.indexOf(service) + 1;
+                    return PopUpConfirm(
+                      service: service,
+                      index: index,
+                      bookingId: widget.booking.bookingId,
+                    );
+                  }
                 }
               }
             } else if (professional == "STYLIST") {
               for (var service in stylistServices) {
-                if (service.bookingServiceStatus == "ONGOING") {
-                  index = stylistServices.indexOf(service) + 1;
-                  return PopUpConfirm(
-                    service: service,
-                    index: index,
-                    bookingId: widget.booking.bookingId,
-                  );
+                if (service.staffId == staffId) {
+                  if (service.bookingServiceStatus == "ONGOING" ||
+                      service.bookingServiceStatus == "CONFIRM") {
+                    index = stylistServices.indexOf(service) + 1;
+                    return PopUpConfirm(
+                      service: service,
+                      index: index,
+                      bookingId: widget.booking.bookingId,
+                    );
+                  }
                 }
               }
             }
@@ -800,32 +860,48 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
       } else if (btn.key == 1) {
         if (professional == "MASSEUR") {
           for (var service in masseurServices) {
-            if (service.bookingServiceStatus == "PROCESSING") {
-              index = masseurServices.indexOf(service) + 1;
+            if (service.staffId == staffId) {
+              if (service.bookingServiceStatus == "PROCESSING") {
+                index = masseurServices.indexOf(service) + 1;
+                Get.to(() => ServiceBookingProcessingScreen(
+                      bookingId: widget.booking.bookingId,
+                      professional: professional,
+                      index: index,
+                      service: service,
+                    ));
+                break;
+              }
             }
           }
         } else if (professional == "STYLIST") {
           for (var service in stylistServices) {
-            if (service.bookingServiceStatus == "PROCESSING") {
-              index = stylistServices.indexOf(service) + 1;
+            if (service.staffId == staffId) {
+              if (service.bookingServiceStatus == "PROCESSING") {
+                index = stylistServices.indexOf(service) + 1;
+
+                Get.to(() => ServiceBookingProcessingScreen(
+                      bookingId: widget.booking.bookingId,
+                      professional: professional,
+                      index: index,
+                      service: service,
+                    ));
+                break;
+              }
             }
           }
         }
-        Get.to(() => ServiceBookingProcessingScreen(
-              bookingId: widget.booking.bookingId,
-              professional: professional,
-              index: index,
-            ));
       } else if (btn.key == 4) {}
     }
   }
 
+  bool checkAllowUpdate = false;
   String phone = '';
   String? isMasseurServicesDone;
   String? isStylistServicesDone;
   bool isLoading = true;
   bool checkServiceBookingIsProcessing = false;
   bool checkBookingIsDone = false;
+  int staffId = 0;
   final List<BtnStatus> btnStatus = [
     BtnStatus(key: 0, value: "bắt đầu phục vụ".toUpperCase()),
     BtnStatus(key: 1, value: "tiếp tục".toUpperCase()),
@@ -838,9 +914,9 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     if (!_isDisposed && mounted) {
       try {
         isLoading = true;
-
         // professional
         professional = await SharedPreferencesService.getProfessional();
+        staffId = await SharedPreferencesService.getStaffId();
         // date
         DateTime appointmentDate =
             DateTime.parse(widget.booking.appointmentDate!);
@@ -861,7 +937,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
         if (masseurServices.isNotEmpty) {
           for (var service in masseurServices) {
             if (service.bookingServiceStatus == "ONGOING" ||
-                service.bookingServiceStatus == "LOCKED") {
+                service.bookingServiceStatus == "LOCKED" ||
+                service.bookingServiceStatus == "CONFIRM") {
               isMasseurServicesDone = "CHƯA LÀM";
             } else if (service.bookingServiceStatus == "PROCESSING") {
               isMasseurServicesDone = "ĐANG LÀM";
@@ -873,7 +950,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
         if (stylistServices.isNotEmpty) {
           for (var service in stylistServices) {
             if (service.bookingServiceStatus == "ONGOING" ||
-                service.bookingServiceStatus == "LOCKED") {
+                service.bookingServiceStatus == "LOCKED" ||
+                service.bookingServiceStatus == "CONFIRM") {
               isStylistServicesDone = "CHƯA LÀM";
             } else if (service.bookingServiceStatus == "PROCESSING") {
               isStylistServicesDone = "ĐANG LÀM";
@@ -916,7 +994,19 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
             btn = btnStatus[0];
           }
         }
-
+        if (professional == "MASSEUR") {
+          for (var service in masseurServices) {
+            if (service.allowUpdate != null) {
+              checkAllowUpdate = service.allowUpdate!;
+            }
+          }
+        } else if (professional == "STYLIST") {
+          for (var service in stylistServices) {
+            if (service.allowUpdate != null) {
+              checkAllowUpdate = service.allowUpdate!;
+            }
+          }
+        }
         if (!_isDisposed && mounted) {
           setState(() {
             isLoading = false;

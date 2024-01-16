@@ -22,12 +22,14 @@ class ServiceBookingProcessingScreen extends StatefulWidget {
   final int? bookingId;
   final int? index;
   final String? professional;
+  final BookingServiceModel? service;
 
   const ServiceBookingProcessingScreen({
     Key? key,
     this.bookingId,
     this.index,
     this.professional,
+    this.service,
   }) : super(key: key);
 
   @override
@@ -300,7 +302,11 @@ class _ServiceBookingProcessingScreenState
                                                       const BoxConstraints(
                                                           maxWidth: 194),
                                                   child: Text(
-                                                    serviceBooking.serviceName!,
+                                                    utf8.decode(widget
+                                                        .service!.serviceName!
+                                                        .toString()
+                                                        .runes
+                                                        .toList()),
                                                     style: const TextStyle(
                                                         fontSize: 20),
                                                   ),
@@ -775,6 +781,7 @@ class _ServiceBookingProcessingScreenState
     super.dispose();
   }
 
+  int staffId = 0;
   bool isLoading = true;
   BookingServiceModel serviceBooking = BookingServiceModel();
   String duration = "00:00:00";
@@ -783,6 +790,7 @@ class _ServiceBookingProcessingScreenState
     if (!_isDisposed && mounted) {
       try {
         if (widget.bookingId != null) {
+          staffId = await SharedPreferencesService.getStaffId();
           final result =
               await BookingService().getBookingById(widget.bookingId!);
           if (result['statusCode'] == 200) {
@@ -802,17 +810,7 @@ class _ServiceBookingProcessingScreenState
             booking.bookingOwnerName =
                 utf8.decode(booking.bookingOwnerName.toString().runes.toList());
 
-            for (var service in booking.bookingServices!) {
-              if (service.bookingServiceStatus == "PROCESSING" &&
-                      service.professional == widget.professional
-                  // && service.actualStartTime != null
-                  ) {
-                service.serviceName =
-                    utf8.decode(service.serviceName.toString().runes.toList());
-                serviceBooking = service;
-              }
-            }
-
+            serviceBooking = widget.service!;
             // duration
             if (serviceBooking.startAppointment != null &&
                 serviceBooking.endAppointment != null) {
@@ -842,6 +840,7 @@ class _ServiceBookingProcessingScreenState
         print(e.toString());
         print("Error: $e");
       }
+      isLoading = false;
     }
   }
 
@@ -876,8 +875,11 @@ class _ServiceBookingProcessingScreenState
   Widget actualTime() {
     try {
       DateTime now = DateTime.now();
-      String timeString = serviceBooking.startAppointment!;
-      // String timeString = "00:15:56.37";
+      String timeString = "00:00:00";
+      if (serviceBooking.actualStartAppointment != null) {
+        timeString = serviceBooking.actualStartAppointment!;
+      }
+
       DateTime actualStartTime = DateTime(
         now.year,
         now.month,
@@ -889,8 +891,13 @@ class _ServiceBookingProcessingScreenState
       Duration difference = now.difference(actualStartTime);
       int seconds = difference.inSeconds % 60;
       int minutes = (difference.inSeconds ~/ 60) % 60;
-      // int hours = difference.inHours;
       int hours = 0;
+      // int hours = 0;
+      if (serviceBooking.actualStartAppointment != null) {
+        hours = difference.inHours;
+      } else {
+        hours = 0;
+      }
       String text =
           '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       return Text(
@@ -911,6 +918,11 @@ class _ServiceBookingProcessingScreenState
     }
   }
 
+  List<String> imageList = [];
+  BookingResultImgsModel bookingResultImgs =
+      BookingResultImgsModel(bookingResultImgs: []);
+  final storage = FirebaseStorage.instance;
+  List<Future<String>> uploadFutures = [];
   Future<void> btnFinishBookingService() async {
     if (!_isDisposed && mounted) {
       try {
@@ -920,14 +932,16 @@ class _ServiceBookingProcessingScreenState
         BookingService bookingService = BookingService();
         if (professional == "MASSEUR") {
           final result = await bookingService.putFinishService(
-              bookingServiceId, accountId);
+              bookingServiceId, accountId, bookingResultImgs);
           if (result['statusCode'] == 200) {
             Get.toNamed(MainScreen.MainScreenRoute);
           } else {
             _errorMessage(result['message']);
             print(result['error']);
           }
-        } else if (professional == "STYLIST") {
+        }
+        // Stylist
+        else if (professional == "STYLIST") {
           if (_images.isEmpty || _images.length < 4) {
             return showModalBottomSheet(
               enableDrag: true,
@@ -958,13 +972,36 @@ class _ServiceBookingProcessingScreenState
                 _selectedImageIndex = 0;
               });
             } else {
-              final result = await bookingService.putFinishService(
-                  bookingServiceId, accountId);
-              if (result['statusCode'] == 200) {
-                Get.toNamed(MainScreen.MainScreenRoute);
-              } else {
-                _errorMessage(result['message']);
-                print(result['error']);
+              imageList = [];
+              if (_images.length == 4) {
+                for (var image in _images) {
+                  imageList.add(
+                      '${booking.bookingCode}_${_images.indexOf(image)}.jpg');
+                  var reference = storage.ref(
+                      'booking/${booking.bookingCode}_${_images.indexOf(image)}.jpg');
+                  UploadTask uploadTask = reference.putFile(
+                      image, SettableMetadata(contentType: 'image/jpeg'));
+                  Future<TaskSnapshot> completedTask =
+                      uploadTask.whenComplete(() => null);
+                  uploadFutures.add(
+                      completedTask.then((_) => reference.getDownloadURL()));
+                }
+              }
+              if (imageList.length < 4) {
+                imageList = [];
+              }
+              List<String> downloadURLs = await Future.wait(uploadFutures);
+              if (downloadURLs.length == 4) {
+                bookingResultImgs =
+                    BookingResultImgsModel(bookingResultImgs: imageList);
+                final result = await bookingService.putFinishService(
+                    bookingServiceId, accountId, bookingResultImgs);
+                if (result['statusCode'] == 200) {
+                  Get.toNamed(MainScreen.MainScreenRoute);
+                } else {
+                  _errorMessage(result['message']);
+                  print(result['error']);
+                }
               }
             }
           }
@@ -1019,7 +1056,6 @@ class _ServiceBookingProcessingScreenState
     );
   }
 
-  final FirebaseStorage storage = FirebaseStorage.instance;
   Future<void> uploadFile(File file) async {
     // name file booking_code + index
     Reference ref =

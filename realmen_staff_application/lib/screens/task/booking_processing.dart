@@ -112,6 +112,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
   // get booking
   Future<void> getBooking(int current) async {
     if (!_isDisposed && mounted) {
+      isLoading = true;
       do {
         try {
           int accountId = await SharedPreferencesService.getAccountId();
@@ -132,21 +133,23 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
 
               if (bookingModel.content!.isNotEmpty) {
                 for (var content in bookingModel.content!) {
-                  checkBSForThisAcc = content.bookingServices!
-                      .any((service) => service.professional == professional);
-                  if (checkBSForThisAcc) {
-                    DateTime dateTimeContent =
-                        DateTime.parse(content.appointmentDate!);
-                    DateTime nowWithTime = DateTime.now();
-                    DateTime now = DateTime(
-                        nowWithTime.year, nowWithTime.month, nowWithTime.day);
-                    if (dateTimeContent.compareTo(now) == 0 &&
-                        content.bookingStatus == "PROCESSING") {
-                      content.bookingServices!.sort((a, b) =>
-                          a.bookingServiceId!.compareTo(b.bookingServiceId!));
-                      bookingContent = content;
-                      bookingViews.add(
-                          BookingProcessingDetail(booking: bookingContent));
+                  if (content.bookingServices != null) {
+                    checkBSForThisAcc = content.bookingServices!
+                        .any((service) => service.professional == professional);
+                    if (checkBSForThisAcc) {
+                      DateTime dateTimeContent =
+                          DateTime.parse(content.appointmentDate!);
+                      DateTime nowWithTime = DateTime.now();
+                      DateTime now = DateTime(
+                          nowWithTime.year, nowWithTime.month, nowWithTime.day);
+                      if (dateTimeContent.compareTo(now) == 0 &&
+                          content.bookingStatus == "PROCESSING") {
+                        content.bookingServices!.sort((a, b) =>
+                            a.bookingServiceId!.compareTo(b.bookingServiceId!));
+                        bookingContent = content;
+                        bookingViews.add(
+                            BookingProcessingDetail(booking: bookingContent));
+                      }
                     }
                   }
                 }
@@ -186,6 +189,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
         } on Exception catch (e) {
           print(e.toString());
           print("Error: $e");
+          isLoading = false;
           break;
         }
       } while (current <= totalPages);

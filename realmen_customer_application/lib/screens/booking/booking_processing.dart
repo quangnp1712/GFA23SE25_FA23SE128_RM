@@ -115,11 +115,14 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                                         Container(
                                           margin:
                                               const EdgeInsets.only(top: 30),
-                                          height: 50,
-                                          width: 50,
                                           child: const Center(
                                             child: Text(
-                                                "Bạn chưa có lịch đặt nào"),
+                                              "Bạn chưa có lịch đặt nào",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.black,
+                                              ),
+                                            ),
                                           ),
                                         )
                                       ],
@@ -514,7 +517,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
       for (var service in booking.bookingServices!) {
         if (service.servicePrice != null) {
           total += double.parse(service.servicePrice.toString());
-          if (service.staffName != null) {
+          if (service.staffName == null) {
           } else if (service.professional == "MASSEUR") {
             massuer = utf8.decode(service.staffName!.toString().runes.toList());
           } else {
@@ -556,11 +559,12 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         int current = 1;
         int totalPages = 0;
         int accountId = await SharedPreferencesService.getAccountId();
+        int customerId = await SharedPreferencesService.getCusomterId();
         if (accountId != 0) {
           do {
             BookingModel bookingModel = BookingModel();
-            final result =
-                await BookingService().getBooking(accountId, current, 1);
+            final result = await BookingService()
+                .getBooking(accountId, customerId, current, 1);
             if (result['statusCode'] == 200) {
               bookingModel = result['data'] as BookingModel;
               current = result['current'];
@@ -630,6 +634,7 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         print(e.toString());
         print("Error: $e");
       }
+      isLoading = false;
     }
   }
 

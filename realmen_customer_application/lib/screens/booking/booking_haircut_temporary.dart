@@ -547,8 +547,10 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             current = result['current'];
             totalPages = result['totalPages'];
             massuers = List<AccountInfoModel>.from(accounts);
+
             massuers.removeWhere(
                 (massuer) => massuer.staff!.professional == 'STYLIST');
+
             if (massuers.isNotEmpty) {
               for (var massuer in massuers) {
                 int staffId = massuer.staff!.staffId!;
@@ -718,13 +720,13 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
     if (!_isDisposed && mounted) {
       try {
         int branchId = widget.branch!.branchId!;
-        int accountId = await SharedPreferencesService.getAccountId();
+        int customerId = await SharedPreferencesService.getCusomterId();
         // ignore: unnecessary_null_comparison
         if (bookingServices != null && bookingServices.isNotEmpty) {
           postBooking = BookingModel(
               appointmentDate: appointmentDate,
               branchId: branchId,
-              accountId: accountId,
+              customerId: customerId,
               bookingServices: bookingServices);
 
           try {

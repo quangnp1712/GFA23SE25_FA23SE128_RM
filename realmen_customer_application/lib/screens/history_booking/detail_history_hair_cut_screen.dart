@@ -467,7 +467,7 @@ class _DetailHistoryBookingScreenState
       for (var service in widget.booking!.bookingServices!) {
         if (service.servicePrice != null) {
           total += double.parse(service.servicePrice.toString());
-          if (service.staffName != null) {
+          if (service.staffName == null) {
           } else if (service.professional == "MASSEUR") {
             massuer = utf8.decode(service.staffName!.toString().runes.toList());
           } else {

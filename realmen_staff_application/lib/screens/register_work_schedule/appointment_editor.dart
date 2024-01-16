@@ -1421,25 +1421,25 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                         });
                                       },
                                     ),
-                                    const Divider(
-                                      indent: 50,
-                                      height: 1.0,
-                                      thickness: 1,
-                                    ),
-                                    RadioListTile<_EndRule>(
-                                      contentPadding:
-                                          const EdgeInsets.only(left: 7),
-                                      title: const Text('Không kết thúc'),
-                                      value: _EndRule.never,
-                                      groupValue: _endRule,
-                                      activeColor: Colors.blueAccent,
-                                      onChanged: (_EndRule? value) {
-                                        setState(() {
-                                          _endRule = _EndRule.never;
-                                          _rangeNoEndDate();
-                                        });
-                                      },
-                                    ),
+                                    // const Divider(
+                                    //   indent: 50,
+                                    //   height: 1.0,
+                                    //   thickness: 1,
+                                    // ),
+                                    // RadioListTile<_EndRule>(
+                                    //   contentPadding:
+                                    //       const EdgeInsets.only(left: 7),
+                                    //   title: const Text('Không kết thúc'),
+                                    //   value: _EndRule.never,
+                                    //   groupValue: _endRule,
+                                    //   activeColor: Colors.blueAccent,
+                                    //   onChanged: (_EndRule? value) {
+                                    //     setState(() {
+                                    //       _endRule = _EndRule.never;
+                                    //       _rangeNoEndDate();
+                                    //     });
+                                    //   },
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -1719,7 +1719,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
   }
 }
 
-enum _EndRule { never, endDate, count }
+enum _EndRule { endDate, count }
 
 enum _SelectRule {
   doesNotRepeat,

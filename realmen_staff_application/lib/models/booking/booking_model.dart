@@ -55,7 +55,7 @@ class BookingModel {
 
 class BookingContent {
   int? bookingId;
-  int? accountId;
+  int? customerId;
   int? branchId;
   String? bookingCode;
   String? bookingOwnerName;
@@ -63,12 +63,14 @@ class BookingContent {
   String? branchAddress;
   String? branchName;
   String? appointmentDate;
+  int? totalBookingPrice;
   List<BookingServiceModel>? bookingServices;
   String? bookingStatus;
+  bool? allowProcess;
 
   BookingContent({
     this.bookingId,
-    this.accountId,
+    this.customerId,
     this.branchId,
     this.bookingCode,
     this.bookingOwnerName,
@@ -78,12 +80,14 @@ class BookingContent {
     this.appointmentDate,
     this.bookingServices,
     this.bookingStatus,
+    this.totalBookingPrice,
+    this.allowProcess,
   });
 
   factory BookingContent.fromJson(Map<String, dynamic> json) {
     return BookingContent(
       bookingId: json['bookingId'],
-      accountId: json['accountId'],
+      customerId: json['customerId'],
       branchId: json['branchId'],
       bookingCode: json['bookingCode'],
       bookingOwnerName: json['bookingOwnerName'],
@@ -97,6 +101,8 @@ class BookingContent {
               .toList())
           : null,
       bookingStatus: json['bookingStatus'],
+      totalBookingPrice: json['totalBookingPrice'],
+      allowProcess: json['allowProcess'],
     );
   }
 }
@@ -111,13 +117,17 @@ class BookingServiceModel {
   String? staffName;
   String? staffPhone;
   String? startAppointment;
-  String? actualStartTime;
+  String? actualStartAppointment;
   String? endAppointment;
-  String? actualEndTime;
+  String? actualEndAppointment;
   String? duration;
   String? durationText;
   String? bookingServiceStatus;
   String? professional;
+
+  String? bookingServiceType;
+  String? bookingServiceTypeText;
+  List<BookingResultsModel>? bookingResults;
   bool? allowUpdate;
 
   BookingServiceModel({
@@ -130,14 +140,17 @@ class BookingServiceModel {
     this.staffName,
     this.staffPhone,
     this.startAppointment,
-    this.actualStartTime,
+    this.actualStartAppointment,
     this.endAppointment,
-    this.actualEndTime,
+    this.actualEndAppointment,
     this.duration,
     this.durationText,
     this.bookingServiceStatus,
     this.professional,
     this.allowUpdate,
+    this.bookingServiceType,
+    this.bookingServiceTypeText,
+    this.bookingResults,
   });
 
   Map<String, dynamic> toJson() {
@@ -160,14 +173,49 @@ class BookingServiceModel {
       staffName: json['staffName'],
       staffPhone: json['staffPhone'],
       startAppointment: json['startAppointment'],
-      actualStartTime: json['actualStartTime'],
+      actualStartAppointment: json['actualStartAppointment'],
       endAppointment: json['endAppointment'],
-      actualEndTime: json['actualEndTime'],
+      actualEndAppointment: json['actualEndAppointment'],
       duration: json['duration'],
       durationText: json['durationText'],
       bookingServiceStatus: json['bookingServiceStatus'],
       professional: json['professional'],
       allowUpdate: json['allowUpdate'],
+      bookingServiceType: json['bookingServiceType'],
+      bookingServiceTypeText: json['bookingServiceTypeText'],
+      bookingResults: json['bookingResults'] != null
+          ? ((json['bookingResults'] as List)
+              .map((e) => BookingResultsModel.fromJson(e))
+              .toList())
+          : null,
     );
+  }
+}
+
+class BookingResultsModel {
+  int? bookingResultId;
+  int? bookingServiceId;
+  String? bookingResultImg;
+  BookingResultsModel({
+    this.bookingResultId,
+    this.bookingServiceId,
+    this.bookingResultImg,
+  });
+  factory BookingResultsModel.fromJson(Map<String, dynamic> json) {
+    return BookingResultsModel(
+      bookingResultId: json['bookingResultId'],
+      bookingServiceId: json['bookingServiceId'],
+      bookingResultImg: json['bookingResultImg'],
+    );
+  }
+}
+
+class BookingResultImgsModel {
+  List<String> bookingResultImgs;
+  BookingResultImgsModel({
+    required this.bookingResultImgs,
+  });
+  Map<String, dynamic> toJson() {
+    return {'bookingResultImgs': bookingResultImgs};
   }
 }

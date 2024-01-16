@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
@@ -170,6 +171,9 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
     super.dispose();
   }
 
+  List<String> imageList = [];
+  BookingResultImgsModel bookingResultImgs =
+      BookingResultImgsModel(bookingResultImgs: []);
   Future<void> btnFinishBookingService() async {
     if (!_isDisposed && mounted) {
       try {
@@ -178,7 +182,7 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
           final int bookingServiceId = widget.bookingServiceId!;
           final int accountId = widget.accountId!;
           final result = await bookingService.putFinishService(
-              bookingServiceId, accountId);
+              bookingServiceId, accountId, bookingResultImgs);
           if (result['statusCode'] == 200) {
             Get.toNamed(MainScreen.MainScreenRoute);
           } else {

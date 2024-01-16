@@ -11,15 +11,15 @@ import 'package:realmen_staff_application/models/schedule/schedule_model.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 
 abstract class IScheduleService {
-  Future<dynamic> postSchedule(int accountId, SchedulesModel schedulesModel);
-  Future<dynamic> getSchedule(int accountId);
+  Future<dynamic> postSchedule(int staffId, SchedulesModel schedulesModel);
+  Future<dynamic> getSchedule(int staffId);
 }
 
 class ScheduleService extends IScheduleService {
   @override
-  Future postSchedule(int accountId, SchedulesModel schedulesModel) async {
+  Future postSchedule(int staffId, SchedulesModel schedulesModel) async {
     try {
-      Uri uri = Uri.parse("$schedulesListUrl?accountId=$accountId");
+      Uri uri = Uri.parse("$schedulesListUrl?staffId=$staffId");
       final client = http.Client();
       final String jwtToken = await SharedPreferencesService.getJwt();
 

@@ -235,52 +235,52 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   final FocusNode _focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
-  void submitPhone() async {
-    String phone = phoneController.text.toString();
-    LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
-    AuthenticateService authenticateService = AuthenticateService();
-    if (phone.isNotEmpty &&
-        phone != '' &&
-        RegExp(r'^0\d{8,11}$').hasMatch(phone)) {
-      try {
-        var result = await authenticateService.loginPhone(loginPhoneModel);
-        if (result["data"] == "false" && result['statusCode'] == 200) {
-          Get.toNamed(RegisterScreen.RegisterScreenRoute);
-        } else if (result["data"] == "true" && result['statusCode'] == 200) {
-          Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
-          // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-        } else if (result['statusCode'] == 500) {
-          _errorMessage("${result['error']}");
-        } else {
-          _errorMessage("Số điện thoại không đúng");
-          // print("$result['statusCode'] : $result['error']");
-        }
-      } catch (e) {
-        _errorMessage("Số điện thoại không đúng");
-        print("Error: $e");
-      }
-    } else if (phone.isEmpty || phone == '') {
-      _errorMessage("Xin nhập số điện thoại");
-    } else if (phone.length < 8 || phone.length > 11) {
-      _errorMessage("Số điện thoại không đúng");
-    } else {
-      _errorMessage("Số điện thoại không đúng");
-    }
-  }
-
-  // // No API
   // void submitPhone() async {
-  //   _focusNode.unfocus();
-  //   // String phone = phoneController.text.toString();
-  //   String phone = "0917901487";
-  //   Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-  //   // Get.toNamed(RegisterScreen.RegisterScreenRoute);
-  //   try {
-  //     await SharedPreferencesService.savePhone(phone);
-  //   } catch (e) {
-  //     _errorMessage(e.toString());
+  //   String phone = phoneController.text.toString();
+  //   LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+  //   AuthenticateService authenticateService = AuthenticateService();
+  //   if (phone.isNotEmpty &&
+  //       phone != '' &&
+  //       RegExp(r'^0\d{8,11}$').hasMatch(phone)) {
+  //     try {
+  //       var result = await authenticateService.loginPhone(loginPhoneModel);
+  //       if (result["data"] == "false" && result['statusCode'] == 200) {
+  //         Get.toNamed(RegisterScreen.RegisterScreenRoute);
+  //       } else if (result["data"] == "true" && result['statusCode'] == 200) {
+  //         Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
+  //         // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+  //       } else if (result['statusCode'] == 500) {
+  //         _errorMessage("${result['error']}");
+  //       } else {
+  //         _errorMessage("Số điện thoại không đúng");
+  //         // print("$result['statusCode'] : $result['error']");
+  //       }
+  //     } catch (e) {
+  //       _errorMessage("Số điện thoại không đúng");
+  //       print("Error: $e");
+  //     }
+  //   } else if (phone.isEmpty || phone == '') {
+  //     _errorMessage("Xin nhập số điện thoại");
+  //   } else if (phone.length < 8 || phone.length > 11) {
+  //     _errorMessage("Số điện thoại không đúng");
+  //   } else {
+  //     _errorMessage("Số điện thoại không đúng");
   //   }
   // }
+
+  // // No API
+  void submitPhone() async {
+    _focusNode.unfocus();
+    // String phone = phoneController.text.toString();
+    String phone = "0917901487";
+    Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+    // Get.toNamed(RegisterScreen.RegisterScreenRoute);
+    try {
+      await SharedPreferencesService.savePhone(phone);
+    } catch (e) {
+      _errorMessage(e.toString());
+    }
+  }
 
   void _errorMessage(String? message) {
     try {

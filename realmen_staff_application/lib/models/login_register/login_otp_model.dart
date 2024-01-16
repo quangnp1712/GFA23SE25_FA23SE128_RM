@@ -27,9 +27,11 @@ class LoginOtpResponseModel {
     this.jwtToken,
     this.role,
     this.expTime,
+    this.customerId,
   });
 
   int? accountId;
+  int? customerId;
   int? staffId;
   int? branchId;
   String? phone;
@@ -46,5 +48,6 @@ class LoginOtpResponseModel {
         jwtToken: json["jwtToken"],
         role: json["role"],
         expTime: json["expTime"],
+        customerId: json["customerId"],
       );
 }

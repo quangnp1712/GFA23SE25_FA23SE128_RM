@@ -118,9 +118,9 @@ class _RegisterWorkScheduleScreenState
                               timeFormat: "CA TỐI",
                             ),
                             // ignore: prefer_if_null_operators,
-                            specialRegions: _specialTimeRegions != null
-                                ? _specialTimeRegions
-                                : <TimeRegion>[],
+                            // specialRegions: _specialTimeRegions != null
+                            //     ? _specialTimeRegions
+                            //     : <TimeRegion>[],
                           ),
                         ),
                         Padding(
@@ -321,9 +321,9 @@ class _RegisterWorkScheduleScreenState
       }
       if (schedulesModel.scheduleModelList!.isNotEmpty) {
         try {
-          int accountId = await SharedPreferencesService.getAccountId();
+          int staffId = await SharedPreferencesService.getStaffId();
           var result =
-              await scheduleService.postSchedule(accountId, schedulesModel);
+              await scheduleService.postSchedule(staffId, schedulesModel);
           if (result['statusCode'] == 200) {
             _successMessage("Đăng ký thành công");
           } else {

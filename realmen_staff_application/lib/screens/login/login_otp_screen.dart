@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:realmen_staff_application/models/schedule/login_register/login_otp_model.dart';
+import 'package:realmen_staff_application/models/login_register/login_otp_model.dart';
 import 'package:realmen_staff_application/screens/main_bottom_bar/main_screen.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/authentication/authenticate_service.dart';
@@ -192,20 +192,26 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     AuthenticateService authenticateService = AuthenticateService();
     try {
       var result = await authenticateService.loginOtp(loginOtpModel);
-      if (result != null && result['statusCode'] == 200) {
+      if (result != null &&
+          result['statusCode'] == 200 &&
+          result['data'] != null) {
         try {
-          if (result['data'].loginOtpResponseModel.jwtToken != null) {
+          loginOtpModel = result['data'];
+          if (loginOtpModel.loginOtpResponseModel!.jwtToken != null &&
+              loginOtpModel.loginOtpResponseModel!.staffId != null) {
             _successMessage("Đăng nhập thành công");
             // Navigator.pushNamed(context, MainScreen.MainScreenRoute);
             Get.toNamed(MainScreen.MainScreenRoute);
           } else {
-            _errorMessage(result['error']);
+            _errorMessage("Tài khoản không hợp lệ");
           }
         } catch (e) {
           _errorMessage("Sai mã OTP");
         }
+      } else if (result['statusCode'] == 200) {
+        _errorMessage("Tài khoản không hợp lệ");
       } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+        _errorMessage("Vui lòng thử lại");
       }
     } catch (e) {
       print("Error: $e");

@@ -7,9 +7,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:realmen_staff_application/global_variable.dart';
 import 'package:realmen_staff_application/models/exception/exception_model.dart';
-import 'package:realmen_staff_application/models/schedule/login_register/login_otp_model.dart';
-import 'package:realmen_staff_application/models/schedule/login_register/login_phone_model.dart';
-import 'package:realmen_staff_application/models/schedule/login_register/register_customer_model.dart';
+import 'package:realmen_staff_application/models/login_register/login_otp_model.dart';
+import 'package:realmen_staff_application/models/login_register/login_phone_model.dart';
+import 'package:realmen_staff_application/models/login_register/register_customer_model.dart';
 import 'package:realmen_staff_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +124,9 @@ class AuthenticateService extends IAuthenticateService {
       if (statusCode == 200) {
         final _loginOtpModel =
             LoginOtpModel.fromJson(json.decode(responseBody));
-        if (_loginOtpModel.loginOtpResponseModel?.jwtToken != null) {
+        if (_loginOtpModel.loginOtpResponseModel?.jwtToken != null &&
+            _loginOtpModel.loginOtpResponseModel!.staffId != null &&
+            _loginOtpModel.loginOtpResponseModel!.role == "STAFF") {
           await SharedPreferencesService.saveAccountInfo(
               _loginOtpModel.loginOtpResponseModel!);
           return {
@@ -134,7 +136,7 @@ class AuthenticateService extends IAuthenticateService {
         } else {
           return {
             'statusCode': statusCode,
-            'error': "ERROR: $_loginOtpModel",
+            'error': "Tài khoản không hợp lệ",
           };
         }
       } else if (statusCode == 401) {

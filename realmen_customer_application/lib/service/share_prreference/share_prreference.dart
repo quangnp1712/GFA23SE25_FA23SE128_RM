@@ -81,7 +81,8 @@ class SharedPreferencesService {
       loginOtpResponseModel.phone!,
       loginOtpResponseModel.jwtToken!,
       loginOtpResponseModel.role!,
-      loginOtpResponseModel.accountId!.toString()
+      loginOtpResponseModel.accountId!.toString(),
+      loginOtpResponseModel.customerId!.toString(),
     ]);
   }
 
@@ -109,6 +110,18 @@ class SharedPreferencesService {
     List<String>? result = sharedPreferences.getStringList("accountInfo");
     if (result != null && result.length >= 4) {
       int accountId = int.parse(result[3]);
+      return accountId;
+    } else {
+      return 0;
+    }
+  }
+
+  static Future<int> getCusomterId() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    List<String>? result = sharedPreferences.getStringList("accountInfo");
+    if (result != null && result.length >= 4) {
+      int accountId = int.parse(result[4]);
       return accountId;
     } else {
       return 0;

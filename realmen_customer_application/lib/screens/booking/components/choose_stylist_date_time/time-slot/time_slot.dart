@@ -350,6 +350,11 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
           // bool checkBetween = checkIsAfter && checkIsBefore;
 
           // lấy những ca làm trong 3 ngày
+          if (listDate!.isNotEmpty) {
+            listDate!.removeWhere((date) =>
+                date['dateTime'] ==
+                "${DateTime.parse(schedule.value.workingDate!)}");
+          }
           if (DateTime.parse(schedule.value.workingDate!) ==
                   DateTime(now.year, now.month, now.day, 0) ||
               (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&

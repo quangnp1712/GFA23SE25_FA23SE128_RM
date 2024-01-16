@@ -33,6 +33,12 @@ final scheduleListUrl =
 
 // Booking API
 final bookingUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BOOKING"]}";
+
+// Booking Service API
+final getBookingServiceAPI =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["SERVICE_BOOKING"]}";
+final confirmBookingUrl =
+    "${dotenv.env["DOMAIN"]}/${dotenv.env["CONFIRM_BOOKING"]}";
 final startBookingUrl =
     "${dotenv.env["DOMAIN"]}/${dotenv.env["START_BOOKING"]}";
 final finishBookingUrl =

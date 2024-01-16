@@ -2,10 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/task/booking_processing.dart';
 import 'package:realmen_staff_application/screens/task/booking_waiting.dart';
 import 'package:realmen_staff_application/service/account/account_info_service.dart';
+import 'package:realmen_staff_application/service/booking/booking_service.dart';
+import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
 
 class TaskScreen extends StatefulWidget {
   TaskScreen(this.callback, {super.key});
@@ -113,15 +117,52 @@ class _TaskScreenState extends State<TaskScreen>
                                               ),
                                             ),
                                           ),
-                                          Tab(
-                                            child: Text(
-                                              'ĐANG CHỜ',
-                                              style: GoogleFonts.quicksand(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ),
+                                          !checkBadge
+                                              ? Tab(
+                                                  child: Text(
+                                                    'ĐANG CHỜ',
+                                                    style:
+                                                        GoogleFonts.quicksand(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Tab(
+                                                  child: badges.Badge(
+                                                    badgeStyle:
+                                                        badges.BadgeStyle(
+                                                      shape: badges
+                                                          .BadgeShape.circle,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      padding:
+                                                          EdgeInsets.all(2),
+                                                      badgeColor: Colors.red,
+                                                    ),
+                                                    position:
+                                                        badges.BadgePosition
+                                                            .topEnd(
+                                                                top: -12,
+                                                                end: -20),
+                                                    badgeContent: Icon(
+                                                      Icons.priority_high,
+                                                      color: Colors.white,
+                                                      size: 13,
+                                                    ),
+                                                    child: Text(
+                                                      'ĐANG CHỜ',
+                                                      style:
+                                                          GoogleFonts.quicksand(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                         ],
                                       ),
                                       const SizedBox(
@@ -159,6 +200,7 @@ class _TaskScreenState extends State<TaskScreen>
   @override
   void initState() {
     getAccountInfo();
+    getBookingService();
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -186,6 +228,41 @@ class _TaskScreenState extends State<TaskScreen>
         print(e.toString());
         print("Error: $e");
       }
+    }
+  }
+
+  int current = 1;
+  int currentResult = 0;
+  int totalPages = 0;
+  bool checkBadge = false;
+
+  List<BookingServiceModel> bookingContent = [];
+  Future<void> getBookingService() async {
+    if (mounted) {
+      do {
+        try {
+          int staffId = await SharedPreferencesService.getStaffId();
+          if (staffId != 0) {
+            final result =
+                await BookingService().getBookingService(staffId, current);
+            if (result['statusCode'] == 200) {
+              bookingContent.addAll(result['data']);
+              currentResult = result['current'];
+              totalPages = result['totalPages'];
+              current = currentResult;
+              current = current + 1;
+              checkBadge = bookingContent.any((element) =>
+                  (element.bookingServiceStatus == "CONFIRM" ||
+                      element.bookingServiceStatus == "REQUEST_CONFIRM "));
+              if (mounted) {
+                setState(() {
+                  checkBadge;
+                });
+              }
+            }
+          }
+        } catch (e) {}
+      } while (current <= totalPages);
     }
   }
 }

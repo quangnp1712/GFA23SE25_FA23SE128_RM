@@ -10,6 +10,8 @@ import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_accept_guests.dart';
 import 'package:realmen_staff_application/service/booking/booking_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
+import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
 
 class BookingWaitingTab extends StatefulWidget {
   const BookingWaitingTab({super.key});
@@ -85,11 +87,41 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                           .toString()
                                           .runes
                                           .toList());
+                                  bool isComfirm = false;
+                                  String bookingServiceStatus = "";
+                                  for (var bookingService
+                                      in bookingsPending[index]
+                                          .bookings![i]
+                                          .bookingServices!) {
+                                    if (bookingService.staffId == staffId) {
+                                      if (bookingService.bookingServiceStatus ==
+                                              "REQUEST_CONFIRM" ||
+                                          bookingService.bookingServiceStatus ==
+                                              "CONFIRM") {
+                                        if (bookingService
+                                                .bookingServiceStatus ==
+                                            "REQUEST_CONFIRM") {
+                                          bookingServiceStatus = "Chờ xác nhận";
+                                        } else if (bookingService
+                                                .bookingServiceStatus ==
+                                            "CONFIRM") {
+                                          bookingServiceStatus = "Đã xác nhận";
+                                        }
+                                        isComfirm = true;
+                                        break;
+                                      } else {
+                                        isComfirm = false;
+                                      }
+                                    }
+                                  }
 
                                   // Return a Card widget for each item in the list
                                   return ExpansionTile(
                                     tilePadding: const EdgeInsets.all(0),
                                     backgroundColor: Colors.transparent,
+                                    collapsedBackgroundColor: isComfirm
+                                        ? Colors.amber
+                                        : Colors.transparent,
                                     title: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -257,6 +289,59 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                     ),
                                                   ],
                                                 ),
+                                                isComfirm
+                                                    ? Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Container(
+                                                                width: 120,
+                                                                child:
+                                                                    const Text(
+                                                                  "Trạng thái: ",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                width: 200,
+                                                                child: Text(
+                                                                  bookingServiceStatus,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  maxLines: 1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .amber
+                                                                        .shade800,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        19,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : Container(),
+
                                                 // Center(
                                                 //   child: TextButton(
                                                 //     onPressed: () {
@@ -337,7 +422,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                 ),
                                                 const Padding(
                                                   padding: EdgeInsets.symmetric(
-                                                    vertical: 10,
+                                                    vertical: 8,
                                                   ),
                                                   child: Divider(
                                                     color: Colors.black,
@@ -345,89 +430,115 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                     thickness: 1,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 10),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      // Container(
-                                                      //   height: 50,
-                                                      //   padding:
-                                                      //       const EdgeInsets.symmetric(
-                                                      //           horizontal: 5),
-                                                      //   decoration: BoxDecoration(
-                                                      //       color: Colors.grey,
-                                                      //       borderRadius:
-                                                      //           BorderRadius.circular(
-                                                      //               10)),
-                                                      //   // margin: EdgeInsets.all(10),
-                                                      //   child: TextButton(
-                                                      //     onPressed: () {},
-                                                      //     child: const Center(
-                                                      //       child: Text(
-                                                      //         "Chuyển khách",
-                                                      //         style: TextStyle(
-                                                      //             fontSize: 20,
-                                                      //             color: Colors.white),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
-                                                      Container(
-                                                        height: 50,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 10),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                border:
-                                                                    Border.all(
-                                                                  color: Colors
-                                                                      .black54,
-                                                                  width: 1,
-                                                                  style:
-                                                                      BorderStyle
-                                                                          .solid,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
-                                                        // margin: EdgeInsets.all(10),
-                                                        child: TextButton(
-                                                          onPressed: () {
-                                                            _popup(
-                                                                name,
-                                                                phone,
-                                                                bookingsPending[
-                                                                        index]
-                                                                    .bookings![
-                                                                        i]
-                                                                    .bookingId!);
-                                                          },
-                                                          child: const Center(
-                                                            child: Text(
-                                                              "Nhận khách",
-                                                              style: TextStyle(
-                                                                  fontSize: 20,
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
+                                                bookingServiceStatus ==
+                                                        "Đã xác nhận"
+                                                    ? Container(
+                                                        height: 60,
+                                                        child: Center(
+                                                          child: Text(
+                                                            "Vui lòng chờ các nhân viên khác xác nhận!",
+                                                            style: TextStyle(
+                                                                fontSize: 16),
                                                           ),
                                                         ),
+                                                      )
+                                                    : Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        10),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                // Container(
+                                                                //   height: 50,
+                                                                //   padding:
+                                                                //       const EdgeInsets.symmetric(
+                                                                //           horizontal: 5),
+                                                                //   decoration: BoxDecoration(
+                                                                //       color: Colors.grey,
+                                                                //       borderRadius:
+                                                                //           BorderRadius.circular(
+                                                                //               10)),
+                                                                //   // margin: EdgeInsets.all(10),
+                                                                //   child: TextButton(
+                                                                //     onPressed: () {},
+                                                                //     child: const Center(
+                                                                //       child: Text(
+                                                                //         "Chuyển khách",
+                                                                //         style: TextStyle(
+                                                                //             fontSize: 20,
+                                                                //             color: Colors.white),
+                                                                //       ),
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
+                                                                Container(
+                                                                  height: 50,
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          border: Border
+                                                                              .all(
+                                                                            color:
+                                                                                Colors.black54,
+                                                                            width:
+                                                                                1,
+                                                                            style:
+                                                                                BorderStyle.solid,
+                                                                          ),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10)),
+                                                                  // margin: EdgeInsets.all(10),
+                                                                  child:
+                                                                      TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      _popup(
+                                                                        name,
+                                                                        phone,
+                                                                        bookingsPending[index]
+                                                                            .bookings![i]
+                                                                            .bookingId!,
+                                                                        bookingsPending[index]
+                                                                            .bookings![i],
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Text(
+                                                                        bookingServiceStatus ==
+                                                                                "Chờ xác nhận"
+                                                                            ? "Xác nhận"
+                                                                            : "Nhận khách",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          )
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                )
                                               ],
                                             ),
                                           ),
@@ -444,8 +555,11 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                           );
                         }),
                   )
-                : const Center(
-                    child: Text("Chưa có đơn booking"),
+                : Container(
+                    height: 70.h,
+                    child: const Center(
+                      child: Text("Chưa có đơn booking"),
+                    ),
                   ),
       ),
     );
@@ -467,7 +581,9 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
     super.dispose();
   }
 
-  Future<void> _popup(String name, String phone, int bookingId) async {
+  // button
+  Future<void> _popup(
+      String name, String phone, int bookingId, BookingContent booking) async {
     if (!_isDisposed) {
       return showModalBottomSheet(
         enableDrag: true,
@@ -481,8 +597,8 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
             top: Radius.circular(20),
           ),
         ),
-        builder: (context) =>
-            PopUpAcceptGuest(name: name, phone: phone, bookingId: bookingId),
+        builder: (context) => PopUpAcceptGuest(
+            name: name, phone: phone, bookingId: bookingId, booking: booking),
       );
     }
   }
@@ -493,6 +609,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
   int current = 0;
   int currentResult = 0;
   int totalPages = 0;
+  int staffId = 0;
 
   // get booking
   Future<void> getBookingPending(int current) async {
@@ -500,142 +617,160 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
       List<BookingContent> bookings = [];
       List<String> dates = [];
       List<DateTime> dateTimes = [];
-      do {
-        try {
-          int accountId = await SharedPreferencesService.getAccountId();
-          String professional =
-              await SharedPreferencesService.getProfessional();
-          if (accountId != 0) {
-            BookingModel bookingModel = BookingModel();
-            final result =
-                await BookingService().getBooking(accountId, current, 10);
-            if (result['statusCode'] == 200) {
-              bookingModel = result['data'] as BookingModel;
-              currentResult = result['current'];
-              totalPages = result['totalPages'];
-              current = currentResult;
-              current = current + 1;
+      try {
+        do {
+          try {
+            int accountId = await SharedPreferencesService.getAccountId();
+            staffId = await SharedPreferencesService.getStaffId();
 
-              if (bookingModel.content!.isNotEmpty) {
-                for (var content in bookingModel.content!) {
-                  DateTime nowWithTime = DateTime.now();
-                  DateTime now = DateTime(
-                      nowWithTime.year, nowWithTime.month, nowWithTime.day);
-                  DateTime bookingDate =
-                      DateTime.parse(content.appointmentDate!);
-                  int checkDate = bookingDate.compareTo(now);
-                  if (!dateTimes.contains(bookingDate) && checkDate == 0) {
-                    dateTimes.add(DateTime.parse(content.appointmentDate!));
+            if (accountId != 0) {
+              BookingModel bookingModel = BookingModel();
+              final result =
+                  await BookingService().getBooking(accountId, current, 10);
+              if (result['statusCode'] == 200) {
+                bookingModel = result['data'] as BookingModel;
+                currentResult = result['current'];
+                totalPages = result['totalPages'];
+                current = currentResult;
+                current = current + 1;
+
+                if (bookingModel.content!.isNotEmpty) {
+                  try {
+                    for (var content in bookingModel.content!) {
+                      if (content.appointmentDate != null) {
+                        DateTime nowWithTime = DateTime.now();
+                        DateTime now = DateTime(nowWithTime.year,
+                            nowWithTime.month, nowWithTime.day);
+                        DateTime bookingDate =
+                            DateTime.parse(content.appointmentDate!);
+                        int checkDate = bookingDate.compareTo(now);
+                        if (!dateTimes.contains(bookingDate) &&
+                            checkDate == 0) {
+                          dateTimes
+                              .add(DateTime.parse(content.appointmentDate!));
+                        }
+                      }
+                    }
+                  } on Exception catch (e) {
+                    isLoading = false;
                   }
-                }
 
-                if (dateTimes.isNotEmpty) {
-                  dateTimes.sort((a, b) => a.compareTo(b));
-                }
-                for (var dateTime in dateTimes) {
-                  String sDateTime = DateFormat('yyyy-MM-dd').format(dateTime);
-                  if (dates.isNotEmpty) {
-                    bool checkDate = dates.contains((sDateTime));
+                  if (dateTimes.isNotEmpty) {
+                    dateTimes.sort((a, b) => a.compareTo(b));
+                  }
+                  for (var dateTime in dateTimes) {
+                    String sDateTime =
+                        DateFormat('yyyy-MM-dd').format(dateTime);
+                    if (dates.isNotEmpty) {
+                      bool checkDate = dates.contains((sDateTime));
 
-                    if (!checkDate) {
+                      if (!checkDate) {
+                        dates.add(sDateTime);
+                      }
+                    } else {
                       dates.add(sDateTime);
                     }
-                  } else {
-                    dates.add(sDateTime);
                   }
-                }
-                for (var date in dates) {
-                  bookings = [];
-                  for (var content in bookingModel.content!) {
-                    bool checkBookingsForThisAcc = content.bookingServices!
-                        .any((service) => service.professional == professional);
-                    if (date == content.appointmentDate &&
-                        content.bookingStatus == "ONGOING" &&
-                        checkBookingsForThisAcc) {
-                      if (content.bookingServices!.length >= 2) {
-                        content.bookingServices!.sort((a, b) =>
-                            a.bookingServiceId!.compareTo(b.bookingServiceId!));
+
+                  for (var date in dates) {
+                    bookings = [];
+                    for (var content in bookingModel.content!) {
+                      bool checkBookingsForThisAcc = content.bookingServices!
+                          .any((service) => service.staffId == staffId);
+                      if (date == content.appointmentDate &&
+                          content.bookingStatus == "ONGOING" &&
+                          checkBookingsForThisAcc) {
+                        if (content.bookingServices!.length >= 2) {
+                          content.bookingServices!.sort((a, b) => a
+                              .bookingServiceId!
+                              .compareTo(b.bookingServiceId!));
+                        }
+                        bookings.add(content);
                       }
-                      bookings.add(content);
                     }
-                  }
 
-                  DateTime dateFormat = DateTime.parse(date);
-                  date = formatDate(dateFormat);
+                    DateTime dateFormat = DateTime.parse(date);
+                    date = formatDate(dateFormat);
 
-                  if (bookings.isNotEmpty) {
-                    bookings.sort(((a, b) {
-                      int check = a.bookingServices!.first.startAppointment!
-                          .compareTo(
-                              b.bookingServices!.first.startAppointment!);
-                      return check;
-                    }));
-                    // add bookingsPending (date , bookings )
-                    if (bookingsPending.isNotEmpty) {
-                      bool isDateContained = bookingsPending
-                          .any((bookingPending) => bookingPending.date == date);
-                      if (isDateContained) {
-                        for (var bookingPending in bookingsPending) {
-                          bookingPending.bookings!.addAll(bookings);
-                          bookingPending.bookings!.sort(((a, b) {
-                            int check = a
-                                .bookingServices!.first.startAppointment!
-                                .compareTo(
-                                    b.bookingServices!.first.startAppointment!);
-                            return check;
-                          }));
+                    if (bookings.isNotEmpty) {
+                      bookings.sort(((a, b) {
+                        int check = a.bookingServices!.first.startAppointment!
+                            .compareTo(
+                                b.bookingServices!.first.startAppointment!);
+                        return check;
+                      }));
+                      // add bookingsPending (date , bookings )
+                      if (bookingsPending.isNotEmpty) {
+                        bool isDateContained = bookingsPending.any(
+                            (bookingPending) => bookingPending.date == date);
+                        if (isDateContained) {
+                          for (var bookingPending in bookingsPending) {
+                            bookingPending.bookings!.addAll(bookings);
+                            bookingPending.bookings!.sort(((a, b) {
+                              int check = a
+                                  .bookingServices!.first.startAppointment!
+                                  .compareTo(b.bookingServices!.first
+                                      .startAppointment!);
+                              return check;
+                            }));
+                          }
+                        } else {
+                          BookingPendingModel newBookingPending =
+                              BookingPendingModel(
+                                  date: date, bookings: bookings);
+                          bookingsPending.add(newBookingPending);
                         }
                       } else {
                         BookingPendingModel newBookingPending =
                             BookingPendingModel(date: date, bookings: bookings);
                         bookingsPending.add(newBookingPending);
                       }
-                    } else {
-                      BookingPendingModel newBookingPending =
-                          BookingPendingModel(date: date, bookings: bookings);
-                      bookingsPending.add(newBookingPending);
                     }
                   }
-                }
 
-                if (!_isDisposed && mounted) {
-                  setState(() {
-                    bookingsPending;
-                    current;
-                  });
+                  if (!_isDisposed && mounted) {
+                    setState(() {
+                      bookingsPending;
+                      current;
+                    });
+                  }
+                } else {
+                  if (!_isDisposed && mounted) {
+                    setState(() {
+                      bookingsPending;
+                      current;
+                    });
+                  }
                 }
+              } else if (result['statusCode'] == 500) {
+                _errorMessage(result['message']);
+                break;
+              } else if (result['statusCode'] == 403) {
+                _errorMessage(result['error']);
+                break;
+                // AuthenticateService authenticateService = AuthenticateService();
+                // authenticateService.logout();
               } else {
-                if (!_isDisposed && mounted) {
-                  setState(() {
-                    bookings;
-                    current;
-                  });
-                }
+                print("$result");
+                break;
               }
-            } else if (result['statusCode'] == 500) {
-              _errorMessage(result['error']);
-              break;
-            } else if (result['statusCode'] == 403) {
-              _errorMessage(result['error']);
-              break;
-              // AuthenticateService authenticateService = AuthenticateService();
-              // authenticateService.logout();
-            } else {
-              print("$result");
-              break;
             }
+          } on Exception catch (e) {
+            print(e.toString());
+            print("Error: $e");
+            isLoading = false;
+            break;
           }
-        } on Exception catch (e) {
-          print(e.toString());
-          print("Error: $e");
-          break;
+        } while (current <= totalPages);
+        if (!_isDisposed && mounted) {
+          setState(() {
+            isLoading = false;
+          });
         }
-      } while (current <= totalPages);
-      if (!_isDisposed && mounted) {
-        setState(() {
-          isLoading = false;
-        });
+      } on Exception catch (e) {
+        isLoading = false;
       }
+      isLoading = false;
     }
   }
 

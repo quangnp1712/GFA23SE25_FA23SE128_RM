@@ -64,6 +64,10 @@ dependencies:
   flutter_localization: ^0.1.14
   syncfusion_localizations: ^23.2.5
   image_picker: ^1.0.4
+  badges:
+    ^3.1.2
+    # tăng tốc độ hiển thị ảnh
+  cached_network_image: ^3.3.0
 
   flutter_web_plugins:
     sdk: flutter

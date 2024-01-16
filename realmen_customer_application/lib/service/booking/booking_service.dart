@@ -12,18 +12,20 @@ import 'package:realmen_customer_application/service/share_prreference/share_prr
 
 abstract class IBookingService {
   Future<dynamic> postBooking(BookingModel booking);
-  Future<dynamic> getBooking(int accountId, int current, int pageRequest);
+  Future<dynamic> getBooking(
+      int accountId, int customer, int current, int pageRequest);
   Future<dynamic> getBookingById(int bookingId);
 }
 
 class BookingService implements IBookingService {
   @override
-  Future getBooking(int accountId, int current, int pageRequest) async {
+  Future getBooking(
+      int accountId, int customerId, int current, int pageRequest) async {
     try {
       BookingModel bookingModel = BookingModel();
       final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse(
-          "$bookingUrl?accountId=$accountId&current=$current&pageRequest=$pageRequest");
+          "$bookingUrl?accountId=$accountId&customerId=$customerId&current=$current&pageRequest=$pageRequest");
       final client = http.Client();
       final response = await client.get(
         uri,

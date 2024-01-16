@@ -5,7 +5,7 @@ import 'package:realmen_staff_application/models/account/account_info_model.dart
 import 'package:realmen_staff_application/service/authentication/authenticate_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:realmen_staff_application/models/schedule/login_register/login_otp_model.dart';
+import 'package:realmen_staff_application/models/login_register/login_otp_model.dart';
 
 class SharedPreferencesService {
   static Future<SharedPreferences> initSharedPreferenced() async {
@@ -128,7 +128,7 @@ class SharedPreferencesService {
       int staffId = int.parse(result[4]);
       return staffId;
     } else {
-      throw Exception("Failed to get account ID from SharedPreferences");
+      return 0;
     }
   }
 

@@ -12,9 +12,11 @@ import 'package:realmen_staff_application/service/share_prreference/share_prrefe
 abstract class IBookingService {
   Future<dynamic> getBooking(int accountId, int current, int pageRequest);
   Future<dynamic> getBookingById(int bookingId);
-  Future<dynamic> putConfirmBooking(int bookingId);
+  Future<dynamic> getBookingService(int staffId, int current);
+  Future<dynamic> putConfirmBooking(int bookingServiceId, int accountId);
   Future<dynamic> putStartService(int bookingServiceId, int accountId);
-  Future<dynamic> putFinishService(int bookingServiceId, int accountId);
+  Future<dynamic> putFinishService(int bookingServiceId, int accountId,
+      BookingResultImgsModel bookingResultImgs);
 }
 
 class BookingService implements IBookingService {
@@ -151,10 +153,11 @@ class BookingService implements IBookingService {
   }
 
   @override
-  Future putConfirmBooking(int bookingId) async {
+  Future putConfirmBooking(int bookingServiceId, int accountId) async {
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
-      Uri uri = Uri.parse("$bookingUrl/$bookingId?isAccepted=true");
+      Uri uri = Uri.parse(
+          "$confirmBookingUrl/$bookingServiceId/confirm-service?accountId=$accountId");
       final client = http.Client();
       final response = await client.put(
         uri,
@@ -272,13 +275,76 @@ class BookingService implements IBookingService {
   }
 
   @override
-  Future putFinishService(int bookingServiceId, int accountId) async {
+  Future putFinishService(int bookingServiceId, int accountId,
+      BookingResultImgsModel bookingResultImgs) async {
     try {
       final String jwtToken = await SharedPreferencesService.getJwt();
       Uri uri = Uri.parse(
           "$startBookingUrl/$bookingServiceId/finish-service?accountId=$accountId");
       final client = http.Client();
-      final response = await client.put(
+      final response = await client
+          .put(uri,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+                'Authorization': 'Bearer $jwtToken'
+              },
+              body: json.encode(bookingResultImgs.toJson()))
+          .timeout(Duration(seconds: connectionTimeOut));
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+      if (statusCode == 200) {
+        return {
+          'statusCode': statusCode,
+        };
+      } else {
+        try {
+          final ServerExceptionModel exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+            'message': "Vui lòng thử lại",
+          };
+        } catch (e) {
+          return {
+            'statusCode': 400,
+            'error': e,
+            'message': "Vui lòng thử lại",
+          };
+        }
+      }
+    } on TimeoutException catch (e) {
+      return {
+        'statusCode': 408,
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
+      };
+    } on SocketException catch (e) {
+      return {
+        'statusCode': 500,
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
+      };
+    } catch (e) {
+      return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
+      };
+    }
+  }
+
+  Future getBookingService(int staffId, int current) async {
+    try {
+      List<BookingServiceModel> bookingModel = [];
+      final String jwtToken = await SharedPreferencesService.getJwt();
+      Uri uri = Uri.parse(
+          "$getBookingServiceAPI?staffId=$staffId&sorter=bookingServiceId&current=$current&pageSize=20");
+      final client = http.Client();
+      final response = await client.get(
         uri,
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -290,8 +356,18 @@ class BookingService implements IBookingService {
       final statusCode = response.statusCode;
       final responseBody = response.body;
       if (statusCode == 200) {
+        final content = json.decode(responseBody);
+        bookingModel = (content['content'] as List)
+            .map((e) => BookingServiceModel.fromJson(e))
+            .toList();
+
+        var totalPages = json.decode(responseBody)['totalPages'] as int;
+        current = json.decode(responseBody)['current'] as int;
         return {
           'statusCode': statusCode,
+          'data': bookingModel,
+          'totalPages': totalPages,
+          'current': current,
         };
       } else {
         try {

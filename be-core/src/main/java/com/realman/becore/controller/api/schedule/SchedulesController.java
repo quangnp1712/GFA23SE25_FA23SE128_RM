@@ -21,7 +21,7 @@ public class SchedulesController implements SchedulesAPI {
     @Override
     public void save(Long staffId, List<ScheduleRequest> scheduleRequestList) {
         List<Schedule> schedules = scheduleRequestList.stream().map(scheduleModelMapper::toDto).toList();
-        scheduleUseCaseService.save(staffId, schedules);
+        scheduleUseCaseService.save(schedules);
     }
 
 }

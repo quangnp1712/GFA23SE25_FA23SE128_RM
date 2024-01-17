@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Min;
 public interface BookingServicesAPI {
     @GetMapping
     PageImplResponse<BookingServiceResponse> findByStaffId(
-            @RequestParam(value = "staffId") Long staffId,
+            @RequestParam(required = false, value = "staffId") Long staffId,
             @RequestParam(required = false, value = "sorter", defaultValue = "appointmentDate") String sorter,
             @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,
             @RequestParam(required = false, value = "pageSize", defaultValue = "20") Integer pageSize);

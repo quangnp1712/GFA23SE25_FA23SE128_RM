@@ -14,18 +14,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/v1/booking-service/{bookingServiceId}")
 public interface BookingServiceAPI {
         @PutMapping("/start-service")
-        void startService(@PathVariable Long bookingServiceId, @RequestParam Long accountId);
+        void startService(@PathVariable Long bookingServiceId, @RequestParam(required = false) Long accountId);
 
         @PutMapping("/finish-service")
         void endService(
                         @PathVariable Long bookingServiceId,
                         @RequestBody BookingResultRequest bookingResultRequest,
-                        @RequestParam Long accountId);
+                        @RequestParam(required = false) Long accountId);
 
         @PutMapping("/confirm-service")
         void confirmService(
                         @PathVariable Long bookingServiceId,
-                        @RequestParam Long accountId);
+                        @RequestParam(required = false) Long accountId);
 
         @PutMapping("/cancel-service")
         @PreAuthorize("hasRole('ROLE_CUSTOMER')")

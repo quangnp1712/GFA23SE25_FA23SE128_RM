@@ -3,7 +3,6 @@ package com.realman.becore.service.booking.service;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import java.time.LocalTime;
-import com.realman.becore.controller.api.booking.service.models.AccountId;
 import com.realman.becore.controller.api.booking.service.models.BookingResultRequest;
 import com.realman.becore.controller.api.booking.service.models.BookingServiceId;
 import com.realman.becore.dto.booking.result.BookingResult;
@@ -17,6 +16,8 @@ import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.booking.service.BookingServiceEntity;
 import com.realman.becore.repository.database.booking.service.BookingServiceRepository;
 import com.realman.becore.service.booking.result.BookingResultCommandService;
+import com.realman.becore.util.RequestContext;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +30,8 @@ public class BookingServiceCommandService {
     private final BookingResultCommandService bookingResultCommandService;
     @NonNull
     private final BookingServiceMapper bookingServiceMapper;
+    @NonNull
+    private final RequestContext requestContext;
 
     public void saveAll(Long bookingId, List<BookingService> bookingServiceList) {
         List<BookingServiceEntity> bookingServiceEntities = bookingServiceList.stream()
@@ -57,9 +60,9 @@ public class BookingServiceCommandService {
         bookingServiceRepository.save(foundBookingService);
     }
 
-    public void startService(BookingServiceId bookingServiceId, AccountId accountId) {
+    public void startService(BookingServiceId bookingServiceId) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
-                .findInfoById(bookingServiceId.value(), accountId.value())
+                .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
             List<BookingServiceEntity> otherBookingServices = bookingServiceRepository
@@ -78,10 +81,9 @@ public class BookingServiceCommandService {
         }
     }
 
-    public void finishService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequests,
-            AccountId accountId) {
+    public void finishService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequests) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
-                .findInfoById(bookingServiceId.value(), accountId.value())
+                .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
             BookingServiceEntity foundBookingServiceEntity = bookingServiceMapper.toEntity(bookingInfo);
@@ -100,9 +102,9 @@ public class BookingServiceCommandService {
         }
     }
 
-    public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
+    public void confirmService(BookingServiceId bookingServiceId) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
-                .findInfoById(bookingServiceId.value(), accountId.value())
+                .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
             BookingServiceEntity foundBookingService = bookingServiceMapper.toEntity(bookingInfo);

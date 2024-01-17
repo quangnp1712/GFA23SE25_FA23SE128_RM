@@ -13,9 +13,13 @@ import com.realman.becore.repository.database.booking.BookingEntity;
 public interface BookingMapper {
     @Mapping(source = "bookingStatus", target = "bookingStatus")
     @Mapping(source = "bookingCode", target = "bookingCode")
-    BookingEntity toEntity(Booking dto, String bookingCode, EBookingStatus bookingStatus);
+    @Mapping(source = "customerId", target = "customerId")
+    BookingEntity toEntity(Booking dto, String bookingCode, EBookingStatus bookingStatus, Long customerId);
 
     Booking toDto(BookingInfo info, List<BookingService> bookingServices);
 
     Booking toDto(BookingInfo info, List<BookingService> bookingServices, Boolean allowProcess);
+
+    @Mapping(source = "totalBookingPrice", target = "totalBookingPrice", defaultValue = "0L")
+    Booking toDto(BookingInfo info, List<BookingService> bookingServices, Long totalBookingPrice);
 }

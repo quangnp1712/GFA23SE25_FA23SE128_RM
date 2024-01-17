@@ -9,6 +9,7 @@ import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.dto.booking.service.BookingServiceMapper;
 import com.realman.becore.repository.database.booking.service.BookingServiceRepository;
 import com.realman.becore.service.booking.result.BookingResultUseCaseService;
+import com.realman.becore.util.RequestContext;
 import com.realman.becore.util.response.PageRequestCustom;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ public class BookingServiceQueryService {
     private final BookingResultUseCaseService bookingResultUseCaseService;
     @NonNull
     private final BookingServiceMapper bookingServiceMapper;
+    @NonNull
+    private final RequestContext requestContext;
 
     public List<BookingService> findByBookingId(Long bookingId) {
         Map<Long, List<BookingResult>> bookingResults = bookingResultUseCaseService.findAll();
@@ -30,17 +33,17 @@ public class BookingServiceQueryService {
         return bookingServices;
     }
 
-    public Page<BookingService> findByStaffId(Long staffId, PageRequestCustom pageRequestCustom) {
+    public Page<BookingService> findByStaffId(PageRequestCustom pageRequestCustom) {
         Map<Long, List<BookingResult>> bookingResults = bookingResultUseCaseService.findAll();
         Page<BookingService> bookingServices = bookingServiceRepository
-                .findByStaffId(staffId, pageRequestCustom.pageRequest())
+                .findByStaffId(requestContext.getStaffId(), pageRequestCustom.pageRequest())
                 .map(r -> bookingServiceMapper.toDto(r, bookingResults.get(r.getBookingServiceId())));
         return bookingServices;
     }
 
-    public List<BookingService> findAll(Long accountId) {
+    public List<BookingService> findAll() {
         Map<Long, List<BookingResult>> bookingResults = bookingResultUseCaseService.findAll();
-        return bookingServiceRepository.findAllInfo(accountId).stream()
+        return bookingServiceRepository.findAllInfo(requestContext.getAccountId()).stream()
                 .map(r -> bookingServiceMapper.toDto(r, bookingResults.get(r.getBookingServiceId()))).toList();
     }
 }

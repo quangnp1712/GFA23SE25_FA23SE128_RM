@@ -44,11 +44,18 @@ public class BookingQueryService {
         public Page<Booking> findAll(BookingSearchCriteria searchCriteria, Long accountId,
                         PageRequestCustom pageRequestCustom) {
                 Map<Long, List<BookingService>> bookingServiceMap = bookingServiceUseCaseService
-                                .findAll(accountId)
+                                .findAll()
                                 .stream().collect(Collectors.groupingBy(BookingService::bookingId));
                 Page<Booking> bookings = bookingRepository.findAllInfo(searchCriteria, pageRequestCustom.pageRequest())
-                                .map(booking -> bookingMapper.toDto(booking,
-                                                bookingServiceMap.get(booking.getBookingId())));
+                                .map(booking -> {
+                                        Long totalBookingPrice = bookingRepository
+                                                        .findBookingPrice(booking.getBookingId()).stream()
+                                                        .reduce(Long::sum)
+                                                        .orElse(0L);
+                                        return bookingMapper.toDto(booking,
+                                                        bookingServiceMap.get(booking.getBookingId()),
+                                                        totalBookingPrice);
+                                });
                 return bookings;
         }
 

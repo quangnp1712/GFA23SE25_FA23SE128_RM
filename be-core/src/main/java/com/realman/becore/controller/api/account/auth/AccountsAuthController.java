@@ -37,7 +37,7 @@ public class AccountsAuthController implements AccountsAuthAPI {
         @Override
         public void saveStaff(@Valid AccountRequest account, EProfessional professional,
                         Long branchId) {
-                Account dto = accountModelMapper.toDto(account.format(), ERole.STAFF);
+                Account dto = accountModelMapper.toDto(account.format(), professional);
                 accountUseCaseService.saveStaff(dto, new BranchId(branchId), professional);
         }
 

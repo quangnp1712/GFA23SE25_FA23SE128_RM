@@ -12,6 +12,7 @@ import com.realman.becore.dto.timeslot.TimeSlot;
 import com.realman.becore.dto.timeslot.TimeSlotInfo;
 import com.realman.becore.dto.timeslot.TimeSlotMapper;
 import com.realman.becore.repository.database.timeslot.TimeSlotRepository;
+import com.realman.becore.util.RequestContext;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,11 @@ public class TimeSlotQueryService {
     private final TimeSlotRepository timeSlotRepository;
     @NonNull
     private final TimeSlotMapper timeSlotMapper;
+    @NonNull
+    private final RequestContext requestContext;
 
-    public List<TimeSlot> findTimeSlots(LocalDate chosenDate, Long staffId) {
-        List<TimeSlotInfo> timeSlotInfos = timeSlotRepository.findAllInfoById(chosenDate, staffId);
+    public List<TimeSlot> findTimeSlots(LocalDate chosenDate) {
+        List<TimeSlotInfo> timeSlotInfos = timeSlotRepository.findAllInfoById(chosenDate, requestContext.getStaffId());
         Map<Long, List<TimeSlotInfo>> timeSlotMap = timeSlotInfos.stream()
                 .collect(Collectors.groupingBy(TimeSlotInfo::getTimeSlotId));
         List<TimeSlot> timeSlots = new ArrayList<>();

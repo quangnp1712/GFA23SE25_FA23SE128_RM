@@ -10,8 +10,7 @@ import lombok.Builder;
 
 @Builder
 public record BookingRequest(
-        @NotNull LocalDate appointmentDate,
-        @NotNull Long branchId,
-        @NotNull Long customerId,
-        @NotNull List<BookingServiceRequest> bookingServices) {
+                @NotNull LocalDate appointmentDate,
+                @NotNull Long branchId,
+                @NotNull List<BookingServiceRequest> bookingServices) {
 }

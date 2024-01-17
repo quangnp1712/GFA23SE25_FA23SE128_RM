@@ -69,6 +69,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
                 bs.bookingServiceStatus AS bookingServiceStatus
             FROM BookingEntity b
             INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
+            INNER JOIN BranchServiceEntity bsr ON b.branchId = bsr.branchId
             WHERE bs.staffId = :staffId
             """)
     List<BookingInfo> findInfoByStaffId(Long staffId);
@@ -115,4 +116,15 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             GROUP BY bs
             """)
     List<Boolean> hasBookingContainBookingServiceStatus(Long bookingServiceId, Long bookingId);
+
+    @Query("""
+            SELECT DISTINCT
+                bsr.branchServicePrice
+            FROM BookingEntity b
+            INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
+            INNER JOIN BranchServiceEntity bsr ON bs.serviceId = bsr.serviceId
+            WHERE b.bookingId = :bookingId
+            GROUP BY bsr.branchServicePrice
+            """)
+    List<Long> findBookingPrice(Long bookingId);
 }

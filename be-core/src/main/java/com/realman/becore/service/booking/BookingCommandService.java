@@ -9,6 +9,8 @@ import com.realman.becore.repository.database.booking.BookingEntity;
 import com.realman.becore.repository.database.booking.BookingRepository;
 import com.realman.becore.service.booking.service.BookingServiceCommandService;
 import com.realman.becore.service.twilio.TwilioUseCaseService;
+import com.realman.becore.util.RequestContext;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -26,6 +28,8 @@ public class BookingCommandService {
     private final TwilioUseCaseService twilioUseCaseService;
     @NonNull
     private final BookingMapper bookingMapper;
+    @NonNull
+    private final RequestContext requestContext;
 
     public void save(Booking booking) {
         StringBuilder bookingCode = new StringBuilder();
@@ -34,7 +38,8 @@ public class BookingCommandService {
                 .append(LocalDate.now().getYear()).append("_").append(LocalTime.now().getHour())
                 .append(LocalTime.now().getMinute())
                 .append(LocalTime.now().getSecond());
-        BookingEntity bookingEntity = bookingMapper.toEntity(booking, bookingCode.toString(), EBookingStatus.ONGOING);
+        BookingEntity bookingEntity = bookingMapper.toEntity(booking, bookingCode.toString(), EBookingStatus.ONGOING,
+                requestContext.getCustomerId());
         BookingEntity savedBooking = bookingRepository.save(bookingEntity);
         bookingServiceCommandService.saveAll(savedBooking.getBookingId(), booking.bookingServices());
     }

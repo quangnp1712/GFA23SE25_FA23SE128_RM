@@ -25,7 +25,7 @@ public class BookingServiceUseCaseService {
 
     @Transactional
     public void startService(BookingServiceId bookingServiceId, AccountId accountId) {
-        bookingServiceCommandService.startService(bookingServiceId, accountId);
+        bookingServiceCommandService.startService(bookingServiceId);
     }
 
     @Transactional
@@ -36,23 +36,23 @@ public class BookingServiceUseCaseService {
     @Transactional
     public void endService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequest,
             AccountId accountId) {
-        bookingServiceCommandService.finishService(bookingServiceId, bookingResultRequest, accountId);
+        bookingServiceCommandService.finishService(bookingServiceId, bookingResultRequest);
     }
 
     public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
-        bookingServiceCommandService.confirmService(bookingServiceId, accountId);
+        bookingServiceCommandService.confirmService(bookingServiceId);
     }
 
     public List<BookingService> findByBookingId(Long bookingId) {
         return bookingServiceQueryService.findByBookingId(bookingId);
     }
 
-    public List<BookingService> findAll(Long accountId) {
-        return bookingServiceQueryService.findAll(accountId);
+    public List<BookingService> findAll() {
+        return bookingServiceQueryService.findAll();
     }
 
     public Page<BookingService> findByStaffId(Long staffId, PageRequestCustom pageRequestCustom) {
-        return bookingServiceQueryService.findByStaffId(staffId, pageRequestCustom);
+        return bookingServiceQueryService.findByStaffId(pageRequestCustom);
     }
 
 }

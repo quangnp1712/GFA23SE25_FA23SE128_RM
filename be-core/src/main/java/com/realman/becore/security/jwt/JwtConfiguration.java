@@ -36,7 +36,7 @@ public class JwtConfiguration {
         return LocalDateTime.ofInstant(Instant.now().plusSeconds(jwtExpiredTime), ZoneId.systemDefault());
     }
 
-    private Claims getClaimsFromJwt(String jwt) {
+    public Claims getClaimsFromJwt(String jwt) {
         return (Claims) Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(jwtSecretKey.getBytes())).build()
                 .parse(jwt).getBody();
     }
@@ -47,7 +47,7 @@ public class JwtConfiguration {
 
     public String getJwtFromRequestHeader(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
-        
+
         if (AppUtil.stringHasLength(authorization)) {
             if (authorization.startsWith("Bearer ")) {
                 String jwt = authorization.substring(7);

@@ -20,4 +20,5 @@ public class ServiceDisplayEntity {
     private Long serviceDisplayId;
     private Long serviceId;
     private String serviceDisplayUrl;
+    private String serviceDisplayBase64Url;
 }

@@ -25,6 +25,6 @@ public class TimeSlotUseCaseService {
     }
 
     public List<TimeSlot> findTimeSlots(LocalDate chosenDate, Long staffId) {
-        return timeSlotQueryService.findTimeSlots(chosenDate);
+        return timeSlotQueryService.findTimeSlots(chosenDate, staffId);
     }
 }

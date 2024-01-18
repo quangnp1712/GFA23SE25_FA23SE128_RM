@@ -27,8 +27,8 @@ public class TimeSlotQueryService {
     @NonNull
     private final RequestContext requestContext;
 
-    public List<TimeSlot> findTimeSlots(LocalDate chosenDate) {
-        List<TimeSlotInfo> timeSlotInfos = timeSlotRepository.findAllInfoById(chosenDate, requestContext.getStaffId());
+    public List<TimeSlot> findTimeSlots(LocalDate chosenDate, Long staffId) {
+        List<TimeSlotInfo> timeSlotInfos = timeSlotRepository.findAllInfoById(chosenDate, staffId);
         Map<Long, List<TimeSlotInfo>> timeSlotMap = timeSlotInfos.stream()
                 .collect(Collectors.groupingBy(TimeSlotInfo::getTimeSlotId));
         List<TimeSlot> timeSlots = new ArrayList<>();

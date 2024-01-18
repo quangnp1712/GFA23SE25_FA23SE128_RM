@@ -17,6 +17,7 @@ public record Branch(
                 Long shopOwnerId,
                 String branchName,
                 @JsonProperty("thumbnailUrl") String branchThumbnailUrl,
+                String branchThumbnailBase64Url,
                 @JsonProperty("phone") String branchHotline,
                 @JsonProperty("address") String branchAddress,
                 @JsonProperty("status") EBranchStatus branchStatus,

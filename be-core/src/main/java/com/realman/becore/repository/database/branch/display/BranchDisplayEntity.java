@@ -26,4 +26,5 @@ public class BranchDisplayEntity extends Auditable {
     private Long branchDisplayId;
     private Long branchId;
     private String url;
+    private String branchDisplayBase64Url;
 }

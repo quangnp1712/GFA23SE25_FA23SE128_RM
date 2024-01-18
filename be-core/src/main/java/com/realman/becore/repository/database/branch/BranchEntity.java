@@ -33,6 +33,7 @@ public class BranchEntity extends Auditable {
     private String branchName;
     @Column(columnDefinition = "NVARCHAR(250)", name = "thumbnail_url")
     private String branchThumbnailUrl;
+    private String branchThumbnailBase64Url;
     @Column(columnDefinition = "NVARCHAR(250)", name = "phone")
     private String branchHotline;
     @Column(columnDefinition = "NVARCHAR(500)", name = "address")

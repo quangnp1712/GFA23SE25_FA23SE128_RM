@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ServiceDisplayResponse(
-    Long serviceDisplayId,
-    String serviceDisplayUrl
-) {
+        Long serviceDisplayId,
+        String serviceDisplayUrl,
+        String serviceDisplayBase64Url) {
 }

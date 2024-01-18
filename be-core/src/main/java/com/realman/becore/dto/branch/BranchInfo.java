@@ -16,6 +16,8 @@ public interface BranchInfo {
 
     void setBranchThumbnailUrl(String branchThumbnailUrl);
 
+    void setBranchThumbnailBase64Url(String branchThumbnailBase64Url);
+
     void setBranchAddress(String branchAddress);
 
     void setBranchHotline(String branchHotline);
@@ -106,4 +108,6 @@ public interface BranchInfo {
     Double getAverageRating();
 
     EProfessional getProfessional();
+
+    String getBranchThumbnailBase64Url();
 }

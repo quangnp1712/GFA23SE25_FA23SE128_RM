@@ -4,6 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record ServiceDisplayRequest(
-    String serviceDisplayUrl
-) {
+        String serviceDisplayUrl,
+        String serviceDisplayBase64Url) {
 }

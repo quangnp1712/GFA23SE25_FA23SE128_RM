@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -11,7 +15,11 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadModule } from 'ng-zorro-antd/upload';
+import {
+  NzUploadFile,
+  NzUploadModule,
+  NzUploadXHRArgs,
+} from 'ng-zorro-antd/upload';
 import { BranchApi } from '../data-access/model/branch-api.model';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -20,6 +28,9 @@ import { BranchStore } from '../data-access/store/branch.store';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
+import { Observable } from 'rxjs';
+import { getStorage, ref, uploadString } from 'firebase/storage';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 @Component({
   selector: 'app-branch',
@@ -43,6 +54,7 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
     NzAutocompleteModule,
     RxLet,
     OnlyNumberInputDirective,
+    NzImageModule
   ],
   providers: [provideComponentStore(BranchStore), NzMessageService],
   template: `
@@ -215,7 +227,13 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
               >Ảnh chi nhánh</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[85%]">
-              <nz-upload nzType="drag" [nzMultiple]="true">
+              <nz-upload
+                nzType="drag"
+                [nzMultiple]="true"
+                [nzCustomRequest]="handleUpload"
+                [nzFileList]="bStore.fileList"
+                [nzShowUploadList]="false"
+              >
                 <p class="ant-upload-drag-icon">
                   <span nz-icon nzType="inbox"></span>
                 </p>
@@ -227,6 +245,22 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
                   uploading company data or other band files
                 </p>
               </nz-upload>
+              <div *ngFor="let file of bStore.fileList, index as index" class="tw-relative tw-text-center tw-mt-3">
+              <img
+                nz-image
+                nzSrc="{{ file.thumbUrl }}"
+                width="30%"
+                height="30%"
+                alt="preview-image"
+                class="tw-object-contain tw-cursor-pointer" />
+              <i
+                nz-icon
+                nzType="close-circle"
+                nzTheme="twotone"
+                nzTwotoneColor="#e10027"
+                (click)="handleRemove(index)"
+                class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"></i>
+            </div>
             </nz-form-control>
           </nz-form-item>
 
@@ -258,24 +292,66 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BranchComponent {
-  constructor(public bStore: BranchStore) {}
+  constructor(public bStore: BranchStore, private _cdr: ChangeDetectorRef) {}
 
   vm$ = this.bStore.state$;
   addModel!: BranchApi.Request;
+  branchDisplayList = [{url: ''}]
 
   addBranch() {
+  this.branchDisplayList = []
     this.bStore.form.controls.serviceArray.value.forEach((value) =>
       this.bStore.form.controls.branchServiceList.value.push({
         serviceId: value,
         price: 0,
       })
     );
+    this.bStore.fileList.forEach(url => {
+      this.branchDisplayList.push({url: 'branch/'+url.name})
+    })
+    this.bStore.form.controls.branchDisplayList.patchValue(this.branchDisplayList)
     this.addModel = this.bStore.form.getRawValue();
-    this.bStore.addBranch({ model: this.addModel });
+    console.log(this.bStore.fileList);
+
+    // this.bStore.addBranch({ model: this.addModel });
   }
 
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.bStore.getAddress(value);
+  }
+
+
+
+  handleUpload = (item: NzUploadXHRArgs) => {
+    return new Observable(
+      (subscriber: { next: (arg0: string | ArrayBuffer | null) => void }) => {
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+          subscriber.next(reader.result);
+        };
+        reader.readAsDataURL(item.file as unknown as File);
+      }
+    ).subscribe({
+      next: (result) => {
+        this.bStore.fileListTmp.push({
+          uid: item.file.uid,
+          name: item.file.name ?? '',
+          status: 'done',
+          thumbUrl: result!.toString(),
+          url: result!.toString().split(';base64,')[1]
+        });
+        this.bStore.fileList = this.bStore.fileListTmp
+        this._cdr.markForCheck();
+      },
+      error: (err) => {
+        this._cdr.markForCheck();
+      },
+    });
+  };
+
+  handleRemove(index: number) {
+    this.bStore.fileListTmp.splice(index,1)
+    this.bStore.fileList = this.bStore.fileListTmp
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -11,7 +11,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzUploadModule, NzUploadXHRArgs } from 'ng-zorro-antd/upload';
 import { BranchApi } from '../data-access/model/branch-api.model';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -21,6 +21,8 @@ import { RxLet } from '@rx-angular/template/let';
 import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
 import { BranchUpdateStore } from '../data-access/store/branch-update.store';
 import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 @Component({
   selector: 'app-branch-update',
@@ -45,6 +47,7 @@ import { RouterLink } from '@angular/router';
     RxLet,
     OnlyNumberInputDirective,
     RouterLink,
+    NzImageModule
   ],
   providers: [provideComponentStore(BranchUpdateStore), NzMessageService],
   template: `
@@ -214,7 +217,13 @@ import { RouterLink } from '@angular/router';
               >Ảnh chi nhánh</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[85%]">
-              <nz-upload nzType="drag" [nzMultiple]="true">
+            <nz-upload
+                nzType="drag"
+                [nzMultiple]="true"
+                [nzCustomRequest]="handleUpload"
+                [nzFileList]="buStore.fileList"
+                [nzShowUploadList]="false"
+              >
                 <p class="ant-upload-drag-icon">
                   <span nz-icon nzType="inbox"></span>
                 </p>
@@ -226,6 +235,22 @@ import { RouterLink } from '@angular/router';
                   uploading company data or other band files
                 </p>
               </nz-upload>
+              <div *ngFor="let file of buStore.fileList, index as index" class="tw-relative tw-text-center tw-mt-3">
+              <img
+                nz-image
+                nzSrc="{{ file.thumbUrl }}"
+                width="30%"
+                height="30%"
+                alt="preview-image"
+                class="tw-object-contain tw-cursor-pointer" />
+              <i
+                nz-icon
+                nzType="close-circle"
+                nzTheme="twotone"
+                nzTwotoneColor="#e10027"
+                (click)="handleRemove(index)"
+                class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"></i>
+            </div>
             </nz-form-control>
           </nz-form-item>
 
@@ -257,7 +282,7 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BranchUpdateComponent implements OnInit {
-  constructor(public buStore: BranchUpdateStore) {}
+  constructor(public buStore: BranchUpdateStore, private _cdr: ChangeDetectorRef) {}
   ngOnInit(): void {
     this.buStore.getBranchData();
   }
@@ -282,5 +307,37 @@ export class BranchUpdateComponent implements OnInit {
       id: this.buStore.form.controls.branchId.getRawValue(),
       model: this.buStore.form.getRawValue(),
     });
+  }
+
+  handleUpload = (item: NzUploadXHRArgs) => {
+    return new Observable(
+      (subscriber: { next: (arg0: string | ArrayBuffer | null) => void }) => {
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+          subscriber.next(reader.result);
+        };
+        reader.readAsDataURL(item.file as unknown as File);
+      }
+    ).subscribe({
+      next: (result) => {
+        this.buStore.fileListTmp.push({
+          uid: item.file.uid,
+          name: item.file.name ?? '',
+          status: 'done',
+          thumbUrl: result!.toString(),
+          url: result!.toString().split(';base64,')[1]
+        });
+        this.buStore.fileList = this.buStore.fileListTmp
+        this._cdr.markForCheck();
+      },
+      error: (err) => {
+        this._cdr.markForCheck();
+      },
+    });
+  };
+
+  handleRemove(index: number) {
+    this.buStore.fileListTmp.splice(index,1)
+    this.buStore.fileList = this.buStore.fileListTmp
   }
 }

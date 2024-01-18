@@ -9,6 +9,10 @@ import SERVICE_MANAGEMENT_ROUTES from './service-management/service-management.r
 import SCHEDULE_MANAGEMENT_ROUTES from './schedule-management/schedule.routes';
 import { NotFoundComponent } from './share/ui/not-found.component';
 import { roleGuard } from './share/guard/role-guard';
+import { initializeApp } from 'firebase/app';
+import { environment } from 'src/environments/environment';
+
+const app = initializeApp(environment.firebaseConfig);
 
 const routes: Routes = [
   { path: '', loadChildren: () => LOGIN_ROUTES },

@@ -19,6 +19,14 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { ServiceDataApi } from 'src/app/service-management/data-access/model/service-api.model';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  StorageReference,
+  uploadString,
+} from 'firebase/storage';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 export interface BranchState {
   branchPaging: Paging<BranchPagingApi.Response>;
@@ -59,6 +67,13 @@ export class BranchStore
 
   addressData!: AutocompleteApi.Response;
   options: string[] = [];
+  fileList: NzUploadFile[] = [];
+  fileListTmp: NzUploadFile[] = [];
+  storage = getStorage();
+  storageRef = ref(this.storage, '/booking');
+  metadata = {
+    contentType: 'image/jpeg',
+  };
 
   pagingRequest: BranchPagingApi.Request = {
     current: 1,
@@ -134,6 +149,17 @@ export class BranchStore
         this._bApiSvc.addBranch(model).pipe(
           tap({
             next: (resp) => {
+              this.fileList.forEach((file) => {
+                this.storageRef = ref(this.storage, 'branch/' + file.name);
+                uploadString(
+                  this.storageRef,
+                  file.url!,
+                  'base64',
+                  this.metadata
+                ).then((snapshot) => {
+                  console.log('Uploaded a ' + file.name + ' string!');
+                });
+              });
               this.form.reset();
               this._nzMessageService.success('Đăng ký chi nhánh thành công');
             },

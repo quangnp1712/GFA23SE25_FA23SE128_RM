@@ -289,6 +289,7 @@ export class BranchUpdateComponent implements OnInit {
 
   vm$ = this.buStore.state$;
   addModel!: BranchApi.Request;
+  branchDisplayList = [{url: ''}]
 
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
@@ -303,6 +304,10 @@ export class BranchUpdateComponent implements OnInit {
         price: 0,
       })
     );
+    this.buStore.fileList.forEach(url => {
+      this.branchDisplayList.push({url: 'branch/'+url.name})
+    })
+    this.buStore.form.controls.branchDisplayList.patchValue(this.branchDisplayList)
     this.buStore.updateBranch({
       id: this.buStore.form.controls.branchId.getRawValue(),
       model: this.buStore.form.getRawValue(),

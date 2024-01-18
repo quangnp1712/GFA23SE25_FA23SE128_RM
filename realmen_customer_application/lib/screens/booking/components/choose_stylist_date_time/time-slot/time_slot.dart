@@ -20,11 +20,17 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
 
   // OneToOne
   final bool oneToOne;
+  bool? isChangeOptional;
   List<BookingServiceModel>? serviceOTOList;
   List<AccountInfoModel>? staffOneToOne;
   final void Function(String date)? onSetStylistShowOTO;
+  final void Function(String date)? choseDateUpdateStylist;
+  final void Function()? updateStylistDone;
+  final void Function()? changeDateDone;
   List<AccountInfoModel>? accountStaffBranchList;
   List<Map<String, dynamic>>? listDate;
+  bool? allowUpdateTimeslot;
+  bool? isChangeDate;
 
   ChooseDateAndTimeSlot({
     super.key,
@@ -38,6 +44,12 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
     this.accountStaffBranchList,
     this.onSetStylistShowOTO,
     this.listDate,
+    this.isChangeOptional,
+    this.allowUpdateTimeslot,
+    this.updateStylistDone,
+    this.choseDateUpdateStylist,
+    this.isChangeDate,
+    this.changeDateDone,
   });
 
   @override
@@ -198,6 +210,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                                         .toList()
                                     : [],
                                 onChanged: (value) {
+                                  // setstate
                                   setState(() {
                                     dateController = value as String?;
                                     dateSeleted = listDate!
@@ -214,10 +227,11 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                                         _isCurrentDate(dateSeleted!['date']);
                                     widget.onDateSelected(dateSeleted);
                                     if (widget.oneToOne) {
-                                      widget.onSetStylistShowOTO!(
+                                      widget.choseDateUpdateStylist!(
                                           dateSeleted!['chosenDate']);
+                                    } else {
+                                      getTimeSlot(dateSeleted!['chosenDate']);
                                     }
-                                    getTimeSlot(dateSeleted!['chosenDate']);
                                   });
 
                                   timeSlotKey.currentState?.rebuildTimeslot();
@@ -310,25 +324,70 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
     if (!widget.oneToOne) {
       getDate();
-    } else {
-      listDate = widget.listDate!;
-    }
+      if (widget.isChangeStylist != null && widget.isChangeStylist! == true) {
+        if (listDate!.isNotEmpty) {
+          dateController = listDate?.first['id'].toString();
+          dateSeleted = listDate?.first;
+          print("didUpdateWidget: $dateController");
+          type = listDate!.first['type'].toString();
+          timeSlotKey.currentState?.rebuildTimeslot();
+          setState(() {
+            widget.isChangeStylist = false;
+            isCurrentDate = _isCurrentDate(dateSeleted!['date']);
+          });
+          getTimeSlot(dateSeleted!['chosenDate']);
+        }
 
-    if (widget.isChangeStylist != null && widget.isChangeStylist! == true) {
-      if (listDate!.isNotEmpty) {
-        dateController = listDate?.first['id'].toString();
-        dateSeleted = listDate?.first;
-        print("didUpdateWidget: $dateController");
-        type = listDate!.first['type'].toString();
-        timeSlotKey.currentState?.rebuildTimeslot();
-        setState(() {
-          widget.isChangeStylist = false;
-          isCurrentDate = _isCurrentDate(dateSeleted!['date']);
-        });
-        getTimeSlot(dateSeleted!['chosenDate']);
+        build(context);
       }
+    } else if (widget.allowUpdateTimeslot != null &&
+        widget.allowUpdateTimeslot!) {
+      // khi chọn option
+      if (widget.isChangeOptional != null && widget.isChangeOptional! == true) {
+        if (listDate!.isNotEmpty) {
+          dateController = listDate?.first['id'].toString();
+          dateSeleted = listDate?.first;
+          print("didUpdateWidget: $dateController");
+          type = listDate!.first['type'].toString();
+          timeSlotKey.currentState?.rebuildTimeslot();
+          Future.delayed(Duration.zero, () {
+            setState(() {
+              widget.isChangeOptional = false;
+              isCurrentDate = _isCurrentDate(dateSeleted!['date']);
+            });
+          });
 
-      build(context);
+          getTimeSlot(dateSeleted!['chosenDate']);
+        }
+
+        build(context);
+      } else
+
+      // khi thay đổi styist
+      // chayj voo day khi chọn Stylist
+      if (widget.oneToOne && widget.isChangeStylist!) {
+        // thay đổi listdate
+        listDate = widget.listDate;
+        // lấy time slot của list date đó
+        if (widget.staffOneToOne!.length == 1) {
+          dateController = listDate?.first['id'].toString();
+          dateSeleted = listDate?.first;
+          type = listDate!.first['type'].toString();
+          timeSlotKey.currentState?.rebuildTimeslot();
+        }
+
+        isCurrentDate = _isCurrentDate(dateSeleted!['date']);
+        getTimeSlot(dateSeleted!['chosenDate']);
+        Future.delayed(Duration.zero, () {
+          widget.updateStylistDone!();
+        });
+        build(context);
+      } else if (widget.oneToOne && widget.isChangeDate!) {
+        getTimeSlot(dateSeleted!['chosenDate']);
+        Future.delayed(Duration.zero, () {
+          widget.changeDateDone!();
+        });
+      }
     }
 
     super.didUpdateWidget(oldWidget);
@@ -433,6 +492,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
           // random
           if (!_isDisposed && mounted) {
             try {
+              // if chưa chọn stylist - full random
               if (widget.staffOneToOne!.isEmpty) {
                 for (int i = 0; i <= 2; i++) {
                   listDate?.add({
@@ -485,10 +545,9 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                     });
                   }
                 }).toList();
+                listDate!
+                    .sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
               }
-
-              listDate!
-                  .sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
 
               if (!_isDisposed && mounted) {
                 setState(() {
@@ -611,7 +670,6 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     'sunday': 'Chủ nhật'
   };
   List<TimeSlotModel> timeSlotModel = [];
-
   // tạo data List timeslot để ktr timeslot ava/una
   Future<void> getTimeSlot(dateSeleted) async {
     if (!_isDisposed && mounted) {
@@ -626,6 +684,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
             if (result['statusCode'] == 200) {
               timeSlotModel = result['data'];
               if (!_isDisposed && mounted) {
+                // gọi didupdate
                 setState(() {
                   timeSlotModel;
                 });

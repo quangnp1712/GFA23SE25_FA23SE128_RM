@@ -977,10 +977,13 @@ class _ServiceBookingProcessingScreenState
                 for (var image in _images) {
                   imageList.add(
                       '${booking.bookingCode}_${_images.indexOf(image)}.jpg');
+                  // Reference
                   var reference = storage.ref(
                       'booking/${booking.bookingCode}_${_images.indexOf(image)}.jpg');
+                  // upload file
                   UploadTask uploadTask = reference.putFile(
                       image, SettableMetadata(contentType: 'image/jpeg'));
+                  // kiem tra up xong chua
                   Future<TaskSnapshot> completedTask =
                       uploadTask.whenComplete(() => null);
                   uploadFutures.add(

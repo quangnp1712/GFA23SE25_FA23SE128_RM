@@ -26,6 +26,14 @@ class ChooseStylist extends StatefulWidget {
   // data service - stylist
   final BranchServiceModel? service;
 
+// hàm này chỉ chọn stylist rồi truyền lại về đây
+  final void Function(BookingServiceModel serviceOTO)?
+      choseStylistUpdatePostBooking;
+
+  // hàm này cập nhập lại postbooking sau khi update stylist
+  // tra lại về step 3 --> widget timslot
+  final void Function(BookingServiceModel serviceOTO)? updatePostBooking;
+
   const ChooseStylist({
     super.key,
     required this.onStylistSelected,
@@ -34,6 +42,8 @@ class ChooseStylist extends StatefulWidget {
     this.oneToOne,
     this.onAddStylistOTO,
     this.service,
+    this.choseStylistUpdatePostBooking,
+    this.updatePostBooking,
   });
 
   @override
@@ -477,6 +487,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
   @override
   void didUpdateWidget(ChooseStylist oldWidget) {
     // thay đổi service -> reset lại chọn stylist - date - timeslot
+    // nếu thg đc chọn có trong staffList mới
     if (!listEquals(oldWidget.accountStaffList, widget.accountStaffList)) {
       if (!widget.accountStaffList!.any((accountStaff) =>
           accountStaff.staff!.accountId == _selectedStylist.accountId)) {
@@ -485,8 +496,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
             setState(() {
               _selectedStylist = AccountInfoModel();
               isDefaultSelected = true;
-              widget.onStylistSelected(null);
-              widget.updateSelectedStylist(null);
+
               if (widget.oneToOne != null) {
                 if (widget.oneToOne!) {
                   BookingServiceModel newBookingServiceModel =
@@ -499,15 +509,21 @@ class _ChooseStylistState extends State<ChooseStylist> {
                     staffName: "REALMEN sẽ chọn hộ bạn",
                     bookingServiceType: "PICKUP_STYLIST",
                   );
-                  widget.onAddStylistOTO!(newBookingServiceModel);
+
+                  // thay thế = hàm chỉ cập nhập lại postbooking
+                  widget.updatePostBooking!(newBookingServiceModel);
                 }
+              } else {
+                widget.onStylistSelected(null);
+                widget.updateSelectedStylist(null);
               }
             });
           }
         });
+        build(context);
       }
     }
-    build(context);
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -522,8 +538,6 @@ class _ChooseStylistState extends State<ChooseStylist> {
     if (stylist.accountId == _selectedStylist.accountId) {
       _selectedStylist = AccountInfoModel();
       isDefaultSelected = true;
-      widget.onStylistSelected(null);
-      widget.updateSelectedStylist(null);
 
       if (widget.oneToOne != null) {
         if (widget.oneToOne!) {
@@ -536,15 +550,16 @@ class _ChooseStylistState extends State<ChooseStylist> {
             staffName: "REALMEN sẽ chọn hộ bạn",
             bookingServiceType: "PICKUP_STYLIST",
           );
-          widget.onAddStylistOTO!(newBookingServiceModel);
+          widget.choseStylistUpdatePostBooking!(newBookingServiceModel);
         }
+      } else {
+        widget.onStylistSelected(null);
+        widget.updateSelectedStylist(null);
       }
     } else {
       // gán data stylist vừa chọn
       _selectedStylist = stylist;
 
-      widget.onStylistSelected(_selectedStylist);
-      widget.updateSelectedStylist(_selectedStylist);
       isDefaultSelected = false;
 
       // nếu option là ONE TO ONE
@@ -561,8 +576,12 @@ class _ChooseStylistState extends State<ChooseStylist> {
                 "${_selectedStylist.firstName} ${_selectedStylist.lastName}",
             bookingServiceType: "CHOSEN_STYLIST",
           );
-          widget.onAddStylistOTO!(newBookingServiceModel);
+          // gọi hàm CHA cập nhập postBooking
+          widget.choseStylistUpdatePostBooking!(newBookingServiceModel);
         }
+      } else {
+        widget.onStylistSelected(_selectedStylist);
+        widget.updateSelectedStylist(_selectedStylist);
       }
     }
     setState(() {

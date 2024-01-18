@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -127,6 +128,7 @@ class _ChooseStylistAndDateTimeBookingState
                           } else {
                             widget.onUpdateOption(true);
                           }
+                          isChangeOptional = true;
                           // getBranches(option, false);
                         }),
                         dropdownStyleData: DropdownStyleData(
@@ -197,26 +199,32 @@ class _ChooseStylistAndDateTimeBookingState
 
                                   // Chọn Stylist
                                   ChooseStylist(
+                                    // chon 1 stylist -> booking home -> Bỏ
+                                    onStylistSelected: widget.onStylistSelected,
 
-                                      // chon 1 stylist -> booking home -> Bỏ
-                                      onStylistSelected:
-                                          widget.onStylistSelected,
+                                    // data stylist hiện thị cho One To One
+                                    // lần đầu full
+                                    // chọn 1 lần hiện thị lại staff có cùng lại ca làm
+                                    accountStaffList: accountStaffBranchList,
+                                    updateSelectedStylist:
+                                        updateSelectedStylist,
 
-                                      // data stylist hiện thị cho One To One
-                                      // lần đầu full
-                                      // chọn 1 lần hiện thị lại staff có cùng lại ca làm
-                                      accountStaffList: accountStaffBranchList,
-                                      updateSelectedStylist:
-                                          updateSelectedStylist,
+                                    // One by One
+                                    oneToOne: true,
 
-                                      // One by One
-                                      oneToOne: true,
+                                    // hàm add stylist vào post booking
+                                    onAddStylistOTO: addStylistOTO,
 
-                                      // hàm add stylist vào post booking
-                                      onAddStylistOTO: addStylistOTO,
+                                    // data service ttrong service đc chọn
+                                    service: item.value,
 
-                                      // data service ttrong service đc chọn
-                                      service: item.value),
+                                    //
+                                    choseStylistUpdatePostBooking:
+                                        choseStylistUpdatePostBooking,
+
+                                    //
+                                    updatePostBooking: updatePostBooking,
+                                  ),
                                 ],
                               );
                             }).toList()),
@@ -254,6 +262,16 @@ class _ChooseStylistAndDateTimeBookingState
                           // lịch của 1 thg đại diện, dựa vào nó
                           // để làm drop dowwn
                           listDate: listDate,
+                          isChangeOptional: isChangeOptional,
+
+                          //
+                          allowUpdateTimeslot: allowUpdateTimeslot,
+                          updateStylistDone: updateStylistDone,
+
+                          // change date
+                          choseDateUpdateStylist: choseDateUpdateStylist,
+                          isChangeDate: isChangeDate,
+                          changeDateDone: changeDateDone,
                         ),
                         const SizedBox(height: 20),
                       ],
@@ -302,12 +320,15 @@ class _ChooseStylistAndDateTimeBookingState
 
   @override
   void didUpdateWidget(ChooseStylistAndDateTimeBooking oldWidget) {
-    isChangeStylist = false;
-
+    if (optionController == options.first) {
+      isChangeOptional = false;
+    }
+    isChangeOptional = false;
     // thay đổi service -> reset lại chọn stylist - date - timeslot
-    if (oldWidget.selectedService != widget.selectedService) {
+    if (!listEquals(oldWidget.selectedService, widget.selectedService)) {
       print("update option");
       optionController = options.first;
+      setData();
     }
 
     // setData();
@@ -315,8 +336,10 @@ class _ChooseStylistAndDateTimeBookingState
     super.didUpdateWidget(oldWidget);
   }
 
+  bool isChangeOptional = false;
   bool isLoading = true;
   bool isChoseStylistDone = false;
+  bool allowUpdateTimeslot = false;
   // Lấy staff cho time slot
   AccountInfoModel? stylistSelected = AccountInfoModel();
   String? optionController;
@@ -438,43 +461,45 @@ class _ChooseStylistAndDateTimeBookingState
     try {
       // lấy 1 staff làm cột mốc
       if (staffOneToOne.length == 1) {
-        listDate = [];
-        DateTime now = DateTime.now();
-        // lấy từng acc để kiểm tra lịch làm
+        if (selectedDate == null) {
+          listDate = [];
+          DateTime now = DateTime.now();
+          // lấy từng acc để kiểm tra lịch làm
 
-        // lấy từng lịch làm để kiểm tra
-        staffOneToOne.first.staff!.scheduleList!
-            .asMap()
-            .entries
-            .map((schedule) {
-          // ktr lịch dropdown đã có data
-          if (listDate.isNotEmpty) {
-            // xóa trùng lịch
-            listDate.removeWhere((date) =>
-                date['dateTime'] ==
-                "${DateTime.parse(schedule.value.workingDate!)}");
-          }
-          // ktr lịch làm của acc có hợp đk 3 ngày
-          if (DateTime.parse(schedule.value.workingDate!) ==
-                  DateTime(now.year, now.month, now.day, 0) ||
-              (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
-                  DateTime.parse(schedule.value.workingDate!)
-                      .isBefore(now.add(const Duration(days: 2))))) {
-            // add lịch dropdrown
-            listDate.add({
-              'id': schedule.key.toString(),
-              'date': formatDate(
-                  DateTime.parse(schedule.value.workingDate!))['date'],
-              'type': formatDate(
-                  DateTime.parse(schedule.value.workingDate!))['type'],
-              'chosenDate': formatDate(
-                  DateTime.parse(schedule.value.workingDate!))['chosenDate'],
-              'start': schedule.value.startShift,
-              'end': schedule.value.endShift,
-              'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
-            });
-          }
-        }).toList();
+          // lấy từng lịch làm để kiểm tra
+          staffOneToOne.first.staff!.scheduleList!
+              .asMap()
+              .entries
+              .map((schedule) {
+            // ktr lịch dropdown đã có data
+            if (listDate.isNotEmpty) {
+              // xóa trùng lịch
+              listDate.removeWhere((date) =>
+                  date['dateTime'] ==
+                  "${DateTime.parse(schedule.value.workingDate!)}");
+            }
+            // ktr lịch làm của acc có hợp đk 3 ngày
+            if (DateTime.parse(schedule.value.workingDate!) ==
+                    DateTime(now.year, now.month, now.day, 0) ||
+                (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
+                    DateTime.parse(schedule.value.workingDate!)
+                        .isBefore(now.add(const Duration(days: 2))))) {
+              // add lịch dropdrown
+              listDate.add({
+                'id': schedule.key.toString(),
+                'date': formatDate(
+                    DateTime.parse(schedule.value.workingDate!))['date'],
+                'type': formatDate(
+                    DateTime.parse(schedule.value.workingDate!))['type'],
+                'chosenDate': formatDate(
+                    DateTime.parse(schedule.value.workingDate!))['chosenDate'],
+                'start': schedule.value.startShift,
+                'end': schedule.value.endShift,
+                'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
+              });
+            }
+          }).toList();
+        }
 
         listDate.sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
 
@@ -521,6 +546,17 @@ class _ChooseStylistAndDateTimeBookingState
       } else if (staffOneToOne.isEmpty) {
         accountStaffBranchList =
             List<AccountInfoModel>.from(widget.accountStaffList!);
+        DateTime now = DateTime.now();
+        listDate = [];
+        for (int i = 0; i <= 2; i++) {
+          listDate.add({
+            'id': i.toString(),
+            'date': formatDate(now.add(Duration(days: i)))['date'],
+            'type': formatDate(now.add(Duration(days: i)))['type'],
+            'chosenDate':
+                "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
+          });
+        }
       }
       if (mounted) {
         setState(() {
@@ -639,6 +675,259 @@ class _ChooseStylistAndDateTimeBookingState
           accountStaffBranchList;
         });
       }
+    }
+  }
+
+  // CHƯA ADD VÀO CON STYLIST
+  // hàm này khi chọn stylist
+  void choseStylistUpdatePostBooking(BookingServiceModel serviceOTO) {
+    // cập nhập lại postbooking
+    // xóa cũ thêm mới
+    if (serviceOTOList.isNotEmpty) {
+      if (serviceOTOList.any(
+          (serviceOTOs) => serviceOTOs.serviceId == serviceOTO.serviceId)) {
+        serviceOTOList.removeWhere(
+            (serviceOTOs) => serviceOTOs.serviceId == serviceOTO.serviceId);
+        serviceOTOList.add(serviceOTO);
+      }
+    } else {
+      serviceOTOList.add(serviceOTO);
+    }
+    widget.onUpdatePostBooking(serviceOTOList);
+
+    // gán data vào staffOneToOne - stylist đã chọn
+    // lấy staffId trong post booking để gán vào stylist đã chọn
+    // reset data
+    staffOneToOne = [];
+    for (var serviceOTO in serviceOTOList) {
+      if (serviceOTO.staffId != 0) {
+        // lấy acc của branch để so sánh với stylist đã có trong post booking
+        for (var accStaff in widget.accountStaffList!) {
+          if (accStaff.staff!.staffId! == serviceOTO.staffId) {
+            staffOneToOne.add(accStaff);
+          }
+        }
+      }
+    }
+
+    // thay đổi data stylist hiển thị
+    // lấy thg đầu ra ktr
+    if (staffOneToOne.isEmpty) {
+      accountStaffBranchList =
+          List<AccountInfoModel>.from(widget.accountStaffList!);
+      DateTime now = DateTime.now();
+      listDate = [];
+      for (int i = 0; i <= 2; i++) {
+        listDate.add({
+          'id': i.toString(),
+          'date': formatDate(now.add(Duration(days: i)))['date'],
+          'type': formatDate(now.add(Duration(days: i)))['type'],
+          'chosenDate':
+              "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
+        });
+      }
+    } else if (staffOneToOne.length == 1) {
+      DateTime now = DateTime.now();
+      // lấy từng acc để kiểm tra lịch làm
+
+      listDate = [];
+      // lấy từng lịch làm để kiểm tra
+      staffOneToOne.first.staff!.scheduleList!.asMap().entries.map((schedule) {
+        // ktr lịch dropdown đã có data
+        if (listDate.isNotEmpty) {
+          // xóa trùng lịch
+          listDate.removeWhere((date) =>
+              date['dateTime'] ==
+              "${DateTime.parse(schedule.value.workingDate!)}");
+        }
+        // ktr lịch làm của acc có hợp đk 3 ngày
+        if (DateTime.parse(schedule.value.workingDate!) ==
+                DateTime(now.year, now.month, now.day, 0) ||
+            (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
+                DateTime.parse(schedule.value.workingDate!)
+                    .isBefore(now.add(const Duration(days: 2))))) {
+          // add lịch dropdrown
+          listDate.add({
+            'id': schedule.key.toString(),
+            'date':
+                formatDate(DateTime.parse(schedule.value.workingDate!))['date'],
+            'type':
+                formatDate(DateTime.parse(schedule.value.workingDate!))['type'],
+            'chosenDate': formatDate(
+                DateTime.parse(schedule.value.workingDate!))['chosenDate'],
+            'start': schedule.value.startShift,
+            'end': schedule.value.endShift,
+            'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
+          });
+        }
+      }).toList();
+
+      listDate.sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
+
+      // Timeslot
+      // thay đổi data cho staff có cùng ca làm
+      // khi chọn thg stylist đầu sẽ lấy nó làm mốc
+      // lấy ngày chon ra ktr
+      final String chosenDate;
+
+      chosenDate = listDate.first['chosenDate'];
+
+      // reset data
+      accountStaffBranchList =
+          List<AccountInfoModel>.from(widget.accountStaffList!);
+      //xóa
+      // cùng ngày cùng ca
+      accountStaffBranchList.removeWhere((accountStaff) {
+        if (accountStaff.staff!.staffId == staffOneToOne.first.staff!.staffId) {
+          return false;
+        }
+        // lấy lịch làm của acc của branch
+        for (var accountSchedule in accountStaff.staff!.scheduleList!) {
+          // lấy lịch làm của stylist đã chọn đầu tiên
+          for (var staffSchedule in staffOneToOne.first.staff!.scheduleList!) {
+            // ktr ngày lich làm của cả 2 có = ngày đã chọn
+            if (accountSchedule.workingDate == chosenDate &&
+                staffSchedule.workingDate == chosenDate) {
+              // nếu 2 ca làm giống nhau -> kh xóa
+              if (accountSchedule.shiftId == staffSchedule.shiftId) {
+                return false;
+              }
+            }
+          } // ktra hết lịch làm của stylist đã chọn đầu tiên
+          // vs 1 lịch làm của acc branch
+        } // ktr hết
+        // nếu chưa return là kh chứa -> xóa
+        return true;
+      });
+
+      if (mounted) {
+        setState(() {
+          // serviceOTOList; // kh thay data
+          // staffOneToOne; //  kh thay data
+          // listDate; // thay đổi UI Timeslot
+          accountStaffBranchList; // thay đổi UI Stylist Timeslot
+          isChangeStylist = true;
+          allowUpdateTimeslot = false;
+        });
+      }
+    }
+  }
+
+// sau khi thay đổi chọn stylist (CON STYLIST)
+  void updatePostBooking(BookingServiceModel serviceOTO) {
+// xóa cũ thêm mới
+    if (serviceOTOList.isNotEmpty) {
+      if (serviceOTOList.any(
+          (serviceOTOs) => serviceOTOs.serviceId == serviceOTO.serviceId)) {
+        serviceOTOList.removeWhere(
+            (serviceOTOs) => serviceOTOs.serviceId == serviceOTO.serviceId);
+        serviceOTOList.add(serviceOTO);
+      }
+    } else {
+      serviceOTOList.add(serviceOTO);
+    }
+    widget.onUpdatePostBooking(serviceOTOList);
+
+    staffOneToOne = [];
+    for (var serviceOTO in serviceOTOList) {
+      if (serviceOTO.staffId != 0) {
+        // lấy acc của branch để so sánh với stylist đã có trong post booking
+        for (var accStaff in widget.accountStaffList!) {
+          if (accStaff.staff!.staffId! == serviceOTO.staffId) {
+            staffOneToOne.add(accStaff);
+          }
+        }
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        if (isChangeStylist) {
+          serviceOTOList;
+          staffOneToOne;
+          listDate;
+          allowUpdateTimeslot = true;
+        } else if (isChangeDate) {
+          allowUpdateTimeslot = true;
+        }
+      });
+    }
+  }
+
+  void updateStylistDone() {
+    if (mounted) {
+      setState(() {
+        allowUpdateTimeslot = false;
+        isChangeStylist = false;
+      });
+    }
+  }
+
+  bool isChangeDate = false;
+  void choseDateUpdateStylist(String selectedDate) {
+    final String chosenDate = selectedDate;
+
+    if (staffOneToOne.isEmpty) {
+      accountStaffBranchList =
+          List<AccountInfoModel>.from(widget.accountStaffList!);
+      DateTime now = DateTime.now();
+      listDate = [];
+      for (int i = 0; i <= 2; i++) {
+        listDate.add({
+          'id': i.toString(),
+          'date': formatDate(now.add(Duration(days: i)))['date'],
+          'type': formatDate(now.add(Duration(days: i)))['type'],
+          'chosenDate':
+              "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
+        });
+      }
+    } else {
+// reset data
+      accountStaffBranchList =
+          List<AccountInfoModel>.from(widget.accountStaffList!);
+      //xóa
+      // cùng ngày cùng ca
+      accountStaffBranchList.removeWhere((accountStaff) {
+        if (accountStaff.staff!.staffId == staffOneToOne.first.staff!.staffId) {
+          return false;
+        }
+        // lấy lịch làm của acc của branch
+        for (var accountSchedule in accountStaff.staff!.scheduleList!) {
+          // lấy lịch làm của stylist đã chọn đầu tiên
+          for (var staffSchedule in staffOneToOne.first.staff!.scheduleList!) {
+            // ktr ngày lich làm của cả 2 có = ngày đã chọn
+            if (accountSchedule.workingDate == chosenDate &&
+                staffSchedule.workingDate == chosenDate) {
+              // nếu 2 ca làm giống nhau -> kh xóa
+              if (accountSchedule.shiftId == staffSchedule.shiftId) {
+                return false;
+              }
+            }
+          } // ktra hết lịch làm của stylist đã chọn đầu tiên
+          // vs 1 lịch làm của acc branch
+        } // ktr hết
+        // nếu chưa return là kh chứa -> xóa
+        return true;
+      });
+    }
+    if (mounted) {
+      setState(() {
+        // listDate; // timeslot
+        accountStaffBranchList; // sytlist timesslot
+        allowUpdateTimeslot = false;
+        isChangeDate = true;
+        isChangeStylist = false;
+      });
+    }
+  }
+
+  void changeDateDone() {
+    if (mounted) {
+      setState(() {
+        allowUpdateTimeslot = false;
+        isChangeStylist = false;
+        isChangeDate = false;
+      });
     }
   }
 }

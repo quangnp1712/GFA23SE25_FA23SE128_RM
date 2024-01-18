@@ -12,6 +12,7 @@ import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
+import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.otp.OTPMapper;
 import com.realman.becore.error_handlers.exceptions.AuthFailException;
 import com.realman.becore.repository.database.otp.OTPEntity;
@@ -20,7 +21,6 @@ import com.realman.becore.repository.database.otp.OTPEntity.OTPEntityBuilder;
 import com.realman.becore.security.jwt.JwtConfiguration;
 import com.realman.becore.service.account.AccountQueryService;
 import com.realman.becore.service.twilio.TwilioUseCaseService;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -97,9 +97,21 @@ public class OTPCommandService {
                         .build());
         Account account = accountQueryService.findByPhone(
                 loginRequest.phone());
-        if (!passwordEncoder
-                .matches(loginRequest.passCode(), otpEntity.getPassCode())) {
+        if (!passwordEncoder.matches(loginRequest.passCode(), otpEntity.getPassCode())) {
             throw new AuthFailException();
+        }
+        if (account.status().equals(EAccountStatus.PENDING)) {
+            return LoginResponse.builder()
+                    .accountId(account.accountId())
+                    .customerId(Objects.nonNull(account.customer()) ? account.customer().customerId() : null)
+                    .staffId(Objects.nonNull(account.staff()) ? account.staff().staffId() : null)
+                    .branchId(Objects.nonNull(account.branch()) ? account.branch().branchId() : null)
+                    .phone(account.phone())
+                    .jwtToken("")
+                    .expTime(LocalDateTime.now())
+                    .role(account.role())
+                    .status(account.status())
+                    .build();
         }
         otpRepository.delete(otpEntity);
         String jwtToken = jwtConfiguration.generateJwt(account.phone());
@@ -113,6 +125,7 @@ public class OTPCommandService {
                 .jwtToken(jwtToken)
                 .expTime(expiredTime)
                 .role(account.role())
+                .status(account.status())
                 .build();
     }
 

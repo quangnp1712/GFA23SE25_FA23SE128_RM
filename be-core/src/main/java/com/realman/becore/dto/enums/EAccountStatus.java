@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EAccountStatus {
     ACTIVATED(0),
-    SUSPENDED(1);
+    SUSPENDED(1),
+    PENDING(2);
 
     private final Integer value;
 }

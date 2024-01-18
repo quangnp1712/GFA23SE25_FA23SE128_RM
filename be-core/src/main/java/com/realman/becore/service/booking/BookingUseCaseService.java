@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.realman.becore.controller.api.booking.models.BookingId;
+import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.dto.booking.Booking;
 import com.realman.becore.dto.booking.BookingSearchCriteria;
 import com.realman.becore.dto.staff.booking.BookingStaff;
@@ -25,6 +26,11 @@ public class BookingUseCaseService {
     @Transactional
     public void save(Booking booking) {
         bookingCommandService.save(booking);
+    }
+
+    @Transactional
+    public void receptSave(ReceptBookingRequest receptBookingRequest) {
+        bookingCommandService.receptSave(receptBookingRequest);
     }
 
     public Booking findById(BookingId bookingId) {

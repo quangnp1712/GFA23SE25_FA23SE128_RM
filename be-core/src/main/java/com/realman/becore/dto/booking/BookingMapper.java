@@ -5,6 +5,9 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+
+import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
+import com.realman.becore.controller.api.booking.service.models.BookingServiceRequest;
 import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.dto.enums.EBookingStatus;
 import com.realman.becore.repository.database.booking.BookingEntity;
@@ -22,4 +25,8 @@ public interface BookingMapper {
 
     @Mapping(source = "totalBookingPrice", target = "totalBookingPrice", defaultValue = "0L")
     Booking toDto(BookingInfo info, List<BookingService> bookingServices, Long totalBookingPrice);
+
+    BookingEntity toEntity(ReceptBookingRequest dto, String bookingCode, EBookingStatus bookingStatus);
+
+    List<BookingService> toDtos(List<BookingServiceRequest> bookingServices);
 }

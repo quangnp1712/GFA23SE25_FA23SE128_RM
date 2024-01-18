@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.realman.becore.controller.api.booking.models.BookingRequest;
 import com.realman.becore.controller.api.booking.models.BookingResponse;
+import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.ValueResponse;
 
@@ -22,6 +23,10 @@ import jakarta.validation.constraints.Min;
 public interface BookingsAPI {
         @PostMapping
         void save(@RequestBody @Valid BookingRequest booking);
+
+        @PostMapping("/receptionist")
+        @PreAuthorize("hasRole('ROLE_RECEPTIONIST')")
+        void receptBooking(@RequestBody @Valid ReceptBookingRequest receptBookingRequest);
 
         @GetMapping
         PageImplResponse<BookingResponse> findAll(

@@ -34,6 +34,9 @@ public class AccountsController implements AccountsAPI {
         accountUseCaseService.save(dto);
     }
 
-    
-
+    @Override
+    public void update(String phone, AccountRequest accountRequest) {
+        Account account = accountModelMapper.toDto(accountRequest);
+        accountUseCaseService.update(phone, account);
+    }
 }

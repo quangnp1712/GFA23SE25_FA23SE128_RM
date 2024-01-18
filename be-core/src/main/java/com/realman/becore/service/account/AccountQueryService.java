@@ -47,7 +47,7 @@ public class AccountQueryService {
                                 .findByPhone(phone)
                                 .orElseThrow(ResourceNotFoundException::new);
                 Account account = accountMapper.toDto(entity);
-                if (entity.getRole().equals(ERole.STAFF)) {
+                if (entity.getRole().equals(ERole.STAFF) || entity.getRole().equals(ERole.RECEPTIONIST)) {
                         Staff staff = staffUsercaseService.findByAccountId(entity.getAccountId());
                         Branch branch = branchUseCaseService.findByAccountId(entity.getAccountId());
                         account = accountMapper.toDto(entity, staff, branch);

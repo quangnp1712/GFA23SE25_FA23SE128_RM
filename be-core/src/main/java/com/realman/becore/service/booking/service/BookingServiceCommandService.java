@@ -16,6 +16,7 @@ import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.booking.service.BookingServiceEntity;
 import com.realman.becore.repository.database.booking.service.BookingServiceRepository;
 import com.realman.becore.service.booking.result.BookingResultCommandService;
+import com.realman.becore.service.twilio.TwilioUseCaseService;
 import com.realman.becore.util.RequestContext;
 
 import lombok.NonNull;
@@ -30,6 +31,8 @@ public class BookingServiceCommandService {
     private final BookingResultCommandService bookingResultCommandService;
     @NonNull
     private final BookingServiceMapper bookingServiceMapper;
+    @NonNull
+    private final TwilioUseCaseService twilioUseCaseService;
     @NonNull
     private final RequestContext requestContext;
 

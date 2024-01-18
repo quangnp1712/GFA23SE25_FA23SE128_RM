@@ -2,11 +2,14 @@ package com.realman.becore.dto.account;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
+import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchInfo;
 import com.realman.becore.dto.customer.Customer;
+import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.repository.database.account.AccountEntity;
 
@@ -18,9 +21,6 @@ public interface AccountMapper {
     AccountEntity toEntity(Account account, Long branchId);
 
     Account toDto(AccountEntity entity);
-
-    // @Mapping(source = "entity.accountId", target = "accountId")
-    // Account toDto(AccountEntity entity, Staff staff);
 
     @Mapping(source = "entity.accountId", target = "accountId")
     Account toDto(AccountEntity entity, Staff staff, Branch branch);
@@ -37,4 +37,11 @@ public interface AccountMapper {
     @Mapping(source = "staff", target = "staff")
     @Mapping(source = "branchInfo.accountId", target = "accountId")
     Account fromBranchInfo(BranchInfo branchInfo, Staff staff);
+
+    @Mapping(target = "role", expression = "java(com.realman.becore.dto.enums.ERole.CUSTOMER)")
+    AccountEntity fromReceptBooking(ReceptBookingRequest receptBooking, EAccountStatus status);
+
+    @Mapping(target = "accountId", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    void update(@MappingTarget AccountEntity foundEntity, Account dto);
 }

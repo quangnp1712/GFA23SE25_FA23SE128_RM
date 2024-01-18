@@ -43,4 +43,5 @@ public class AccountAuthController implements AccountAuthAPI {
         AccountResponse response = accountModelMapper.toModel(dto);
         return new ValueResponse<AccountResponse>(response);
     }
+
 }

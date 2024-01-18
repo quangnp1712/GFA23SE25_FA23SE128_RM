@@ -17,6 +17,8 @@ public interface AccountModelMapper {
 
     Account toDto(AccountRequest model, ERole role);
 
+    Account toDto(AccountRequest model);
+
     AccountResponse toModel(Account dto);
 
     default ERole getRole(EProfessional professional) {

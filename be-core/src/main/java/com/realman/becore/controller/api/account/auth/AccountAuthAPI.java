@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Account", description = "manage account API")
 @RequestMapping("/v1/auth/account/{accountId}")
-@PreAuthorize("hasAuthority('account:view')")
+@PreAuthorize("hasAuthority({'account:view', 'account:update'})")
 public interface AccountAuthAPI {
 
     @GetMapping("/staff")

@@ -47,6 +47,11 @@ public class AccountUseCaseService {
         accountCommandService.save(account, branchId);
     }
 
+    @Transactional
+    public void update(String phone, Account account) {
+        accountCommandService.update(phone, account);
+    }
+
     public Account findStaffAccount(AccountId accountId, Boolean isShowDistance, Double lat, Double lng) {
         return accountQueryService.findStaffAccount(accountId, isShowDistance, lat, lng);
     }

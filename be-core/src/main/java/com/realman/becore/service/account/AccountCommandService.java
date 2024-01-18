@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch.BranchId;
+import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;
+import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.account.AccountEntity;
 import com.realman.becore.repository.database.account.AccountRepository;
 import com.realman.becore.service.customer.CustomerCommandService;
@@ -23,16 +26,12 @@ import lombok.RequiredArgsConstructor;
 public class AccountCommandService {
         @NonNull
         private final AccountRepository accountRepository;
-
         @NonNull
         private final CustomerCommandService customerCommandService;
-
         @NonNull
         private final StaffCommandService staffCommandService;
-
         @NonNull
         private final OTPCommandService otpCommandService;
-
         @NonNull
         private final AccountMapper accountMapper;
 
@@ -82,4 +81,19 @@ public class AccountCommandService {
                 accountRepository.save(entity);
         }
 
+        public void saveFromReceptBooking(ReceptBookingRequest receptBookingRequest) {
+                if (accountRepository.findByPhone(receptBookingRequest.phone()).isPresent()) {
+                        throw new ResourceDuplicateException();
+                }
+                AccountEntity account = accountMapper.fromReceptBooking(receptBookingRequest, EAccountStatus.PENDING);
+                AccountEntity savedAccount = accountRepository.save(account);
+                customerCommandService.save(savedAccount.getAccountId());
+        }
+
+        public void update(String phone, Account account) {
+                AccountEntity foundAccount = accountRepository.findByPhone(phone)
+                                .orElseThrow(ResourceNotFoundException::new);
+                accountMapper.update(foundAccount, account);
+                accountRepository.save(foundAccount);
+        }
 }

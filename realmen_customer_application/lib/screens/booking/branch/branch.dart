@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/booking/booking_haircut_temporary.dart';
 import 'package:realmen_customer_application/screens/booking/components/choose_branch/branch_booking_choose.dart';
@@ -115,7 +116,11 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                   onDateSelected: updateSelectedDate,
                   onTimeSelected: updateSelectedTime,
                   onStylistSelected: updateSelectedStylist,
-                  accountStaffList: selectedBranch.accountStaffList!)
+                  accountStaffList: selectedBranch.accountStaffList!,
+                  selectedService: selectedService,
+                  onUpdatePostBooking: updatePostBooking,
+                  onUpdateOption: updateOption,
+                )
               : Container(
                   height: 150,
                   padding: const EdgeInsets.only(top: 10, right: 15),
@@ -231,6 +236,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
       setState(() {
         selectedService = service;
         isUpdateBranch = false;
+
         print(selectedService);
       });
     }
@@ -251,6 +257,27 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
       setState(() {
         selectedTime = time;
         print(selectedTime);
+      });
+    }
+  }
+
+  //
+  bool oneToOne = false;
+  List<BookingServiceModel> postBooking = [];
+  void updatePostBooking(List<BookingServiceModel> postBooking) {
+    if (!_isDisposed) {
+      setState(() {
+        oneToOne = true;
+        this.postBooking = postBooking;
+      });
+    }
+  }
+
+  // change optione
+  void updateOption(bool oneToOne) {
+    if (!_isDisposed) {
+      setState(() {
+        this.oneToOne = oneToOne;
       });
     }
   }
@@ -318,13 +345,14 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
       _errorMessage("Xin chọn giờ");
     } else {
       Get.to(() => BookingHaircutTemporary(
-            callback: widget.callback,
-            branch: selectedBranch,
-            service: selectedService,
-            stylist: selectedStylist,
-            date: selectedDate,
-            time: selectedTime,
-          ));
+          callback: widget.callback,
+          branch: selectedBranch,
+          service: selectedService,
+          stylist: selectedStylist,
+          date: selectedDate,
+          time: selectedTime,
+          oneToOne: oneToOne,
+          postBooking: postBooking));
     }
   }
 }

@@ -5,20 +5,35 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 
 class ChooseStylist extends StatefulWidget {
   final void Function(AccountInfoModel? stylist) onStylistSelected;
   final void Function(AccountInfoModel? stylistSelected) updateSelectedStylist;
   final List<AccountInfoModel>? accountStaffList;
 
+  // option OTO
+  final bool? oneToOne;
+
+  // hàm add stylist vào post booking
+  final void Function(BookingServiceModel serviceOTO)? onAddStylistOTO;
+
+  // data service - stylist
+  final BranchServiceModel? service;
+
   const ChooseStylist({
     super.key,
     required this.onStylistSelected,
     required this.updateSelectedStylist,
     this.accountStaffList,
+    this.oneToOne,
+    this.onAddStylistOTO,
+    this.service,
   });
 
   @override
@@ -70,6 +85,23 @@ class _ChooseStylistState extends State<ChooseStylist> {
 
                           widget.onStylistSelected(null);
                           widget.updateSelectedStylist(null);
+
+                          if (widget.oneToOne != null) {
+                            if (widget.oneToOne!) {
+                              BookingServiceModel newBookingServiceModel =
+                                  BookingServiceModel(
+                                serviceId: widget.service!.serviceId,
+                                staffId: 0,
+                                serviceName: widget.service!.serviceName,
+                                servicePrice:
+                                    widget.service!.branchServicePrice ??
+                                        widget.service!.price,
+                                staffName: "REALMEN sẽ chọn hộ bạn",
+                                bookingServiceType: "PICKUP_STYLIST",
+                              );
+                              widget.onAddStylistOTO!(newBookingServiceModel);
+                            }
+                          }
                         } else {
                           isDefaultSelected = true;
                         }
@@ -161,7 +193,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                           Container(
                               constraints: const BoxConstraints(maxWidth: 76),
                               child: const Text(
-                                "REALMEN Chọn hộ anh Phuong Quang",
+                                "REALMEN sẽ chọn hộ bạn ",
                                 maxLines: 2,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -393,7 +425,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                       padding: MaterialStatePropertyAll(
                                           EdgeInsets.zero)),
                                   child: const Text(
-                                    "Xem thêm",
+                                    "",
                                     textAlign: TextAlign.end,
                                     style: TextStyle(
                                       decoration: TextDecoration.underline,
@@ -442,25 +474,100 @@ class _ChooseStylistState extends State<ChooseStylist> {
     );
   }
 
+  @override
+  void didUpdateWidget(ChooseStylist oldWidget) {
+    // thay đổi service -> reset lại chọn stylist - date - timeslot
+    if (!listEquals(oldWidget.accountStaffList, widget.accountStaffList)) {
+      if (!widget.accountStaffList!.any((accountStaff) =>
+          accountStaff.staff!.accountId == _selectedStylist.accountId)) {
+        Future.delayed(Duration.zero, () {
+          if (mounted) {
+            setState(() {
+              _selectedStylist = AccountInfoModel();
+              isDefaultSelected = true;
+              widget.onStylistSelected(null);
+              widget.updateSelectedStylist(null);
+              if (widget.oneToOne != null) {
+                if (widget.oneToOne!) {
+                  BookingServiceModel newBookingServiceModel =
+                      BookingServiceModel(
+                    serviceId: widget.service!.serviceId,
+                    staffId: 0,
+                    serviceName: widget.service!.serviceName,
+                    servicePrice: widget.service!.branchServicePrice ??
+                        widget.service!.price,
+                    staffName: "REALMEN sẽ chọn hộ bạn",
+                    bookingServiceType: "PICKUP_STYLIST",
+                  );
+                  widget.onAddStylistOTO!(newBookingServiceModel);
+                }
+              }
+            });
+          }
+        });
+      }
+    }
+    build(context);
+    super.didUpdateWidget(oldWidget);
+  }
+
   AccountInfoModel _selectedStylist = AccountInfoModel();
   bool isDefaultSelected = true;
+
+  // khi chọn Stylist
+  // data = chọn stylist - stylist
+  // hàm add data vào post booking
   void _onStylistSelected(AccountInfoModel stylist) {
-    setState(() {
-      if (stylist.accountId == _selectedStylist.accountId) {
-        _selectedStylist = AccountInfoModel();
-        isDefaultSelected = true;
-        widget.onStylistSelected(null);
-        widget.updateSelectedStylist(null);
-      } else {
-        _selectedStylist = stylist;
-        //Lấy tên 2 chữ
-        // String name = _selectedStylist.firstName!
-        //         .substring(_selectedStylist.firstName!.lastIndexOf(" ") + 1) +
-        //     _selectedStylist.lastName!;
-        widget.onStylistSelected(_selectedStylist);
-        widget.updateSelectedStylist(_selectedStylist);
-        isDefaultSelected = false;
+    // trường hợp ấn 1 stylist 2 lần -> random
+    if (stylist.accountId == _selectedStylist.accountId) {
+      _selectedStylist = AccountInfoModel();
+      isDefaultSelected = true;
+      widget.onStylistSelected(null);
+      widget.updateSelectedStylist(null);
+
+      if (widget.oneToOne != null) {
+        if (widget.oneToOne!) {
+          BookingServiceModel newBookingServiceModel = BookingServiceModel(
+            serviceId: widget.service!.serviceId,
+            staffId: 0,
+            serviceName: widget.service!.serviceName,
+            servicePrice:
+                widget.service!.branchServicePrice ?? widget.service!.price,
+            staffName: "REALMEN sẽ chọn hộ bạn",
+            bookingServiceType: "PICKUP_STYLIST",
+          );
+          widget.onAddStylistOTO!(newBookingServiceModel);
+        }
       }
+    } else {
+      // gán data stylist vừa chọn
+      _selectedStylist = stylist;
+
+      widget.onStylistSelected(_selectedStylist);
+      widget.updateSelectedStylist(_selectedStylist);
+      isDefaultSelected = false;
+
+      // nếu option là ONE TO ONE
+      // add vào post booking
+      if (widget.oneToOne != null) {
+        if (widget.oneToOne!) {
+          BookingServiceModel newBookingServiceModel = BookingServiceModel(
+            serviceId: widget.service!.serviceId,
+            staffId: _selectedStylist.staff!.staffId,
+            serviceName: widget.service!.serviceName,
+            servicePrice:
+                widget.service!.branchServicePrice ?? widget.service!.price,
+            staffName:
+                "${_selectedStylist.firstName} ${_selectedStylist.lastName}",
+            bookingServiceType: "CHOSEN_STYLIST",
+          );
+          widget.onAddStylistOTO!(newBookingServiceModel);
+        }
+      }
+    }
+    setState(() {
+      _selectedStylist;
+      isDefaultSelected;
     });
   }
 

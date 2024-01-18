@@ -1,7 +1,9 @@
 // ignore_for_file: constant_identifier_names, must_be_immutable
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -103,6 +105,200 @@ class _DetailHistoryBookingScreenState
                                 )
                               : Column(
                                   children: [
+                                    _images.isNotEmpty
+                                        ? Column(
+                                            children: [
+                                              Container(
+                                                height: 200,
+                                                // width: 300,
+
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    IconButton(
+                                                      icon: const Icon(
+                                                          Icons.arrow_back),
+                                                      onPressed: () {
+                                                        if (_currentPage > 0) {
+                                                          _pageController
+                                                              .previousPage(
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        300),
+                                                            curve: Curves.ease,
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                    Expanded(
+                                                      child: PageView.builder(
+                                                        controller:
+                                                            _pageController,
+                                                        itemCount:
+                                                            _images.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              _showFullScreenImage(
+                                                                  context,
+                                                                  index);
+                                                            },
+                                                            child: Hero(
+                                                              tag:
+                                                                  'selectedImage$index',
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: _images[
+                                                                        index]
+                                                                    .bookingResultImg!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                progressIndicatorBuilder:
+                                                                    (context,
+                                                                            url,
+                                                                            progress) =>
+                                                                        Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    value: progress
+                                                                        .progress,
+                                                                  ),
+                                                                ),
+                                                                errorWidget: (context,
+                                                                        url,
+                                                                        error) =>
+                                                                    Image.asset(
+                                                                  "assets/images/default.png",
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        onPageChanged:
+                                                            (int page) {
+                                                          setState(() {
+                                                            _currentPage = page;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                      icon: const Icon(
+                                                          Icons.arrow_forward),
+                                                      onPressed: () {
+                                                        if (_currentPage <
+                                                            _images.length -
+                                                                1) {
+                                                          _pageController
+                                                              .nextPage(
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        300),
+                                                            curve: Curves.ease,
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                height: 170,
+                                                child: GridView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  gridDelegate:
+                                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 4,
+                                                    mainAxisSpacing: 5.0,
+                                                    crossAxisSpacing: 4.0,
+                                                    childAspectRatio: 4 / 8,
+                                                  ),
+                                                  shrinkWrap: true,
+                                                  itemCount: _images.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        // Set the current page of PageView to the selected image
+                                                        if (_currentPage > 0) {
+                                                          _pageController
+                                                              .animateToPage(
+                                                            index,
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        300),
+                                                            curve: Curves.ease,
+                                                          );
+                                                        } else if (_currentPage <
+                                                            _images.length -
+                                                                1) {
+                                                          _pageController
+                                                              .animateToPage(
+                                                            index,
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        300),
+                                                            curve: Curves.ease,
+                                                          );
+                                                        }
+                                                      },
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: _images[index]
+                                                            .bookingResultImg!,
+                                                        fit: BoxFit.contain,
+                                                        // height: 120,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height /
+                                                            7.3,
+                                                        alignment:
+                                                            Alignment.topCenter,
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    progress) =>
+                                                                Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            value: progress
+                                                                .progress,
+                                                          ),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Image.asset(
+                                                          "assets/images/default.png",
+                                                          fit: BoxFit.contain,
+                                                          // height: 120,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              7.3,
+                                                          alignment: Alignment
+                                                              .topCenter,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Container(),
                                     _buildInfoUser(),
                                     _buildService(),
                                     const Padding(
@@ -486,10 +682,27 @@ class _DetailHistoryBookingScreenState
     });
   }
 
+  List<BookingResultsModel> _images = [];
   @override
   void initState() {
-    super.initState();
     calTotal();
+    if (widget.booking!.bookingServices!.first.bookingResults != null) {
+      _images = widget.booking!.bookingServices!.first.bookingResults!;
+    }
+    super.initState();
+  }
+
+  int _selectedImageIndex = 0;
+  int _currentPage = 0;
+  PageController _pageController = PageController();
+  void _showFullScreenImage(BuildContext context, int initialIndex) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            FullScreenImagePage(images: _images, initialIndex: initialIndex),
+      ),
+    );
   }
 }
 
@@ -500,4 +713,65 @@ class ServiceList {
     this.name,
     this.price,
   });
+}
+
+class FullScreenImagePage extends StatefulWidget {
+  final List<BookingResultsModel> images;
+  final int initialIndex;
+
+  const FullScreenImagePage(
+      {super.key, required this.images, required this.initialIndex});
+
+  @override
+  _FullScreenImagePageState createState() => _FullScreenImagePageState();
+}
+
+class _FullScreenImagePageState extends State<FullScreenImagePage> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.initialIndex);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+            backgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white)),
+        body:
+            // Zoomed
+            InteractiveViewer(
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.images.length,
+            itemBuilder: (context, index) {
+              return Center(
+                // slide
+                child: Hero(
+                  tag: 'selectedImage$index',
+                  child: CachedNetworkImage(
+                    imageUrl: widget.images[index].bookingResultImg!,
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        Center(
+                      child: CircularProgressIndicator(
+                        value: progress.progress,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      "assets/images/default.png",
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }

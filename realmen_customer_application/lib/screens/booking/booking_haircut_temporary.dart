@@ -28,6 +28,8 @@ class BookingHaircutTemporary extends StatefulWidget {
   AccountInfoModel? stylist;
   dynamic date;
   dynamic time;
+  bool? oneToOne;
+  List<BookingServiceModel>? postBooking;
 
   BookingHaircutTemporary({
     Key? key,
@@ -37,6 +39,8 @@ class BookingHaircutTemporary extends StatefulWidget {
     this.stylist,
     this.date,
     this.time,
+    this.oneToOne,
+    this.postBooking,
   }) : super(key: key);
 
   @override
@@ -229,15 +233,17 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(
-                width: 130,
-                child: Text(
-                  "Stylist: ",
-                  style: TextStyle(
-                    fontSize: 17,
-                  ),
-                ),
-              ),
+              !widget.oneToOne!
+                  ? const SizedBox(
+                      width: 130,
+                      child: Text(
+                        "Stylist: ",
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
+                      ),
+                    )
+                  : Container(),
               SizedBox(
                 width: 220,
                 child: Text(
@@ -329,35 +335,57 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
             return Padding(
               padding: const EdgeInsets.only(
                   top: 10, bottom: 10, left: 10, right: 20),
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 280),
-                    child: Expanded(
-                      child: Text(
-                        service != []
-                            ? utf8.decode(service[index]
-                                .serviceName
-                                .toString()
-                                .runes
-                                .toList())
-                            : "",
-                        maxLines: 2,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        constraints: const BoxConstraints(maxWidth: 280),
+                        child: Expanded(
+                          child: Text(
+                            service != []
+                                ? utf8.decode(service[index]
+                                    .serviceName
+                                    .toString()
+                                    .runes
+                                    .toList())
+                                : "",
+                            maxLines: 2,
+                            style: const TextStyle(fontSize: 17),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        service[index].price != null
+                            ? formatter.format(service[index].price)
+                            : (service[index].branchServicePrice != null
+                                ? formatter
+                                    .format(service[index].branchServicePrice)
+                                : "0 VNĐ"),
                         style: const TextStyle(fontSize: 17),
                       ),
-                    ),
+                    ],
                   ),
-                  Text(
-                    service[index].price != null
-                        ? formatter.format(service[index].price)
-                        : (service[index].branchServicePrice != null
-                            ? formatter
-                                .format(service[index].branchServicePrice)
-                            : "0 VNĐ"),
-                    style: const TextStyle(fontSize: 17),
-                  ),
+                  widget.oneToOne!
+                      ? Container(
+                          constraints: const BoxConstraints(maxWidth: 280),
+                          child: Expanded(
+                            child: Text(
+                              utf8.decode(service[index]
+                                  .thumbnailUrl!
+                                  .toString()
+                                  .runes
+                                  .toList()),
+                              maxLines: 2,
+                              style: const TextStyle(fontSize: 17),
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             );
@@ -619,7 +647,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
       String startTime = "";
       String endTime = '';
       int staffId = 0;
-
+      bookingServices = [];
       const int staffIdNull = 0;
       final random = Random();
       if (massuerIdList.isNotEmpty) {
@@ -672,6 +700,20 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                     if (staffId == 0) {
                       bookingServiceType = "PICKUP_STYLIST";
                     }
+                    // newBookingService
+                    BookingServiceModel newBookingService = BookingServiceModel(
+                      serviceId: service.serviceId,
+                      staffId: staffId,
+                      startAppointment: startTime,
+                      endAppointment: endTime,
+                      bookingServiceType: bookingServiceType,
+                    );
+
+                    // List BookingService add newBookingService
+                    bookingServices.add(newBookingService);
+
+                    // startTime sau sẽ là EndTime trước
+                    selectedTime = endTime;
                   } else {
                     if (widget.stylist != null) {
                       staffId = widget.stylist!.staff!.staffId!;
@@ -680,22 +722,43 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                       staffId = staffIdNull;
                       bookingServiceType = "PICKUP_STYLIST";
                     }
+                    if (!widget.oneToOne!) {
+                      // newBookingService
+                      BookingServiceModel newBookingService =
+                          BookingServiceModel(
+                        serviceId: service.serviceId,
+                        staffId: staffId,
+                        startAppointment: startTime,
+                        endAppointment: endTime,
+                        bookingServiceType: bookingServiceType,
+                      );
+
+                      // List BookingService add newBookingService
+                      bookingServices.add(newBookingService);
+
+                      // startTime sau sẽ là EndTime trước
+                      selectedTime = endTime;
+                    } else {
+                      for (var postBooking in widget.postBooking!) {
+                        // newBookingService
+                        BookingServiceModel newBookingService =
+                            BookingServiceModel(
+                          serviceId: postBooking.serviceId,
+                          staffId: postBooking.staffId,
+                          startAppointment: startTime,
+                          endAppointment: endTime,
+                          bookingServiceType: postBooking.bookingServiceType,
+                        );
+
+                        // List BookingService add newBookingService
+                        bookingServices.add(newBookingService);
+
+                        // startTime sau sẽ là EndTime trước
+                        selectedTime = endTime;
+                        service.thumbnailUrl = postBooking.staffName;
+                      }
+                    }
                   }
-
-                  // newBookingService
-                  BookingServiceModel newBookingService = BookingServiceModel(
-                    serviceId: service.serviceId,
-                    staffId: staffId,
-                    startAppointment: startTime,
-                    endAppointment: endTime,
-                    bookingServiceType: bookingServiceType,
-                  );
-
-                  // List BookingService add newBookingService
-                  bookingServices.add(newBookingService);
-
-                  // startTime sau sẽ là EndTime trước
-                  selectedTime = endTime;
                 }
               }
             }

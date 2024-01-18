@@ -10,7 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 
 abstract class IBranchService {
-  Future<dynamic> getBranchId(int branchId);
+  Future<dynamic> getBranchId(int branchId, bool getLocal);
   Future<dynamic> getBranches(String? search, bool callBack);
   Future<dynamic> getSearchBranches(String? search, int pageSize, int current);
   Future<dynamic> getBranchesByCity();
@@ -18,12 +18,17 @@ abstract class IBranchService {
 
 class BranchService implements IBranchService {
   @override
-  Future getBranchId(int branchId) async {
+  Future getBranchId(int branchId, bool getLocal) async {
     double lat = 0;
     double lng = 0;
     bool isShowDistance = false;
-    bool locationPermission =
-        await SharedPreferencesService.getLocationPermission();
+    bool locationPermission = false;
+
+    if (getLocal) {
+      locationPermission =
+          await SharedPreferencesService.getLocationPermission();
+    }
+
     // ignore: unnecessary_null_comparison
     if (branchId == null) {
       return const Iterable<String>.empty();

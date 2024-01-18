@@ -187,26 +187,35 @@ class SharedPreferencesService {
   }
 
   static Future<bool> getLocationPermission() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    bool? result = sharedPreferences.getBool("locationPermission");
-    if (result != null) {
-      return result;
-    } else {
+    try {
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      bool? result = sharedPreferences.getBool("locationPermission");
+      if (result != null) {
+        return result;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
       return false;
     }
   }
 
   static Future<Map<String, dynamic>> getLongLat() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    double? lng = sharedPreferences.getDouble("longitude");
-    double? lat = sharedPreferences.getDouble("latitude");
-    if (lng != null && lat != null) {
-      Map<String, dynamic> result = {"lng": lng, "lat": lat};
+    try {
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      double? lng = sharedPreferences.getDouble("longitude");
+      double? lat = sharedPreferences.getDouble("latitude");
+      if (lng != null && lat != null) {
+        Map<String, dynamic> result = {"lng": lng, "lat": lat};
+        return result;
+      } else {
+        throw Exception("Failed to get phone number from SharedPreferences");
+      }
+    } catch (e) {
+      Map<String, dynamic> result = {"lng": 0, "lat": 0};
       return result;
-    } else {
-      throw Exception("Failed to get phone number from SharedPreferences");
     }
   }
 }

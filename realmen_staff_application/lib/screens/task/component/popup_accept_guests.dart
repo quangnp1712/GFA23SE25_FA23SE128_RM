@@ -257,11 +257,20 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
   }
 
   bool isLoading = true;
+  // nhận khách trước 20'
   Future<void> ConfirmBooking() async {
     if (!_isDisposed && mounted) {
       bool checkSuccess = false;
       try {
-        if (allowUpdate) {
+        widget.booking.bookingServices!
+            .sort((a, b) => a.bookingServiceId!.compareTo(b.bookingServiceId!));
+        DateTime now = DateTime.now();
+        DateTime startTime = DateTime.parse(
+            "2023-01-16 ${widget.booking.bookingServices!.first.startAppointment}:00");
+        DateTime startTime20 = startTime.subtract(Duration(minutes: 20));
+
+        if (allowUpdate &&
+            (now.isAtSameMomentAs(startTime20) || now.isAfter(startTime20))) {
           int accountId = await SharedPreferencesService.getAccountId();
           if (widget.booking.bookingServices != null) {
             if (widget.booking.bookingServices!.isNotEmpty) {
@@ -283,6 +292,8 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
               }
             }
           }
+        } else {
+          _errorMessage("Chỉ được nhận khách trước 20 phút.");
         }
       } catch (e) {
         _errorMessage('Nhận khách thất bại');

@@ -79,6 +79,26 @@ class BranchModel {
     this.lng,
     this.distance,
   });
+  BranchModel.clone(BranchModel otherBranchModel)
+      : this(
+          branchId: otherBranchModel.branchId,
+          shopOwnerId: otherBranchModel.shopOwnerId,
+          branchName: otherBranchModel.branchName,
+          thumbnailUrl: otherBranchModel.thumbnailUrl,
+          phone: otherBranchModel.phone,
+          address: otherBranchModel.address,
+          status: otherBranchModel.status,
+          numberStaffs: otherBranchModel.numberStaffs,
+          open: otherBranchModel.open,
+          close: otherBranchModel.close,
+          branchDisplayList: otherBranchModel.branchDisplayList,
+          branchServiceList: otherBranchModel.branchServiceList,
+          accountStaffList: otherBranchModel.accountStaffList,
+          distanceKilometer: otherBranchModel.distanceKilometer,
+          lat: otherBranchModel.lat,
+          lng: otherBranchModel.lng,
+          distance: otherBranchModel.distance,
+        );
 
   factory BranchModel.fromJson(Map<String, dynamic> json) {
     return BranchModel(
@@ -114,7 +134,6 @@ class BranchModel {
     );
   }
 }
-
 
 class BranchServiceModel {
   int? serviceId;

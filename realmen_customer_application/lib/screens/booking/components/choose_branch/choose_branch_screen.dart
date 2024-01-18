@@ -938,7 +938,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     if (!_isDisposed && mounted) {
       try {
         BranchService branchService = BranchService();
-        final result = await branchService.getBranchId(branchId!);
+        final result = await branchService.getBranchId(branchId!, true);
         if (result['statusCode'] == 200) {
           selectedBranch = result['data'] as BranchModel;
 

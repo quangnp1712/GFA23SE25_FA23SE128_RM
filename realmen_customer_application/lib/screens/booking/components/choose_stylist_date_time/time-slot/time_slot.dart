@@ -6,7 +6,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/account/account_info_model.dart';
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
+import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/models/time_slot/time_slot_model.dart';
+import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:realmen_customer_application/service/timeslot/time_slot_service.dart';
 
 class ChooseDateAndTimeSlot extends StatefulWidget {
@@ -15,12 +18,27 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
   final AccountInfoModel? stylistSelected;
   bool? isChangeStylist;
 
-  ChooseDateAndTimeSlot(
-      {super.key,
-      required this.onDateSelected,
-      required this.onTimeSelected,
-      required this.stylistSelected,
-      this.isChangeStylist});
+  // OneToOne
+  final bool oneToOne;
+  List<BookingServiceModel>? serviceOTOList;
+  List<AccountInfoModel>? staffOneToOne;
+  final void Function(String date)? onSetStylistShowOTO;
+  List<AccountInfoModel>? accountStaffBranchList;
+  List<Map<String, dynamic>>? listDate;
+
+  ChooseDateAndTimeSlot({
+    super.key,
+    required this.onDateSelected,
+    required this.onTimeSelected,
+    required this.stylistSelected,
+    this.isChangeStylist,
+    required this.oneToOne,
+    this.serviceOTOList,
+    this.staffOneToOne,
+    this.accountStaffBranchList,
+    this.onSetStylistShowOTO,
+    this.listDate,
+  });
 
   @override
   State<ChooseDateAndTimeSlot> createState() => _ChooseDateAndTimeSlotState();
@@ -182,7 +200,6 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                                 onChanged: (value) {
                                   setState(() {
                                     dateController = value as String?;
-
                                     dateSeleted = listDate!
                                         .where((date) =>
                                             date['id'] == value.toString())
@@ -196,6 +213,10 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
                                     isCurrentDate =
                                         _isCurrentDate(dateSeleted!['date']);
                                     widget.onDateSelected(dateSeleted);
+                                    if (widget.oneToOne) {
+                                      widget.onSetStylistShowOTO!(
+                                          dateSeleted!['chosenDate']);
+                                    }
                                     getTimeSlot(dateSeleted!['chosenDate']);
                                   });
 
@@ -266,7 +287,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   // Logic
   @override
   void initState() {
-    super.initState();
+    //
     getDate();
     dateController = listDate?.first['id'].toString();
     dateSeleted = listDate?.first;
@@ -274,6 +295,7 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     getTimeSlot(dateSeleted!['chosenDate']);
 
     // widget.onDateSelected(dateController);
+    super.initState();
   }
 
   // ignore: unused_field
@@ -286,7 +308,11 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
 
   @override
   void didUpdateWidget(ChooseDateAndTimeSlot oldWidget) {
-    getDate();
+    if (!widget.oneToOne) {
+      getDate();
+    } else {
+      listDate = widget.listDate!;
+    }
 
     if (widget.isChangeStylist != null && widget.isChangeStylist! == true) {
       if (listDate!.isNotEmpty) {
@@ -317,70 +343,224 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
   List<Map<String, dynamic>>? listDate = [];
   bool isLoading = true;
 
-  getDate() {
+  // hàm để lấy date cho dropdown
+  Future<void> getDate() async {
     DateTime now = DateTime.now();
     listDate = [];
-    if (widget.stylistSelected?.staff?.scheduleList == null) {
-      for (int i = 0; i <= 2; i++) {
-        listDate?.add({
-          'id': i.toString(),
-          'date': formatDate(now.add(Duration(days: i)))['date'],
-          'type': formatDate(now.add(Duration(days: i)))['type'],
-          'chosenDate':
-              "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
-        });
-      }
-    } else {
-      try {
-        //scheduleList
-        widget.stylistSelected?.staff!.scheduleList!
-            .asMap()
-            .entries
-            .map((schedule) {
-          DateTime workingDate = DateTime.parse(schedule.value.workingDate!);
-          DateTime nowFullDate = DateTime(now.year, now.month, now.day, 0);
-          // // kiểm tra = now
-          // bool checkNow = workingDate == nowFullDate;
-          // // kiểm tra workingDate > now
-          // bool checkIsAfter = workingDate.isAfter(now);
-          // // kiểm tra workingDate < now + 4 ngày
-          // bool checkIsBefore =
-          //     workingDate.isBefore(now.add(const Duration(days: 4)));
+    // nếu kh phải opt OTO
+    if (!widget.oneToOne) {
+      if (widget.stylistSelected?.staff?.scheduleList == null) {
+        for (int i = 0; i <= 2; i++) {
+          listDate?.add({
+            'id': i.toString(),
+            'date': formatDate(now.add(Duration(days: i)))['date'],
+            'type': formatDate(now.add(Duration(days: i)))['type'],
+            'chosenDate':
+                "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
+          });
+        }
+      } else {
+        try {
+          //scheduleList
+          widget.stylistSelected?.staff!.scheduleList!
+              .asMap()
+              .entries
+              .map((schedule) {
+            DateTime workingDate = DateTime.parse(schedule.value.workingDate!);
+            DateTime nowFullDate = DateTime(now.year, now.month, now.day, 0);
+            // // kiểm tra = now
+            // bool checkNow = workingDate == nowFullDate;
+            // // kiểm tra workingDate > now
+            // bool checkIsAfter = workingDate.isAfter(now);
+            // // kiểm tra workingDate < now + 4 ngày
+            // bool checkIsBefore =
+            //     workingDate.isBefore(now.add(const Duration(days: 4)));
 
-          // bool checkBetween = checkIsAfter && checkIsBefore;
+            // bool checkBetween = checkIsAfter && checkIsBefore;
 
-          // lấy những ca làm trong 3 ngày
-          if (listDate!.isNotEmpty) {
-            listDate!.removeWhere((date) =>
-                date['dateTime'] ==
-                "${DateTime.parse(schedule.value.workingDate!)}");
-          }
-          if (DateTime.parse(schedule.value.workingDate!) ==
-                  DateTime(now.year, now.month, now.day, 0) ||
-              (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
-                  DateTime.parse(schedule.value.workingDate!)
-                      .isBefore(now.add(const Duration(days: 2))))) {
-            listDate?.add({
-              'id': schedule.key.toString(),
-              'date': formatDate(
-                  DateTime.parse(schedule.value.workingDate!))['date'],
-              'type': formatDate(
-                  DateTime.parse(schedule.value.workingDate!))['type'],
-              'chosenDate': formatDate(
-                  DateTime.parse(schedule.value.workingDate!))['chosenDate'],
-              'start': schedule.value.startShift,
-              'end': schedule.value.endShift,
-              'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
+            // lấy những ca làm trong 3 ngày
+            if (listDate!.isNotEmpty) {
+              listDate!.removeWhere((date) =>
+                  date['dateTime'] ==
+                  "${DateTime.parse(schedule.value.workingDate!)}");
+            }
+            if (DateTime.parse(schedule.value.workingDate!) ==
+                    DateTime(now.year, now.month, now.day, 0) ||
+                (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
+                    DateTime.parse(schedule.value.workingDate!)
+                        .isBefore(now.add(const Duration(days: 2))))) {
+              listDate?.add({
+                'id': schedule.key.toString(),
+                'date': formatDate(
+                    DateTime.parse(schedule.value.workingDate!))['date'],
+                'type': formatDate(
+                    DateTime.parse(schedule.value.workingDate!))['type'],
+                'chosenDate': formatDate(
+                    DateTime.parse(schedule.value.workingDate!))['chosenDate'],
+                'start': schedule.value.startShift,
+                'end': schedule.value.endShift,
+                'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
+              });
+            }
+          }).toList();
+
+          listDate!.sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
+
+          if (!_isDisposed && mounted) {
+            setState(() {
+              listDate;
             });
           }
-        }).toList();
-
-        listDate!.sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
-
-        if (!_isDisposed && mounted) {
-          setState(() {
-            listDate;
+        } on Exception catch (e) {
+          listDate?.add({
+            'date': formatDate(now.add(const Duration(days: 1)))['date'],
+            'type': formatDate(now.add(const Duration(days: 1)))['type'],
+            'chosenDate':
+                "${formatDate(now.add(const Duration(days: 1)))['chosenDate']}",
           });
+
+          print(e.toString());
+        }
+      }
+      //
+    } else {
+      // Option One To One
+      try {
+        // nếu stylist đã đc chọn != post booking
+        // TH có random
+        // nếu có 1 stylist kiểm tra các acc trong random có cùng ca làm kh
+        if (widget.staffOneToOne!.length != widget.serviceOTOList!.length) {
+          // random
+          if (!_isDisposed && mounted) {
+            try {
+              if (widget.staffOneToOne!.isEmpty) {
+                for (int i = 0; i <= 2; i++) {
+                  listDate?.add({
+                    'id': i.toString(),
+                    'date': formatDate(now.add(Duration(days: i)))['date'],
+                    'type': formatDate(now.add(Duration(days: i)))['type'],
+                    'chosenDate':
+                        "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
+                  });
+                }
+              } else {
+                // lấy thằng đầu làm mốc
+                // thay đổi lịch là thay đổi ngi
+                widget.accountStaffBranchList!.first.staff!.scheduleList!
+                    .asMap()
+                    .entries
+                    .map((schedule) {
+                  DateTime workingDate =
+                      DateTime.parse(schedule.value.workingDate!);
+                  DateTime nowFullDate =
+                      DateTime(now.year, now.month, now.day, 0);
+
+                  // ktr lịch dropdown đã có data
+                  if (listDate!.isNotEmpty) {
+                    // xóa trùng lịch
+                    listDate!.removeWhere((date) =>
+                        date['dateTime'] ==
+                        "${DateTime.parse(schedule.value.workingDate!)}");
+                  }
+                  // ktr lịch làm của acc có hợp đk 3 ngày
+                  if (DateTime.parse(schedule.value.workingDate!) ==
+                          DateTime(now.year, now.month, now.day, 0) ||
+                      (DateTime.parse(schedule.value.workingDate!)
+                              .isAfter(now) &&
+                          DateTime.parse(schedule.value.workingDate!)
+                              .isBefore(now.add(const Duration(days: 2))))) {
+                    // add lịch dropdrown
+                    listDate?.add({
+                      'id': schedule.key.toString(),
+                      'date': formatDate(
+                          DateTime.parse(schedule.value.workingDate!))['date'],
+                      'type': formatDate(
+                          DateTime.parse(schedule.value.workingDate!))['type'],
+                      'chosenDate': formatDate(DateTime.parse(
+                          schedule.value.workingDate!))['chosenDate'],
+                      'start': schedule.value.startShift,
+                      'end': schedule.value.endShift,
+                      'dateTime':
+                          "${DateTime.parse(schedule.value.workingDate!)}",
+                    });
+                  }
+                }).toList();
+              }
+
+              listDate!
+                  .sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
+
+              if (!_isDisposed && mounted) {
+                setState(() {
+                  listDate;
+                });
+              }
+            } on Exception catch (e) {
+              print(e.toString());
+              print("Error: $e");
+            }
+          }
+        }
+        // TH chọn đủ stylist
+        else {
+          // staffOneToOne là stylist chọn theo service
+          for (var stafOneToOneElement in widget.staffOneToOne!) {
+            // lấy lịch làm của staff đã chọn
+            stafOneToOneElement.staff!.scheduleList!
+                .asMap()
+                .entries
+                .map((schedule) {
+              DateTime workingDate =
+                  DateTime.parse(schedule.value.workingDate!);
+              DateTime nowFullDate = DateTime(now.year, now.month, now.day, 0);
+
+              // lấy những ca làm trong 3 ngày
+              if (listDate!.isNotEmpty) {
+                // xóa trùng
+                listDate!.removeWhere((date) =>
+                    date['dateTime'] ==
+                    "${DateTime.parse(schedule.value.workingDate!)}");
+              }
+              if (DateTime.parse(schedule.value.workingDate!) ==
+                      DateTime(now.year, now.month, now.day, 0) ||
+                  (DateTime.parse(schedule.value.workingDate!).isAfter(now) &&
+                      DateTime.parse(schedule.value.workingDate!)
+                          .isBefore(now.add(const Duration(days: 2))))) {
+                listDate?.add({
+                  'id': schedule.key.toString(),
+                  'date': formatDate(
+                      DateTime.parse(schedule.value.workingDate!))['date'],
+                  'type': formatDate(
+                      DateTime.parse(schedule.value.workingDate!))['type'],
+                  'chosenDate':
+                      formatDate(DateTime.parse(schedule.value.workingDate!))[
+                          'chosenDate'],
+                  'start': schedule.value.startShift,
+                  'end': schedule.value.endShift,
+                  'dateTime': "${DateTime.parse(schedule.value.workingDate!)}",
+                });
+              }
+            }).toList();
+
+            listDate!.sort(((a, b) => a['dateTime'].compareTo(b['dateTime'])));
+
+            if (!_isDisposed && mounted) {
+              setState(() {
+                listDate;
+              });
+            }
+          }
+        }
+        if (listDate!.isEmpty) {
+          for (int i = 0; i <= 2; i++) {
+            listDate?.add({
+              'id': i.toString(),
+              'date': formatDate(now.add(Duration(days: i)))['date'],
+              'type': formatDate(now.add(Duration(days: i)))['type'],
+              'chosenDate':
+                  "${formatDate(now.add(Duration(days: i)))['chosenDate']}",
+            });
+          }
         }
       } on Exception catch (e) {
         listDate?.add({
@@ -431,31 +611,149 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     'sunday': 'Chủ nhật'
   };
   List<TimeSlotModel> timeSlotModel = [];
+
+  // tạo data List timeslot để ktr timeslot ava/una
   Future<void> getTimeSlot(dateSeleted) async {
     if (!_isDisposed && mounted) {
-      final chosenDate = dateSeleted;
-      final staffId = widget.stylistSelected?.staff!.staffId;
-      if (chosenDate != null && staffId != null) {
-        try {
-          TimeSlotService timeSlotService = TimeSlotService();
-          final result = await timeSlotService.getTimeSlot(chosenDate, staffId);
-          if (result['statusCode'] == 200) {
-            timeSlotModel = result['data'];
-            if (!_isDisposed && mounted) {
-              setState(() {
-                timeSlotModel;
-              });
+      if (!widget.oneToOne) {
+        final chosenDate = dateSeleted;
+        final staffId = widget.stylistSelected?.staff!.staffId;
+        if (chosenDate != null && staffId != null) {
+          try {
+            TimeSlotService timeSlotService = TimeSlotService();
+            final result =
+                await timeSlotService.getTimeSlot(chosenDate, staffId);
+            if (result['statusCode'] == 200) {
+              timeSlotModel = result['data'];
+              if (!_isDisposed && mounted) {
+                setState(() {
+                  timeSlotModel;
+                });
+              }
+            } else {
+              print(result['error']);
+              if (!_isDisposed && mounted) {
+                setState(() {});
+              }
             }
-          } else {
-            print(result['error']);
-            if (!_isDisposed && mounted) {
+          } catch (e) {
+            print(e.toString());
+            if (_isDisposed && mounted) {
               setState(() {});
             }
           }
-        } catch (e) {
-          print(e.toString());
-          if (_isDisposed && mounted) {
-            setState(() {});
+        }
+      }
+      // Option One To One
+      // set Timeslot data
+      else {
+        // ngày đã chọn
+        final chosenDate = dateSeleted;
+        //ktra stylist đã chọn có chứa random kh
+        // TH chứa random
+        if (widget.staffOneToOne!.length != widget.serviceOTOList!.length) {
+          // reset data
+          timeSlotModel = [];
+          // clone data
+          List<AccountInfoModel>? accountStaffList =
+              List<AccountInfoModel>.from(widget.accountStaffBranchList!);
+          // TH đã có ít nhất 1 stylist đã chọn
+          if (widget.staffOneToOne!.isNotEmpty) {
+            try {
+              // xóa những acc kh cùng ca làm của branch
+              // lấy từng acc của branch
+              accountStaffList.removeWhere((accountStaff) {
+                if (accountStaff.staff!.staffId ==
+                    widget.staffOneToOne!.first.staff!.staffId) {
+                  return false;
+                }
+                // lấy lịch làm của acc của branch
+                for (var accountSchedule in accountStaff.staff!.scheduleList!) {
+                  // lấy lịch làm của stylist đã chọn đầu tiên
+                  for (var staffSchedule
+                      in widget.staffOneToOne!.first.staff!.scheduleList!) {
+                    // ktr ngày lich làm của cả 2 có = ngày đã chọn
+                    if (accountSchedule.workingDate == chosenDate &&
+                        staffSchedule.workingDate == chosenDate) {
+                      // nếu 2 ca làm giống nhau -> kh xóa
+                      if (accountSchedule.shiftId == staffSchedule.shiftId) {
+                        return false;
+                      }
+                    }
+                  } // ktra hết lịch làm của stylist đã chọn đầu tiên
+                  // vs 1 lịch làm của acc branch
+                } // ktr hết
+                // nếu chưa return là kh chứa -> xóa
+                return true;
+              });
+            } on Exception catch (e) {}
+          }
+
+          // lấy từng stylist đã chọn để lấy timeslot
+          // timeslot là tổng hợp tất cả stlist đã chọn
+          for (var staffOneToOneElement in accountStaffList) {
+            final staffId = staffOneToOneElement.staff!.staffId;
+            if (chosenDate != null && staffId != null) {
+              try {
+                TimeSlotService timeSlotService = TimeSlotService();
+                final result =
+                    await timeSlotService.getTimeSlot(chosenDate, staffId);
+                if (result['statusCode'] == 200) {
+                  timeSlotModel.addAll(result['data']);
+                  if (!_isDisposed && mounted) {
+                    setState(() {
+                      timeSlotModel;
+                    });
+                  }
+                } else {
+                  print(result['error']);
+                  if (!_isDisposed && mounted) {
+                    setState(() {});
+                  }
+                }
+              } catch (e) {
+                print(e.toString());
+                if (_isDisposed && mounted) {
+                  setState(() {});
+                }
+              }
+            }
+          }
+        }
+        // khi stylist đã chọn đủ
+        else {
+          // reset data
+          timeSlotModel = [];
+          // lấy từng stylist đã chọn
+          // lấy tất cả timeslot của staffOneToOne
+          for (var staffOneToOneElement in widget.staffOneToOne!) {
+            final chosenDate = dateSeleted;
+            final staffId = staffOneToOneElement.staff!.staffId;
+            if (chosenDate != null && staffId != null) {
+              try {
+                TimeSlotService timeSlotService = TimeSlotService();
+                final result =
+                    await timeSlotService.getTimeSlot(chosenDate, staffId);
+                if (result['statusCode'] == 200) {
+                  timeSlotModel.addAll(result['data']);
+                  if (!_isDisposed && mounted) {
+                    setState(() {
+                      timeSlotModel;
+                    });
+                  }
+                } else {
+                  print(result['error']);
+                  if (!_isDisposed && mounted) {
+                    setState(() {});
+                  }
+                }
+              } catch (e) {
+                print(e.toString());
+                if (_isDisposed && mounted) {
+                  setState(() {});
+                }
+              }
+            }
           }
         }
       }

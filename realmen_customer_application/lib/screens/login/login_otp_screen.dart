@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, avoid_print, unused_import
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/login_register/login_otp_model.dart';
@@ -129,17 +131,30 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                   SizedBox(
                                     height: 0.5.h,
                                   ),
-                                  TextButton(
-                                    onPressed: resendOtp,
-                                    child: const Center(
-                                      child: Text(
-                                        "Gửi lại mã OTP",
-                                        style: TextStyle(
-                                          decoration: TextDecoration.underline,
-                                          fontSize: 18,
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed:
+                                            _buttonEnabled ? resendOtp : null,
+                                        child: const Center(
+                                          child: Text(
+                                            "Gửi lại mã OTP",
+                                            style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontSize: 18,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        _countdown == 0 ? "" : '${_countdown}s',
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ],
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -248,7 +263,22 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
   }
 
   // Logic
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    startCountdown();
+    super.initState();
+  }
+
   TextEditingController otpController = TextEditingController();
+  bool _buttonEnabled = true;
+  int _countdown = 30;
+  late Timer _timer;
   void submitOtp() async {
     String phone = await SharedPreferencesService.getPhone();
     String otp = otpController.text.toString();
@@ -300,11 +330,14 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
     }
   }
 
-  void resendOtp() async {
-    setState(() {
-      otpController = TextEditingController();
-    });
+  Future<void> resendOtp() async {
+    if (mounted) {
+      setState(() {
+        otpController = TextEditingController();
+      });
+    }
 
+    startCountdown();
     String phone = await SharedPreferencesService.getPhone();
     LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
     AuthenticateService authenticateService = AuthenticateService();
@@ -325,5 +358,23 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
       _errorMessage("Gửi lại mã OTP thất bại");
       Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
     }
+  }
+
+  void startCountdown() {
+    setState(() {
+      _buttonEnabled = false;
+      _countdown = 30;
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_countdown > 0) {
+          _countdown--;
+        } else {
+          _timer.cancel();
+          _buttonEnabled = true;
+        }
+      });
+    });
   }
 }

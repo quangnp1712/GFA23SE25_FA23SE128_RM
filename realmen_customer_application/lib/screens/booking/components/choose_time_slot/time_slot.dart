@@ -39,10 +39,12 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
             height: 10,
           ),
           ChooseDateAndTimeSlot(
-              onDateSelected: widget.onDateSelected,
-              onTimeSelected: widget.onTimeSelected,
-              stylistSelected: widget.selectedStylist,
-              isChangeStylist: widget.isChangeStylist),
+            onDateSelected: widget.onDateSelected,
+            onTimeSelected: widget.onTimeSelected,
+            stylistSelected: widget.selectedStylist,
+            isChangeStylist: widget.isChangeStylist,
+            oneToOne: false,
+          ),
           const SizedBox(
             height: 20,
           ),

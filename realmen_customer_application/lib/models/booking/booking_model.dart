@@ -63,8 +63,10 @@ class BookingContent {
   String? branchAddress;
   String? branchName;
   String? appointmentDate;
+  int? totalBookingPrice;
   List<BookingServiceModel>? bookingServices;
   String? bookingStatus;
+  bool? allowProcess;
 
   BookingContent({
     this.bookingId,
@@ -78,6 +80,8 @@ class BookingContent {
     this.appointmentDate,
     this.bookingServices,
     this.bookingStatus,
+    this.totalBookingPrice,
+    this.allowProcess,
   });
 
   factory BookingContent.fromJson(Map<String, dynamic> json) {
@@ -97,6 +101,8 @@ class BookingContent {
               .toList())
           : null,
       bookingStatus: json['bookingStatus'],
+      totalBookingPrice: json['totalBookingPrice'],
+      allowProcess: json['allowProcess'],
     );
   }
 }
@@ -117,12 +123,12 @@ class BookingServiceModel {
   String? duration;
   String? durationText;
   String? bookingServiceStatus;
-  bool? allowUpdate;
-  String? bookingServiceType;
-
   String? professional;
+
+  String? bookingServiceType;
   String? bookingServiceTypeText;
-  String? bookingStatus;
+  List<BookingResultsModel>? bookingResults;
+  bool? allowUpdate;
 
   BookingServiceModel({
     this.bookingServiceId,
@@ -140,11 +146,11 @@ class BookingServiceModel {
     this.duration,
     this.durationText,
     this.bookingServiceStatus,
+    this.professional,
     this.allowUpdate,
     this.bookingServiceType,
-    this.professional,
     this.bookingServiceTypeText,
-    this.bookingStatus,
+    this.bookingResults,
   });
 
   Map<String, dynamic> toJson() {
@@ -174,10 +180,43 @@ class BookingServiceModel {
       duration: json['duration'],
       durationText: json['durationText'],
       bookingServiceStatus: json['bookingServiceStatus'],
-      allowUpdate: json['allowUpdate'],
       professional: json['professional'],
+      allowUpdate: json['allowUpdate'],
+      bookingServiceType: json['bookingServiceType'],
       bookingServiceTypeText: json['bookingServiceTypeText'],
-      bookingStatus: json['bookingStatus'],
+      bookingResults: json['bookingResults'] != null
+          ? ((json['bookingResults'] as List)
+              .map((e) => BookingResultsModel.fromJson(e))
+              .toList())
+          : null,
     );
+  }
+}
+
+class BookingResultsModel {
+  int? bookingResultId;
+  int? bookingServiceId;
+  String? bookingResultImg;
+  BookingResultsModel({
+    this.bookingResultId,
+    this.bookingServiceId,
+    this.bookingResultImg,
+  });
+  factory BookingResultsModel.fromJson(Map<String, dynamic> json) {
+    return BookingResultsModel(
+      bookingResultId: json['bookingResultId'],
+      bookingServiceId: json['bookingServiceId'],
+      bookingResultImg: json['bookingResultImg'],
+    );
+  }
+}
+
+class BookingResultImgsModel {
+  List<String> bookingResultImgs;
+  BookingResultImgsModel({
+    required this.bookingResultImgs,
+  });
+  Map<String, dynamic> toJson() {
+    return {'bookingResultImgs': bookingResultImgs};
   }
 }

@@ -1,7 +1,10 @@
 // ignore_for_file: constant_identifier_names, sized_box_for_whitespace, avoid_print
 
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -219,13 +222,58 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              Image.asset(
-                                                                "assets/images/default.png",
-                                                                height: 170,
-                                                                width: 120,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
+                                                              bookings[index]
+                                                                          .bookingServices!
+                                                                          .first
+                                                                          .bookingResults !=
+                                                                      null
+                                                                  ? CachedNetworkImage(
+                                                                      imageUrl: bookings[
+                                                                              index]
+                                                                          .bookingServices!
+                                                                          .first
+                                                                          .bookingResults!
+                                                                          .first
+                                                                          .bookingResultImg!,
+                                                                      height:
+                                                                          170,
+                                                                      width:
+                                                                          120,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      progressIndicatorBuilder: (context,
+                                                                              url,
+                                                                              progress) =>
+                                                                          Center(
+                                                                        child:
+                                                                            CircularProgressIndicator(
+                                                                          value:
+                                                                              progress.progress,
+                                                                        ),
+                                                                      ),
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          Image
+                                                                              .asset(
+                                                                        "assets/images/default.png",
+                                                                        height:
+                                                                            170,
+                                                                        width:
+                                                                            120,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    )
+                                                                  : Image.asset(
+                                                                      "assets/images/default.png",
+                                                                      height:
+                                                                          170,
+                                                                      width:
+                                                                          120,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
                                                               Column(
                                                                 children: [
                                                                   Padding(
@@ -392,6 +440,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
   int current = 0;
   int currentResult = 0;
   int totalPages = 0;
+  final storage = FirebaseStorage.instance;
 
   Future<void> getBookingPending(int current) async {
     if (!_isDisposed && mounted) {
@@ -430,6 +479,25 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                       } else {
                         stylist = utf8.decode(
                             service.staffName!.toString().runes.toList());
+                      }
+                      List<BookingResultsModel> bookingResultImg = [];
+
+                      if (service.bookingResults != null) {
+                        for (BookingResultsModel image
+                            in service.bookingResults!) {
+                          String bookingImage = "";
+                          try {
+                            var reference = storage
+                                .ref('booking/${image.bookingResultImg}');
+                            bookingImage = await reference.getDownloadURL();
+                            bookingResultImg.add(BookingResultsModel(
+                                bookingResultImg: bookingImage));
+                          } catch (e) {}
+                        }
+                        if (bookingResultImg.length == 4) {
+                          booking.bookingServices!.first.bookingResults =
+                              bookingResultImg;
+                        }
                       }
                     }
                     totals

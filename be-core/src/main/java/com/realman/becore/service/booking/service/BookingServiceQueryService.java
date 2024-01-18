@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.realman.becore.dto.booking.result.BookingResult;
 import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.dto.booking.service.BookingServiceMapper;
+import com.realman.becore.dto.booking.service.BookingServiceSearchCriteria;
 import com.realman.becore.repository.database.booking.service.BookingServiceRepository;
 import com.realman.becore.service.booking.result.BookingResultUseCaseService;
 import com.realman.becore.util.RequestContext;
@@ -38,6 +39,15 @@ public class BookingServiceQueryService {
         Page<BookingService> bookingServices = bookingServiceRepository
                 .findByStaffId(requestContext.getStaffId(), pageRequestCustom.pageRequest())
                 .map(r -> bookingServiceMapper.toDto(r, bookingResults.get(r.getBookingServiceId())));
+        return bookingServices;
+    }
+
+    public Page<BookingService> findAll(BookingServiceSearchCriteria searchCriteria,
+            PageRequestCustom pageRequestCustom) {
+        Map<Long, List<BookingResult>> bookingResults = bookingResultUseCaseService.findAll();
+        Page<BookingService> bookingServices = bookingServiceRepository
+                .findAll(searchCriteria.toLowerCase(), pageRequestCustom.pageRequest())
+                .map(bs -> bookingServiceMapper.toDto(bs, bookingResults.get(bs.getBookingServiceId())));
         return bookingServices;
     }
 

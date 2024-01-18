@@ -10,6 +10,7 @@ import com.realman.becore.controller.api.booking.service.models.AccountId;
 import com.realman.becore.controller.api.booking.service.models.BookingResultRequest;
 import com.realman.becore.controller.api.booking.service.models.BookingServiceId;
 import com.realman.becore.dto.booking.service.BookingService;
+import com.realman.becore.dto.booking.service.BookingServiceSearchCriteria;
 import com.realman.becore.util.response.PageRequestCustom;
 
 import lombok.NonNull;
@@ -39,6 +40,16 @@ public class BookingServiceUseCaseService {
         bookingServiceCommandService.finishService(bookingServiceId, bookingResultRequest);
     }
 
+    @Transactional
+    public void chooseStylist(Long bookingServiceId, Long staffId) {
+        bookingServiceCommandService.chooseStylist(staffId, bookingServiceId);
+    }
+
+    @Transactional
+    public void chooseStylistForAll(Long staffId, Long bookingId) {
+        bookingServiceCommandService.chooseStylistForAll(bookingId, staffId);
+    }
+
     public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
         bookingServiceCommandService.confirmService(bookingServiceId);
     }
@@ -53,6 +64,11 @@ public class BookingServiceUseCaseService {
 
     public Page<BookingService> findByStaffId(Long staffId, PageRequestCustom pageRequestCustom) {
         return bookingServiceQueryService.findByStaffId(pageRequestCustom);
+    }
+
+    public Page<BookingService> findAll(BookingServiceSearchCriteria searchCriteria,
+            PageRequestCustom pageRequestCustom) {
+        return bookingServiceQueryService.findAll(searchCriteria, pageRequestCustom);
     }
 
 }

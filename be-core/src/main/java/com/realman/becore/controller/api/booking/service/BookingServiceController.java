@@ -36,4 +36,9 @@ public class BookingServiceController implements BookingServiceAPI {
         bookingServiceUseCaseService.cancelBookingService(bookingServiceId);
     }
 
+    @Override
+    public void chooseStylist(Long staffId, Long bookingServiceId) {
+        bookingServiceUseCaseService.chooseStylist(bookingServiceId, staffId);
+    }
+
 }

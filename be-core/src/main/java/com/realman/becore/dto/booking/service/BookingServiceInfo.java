@@ -19,6 +19,8 @@ public interface BookingServiceInfo {
 
     void setCategoryId(Long categoryId);
 
+    void setBookingCode(String bookingCode);
+
     void setCategoryName(String categoryName);
 
     void setPriority(Integer priority);
@@ -30,6 +32,10 @@ public interface BookingServiceInfo {
     void setStaffName(String staffName);
 
     void setStaffPhone(String staffPhone);
+
+    void setCustomerName(String customerName);
+
+    void setCustomerPhone(String customerPhone);
 
     void setStartAppointment(LocalTime startAppointment);
 
@@ -92,4 +98,10 @@ public interface BookingServiceInfo {
     String getCusPhone();
 
     EProfessional getProfessional();
+
+    String getBookingCode();
+
+    String getCustomerName();
+
+    String getCustomerPhone();
 }

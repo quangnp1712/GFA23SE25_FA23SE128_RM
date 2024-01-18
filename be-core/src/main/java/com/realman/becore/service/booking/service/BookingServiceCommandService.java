@@ -1,5 +1,6 @@
 package com.realman.becore.service.booking.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import java.time.LocalTime;
@@ -60,6 +61,7 @@ public class BookingServiceCommandService {
         }
         foundBookingService.setStaffId(staffId);
         foundBookingService.setBookingServiceStatus(EBookingServiceStatus.ONGOING);
+        foundBookingService.setBookingServiceType(EBookingServiceType.CHOSEN_STYLIST);
         bookingServiceRepository.save(foundBookingService);
     }
 
@@ -160,4 +162,17 @@ public class BookingServiceCommandService {
         bookingServiceRepository.saveAll(updatedBookingServices);
     }
 
+    public void chooseStylistForAll(Long bookingId, Long staffId) {
+        List<BookingServiceEntity> bookingServices = bookingServiceRepository.findAllByBookingId(bookingId);
+        List<BookingServiceEntity> updatedBookingServices = new ArrayList<>();
+        bookingServices.forEach(bs -> {
+            if (bs.getBookingServiceType().equals(EBookingServiceType.PICKUP_STYLIST)) {
+                bs.setStaffId(staffId);
+                bs.setBookingServiceStatus(EBookingServiceStatus.ONGOING);
+                bs.setBookingServiceType(EBookingServiceType.CHOSEN_STYLIST);
+                updatedBookingServices.add(bs);
+            }
+        });
+        bookingServiceRepository.saveAll(updatedBookingServices);
+    }
 }

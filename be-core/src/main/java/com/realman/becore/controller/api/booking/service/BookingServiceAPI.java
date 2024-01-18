@@ -30,4 +30,8 @@ public interface BookingServiceAPI {
         @PutMapping("/cancel-service")
         @PreAuthorize("hasRole('ROLE_CUSTOMER')")
         void cancelBookingService(@PathVariable Long bookingServiceId);
+
+        @PutMapping("/choose-stylist")
+        @PreAuthorize("hasRole('ROLE_RECEPTIONIST')")
+        void chooseStylist(@RequestParam Long staffId, @PathVariable Long bookingServiceId);
 }

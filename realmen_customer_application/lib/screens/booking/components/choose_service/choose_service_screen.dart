@@ -278,7 +278,7 @@ class _ChooseServiceBookingScreenState
                       description = service.description;
                       try {
                         var reference = storage.ref(
-                            'service/${service.serviceDisplayList![0].serviceDisplayUrl}');
+                            '${service.serviceDisplayList![0].serviceDisplayUrl}');
                         branchService.thumbnailUrl =
                             await reference.getDownloadURL();
                       } catch (e) {
@@ -475,6 +475,12 @@ class _SubServiceTileState extends State<SubServiceTile> {
                 child: CircularProgressIndicator(
                   value: progress.progress,
                 ),
+              ),
+              errorWidget: (context, url, error) => Image.asset(
+                "assets/images/massage.jpg",
+                height: 140,
+                width: MediaQuery.of(context).size.width / 1.4,
+                fit: BoxFit.cover,
               ),
             ),
           ),

@@ -487,8 +487,7 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                             in service.bookingResults!) {
                           String bookingImage = "";
                           try {
-                            var reference = storage
-                                .ref('booking/${image.bookingResultImg}');
+                            var reference = storage.ref(image.bookingResultImg);
                             bookingImage = await reference.getDownloadURL();
                             bookingResultImg.add(BookingResultsModel(
                                 bookingResultImg: bookingImage));
@@ -530,20 +529,14 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                 });
               }
             }
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-            isLoading = false;
-          } else if (result['statusCode'] == 403) {
-            _errorMessage(result['error']);
-            AuthenticateService authenticateService = AuthenticateService();
-            authenticateService.logout();
           } else {
-            print("$result");
+            _errorMessage(result['message']);
+            print(result);
           }
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
     }
     isLoading = false;

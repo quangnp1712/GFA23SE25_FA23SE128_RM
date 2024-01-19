@@ -73,6 +73,12 @@ class _barberTopState extends State<barberTop> {
                                   value: progress.progress,
                                 ),
                               ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                "assets/images/barber1.jpg",
+                                height: 200,
+                                width: MediaQuery.of(context).size.width / 1.4,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -256,7 +262,7 @@ class _barberTopState extends State<barberTop> {
                 .removeWhere((staff) => staff.staff!.professional == 'MASSEUR');
             for (var staff in staffList) {
               try {
-                var reference = storage.ref('stylist/${staff.thumbnailUrl}');
+                var reference = storage.ref(staff.thumbnailUrl);
                 staff.thumbnailUrl = await reference.getDownloadURL();
               } catch (e) {
                 final random = Random();
@@ -269,24 +275,15 @@ class _barberTopState extends State<barberTop> {
               staffList;
             });
             current++;
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-            break;
-          } else if (result['statusCode'] == 403) {
-            if (callBack == false) {
-              callBack = true;
-              getStylist(callBack);
-            } else {
-              print(result);
-            }
           } else {
-            print("$result");
+            _errorMessage(result['message']);
+            print(result);
             break;
           }
         } while (current <= totalPages);
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
     }
   }

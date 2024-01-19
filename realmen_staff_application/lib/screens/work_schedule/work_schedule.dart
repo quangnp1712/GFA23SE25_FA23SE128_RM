@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:realmen_staff_application/models/schedule/schedule_model.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/service/schedule/schedule_service.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
@@ -214,11 +215,22 @@ class _WorkScheduleState extends State<WorkScheduleScreen> {
           });
         }
       } else {
-        print("$result['statusCode'] : $result['error']");
+        _errorMessage(result['message']);
+        print(result);
         return appointments;
       }
     } catch (e) {
+      _errorMessage("Vui lòng thử lại");
+      print(e.toString());
       return appointments;
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
     }
   }
 

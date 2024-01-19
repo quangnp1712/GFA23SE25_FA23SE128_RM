@@ -265,8 +265,9 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
         widget.booking.bookingServices!
             .sort((a, b) => a.bookingServiceId!.compareTo(b.bookingServiceId!));
         DateTime now = DateTime.now();
-        DateTime startTime = DateTime.parse(
-            "2023-01-16 ${widget.booking.bookingServices!.first.startAppointment}:00");
+        String startAppointment =
+            "2023-01-16 ${widget.booking.bookingServices!.first.startAppointment}";
+        DateTime startTime = DateTime.parse(startAppointment);
         DateTime startTime20 = startTime.subtract(Duration(minutes: 20));
 
         if (allowUpdate &&
@@ -282,12 +283,9 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
                   // _successMessage('Nhận khách thành công');
                   // Get.toNamed(TaskScreen.TaskScreenRoute);
                   // Get.to(() => const MainScreen());
-                } else if (result['statusCode'] == 500) {
-                  checkSuccess = false;
-                  print(result['error']);
                 } else {
-                  checkSuccess = false;
-                  print('Nhận khách thất bại');
+                  _errorMessage(result['message']);
+                  print(result);
                 }
               }
             }
@@ -302,6 +300,7 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
         _successMessage('Nhận khách thành công');
         Get.to(() => const MainScreen());
       } else {
+        Get.back();
         _errorMessage('Nhận khách thất bại');
       }
     }

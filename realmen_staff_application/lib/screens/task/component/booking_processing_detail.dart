@@ -5,13 +5,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
 import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_change_staff.dart';
 import 'package:realmen_staff_application/screens/task/component/popup_confirm.dart';
 import 'package:realmen_staff_application/screens/task/service_booking_processing.dart';
 import 'package:realmen_staff_application/service/share_prreference/share_prreference.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class BookingProcessingDetail extends StatefulWidget {
   final BookingContent booking;
@@ -445,176 +446,55 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       const SizedBox(
                         height: 15,
                       ),
-                      stylistServices.isNotEmpty
-                          ? Column(
-                              children: [
-                                Container(
-                                  constraints:
-                                      const BoxConstraints(minHeight: 40),
-                                  color: Colors.grey.shade300,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        constraints:
-                                            const BoxConstraints(maxWidth: 245),
-                                        child: Text(
-                                          "Stylist: ${utf8.decode(stylistServices.first.staffName!.toString().runes.toList())}",
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 1),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          width: 100,
-                                          height: 30,
-                                          margin:
-                                              const EdgeInsets.only(right: 5),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            // color: Color(0xff207A20),
-                                            color: isStylistServicesDone ==
-                                                    "CHƯA LÀM"
-                                                ? Colors.white
-                                                : (isStylistServicesDone ==
-                                                        "ĐANG LÀM"
-                                                    ? Colors.amberAccent
-                                                    : const Color(0xff207A20)),
-                                            border: Border.all(
-                                                color: Colors.black54,
-                                                style: BorderStyle.solid),
-                                          ),
-                                          child: Center(
+                      stylistServiceMuitl.isNotEmpty
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: stylistServiceMuitl.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      constraints:
+                                          const BoxConstraints(minHeight: 40),
+                                      color: Colors.grey.shade300,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            constraints: const BoxConstraints(
+                                                maxWidth: 245),
                                             child: Text(
-                                              isStylistServicesDone!,
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w700,
-                                                // color: Colors.white,
-                                                color: isStylistServicesDone ==
-                                                        "HOÀN THÀNH"
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
+                                              "Stylist: ${utf8.decode(stylistServiceMuitl[index].name!.toString().runes.toList())}",
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 1),
                                             ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: stylistServices.length,
-                                  itemBuilder: (context, index) {
-                                    return TimelineTile(
-                                      // false la hien thanh
-
-                                      isLast: false,
-                                      beforeLineStyle: LineStyle(
-                                          color: index + 1 !=
-                                                  stylistServices.length
-                                              ? Colors.black
-                                              : Colors.transparent,
-                                          thickness: 2),
-
-                                      // icon
-                                      indicatorStyle: IndicatorStyle(
-                                        width: 35,
-                                        height: 40,
-                                        padding: const EdgeInsets.only(
-                                            top: 4, bottom: 4, right: 5),
-                                        indicator: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: stylistServices[index].bookingServiceStatus ==
-                                                        "ONGOING" ||
-                                                    stylistServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "LOCKED" ||
-                                                    stylistServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "CONFIRM"
-                                                ? Colors.grey.shade300
-                                                : (stylistServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "PROCESSING"
-                                                    ? Colors.amberAccent
-                                                    : const Color(0xff207A20)),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              "${index + 1}",
-                                              style: TextStyle(
-                                                  color: stylistServices[index]
-                                                              .bookingServiceStatus ==
-                                                          "FINISHED"
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ),
-                                        indicatorXY: 0.0,
-                                      ),
-
-                                      // content
-                                      endChild: Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, right: 0, left: 10),
-                                        constraints:
-                                            const BoxConstraints(minHeight: 80),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              constraints: const BoxConstraints(
-                                                  maxWidth: 194),
-                                              child: Text(
-                                                utf8.decode(
-                                                    stylistServices[index]
-                                                        .serviceName!
-                                                        .toString()
-                                                        .runes
-                                                        .toList()),
-                                                style: const TextStyle(
-                                                    fontSize: 20),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 106,
-                                              height: 40,
+                                          Center(
+                                            child: Container(
+                                              width: 100,
+                                              height: 30,
+                                              margin: const EdgeInsets.only(
+                                                  right: 5),
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 5,
                                                       vertical: 5),
                                               decoration: BoxDecoration(
                                                 // color: Color(0xff207A20),
-                                                color: stylistServices[index].bookingServiceStatus ==
-                                                            "ONGOING" ||
-                                                        stylistServices[index]
-                                                                .bookingServiceStatus ==
-                                                            "LOCKED" ||
-                                                        stylistServices[index]
-                                                                .bookingServiceStatus ==
-                                                            "CONFIRM"
+                                                color: stylistServiceMuitl[
+                                                                index]
+                                                            .isStylistServicesDone ==
+                                                        "CHƯA LÀM"
                                                     ? Colors.white
-                                                    : (stylistServices[index]
-                                                                .bookingServiceStatus ==
-                                                            "PROCESSING"
+                                                    : (stylistServiceMuitl[
+                                                                    index]
+                                                                .isStylistServicesDone ==
+                                                            "ĐANG LÀM"
                                                         ? Colors.amberAccent
                                                         : const Color(
                                                             0xff207A20)),
@@ -624,43 +504,234 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                               ),
                                               child: Center(
                                                 child: Text(
-                                                  stylistServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "ONGOING" ||
-                                                          stylistServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "LOCKED" ||
-                                                          stylistServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "CONFIRM"
-                                                      ? "CHƯA LÀM"
-                                                      : (stylistServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "PROCESSING"
-                                                          ? "ĐANG LÀM"
-                                                          : "HOÀN THÀNH"),
+                                                  stylistServiceMuitl[index]
+                                                      .isStylistServicesDone!,
                                                   style: TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 13,
                                                     fontWeight: FontWeight.w700,
                                                     // color: Colors.white,
-                                                    color: stylistServices[
+                                                    color: stylistServiceMuitl[
                                                                     index]
-                                                                .bookingServiceStatus ==
-                                                            "FINISHED"
+                                                                .isStylistServicesDone ==
+                                                            "HOÀN THÀNH"
                                                         ? Colors.white
                                                         : Colors.black,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          )
+                                        ],
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            )
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: stylistServiceMuitl[index]
+                                          .bookingServiceList!
+                                          .length,
+                                      itemBuilder: (context, i) {
+                                        return TimelineTile(
+                                          // false la hien thanh
+
+                                          isLast: false,
+                                          beforeLineStyle: LineStyle(
+                                              color: index + 1 !=
+                                                      stylistServiceMuitl[index]
+                                                          .bookingServiceList!
+                                                          .length
+                                                  ? Colors.black
+                                                  : Colors.transparent,
+                                              thickness: 2),
+
+                                          // icon
+                                          indicatorStyle: IndicatorStyle(
+                                            width: 35,
+                                            height: 40,
+                                            padding: const EdgeInsets.only(
+                                                top: 4, bottom: 4, right: 5),
+                                            indicator: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: stylistServiceMuitl[index]
+                                                                .bookingServiceList![
+                                                                    i]
+                                                                .bookingServiceStatus ==
+                                                            "ONGOING" ||
+                                                        stylistServiceMuitl[
+                                                                    index]
+                                                                .bookingServiceList![
+                                                                    i]
+                                                                .bookingServiceStatus ==
+                                                            "LOCKED" ||
+                                                        stylistServiceMuitl[
+                                                                    index]
+                                                                .bookingServiceList![
+                                                                    i]
+                                                                .bookingServiceStatus ==
+                                                            "CONFIRM"
+                                                    ? Colors.grey.shade300
+                                                    : (stylistServiceMuitl[
+                                                                    index]
+                                                                .bookingServiceList![
+                                                                    i]
+                                                                .bookingServiceStatus ==
+                                                            "PROCESSING"
+                                                        ? Colors.amberAccent
+                                                        : const Color(
+                                                            0xff207A20)),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "${i + 1}",
+                                                  style: TextStyle(
+                                                      color: stylistServiceMuitl[
+                                                                      index]
+                                                                  .bookingServiceList![
+                                                                      i]
+                                                                  .bookingServiceStatus ==
+                                                              "FINISHED"
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            indicatorXY: 0.0,
+                                          ),
+
+                                          // content
+                                          endChild: Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 10, right: 0, left: 10),
+                                            constraints: const BoxConstraints(
+                                                minHeight: 80),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          maxWidth: 194),
+                                                  child: Text(
+                                                    utf8.decode(
+                                                        stylistServiceMuitl[
+                                                                index]
+                                                            .bookingServiceList![
+                                                                i]
+                                                            .serviceName
+                                                            .toString()
+                                                            .runes
+                                                            .toList()),
+                                                    style: const TextStyle(
+                                                        fontSize: 20),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 106,
+                                                  height: 40,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 5,
+                                                      vertical: 5),
+                                                  decoration: BoxDecoration(
+                                                    // color: Color(0xff207A20),
+                                                    color: stylistServiceMuitl[index]
+                                                                    .bookingServiceList![
+                                                                        i]
+                                                                    .bookingServiceStatus ==
+                                                                "ONGOING" ||
+                                                            stylistServiceMuitl[
+                                                                        index]
+                                                                    .bookingServiceList![
+                                                                        i]
+                                                                    .bookingServiceStatus ==
+                                                                "LOCKED" ||
+                                                            stylistServiceMuitl[
+                                                                        index]
+                                                                    .bookingServiceList![
+                                                                        i]
+                                                                    .bookingServiceStatus ==
+                                                                "CONFIRM"
+                                                        ? Colors.white
+                                                        : (stylistServiceMuitl[
+                                                                        index]
+                                                                    .bookingServiceList![
+                                                                        i]
+                                                                    .bookingServiceStatus ==
+                                                                "PROCESSING"
+                                                            ? Colors.amberAccent
+                                                            : const Color(
+                                                                0xff207A20)),
+                                                    border: Border.all(
+                                                        color: Colors.black54,
+                                                        style:
+                                                            BorderStyle.solid),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      stylistServiceMuitl[index]
+                                                                      .bookingServiceList![
+                                                                          i]
+                                                                      .bookingServiceStatus ==
+                                                                  "ONGOING" ||
+                                                              stylistServiceMuitl[
+                                                                          index]
+                                                                      .bookingServiceList![
+                                                                          i]
+                                                                      .bookingServiceStatus ==
+                                                                  "LOCKED" ||
+                                                              stylistServiceMuitl[
+                                                                          index]
+                                                                      .bookingServiceList![
+                                                                          i]
+                                                                      .bookingServiceStatus ==
+                                                                  "CONFIRM"
+                                                          ? "CHƯA LÀM"
+                                                          : (stylistServiceMuitl[
+                                                                          index]
+                                                                      .bookingServiceList![
+                                                                          i]
+                                                                      .bookingServiceStatus ==
+                                                                  "PROCESSING"
+                                                              ? "ĐANG LÀM"
+                                                              : "HOÀN THÀNH"),
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        // color: Colors.white,
+                                                        color: stylistServiceMuitl[
+                                                                        index]
+                                                                    .bookingServiceList![
+                                                                        i]
+                                                                    .bookingServiceStatus ==
+                                                                "FINISHED"
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              })
                           : Container(),
                       const SizedBox(
                         height: 20,
@@ -805,6 +876,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
 
   List<BookingServiceModel> stylistServices = [];
 
+  List<MutilBookingService> stylistServiceMuitl = [];
+
+  bool isMutil = false;
+
   Future<void> _btnRight() async {
     if (!_isDisposed && mounted) {
       int index = 0;
@@ -910,6 +985,8 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     BtnStatus(key: 4, value: "Thanh toán".toUpperCase()),
   ];
   BtnStatus btn = BtnStatus();
+
+  //
   Future<void> setDataBooking() async {
     if (!_isDisposed && mounted) {
       try {
@@ -934,6 +1011,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
             stylistServices.add(bookingService);
           }
         }
+        // title massur
         if (masseurServices.isNotEmpty) {
           for (var service in masseurServices) {
             if (service.bookingServiceStatus == "ONGOING" ||
@@ -947,18 +1025,26 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
             }
           }
         }
-        if (stylistServices.isNotEmpty) {
-          for (var service in stylistServices) {
-            if (service.bookingServiceStatus == "ONGOING" ||
-                service.bookingServiceStatus == "LOCKED" ||
-                service.bookingServiceStatus == "CONFIRM") {
-              isStylistServicesDone = "CHƯA LÀM";
-            } else if (service.bookingServiceStatus == "PROCESSING") {
-              isStylistServicesDone = "ĐANG LÀM";
-            } else if (service.bookingServiceStatus == "FINISHED") {
-              isStylistServicesDone = "HOÀN THÀNH";
+
+        // set data stylist
+        setDataStylist();
+        // one to all
+        if (stylistServiceMuitl.isNotEmpty) {
+          stylistServiceMuitl.map((mutil) {
+            if (mutil.staffId == staffId) {
+              for (var service in mutil.bookingServiceList!) {
+                if (service.bookingServiceStatus == "ONGOING" ||
+                    service.bookingServiceStatus == "LOCKED" ||
+                    service.bookingServiceStatus == "CONFIRM") {
+                  isStylistServicesDone = "CHƯA LÀM";
+                } else if (service.bookingServiceStatus == "PROCESSING") {
+                  isStylistServicesDone = "ĐANG LÀM";
+                } else if (service.bookingServiceStatus == "FINISHED") {
+                  isStylistServicesDone = "HOÀN THÀNH";
+                }
+              }
             }
-          }
+          });
         }
 
         // checkBookingIsDone
@@ -1001,10 +1087,16 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
             }
           }
         } else if (professional == "STYLIST") {
-          for (var service in stylistServices) {
-            if (service.allowUpdate != null) {
-              checkAllowUpdate = service.allowUpdate!;
-            }
+          if (stylistServiceMuitl.isNotEmpty) {
+            stylistServiceMuitl.map((mutil) {
+              if (mutil.staffId == staffId) {
+                for (var service in mutil.bookingServiceList!) {
+                  if (service.allowUpdate != null) {
+                    checkAllowUpdate = service.allowUpdate!;
+                  }
+                }
+              }
+            });
           }
         }
         if (!_isDisposed && mounted) {
@@ -1018,6 +1110,62 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
         isLoading = true;
       }
     }
+  }
+
+  void setDataStylist() {
+//titile stylist
+    // kiểm tra có 2 staff id trỏe lên kh
+    staffId;
+    stylistServiceMuitl = [];
+    List<BookingServiceModel> newBookingServcie = [];
+    for (var service in stylistServices) {
+      if (stylistServiceMuitl.isEmpty) {
+        MutilBookingService newMutilBookingService = MutilBookingService(
+          name: service.staffName,
+          staffId: service.staffId,
+        );
+        stylistServiceMuitl.add(newMutilBookingService);
+      } else if (stylistServiceMuitl
+          .any((element) => element.staffId != service.staffId)) {
+        MutilBookingService newMutilBookingService = MutilBookingService(
+          name: service.staffName,
+          staffId: service.staffId,
+          isStylistServicesDone: '',
+          bookingServiceList: [],
+        );
+        stylistServiceMuitl.add(newMutilBookingService);
+      }
+    }
+    if (stylistServiceMuitl.isNotEmpty) {
+      for (var serviceMutil in stylistServiceMuitl) {
+        newBookingServcie = [];
+        for (var service in stylistServices) {
+          if (serviceMutil.staffId == service.staffId) {
+            newBookingServcie.add(service);
+          }
+        }
+        if (newBookingServcie.isNotEmpty) {
+          serviceMutil.bookingServiceList!.addAll(newBookingServcie);
+        }
+      }
+    }
+    if (stylistServiceMuitl.isNotEmpty) {
+      for (var serviceMutil in stylistServiceMuitl) {
+        for (var service in serviceMutil.bookingServiceList!) {
+          if (service.bookingServiceStatus == "ONGOING" ||
+              service.bookingServiceStatus == "LOCKED" ||
+              service.bookingServiceStatus == "CONFIRM") {
+            isStylistServicesDone = "CHƯA LÀM";
+          } else if (service.bookingServiceStatus == "PROCESSING") {
+            isStylistServicesDone = "ĐANG LÀM";
+          } else if (service.bookingServiceStatus == "FINISHED") {
+            isStylistServicesDone = "HOÀN THÀNH";
+          }
+        }
+        serviceMutil.isStylistServicesDone = isStylistServicesDone;
+      }
+    }
+    isStylistServicesDone = '';
   }
 
   String professional = '';
@@ -1104,4 +1252,17 @@ class BtnStatus {
   int? key;
   String? value;
   BtnStatus({this.key, this.value});
+}
+
+class MutilBookingService {
+  int? staffId;
+  String? name;
+  String? isStylistServicesDone;
+  List<BookingServiceModel>? bookingServiceList;
+  MutilBookingService({
+    this.staffId,
+    this.name,
+    this.isStylistServicesDone,
+    this.bookingServiceList,
+  });
 }

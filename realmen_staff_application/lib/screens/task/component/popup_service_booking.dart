@@ -187,7 +187,7 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
             Get.toNamed(MainScreen.MainScreenRoute);
           } else {
             _errorMessage(result['message']);
-            print(result['error']);
+            print(result);
           }
         }
       } on Exception catch (e) {

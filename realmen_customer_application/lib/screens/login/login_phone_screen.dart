@@ -250,14 +250,14 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   //         Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
   //         // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
   //       } else if (result['statusCode'] == 500) {
-  //         _errorMessage("${result['error']}");
+  //        _errorMessage(result['message']);
   //       } else {
   //         _errorMessage("Số điện thoại không đúng");
-  //         // print("$result['statusCode'] : $result['error']");
+  //         // print(result);
   //       }
   //     } catch (e) {
   //       _errorMessage("Số điện thoại không đúng");
-  //       print("Error: $e");
+  //       print(result);
   //     }
   //   } else if (phone.isEmpty || phone == '') {
   //     _errorMessage("Xin nhập số điện thoại");

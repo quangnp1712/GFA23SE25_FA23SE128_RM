@@ -73,6 +73,12 @@ class _RecomendServicesState extends State<RecomendServices> {
                                   value: progress.progress,
                                 ),
                               ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                "assets/images/massage.jpg",
+                                height: 140,
+                                width: MediaQuery.of(context).size.width / 1.4,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -153,7 +159,7 @@ class _RecomendServicesState extends State<RecomendServices> {
                   service.serviceDisplayList!.isNotEmpty) {
                 final String serviceDisplayUrl =
                     service.serviceDisplayList![0].serviceDisplayUrl.toString();
-                var reference = storage.ref('service/$serviceDisplayUrl');
+                var reference = storage.ref(serviceDisplayUrl);
                 service.serviceDisplayList![0].serviceDisplayUrl =
                     await reference.getDownloadURL();
               }
@@ -169,10 +175,12 @@ class _RecomendServicesState extends State<RecomendServices> {
             serviceList;
           });
         } else {
-          print("$result");
+          // _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
-        print("Error: $e");
+        // _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

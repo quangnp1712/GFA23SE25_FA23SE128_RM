@@ -85,6 +85,7 @@ class SharedPreferencesService {
       loginOtpResponseModel.accountId!.toString(),
       loginOtpResponseModel.staffId?.toString() ?? "",
       loginOtpResponseModel.branchId?.toString() ?? "",
+      loginOtpResponseModel.expTime?.toString() ?? "",
     ]);
   }
 
@@ -101,6 +102,7 @@ class SharedPreferencesService {
         "accountId": result[3],
         "staffId": result[4],
         "branchId": result[5],
+        "expTime": result[6],
       };
       return resultMap;
     } else {
@@ -116,7 +118,7 @@ class SharedPreferencesService {
       int accountId = int.parse(result[3]);
       return accountId;
     } else {
-      throw Exception("Failed to get account ID from SharedPreferences");
+      return 0;
     }
   }
 

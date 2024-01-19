@@ -173,22 +173,15 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                   tabs.add(tab);
                 }
               }
-            } else if (result['statusCode'] == 500) {
-              _errorMessage(result['message']);
-              break;
-            } else if (result['statusCode'] == 403) {
-              _errorMessage(result['message']);
-              // AuthenticateService authenticateService = AuthenticateService();
-              // authenticateService.logout();
-              break;
             } else {
-              print("$result");
+              _errorMessage(result['message']);
+              print(result);
               break;
             }
           }
         } on Exception catch (e) {
+          _errorMessage("Vui lòng thử lại");
           print(e.toString());
-          print("Error: $e");
           isLoading = false;
           break;
         }

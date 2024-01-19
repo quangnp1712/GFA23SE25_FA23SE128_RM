@@ -733,16 +733,13 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
           );
           dobController.text = (accountInfo!.dob)!.substring(0, 10);
         });
-      } else if (result['statusCode'] == 403) {
-        AuthenticateService authenticateService = AuthenticateService();
-        authenticateService.logout();
-        _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
       } else {
-        _errorMessage("$result['statusCode'] : $result['error']");
+        _errorMessage(result['message']);
+        print(result);
       }
     } on Exception catch (e) {
-      _errorMessage(e.toString());
-      print("Error: $e");
+      _errorMessage("Vui lòng thử lại");
+      print(e.toString());
     }
   }
 

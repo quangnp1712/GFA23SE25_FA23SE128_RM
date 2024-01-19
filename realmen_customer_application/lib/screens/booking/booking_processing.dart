@@ -609,16 +609,9 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                 // }
                 current++;
               }
-            } else if (result['statusCode'] == 500) {
-              _errorMessage(result['error']);
-              break;
-            } else if (result['statusCode'] == 403) {
-              _errorMessage(result['error']);
-              AuthenticateService authenticateService = AuthenticateService();
-              authenticateService.logout();
-              break;
             } else {
-              print("$result");
+              _errorMessage(result['message']);
+              print(result);
               break;
             }
           } while (current <= totalPages);
@@ -631,8 +624,8 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
           }
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
       isLoading = false;
     }

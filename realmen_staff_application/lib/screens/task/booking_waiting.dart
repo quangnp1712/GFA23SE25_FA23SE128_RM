@@ -742,22 +742,15 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                     });
                   }
                 }
-              } else if (result['statusCode'] == 500) {
-                _errorMessage(result['message']);
-                break;
-              } else if (result['statusCode'] == 403) {
-                _errorMessage(result['error']);
-                break;
-                // AuthenticateService authenticateService = AuthenticateService();
-                // authenticateService.logout();
               } else {
-                print("$result");
+                _errorMessage(result['message']);
+                print(result);
                 break;
               }
             }
           } on Exception catch (e) {
+            _errorMessage("Vui lòng thử lại");
             print(e.toString());
-            print("Error: $e");
             isLoading = false;
             break;
           }
@@ -768,6 +761,8 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
           });
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
         isLoading = false;
       }
       isLoading = false;

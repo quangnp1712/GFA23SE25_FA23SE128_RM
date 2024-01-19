@@ -117,17 +117,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: ClipOval(
                                       child: CachedNetworkImage(
                                         imageUrl: avatarUrl ?? avatarDefault,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        // progressIndicatorBuilder:
-                                        //     (context, url, progress) => Center(
-                                        //   child: CircularProgressIndicator(
-                                        //     value: progress.progress,
-                                        //   ),
-                                        // ),
                                         fit: BoxFit.cover,
                                         width: 120,
                                         height: 120,
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) => Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.progress,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(
+                                          "assets/images/default.png",
+                                          width: 120,
+                                          height: 120,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -424,8 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (accountInfo!.thumbnailUrl != null &&
               accountInfo!.thumbnailUrl != "") {
             try {
-              var reference =
-                  storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+              var reference = storage.ref(accountInfo!.thumbnailUrl);
               avatarUrl = await reference.getDownloadURL();
             } catch (e) {
               var reference = storage.ref('avatar/default.png');
@@ -441,21 +444,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             avatarUrl;
           });
-        } else if (result['statusCode'] == 403) {
-          AuthenticateService authenticateService = AuthenticateService();
-          authenticateService.logout();
-          _errorMessage("Cần đăng nhập lại");
-          print("Cần đăng nhập lại");
-        } else if (result['statusCode'] == 500) {
-          _errorMessage("Kiểm tra lại kết nối Internet");
         } else {
-          print("$result['statusCode'] : $result['error']");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
-        print("Error: $e");
-        // AuthenticateService authenticateService = AuthenticateService();
-        // authenticateService.logout();
-        _errorMessage("Cần đăng nhập lại");
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

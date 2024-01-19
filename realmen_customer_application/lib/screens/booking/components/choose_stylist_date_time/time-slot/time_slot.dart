@@ -16,6 +16,7 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
   final void Function(dynamic date) onDateSelected;
   final void Function(dynamic time) onTimeSelected;
   final AccountInfoModel? stylistSelected;
+  List<AccountInfoModel>? accountStaffList;
   bool? isChangeStylist;
 
   // OneToOne
@@ -50,6 +51,7 @@ class ChooseDateAndTimeSlot extends StatefulWidget {
     this.choseDateUpdateStylist,
     this.isChangeDate,
     this.changeDateDone,
+    this.accountStaffList,
   });
 
   @override
@@ -675,30 +677,61 @@ class _ChooseDateAndTimeSlotState extends State<ChooseDateAndTimeSlot> {
     if (!_isDisposed && mounted) {
       if (!widget.oneToOne) {
         final chosenDate = dateSeleted;
-        final staffId = widget.stylistSelected?.staff!.staffId;
-        if (chosenDate != null && staffId != null) {
-          try {
-            TimeSlotService timeSlotService = TimeSlotService();
-            final result =
-                await timeSlotService.getTimeSlot(chosenDate, staffId);
-            if (result['statusCode'] == 200) {
-              timeSlotModel = result['data'];
-              if (!_isDisposed && mounted) {
-                // gọi didupdate
-                setState(() {
-                  timeSlotModel;
-                });
+        if (widget.stylistSelected != null) {
+          final staffId = widget.stylistSelected?.staff!.staffId;
+          if (chosenDate != null && staffId != null) {
+            try {
+              TimeSlotService timeSlotService = TimeSlotService();
+              final result =
+                  await timeSlotService.getTimeSlot(chosenDate, staffId);
+              if (result['statusCode'] == 200) {
+                timeSlotModel = result['data'];
+                if (!_isDisposed && mounted) {
+                  // gọi didupdate
+                  setState(() {
+                    timeSlotModel;
+                  });
+                }
+              } else {
+                print(result['error']);
+                if (!_isDisposed && mounted) {
+                  setState(() {});
+                }
               }
-            } else {
-              print(result['error']);
-              if (!_isDisposed && mounted) {
+            } catch (e) {
+              print(e.toString());
+              if (_isDisposed && mounted) {
                 setState(() {});
               }
             }
-          } catch (e) {
-            print(e.toString());
-            if (_isDisposed && mounted) {
-              setState(() {});
+          }
+        } else {
+          for (AccountInfoModel staffElement in widget.accountStaffList!) {
+            final staffId = staffElement.staff!.staffId;
+            if (chosenDate != null && staffId != null) {
+              try {
+                TimeSlotService timeSlotService = TimeSlotService();
+                final result =
+                    await timeSlotService.getTimeSlot(chosenDate, staffId);
+                if (result['statusCode'] == 200) {
+                  timeSlotModel.addAll(result['data']);
+                  if (!_isDisposed && mounted) {
+                    setState(() {
+                      timeSlotModel;
+                    });
+                  }
+                } else {
+                  print(result['message']);
+                  if (!_isDisposed && mounted) {
+                    setState(() {});
+                  }
+                }
+              } catch (e) {
+                print(e.toString());
+                if (_isDisposed && mounted) {
+                  setState(() {});
+                }
+              }
             }
           }
         }

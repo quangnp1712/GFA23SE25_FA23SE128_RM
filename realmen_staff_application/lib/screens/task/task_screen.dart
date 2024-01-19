@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:realmen_staff_application/models/booking/booking_model.dart';
+import 'package:realmen_staff_application/screens/message/success_screen.dart';
 import 'package:realmen_staff_application/screens/task/booking_processing.dart';
 import 'package:realmen_staff_application/screens/task/booking_waiting.dart';
 import 'package:realmen_staff_application/service/account/account_info_service.dart';
@@ -225,8 +226,8 @@ class _TaskScreenState extends State<TaskScreen>
         });
         print("$result");
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
     }
   }
@@ -253,16 +254,33 @@ class _TaskScreenState extends State<TaskScreen>
               current = current + 1;
               checkBadge = bookingContent.any((element) =>
                   (element.bookingServiceStatus == "CONFIRM" ||
-                      element.bookingServiceStatus == "REQUEST_CONFIRM "));
+                      element.bookingServiceStatus == "REQUEST_CONFIRM"));
               if (mounted) {
                 setState(() {
                   checkBadge;
                 });
               }
+            } else {
+              _errorMessage(result['message']);
+              print(result);
             }
           }
-        } catch (e) {}
+        } catch (e) {
+          _errorMessage("Vui lòng thử lại");
+          print(e.toString());
+        }
       } while (current <= totalPages);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
     }
   }
 }

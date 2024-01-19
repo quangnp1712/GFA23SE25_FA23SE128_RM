@@ -337,6 +337,18 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
                                                                   .progress,
                                                             ),
                                                           ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Image.asset(
+                                                            "assets/images/massage.jpg",
+                                                            height: 140,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                1.4,
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
                                                       ),
                                                       Padding(
@@ -515,8 +527,8 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
             if (category.serviceList != null) {
               for (var service in category.serviceList!) {
                 try {
-                  var reference = storage.ref(
-                      'service/${service.serviceDisplayList![0].serviceDisplayUrl}');
+                  var reference = storage
+                      .ref(service.serviceDisplayList![0].serviceDisplayUrl);
                   service.serviceDisplayList![0].serviceDisplayUrl =
                       await reference.getDownloadURL();
                 } catch (e) {
@@ -535,14 +547,14 @@ class _ServicePriceListScreenState extends State<ServicePriceListScreen> {
               isLoading = false;
             });
           }
-        } else if (result['statusCode'] == 500) {
-          _errorMessage("${result['error']}");
         } else {
-          // Xử lý lỗi nếu cần
-          print(result['status'] + result['error']);
+          _errorMessage(result['message']);
+          print(result);
         }
-      } catch (e) {
+      } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
+        isLoading = false;
       }
     }
   }

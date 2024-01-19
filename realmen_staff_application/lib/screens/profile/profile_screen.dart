@@ -161,100 +161,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                        width: 82.w,
-                                        height: 40,
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                                color: Color(0x4D444444),
-                                                width: 1.0),
-                                          ),
-                                        ),
-                                        child: TextButton(
-                                          onPressed: () {},
-                                          style: TextButton.styleFrom(
-                                            padding:
-                                                const EdgeInsets.only(left: 0),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Icon(
-                                                  CommunityMaterialIcons
-                                                      .history,
-                                                  color: Colors.black,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10.0),
-                                                child: const Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Lịch sử cắt tóc",
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 82.w,
-                                        height: 40,
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                                color: Color(0x4D444444),
-                                                width: 1.0),
-                                          ),
-                                        ),
-                                        child: TextButton(
-                                          onPressed: () {},
-                                          style: TextButton.styleFrom(
-                                            padding:
-                                                const EdgeInsets.only(left: 0),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Icon(
-                                                  CommunityMaterialIcons
-                                                      .history,
-                                                  color: Colors.black,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10.0),
-                                                child: const Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "KHÁCH ĐÃ CHECK-OUT",
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      // Container(
+                                      //   width: 82.w,
+                                      //   height: 40,
+                                      //   decoration: const BoxDecoration(
+                                      //     border: Border(
+                                      //       top: BorderSide(
+                                      //           color: Color(0x4D444444),
+                                      //           width: 1.0),
+                                      //     ),
+                                      //   ),
+                                      //   child: TextButton(
+                                      //     onPressed: () {},
+                                      //     style: TextButton.styleFrom(
+                                      //       padding:
+                                      //           const EdgeInsets.only(left: 0),
+                                      //     ),
+                                      //     child: Row(
+                                      //       children: [
+                                      //         const Align(
+                                      //           alignment: Alignment.centerLeft,
+                                      //           child: Icon(
+                                      //             CommunityMaterialIcons
+                                      //                 .history,
+                                      //             color: Colors.black,
+                                      //             size: 24,
+                                      //           ),
+                                      //         ),
+                                      //         Container(
+                                      //           margin: const EdgeInsets.only(
+                                      //               left: 10.0),
+                                      //           child: const Align(
+                                      //             alignment:
+                                      //                 Alignment.centerLeft,
+                                      //             child: Text(
+                                      //               "Lịch sử cắt tóc",
+                                      //               style: TextStyle(
+                                      //                   fontSize: 15,
+                                      //                   fontWeight:
+                                      //                       FontWeight.w400,
+                                      //                   color: Colors.black),
+                                      //             ),
+                                      //           ),
+                                      //         )
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // Container(
+                                      //   width: 82.w,
+                                      //   height: 40,
+                                      //   decoration: const BoxDecoration(
+                                      //     border: Border(
+                                      //       top: BorderSide(
+                                      //           color: Color(0x4D444444),
+                                      //           width: 1.0),
+                                      //     ),
+                                      //   ),
+                                      //   child: TextButton(
+                                      //     onPressed: () {},
+                                      //     style: TextButton.styleFrom(
+                                      //       padding:
+                                      //           const EdgeInsets.only(left: 0),
+                                      //     ),
+                                      //     child: Row(
+                                      //       children: [
+                                      //         const Align(
+                                      //           alignment: Alignment.centerLeft,
+                                      //           child: Icon(
+                                      //             CommunityMaterialIcons
+                                      //                 .history,
+                                      //             color: Colors.black,
+                                      //             size: 24,
+                                      //           ),
+                                      //         ),
+                                      //         Container(
+                                      //           margin: const EdgeInsets.only(
+                                      //               left: 10.0),
+                                      //           child: const Align(
+                                      //             alignment:
+                                      //                 Alignment.centerLeft,
+                                      //             child: Text(
+                                      //               "KHÁCH ĐÃ CHECK-OUT",
+                                      //               style: TextStyle(
+                                      //                   fontSize: 15,
+                                      //                   fontWeight:
+                                      //                       FontWeight.w400,
+                                      //                   color: Colors.black),
+                                      //             ),
+                                      //           ),
+                                      //         )
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       Container(
                                         width: 82.w,
                                         height: 40,
@@ -365,15 +365,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             phone = accountInfo!.phone ?? '';
             avatarUrl;
           });
-        } else if (result['statusCode'] == 403) {
-          Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-          _errorMessage("$result['statusCode'] : Cần đăng nhập lại");
         } else {
-          _errorMessage("$result['statusCode'] : $result['error']");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
-        _errorMessage(e.toString());
-        print("Error: $e");
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

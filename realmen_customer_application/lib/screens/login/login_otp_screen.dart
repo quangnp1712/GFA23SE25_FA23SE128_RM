@@ -300,10 +300,10 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             _errorMessage("Sai mã OTP");
           }
         } else if (result['statusCode'] == 500) {
-          _errorMessage("${result['error']}");
+          _errorMessage(result['message']);
         } else {
           _errorMessage("Sai mã OTP");
-          print("$result['statusCode'] : $result['error']");
+          print("$result");
         }
       } catch (e) {
         _errorMessage("Lỗi đăng nhập");

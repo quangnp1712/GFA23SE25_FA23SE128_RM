@@ -143,6 +143,7 @@ class BranchServiceModel {
   String? thumbnailUrl;
   int? price;
   int? branchServicePrice;
+  int? duration;
 
   BranchServiceModel({
     this.serviceId,
@@ -152,6 +153,7 @@ class BranchServiceModel {
     this.thumbnailUrl,
     this.price,
     this.branchServicePrice,
+    this.duration,
   });
 
   factory BranchServiceModel.fromJson(Map<String, dynamic> json) =>

@@ -75,6 +75,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fit: BoxFit.cover,
                                   width: 120,
                                   height: 120,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                      value: progress.progress,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    "assets/images/default.png",
+                                    fit: BoxFit.cover,
+                                    width: 120,
+                                    height: 120,
+                                  ),
                                 ),
                               ),
                             ),
@@ -415,8 +428,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (accountInfo!.thumbnailUrl != null &&
               accountInfo!.thumbnailUrl != "") {
             try {
-              var reference =
-                  storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+              var reference = storage.ref(accountInfo!.thumbnailUrl);
               avatarUrl = await reference.getDownloadURL();
             } catch (e) {
               var reference = storage.ref('avatar/default.png');
@@ -435,19 +447,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               avatarUrl;
             });
           }
-        } else if (result['statusCode'] == 403) {
-          Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-          _errorMessage("Cần đăng nhập lại");
-        } else if (result['statusCode'] == 500) {
-          _errorMessage(result['error']);
         } else {
-          print("$result['statusCode'] : $result['error']");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
-        _errorMessage("Cần đăng nhập lại");
-        Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-
-        print("Error: $e");
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

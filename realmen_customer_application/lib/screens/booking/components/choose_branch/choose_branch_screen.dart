@@ -418,6 +418,17 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                                   value: progress.progress,
                                                 ),
                                               ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Image.asset(
+                                                "assets/images/barber1.jpg",
+                                                height: 140,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    1.2,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                             const SizedBox(width: 5),
                                             ListTile(
@@ -580,6 +591,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
     super.initState();
     getBranchesByCity();
     cityController = "Thành Phố/Tỉnh";
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -657,6 +669,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         print(e.toString());
         print("Error: $e");
       }
+      searchBranches('', null, false);
     }
   }
 
@@ -695,7 +708,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           });
           for (BranchModel branch in branchesForCity!) {
             try {
-              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              var reference = storage.ref('${branch.thumbnailUrl}');
               branch.branchDisplayList![0].url =
                   await reference.getDownloadURL();
             } catch (e) {
@@ -740,7 +753,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
 
 // get branch by search
   Future<void> searchBranches(
-      String query, FocusNode focusNode, bool callBack) async {
+      String query, FocusNode? focusNode, bool callBack) async {
     if (!_isDisposed) {
       try {
         BranchService branchService = BranchService();
@@ -767,7 +780,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           });
           for (BranchModel branch in branchesForCity!) {
             try {
-              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              var reference = storage.ref('${branch.thumbnailUrl}');
               branch.branchDisplayList![0].url =
                   await reference.getDownloadURL();
             } catch (e) {
@@ -781,7 +794,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           setState(() {
             branchesForCity;
             isSearching = true;
-            focusNode.unfocus();
+            if (focusNode != null) {
+              focusNode.unfocus();
+            }
           });
         } else if (result['statusCode'] == 403) {
           if (callBack == false) {
@@ -857,7 +872,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           });
           for (BranchModel branch in branchesForCity!) {
             try {
-              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              var reference = storage.ref('${branch.thumbnailUrl}');
               branch.branchDisplayList![0].url =
                   await reference.getDownloadURL();
             } catch (e) {

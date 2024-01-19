@@ -821,14 +821,9 @@ class _ServiceBookingProcessingScreenState
               final timeDifference = endAppo.difference(startAppo);
               duration = timeDifference.toString().split('.')[0];
             }
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-          } else if (result['statusCode'] == 403) {
-            _errorMessage(result['error']);
-            // AuthenticateService authenticateService = AuthenticateService();
-            // authenticateService.logout();
           } else {
-            print("$result");
+            _errorMessage(result['message']);
+            print(result);
           }
         }
         if (!_isDisposed && mounted) {
@@ -836,9 +831,9 @@ class _ServiceBookingProcessingScreenState
             isLoading = false;
           });
         }
-      } catch (e) {
+      } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
       isLoading = false;
     }
@@ -1003,7 +998,7 @@ class _ServiceBookingProcessingScreenState
                   Get.toNamed(MainScreen.MainScreenRoute);
                 } else {
                   _errorMessage(result['message']);
-                  print(result['error']);
+                  print(result);
                 }
               }
             }

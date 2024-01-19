@@ -59,128 +59,150 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Column(
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Image.asset(
-                                    'assets/images/logo.png',
-                                    width: 257,
-                                    // height: 478,
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  const Text(
-                                    "ĐĂNG NHẬP",
-                                    style: TextStyle(
-                                      fontSize: 35,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xff444444),
+                              Form(
+                                key: _formKey,
+                                autovalidateMode: AutovalidateMode.always,
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 5.h,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                  const Text(
-                                    "Nhập số điện thoại",
-                                    style: TextStyle(
-                                      fontSize: 27,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff444444),
+                                    Image.asset(
+                                      'assets/images/logo.png',
+                                      width: 257,
+                                      // height: 478,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                  SizedBox(
-                                    width: 70.w,
-                                    // height: 40,
-                                    child: TextField(
-                                      controller: phoneController,
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(11),
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      cursorColor: Colors.black,
-                                      cursorWidth: 1,
-                                      style: const TextStyle(
-                                          height: 1.17,
-                                          fontSize: 20,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Color(0xffC4C4C4)),
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Color(0xffC4C4C4)),
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                        contentPadding: const EdgeInsets.only(
-                                            // top: 10,
-                                            // bottom: 20,
-                                            left: 15,
-                                            right: 15),
-                                        hintText: "Nhập số điện thoại của bạn",
-                                        hintStyle: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w400,
-                                          color: Color(0xffC4C4C4),
-                                        ),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    const Text(
+                                      "ĐĂNG NHẬP",
+                                      style: TextStyle(
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xff444444),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 2.5.h,
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 22),
-                                    width: 70.w,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            Color(0xff302E2E),
-                                            Color(0xe6444141),
-                                            Color(0x8c484646),
-                                            Color(0x26444141),
-                                          ]),
-                                      borderRadius: BorderRadius.circular(24),
+                                    SizedBox(
+                                      height: 2.h,
                                     ),
-                                    child: ElevatedButton(
-                                      onPressed: submitPhone
-                                      // () {
-                                      //   Navigator.pushNamed(context,
-                                      //       LoginOTPScreen.LoginOTPScreenRoute);
-                                      // }
-                                      ,
-                                      style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                        backgroundColor: Colors.transparent,
-                                        shadowColor: Colors.transparent,
+                                    const Text(
+                                      "Nhập số điện thoại",
+                                      style: TextStyle(
+                                        fontSize: 27,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff444444),
                                       ),
-                                      child: const Text(
-                                        "TIẾP THEO",
-                                        style: TextStyle(
-                                            fontSize: 24,
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    SizedBox(
+                                      width: 70.w,
+                                      // height: 40,
+                                      child: TextFormField(
+                                        controller: phoneController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(11),
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        focusNode: _focusNode,
+                                        onTapOutside: (event) =>
+                                            _focusNode.unfocus(),
+                                        onEditingComplete: () => submitPhone(),
+                                        cursorColor: Colors.black,
+                                        cursorWidth: 1,
+                                        style: const TextStyle(
+                                            height: 1.17,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color(0xffC4C4C4)),
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color(0xffC4C4C4)),
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color(0xffC4C4C4)),
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                          contentPadding: const EdgeInsets.only(
+                                              // top: 10,
+                                              // bottom: 20,
+                                              left: 15,
+                                              right: 15),
+                                          hintText:
+                                              "Nhập số điện thoại của bạn",
+                                          hintStyle: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400,
                                             color: Color(0xffC4C4C4),
-                                            fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Vui lòng không để trống sđt của bạn';
+                                          }
+
+                                          return null; // Trả về null nếu không có lỗi
+                                        },
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    Container(
+                                      // margin: const EdgeInsets.only(top: 22),
+                                      width: 70.w,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Color(0xff302E2E),
+                                              Color(0xe6444141),
+                                              Color(0x8c484646),
+                                              Color(0x26444141),
+                                            ]),
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            submitPhone();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                          backgroundColor: Colors.transparent,
+                                          shadowColor: Colors.transparent,
+                                        ),
+                                        child: const Text(
+                                          "TIẾP THEO",
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              color: Color(0xffC4C4C4),
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -199,34 +221,44 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
 
   // Logic
   TextEditingController phoneController = TextEditingController();
-
+  final FocusNode _focusNode = FocusNode();
+  final _formKey = GlobalKey<FormState>();
   // void submitPhone() async {
   //   String phone = phoneController.text.toString();
   //   LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
   //   AuthenticateService authenticateService = AuthenticateService();
-  //   if (phone != '') {
+  //   if (phone.isNotEmpty &&
+  //       phone != '' &&
+  //       RegExp(r'^0\d{8,11}$').hasMatch(phone)) {
   //     try {
   //       var result = await authenticateService.loginPhone(loginPhoneModel);
   //       if (result["data"] == "false" && result['statusCode'] == 200) {
-  //         _errorMessage("Không tìm thấy số điện thoại");
+  //         Get.toNamed(RegisterScreen.RegisterScreenRoute);
   //       } else if (result["data"] == "true" && result['statusCode'] == 200) {
   //         Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
   //         // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+  //       } else if (result['statusCode'] == 500) {
+  //         _errorMessage("${result['error']}");
   //       } else {
-  //         _errorMessage("$result['statusCode'] : $result['error']");
+  //         _errorMessage("Số điện thoại không đúng");
+  //         // print("$result['statusCode'] : $result['error']");
   //       }
   //     } catch (e) {
+  //       _errorMessage("Số điện thoại không đúng");
   //       print("Error: $e");
   //     }
-  //   } else if (phone == '') {
+  //   } else if (phone.isEmpty || phone == '') {
   //     _errorMessage("Xin nhập số điện thoại");
   //   } else if (phone.length < 8 || phone.length > 11) {
+  //     _errorMessage("Số điện thoại không đúng");
+  //   } else {
   //     _errorMessage("Số điện thoại không đúng");
   //   }
   // }
 
   // // No API
   void submitPhone() async {
+    _focusNode.unfocus();
     String phone = phoneController.text.toString();
     Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
     try {

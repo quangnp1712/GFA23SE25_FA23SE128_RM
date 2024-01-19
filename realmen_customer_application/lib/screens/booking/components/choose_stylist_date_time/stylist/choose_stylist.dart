@@ -288,6 +288,14 @@ class _ChooseStylistState extends State<ChooseStylist> {
                                                         fit: BoxFit.cover,
                                                         width: 70,
                                                         height: 70,
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Image.asset(
+                                                          "assets/images/s1.jpg",
+                                                          fit: BoxFit.cover,
+                                                          width: 70,
+                                                          height: 70,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -623,7 +631,7 @@ class _ChooseStylistState extends State<ChooseStylist> {
             } else if (staff.accountId == 8) {
               staff.thumbnailUrl = "3.jpg";
             }
-            var reference = storage.ref('stylist/${staff.thumbnailUrl}');
+            var reference = storage.ref(staff.thumbnailUrl);
             staff.thumbnailUrl = await reference.getDownloadURL();
           } catch (e) {
             final random = Random();

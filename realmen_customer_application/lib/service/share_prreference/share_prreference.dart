@@ -82,7 +82,9 @@ class SharedPreferencesService {
       loginOtpResponseModel.jwtToken!,
       loginOtpResponseModel.role!,
       loginOtpResponseModel.accountId!.toString(),
-      loginOtpResponseModel.customerId!.toString(),
+      loginOtpResponseModel.customerId?.toString() ?? "",
+      loginOtpResponseModel.branchId?.toString() ?? "",
+      loginOtpResponseModel.expTime?.toString() ?? "",
     ]);
   }
 
@@ -96,7 +98,10 @@ class SharedPreferencesService {
         "phone": result[0],
         "jwtToken": result[1],
         "role": result[2],
-        "accountId": result[3]
+        "accountId": result[3],
+        "customerId": result[4],
+        "branchId": result[5],
+        "expTime": result[6],
       };
       return resultMap;
     } else {
@@ -183,6 +188,7 @@ class SharedPreferencesService {
     final expiry = decoded['exp'];
     DateTime expiration = DateTime.fromMillisecondsSinceEpoch(expiry * 1000);
     final dateNow = DateTime.now();
+    final check = expiration.isBefore(dateNow);
     return expiration.isBefore(dateNow);
   }
 

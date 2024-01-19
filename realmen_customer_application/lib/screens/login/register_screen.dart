@@ -636,14 +636,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
           Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
         } else if (result['statusCode'] == 500) {
-          _errorMessage("${result['error']}");
+          _errorMessage(result['message']);
         } else {
           _errorMessage("Nhập thông tin thất bại");
           print("$result");
         }
       } catch (e) {
-        _errorMessage("Nhập thông tin thất bại");
-        print("Error: $e");
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

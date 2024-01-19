@@ -162,14 +162,13 @@ class _MembershipScreenState extends State<MembershipScreen> {
           setState(() {
             avatarUrl;
           });
-        } else if (result['statusCode'] == 403) {
-          Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
-          _errorMessage(": Cần đăng nhập lại");
         } else {
-          print("$result['statusCode'] : $result['error']");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
-        print("Error: $e");
+        _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

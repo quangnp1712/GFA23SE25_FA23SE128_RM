@@ -267,7 +267,6 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   void updatePostBooking(List<BookingServiceModel> postBooking) {
     if (!_isDisposed) {
       setState(() {
-        oneToOne = true;
         this.postBooking = postBooking;
       });
     }

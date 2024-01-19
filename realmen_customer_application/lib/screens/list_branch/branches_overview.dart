@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/list_branch/list_branches.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -401,12 +402,21 @@ class _BranchesOverviewScreenState extends State<BranchesOverviewScreen> {
             city2;
           });
         } else {
-          print("$result['statusCode'] : $result['error']");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
     }
   }
 }

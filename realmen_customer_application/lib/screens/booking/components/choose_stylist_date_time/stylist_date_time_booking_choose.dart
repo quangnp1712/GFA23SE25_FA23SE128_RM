@@ -288,6 +288,7 @@ class _ChooseStylistAndDateTimeBookingState
                           onTimeSelected: widget.onTimeSelected,
                           stylistSelected: stylistSelected,
                           isChangeStylist: isChangeStylist,
+                          accountStaffList: widget.accountStaffList,
                           oneToOne: false,
                         ),
                         const SizedBox(height: 20),
@@ -322,6 +323,7 @@ class _ChooseStylistAndDateTimeBookingState
   void didUpdateWidget(ChooseStylistAndDateTimeBooking oldWidget) {
     if (optionController == options.first) {
       isChangeOptional = false;
+      isChangeStylist = false;
     }
     isChangeOptional = false;
     // thay đổi service -> reset lại chọn stylist - date - timeslot
@@ -333,6 +335,7 @@ class _ChooseStylistAndDateTimeBookingState
 
     // setData();
     // build(context);
+    print("one to one: $optionController");
     super.didUpdateWidget(oldWidget);
   }
 
@@ -565,8 +568,8 @@ class _ChooseStylistAndDateTimeBookingState
         });
       }
     } on Exception catch (e) {
+      // _errorMessage("Vui lòng thử lại");
       print(e.toString());
-      print("Error: $e");
     }
   }
 
@@ -661,9 +664,11 @@ class _ChooseStylistAndDateTimeBookingState
           }
           widget.onUpdatePostBooking(serviceOTOList);
         } else {
-          print("${result['statusCode']}  ${result['error']}");
+          // _errorMessage(result['message']);
+          print(result);
         }
-      } catch (e) {
+      } on Exception catch (e) {
+        // _errorMessage("Vui lòng thử lại");
         print(e.toString());
       }
       print(stylistService.length);

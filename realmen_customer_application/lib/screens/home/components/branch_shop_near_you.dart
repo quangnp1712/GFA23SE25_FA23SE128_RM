@@ -95,6 +95,14 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                       value: progress.progress,
                                     ),
                                   ),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    "assets/images/barber1.jpg",
+                                    height: 160,
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.4,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -318,7 +326,7 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
             });
             for (BranchModel branch in branchesForCity!) {
               try {
-                var reference = storage.ref('branch/${branch.thumbnailUrl}');
+                var reference = storage.ref(branch.thumbnailUrl);
                 branch.branchDisplayList![0].url =
                     await reference.getDownloadURL();
               } catch (e) {
@@ -335,11 +343,12 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
             });
           }
         } else {
-          print("$result['statusCode'] : $result['error']");
+          // _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
-        // print(e.toString());
-        print("Error: $e");
+        // _errorMessage("Vui lòng thử lại");
+        print(e.toString());
       }
     }
   }

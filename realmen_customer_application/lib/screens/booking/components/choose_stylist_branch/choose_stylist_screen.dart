@@ -701,7 +701,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
               (massuer) => massuer.staff!.professional == 'STYLIST');
           for (var staff in stylists) {
             try {
-              var reference = storage.ref('stylist/${staff.thumbnailUrl}');
+              var reference = storage.ref('${staff.thumbnailUrl}');
               staff.thumbnailUrl = await reference.getDownloadURL();
             } catch (e) {
               final random = Random();
@@ -711,8 +711,7 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
               staff.thumbnailUrl = await reference.getDownloadURL();
             }
             try {
-              var reference =
-                  storage.ref('branch/${staff.branch!.thumbnailUrl}');
+              var reference = storage.ref('${staff.branch!.thumbnailUrl}');
               staff.branch!.thumbnailUrl = await reference.getDownloadURL();
             } catch (e) {
               final random = Random();
@@ -732,14 +731,13 @@ class _ChooseStylistScreenState extends State<ChooseStylistScreen> {
           if (stylists.length < 3 && current <= totalPages) {
             await getStaff(current);
           }
-        } else if (result['statusCode'] == 500) {
-          _errorMessage(result['error']);
         } else {
-          print("$result");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
         if (!_isDisposed && mounted) {
           setState(() {
             stylists;

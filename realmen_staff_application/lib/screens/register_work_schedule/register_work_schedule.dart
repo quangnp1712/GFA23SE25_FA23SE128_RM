@@ -330,8 +330,8 @@ class _RegisterWorkScheduleScreenState
             _errorMessage("Đăng ký thất bại");
           }
         } catch (e) {
-          _errorMessage(e.toString());
-          print("Error: $e");
+          _errorMessage("Vui lòng thử lại");
+          print(e.toString());
         }
       } else {
         _errorMessage("Vui lòng đăng ký ca làm");
@@ -444,10 +444,12 @@ class _RegisterWorkScheduleScreenState
         }
         _appointmentSoucre = List.from(_dataSource.source);
       } else {
-        print("$result['statusCode'] : $result['error']");
+        _errorMessage(result['message']);
         return appointments;
       }
     } catch (e) {
+      _errorMessage("Vui lòng thử lại");
+      print(e.toString());
       return appointments;
     }
   }

@@ -120,6 +120,22 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
                                                 fit: BoxFit.cover,
                                                 width: 120,
                                                 height: 120,
+                                                progressIndicatorBuilder:
+                                                    (context, url, progress) =>
+                                                        Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: progress.progress,
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Image.asset(
+                                                  "assets/images/default.png",
+                                                  fit: BoxFit.cover,
+                                                  width: 120,
+                                                  height: 120,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -689,7 +705,7 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
         accountInfo = result['data'] as AccountInfoModel;
         if (accountInfo!.thumbnailUrl != null &&
             accountInfo!.thumbnailUrl != "") {
-          var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
+          var reference = storage.ref(accountInfo!.thumbnailUrl);
           avatarUrl = await reference.getDownloadURL();
         } else {
           var reference = storage.ref('avatar/default.png');
@@ -713,16 +729,13 @@ class _ViewEditProfileScreenState extends State<ViewEditProfileScreen> {
           );
           dobController.text = (accountInfo!.dob)!.substring(0, 10);
         });
-      } else if (result['statusCode'] == 403) {
-        AuthenticateService authenticateService = AuthenticateService();
-        authenticateService.logout();
-        _errorMessage(" Cần đăng nhập lại");
       } else {
-        print("$result['statusCode'] : $result['error']");
+        _errorMessage(result['message']);
+        print(result);
       }
     } on Exception catch (e) {
-      // _errorMessage(e.toString());
-      print("Error: $e");
+      _errorMessage("Vui lòng thử lại");
+      print(e.toString());
     }
   }
 

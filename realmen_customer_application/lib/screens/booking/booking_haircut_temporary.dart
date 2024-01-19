@@ -230,11 +230,11 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           const SizedBox(
             height: 12,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              !widget.oneToOne!
-                  ? const SizedBox(
+          widget.oneToOne == null || !widget.oneToOne!
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
                       width: 130,
                       child: Text(
                         "Stylist: ",
@@ -242,28 +242,29 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                           fontSize: 17,
                         ),
                       ),
-                    )
-                  : Container(),
-              SizedBox(
-                width: 220,
-                child: Text(
-                  stylist != null && stylist.accountId != null
-                      ? utf8.decode(("${stylist.firstName} ${stylist.lastName}")
-                          .toString()
-                          .runes
-                          .toList())
-                      : "REALMEN sẽ chọn giúp anh",
-                  textAlign: TextAlign.left,
-                  maxLines: 1,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 17,
-                      overflow: TextOverflow.ellipsis),
-                ),
-              ),
-            ],
-          ),
+                    ),
+                    SizedBox(
+                      width: 220,
+                      child: Text(
+                        stylist != null && stylist.accountId != null
+                            ? utf8.decode(
+                                ("${stylist.firstName} ${stylist.lastName}")
+                                    .toString()
+                                    .runes
+                                    .toList())
+                            : "REALMEN sẽ chọn giúp anh",
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                  ],
+                )
+              : Container(),
 
           const SizedBox(height: 12),
           // Barber Shop:
@@ -348,14 +349,16 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                         child: Expanded(
                           child: Text(
                             service != []
-                                ? utf8.decode(service[index]
-                                    .serviceName
-                                    .toString()
-                                    .runes
-                                    .toList())
+                                ? utf8
+                                    .decode(service[index]
+                                        .serviceName
+                                        .toString()
+                                        .runes
+                                        .toList())
+                                    .toUpperCase()
                                 : "",
                             maxLines: 2,
-                            style: const TextStyle(fontSize: 17),
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ),
                       ),
@@ -370,21 +373,21 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                       ),
                     ],
                   ),
-                  widget.oneToOne!
-                      ? Container(
-                          constraints: const BoxConstraints(maxWidth: 280),
-                          child: Expanded(
-                            child: Text(
-                              utf8.decode(service[index]
-                                  .thumbnailUrl!
-                                  .toString()
-                                  .runes
-                                  .toList()),
-                              maxLines: 2,
-                              style: const TextStyle(fontSize: 17),
-                            ),
-                          ),
-                        )
+                  widget.oneToOne != null
+                      ? widget.oneToOne!
+                          ? Container(
+                              constraints: const BoxConstraints(maxWidth: 280),
+                              child: Expanded(
+                                child: Text(
+                                  service[index].thumbnailUrl == ''
+                                      ? ''
+                                      : 'Stylist- ${utf8.decode(service[index].thumbnailUrl!.toString().runes.toList())}',
+                                  maxLines: 2,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            )
+                          : Container()
                       : Container(),
                 ],
               ),
@@ -616,11 +619,9 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               });
             }
             current++;
-          } else if (result['statusCode'] == 500) {
-            _errorMessage(result['error']);
-            break;
           } else {
-            print("$result['statusCode'] : $result['error']");
+            _errorMessage(result['message']);
+            print(result);
             break;
           }
         } while (current <= totalPages);
@@ -629,8 +630,8 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           setInforBooking();
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
     }
   }
@@ -666,9 +667,22 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 if (caterogy.serviceList!.any((cateService) =>
                         cateService.serviceId! == service.serviceId) ==
                     true) {
-                  if (caterogy.categoryId == 1) {
+                  if (caterogy.categoryId == 2) {
                     copyServiceList.removeAt(copyServiceList.indexOf(service));
+                    caterogy.serviceList!.map((cateService) {
+                      if (cateService.serviceId! == service.serviceId) {
+                        service.duration = cateService.durationValue;
+                      }
+                    });
                     copyServiceList.insert(0, service);
+                  } else if (caterogy.categoryId == 1) {
+                    copyServiceList.removeAt(copyServiceList.indexOf(service));
+                    caterogy.serviceList!.map((cateService) {
+                      if (cateService.serviceId! == service.serviceId) {
+                        service.duration = cateService.durationValue;
+                      }
+                    });
+                    copyServiceList.insert(copyServiceList.length, service);
                   }
                 }
               }
@@ -686,7 +700,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                   // start Time
                   startTime = selectedTime;
                   // end Time
-                  int duration = 30;
+                  int duration = service.duration ?? 30;
                   DateTime time = format.parse(startTime);
                   endTime =
                       format.format(time.add(Duration(minutes: duration)));
@@ -714,6 +728,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
 
                     // startTime sau sẽ là EndTime trước
                     selectedTime = endTime;
+                    service.thumbnailUrl = '';
                   } else {
                     if (widget.stylist != null) {
                       staffId = widget.stylist!.staff!.staffId!;
@@ -722,7 +737,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                       staffId = staffIdNull;
                       bookingServiceType = "PICKUP_STYLIST";
                     }
-                    if (!widget.oneToOne!) {
+                    if (widget.oneToOne == null || !widget.oneToOne!) {
                       // newBookingService
                       BookingServiceModel newBookingService =
                           BookingServiceModel(
@@ -739,22 +754,26 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                       // startTime sau sẽ là EndTime trước
                       selectedTime = endTime;
                     } else {
-                      for (var postBooking in widget.postBooking!) {
-                        // newBookingService
-                        BookingServiceModel newBookingService =
-                            BookingServiceModel(
-                          serviceId: postBooking.serviceId,
-                          staffId: postBooking.staffId,
-                          startAppointment: startTime,
-                          endAppointment: endTime,
-                          bookingServiceType: postBooking.bookingServiceType,
-                        );
+                      BookingServiceModel postBooking = widget.postBooking!
+                          .singleWhere((element) =>
+                              element.serviceId == service.serviceId);
 
-                        // List BookingService add newBookingService
-                        bookingServices.add(newBookingService);
+                      // newBookingService
+                      BookingServiceModel newBookingService =
+                          BookingServiceModel(
+                        serviceId: postBooking.serviceId,
+                        staffId: postBooking.staffId,
+                        startAppointment: startTime,
+                        endAppointment: endTime,
+                        bookingServiceType: postBooking.bookingServiceType,
+                      );
 
-                        // startTime sau sẽ là EndTime trước
-                        selectedTime = endTime;
+                      // List BookingService add newBookingService
+                      bookingServices.add(newBookingService);
+
+                      // startTime sau sẽ là EndTime trước
+                      selectedTime = endTime;
+                      if (service.serviceId == postBooking.serviceId) {
                         service.thumbnailUrl = postBooking.staffName;
                       }
                     }
@@ -763,18 +782,17 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               }
             }
           }
-
-          if (!_isDisposed && mounted) {
-            setState(() {
-              bookingServices;
-              isLoading = false;
-            });
-          }
         } else {
           print("${result['statusCode']}  ${result['error']}");
         }
       } catch (e) {
         print(e.toString());
+      }
+      if (!_isDisposed && mounted) {
+        setState(() {
+          bookingServices;
+          isLoading = false;
+        });
       }
     }
   }

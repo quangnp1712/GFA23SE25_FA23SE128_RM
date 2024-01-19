@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:realmen_customer_application/service/location/location_service.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
@@ -414,6 +415,17 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
                                                   value: progress.progress,
                                                 ),
                                               ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Image.asset(
+                                                "assets/images/barber1.jpg",
+                                                height: 140,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    1.4,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                             const SizedBox(width: 5),
                                             ListTile(
@@ -632,12 +644,21 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
             });
           }
         } else {
-          print("$result['statusCode'] : $result['error']");
+          _errorMessage(result['message']);
+          print(result);
         }
       } on Exception catch (e) {
+        _errorMessage("Vui lòng thử lại");
         print(e.toString());
-        print("Error: $e");
       }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -673,7 +694,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           });
           for (BranchModel branch in branchesForCity!) {
             try {
-              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              var reference = storage.ref(branch.thumbnailUrl);
               branch.branchDisplayList![0].url =
                   await reference.getDownloadURL();
             } catch (e) {
@@ -736,7 +757,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           });
           for (BranchModel branch in branchesForCity!) {
             try {
-              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              var reference = storage.ref(branch.thumbnailUrl);
               branch.branchDisplayList![0].url =
                   await reference.getDownloadURL();
             } catch (e) {
@@ -821,7 +842,7 @@ class _ListBranchesScreenState extends State<ListBranchesScreen> {
           });
           for (BranchModel branch in branchesForCity!) {
             try {
-              var reference = storage.ref('branch/${branch.thumbnailUrl}');
+              var reference = storage.ref(branch.thumbnailUrl);
               branch.branchDisplayList![0].url =
                   await reference.getDownloadURL();
             } catch (e) {

@@ -48,50 +48,41 @@ class BookingService implements IBookingService {
           'totalPages': totalPages,
           'current': current,
         };
-      } else if (statusCode == 401) {
+      } else {
         try {
-          final exceptionModel =
+          final ServerExceptionModel exceptionModel =
               ServerExceptionModel.fromJson(json.decode(responseBody));
           return {
             'statusCode': statusCode,
             'error': exceptionModel,
+            'message': "Vui lòng thử lại",
           };
         } catch (e) {
           return {
-            'statusCode': statusCode,
+            'statusCode': 400,
             'error': e,
+            'message': "Vui lòng thử lại",
           };
         }
-      } else if (statusCode == 403) {
-        return {
-          'statusCode': statusCode,
-          'error': "Hết hạn đăng nhập",
-        };
-      } else if (statusCode == 400) {
-        return {
-          'statusCode': statusCode,
-          'error': "Bad request",
-        };
-      } else {
-        return {
-          'statusCode': statusCode,
-          'error': 'Failed to fetch data',
-        };
       }
     } on TimeoutException catch (e) {
       return {
         'statusCode': 408,
-        'error': "Request timeout",
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
       };
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
-        'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
       };
     }
   }
@@ -121,50 +112,41 @@ class BookingService implements IBookingService {
           'statusCode': statusCode,
           'data': bookingModel,
         };
-      } else if (statusCode == 401) {
+      } else {
         try {
-          final exceptionModel =
+          final ServerExceptionModel exceptionModel =
               ServerExceptionModel.fromJson(json.decode(responseBody));
           return {
             'statusCode': statusCode,
             'error': exceptionModel,
+            'message': "Vui lòng thử lại",
           };
         } catch (e) {
           return {
-            'statusCode': statusCode,
+            'statusCode': 400,
             'error': e,
+            'message': "Vui lòng thử lại",
           };
         }
-      } else if (statusCode == 403) {
-        return {
-          'statusCode': statusCode,
-          'error': "Forbidden",
-        };
-      } else if (statusCode == 400) {
-        return {
-          'statusCode': statusCode,
-          'error': "Bad request",
-        };
-      } else {
-        return {
-          'statusCode': statusCode,
-          'error': 'Failed to fetch data',
-        };
       }
     } on TimeoutException catch (e) {
       return {
         'statusCode': 408,
-        'error': "Request timeout",
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
       };
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
-        'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
       };
     }
   }
@@ -190,50 +172,38 @@ class BookingService implements IBookingService {
         return {
           'statusCode': statusCode,
         };
-      } else if (statusCode == 401) {
+      } else {
         try {
-          final exceptionModel =
-              ServerExceptionModel.fromJson(json.decode(response.body));
           return {
             'statusCode': statusCode,
-            'error': exceptionModel,
+            'message': "Vui lòng thử lại",
           };
         } catch (e) {
           return {
-            'statusCode': statusCode,
+            'statusCode': 400,
             'error': e,
+            'message': "Vui lòng thử lại",
           };
         }
-      } else if (statusCode == 403) {
-        return {
-          'statusCode': statusCode,
-          'error': "Forbidden",
-        };
-      } else if (statusCode == 400) {
-        return {
-          'statusCode': statusCode,
-          'error': "Bad request",
-        };
-      } else {
-        return {
-          'statusCode': statusCode,
-          'error': 'error',
-        };
       }
     } on TimeoutException catch (e) {
       return {
         'statusCode': 408,
-        'error': "Request timeout",
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
       };
     } on SocketException catch (e) {
       return {
         'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
       };
     } catch (e) {
       return {
-        'statusCode': 500,
-        'error': 'Kiểm tra lại kết nối Internet',
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
       };
     }
   }

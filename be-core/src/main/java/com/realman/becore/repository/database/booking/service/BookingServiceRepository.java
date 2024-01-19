@@ -19,6 +19,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 bs.bookingId AS bookingId,
                 ss.serviceId AS serviceId,
                 s.staffId AS staffId,
+                b.bookingCode As bookingCode,
                 s.professional AS professional,
                 c.categoryId AS categoryId,
                 c.categoryName AS categoryName,
@@ -27,6 +28,8 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 ss.serviceName AS serviceName,
                 CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                 a.phone AS staffPhone,
+                CONCAT(ac.firstName, ' ', ac.lastName) AS customerName,
+                ac.phone AS customerPhone,
                 bs.startAppointment AS startAppointment,
                 bs.endAppointment AS endAppointment,
                 bs.actualStartAppointment AS actualStartAppointment,
@@ -35,8 +38,11 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                 bs.bookingServiceStatus AS bookingServiceStatus,
                 bs.bookingServiceType AS bookingServiceType
             FROM BookingServiceEntity bs
-            INNER JOIN StaffEntity s ON bs.staffId = s.staffId
-            INNER JOIN AccountEntity a ON a.accountId = s.accountId
+            INNER JOIN BookingEntity b ON bs.bookingId = b.bookingId
+            INNER JOIN CustomerEntity cu ON b.customerId = cu.customerId
+            LEFT JOIN StaffEntity s ON bs.staffId = s.staffId
+            LEFT JOIN AccountEntity a ON a.accountId = s.accountId
+            INNER JOIN AccountEntity ac ON cu.accountId = ac.accountId
             INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
             INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
             INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId
@@ -70,7 +76,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
             FROM BookingServiceEntity bs
             LEFT JOIN StaffEntity s ON s.staffId = bs.staffId
             LEFT JOIN AccountEntity a ON a.accountId = s.accountId
-            LEFT JOIN CustomerEntity cu ON a.accountId = cu.accountId
+            INNER JOIN CustomerEntity cu ON a.accountId = cu.accountId
             INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
             INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
             INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId

@@ -77,6 +77,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     @Query("""
             SELECT
                 b.bookingId AS bookingId,
+                cu.customerId AS customerId,
                 a.accountId AS accountId,
                 be.branchId AS branchId,
                 b.bookingCode AS bookingCode,

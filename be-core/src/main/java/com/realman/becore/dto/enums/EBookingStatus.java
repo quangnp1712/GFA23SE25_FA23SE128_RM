@@ -10,7 +10,8 @@ public enum EBookingStatus {
     PROCESSING(1),
     FINISHED(2),
     PENDING(3),
-    CANCLED(4);
+    CANCLED(4),
+    PAID(5);
 
     private Integer value;
 }

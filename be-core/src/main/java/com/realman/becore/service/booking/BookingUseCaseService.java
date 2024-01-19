@@ -38,6 +38,11 @@ public class BookingUseCaseService {
         bookingCommandService.finishBooking(bookingId);
     }
 
+    @Transactional
+    public void endBooking(Long bookingId) {
+        bookingCommandService.endBooking(bookingId);
+    }
+
     public Booking findById(BookingId bookingId) {
         return bookingQueryService.findById(bookingId);
     }

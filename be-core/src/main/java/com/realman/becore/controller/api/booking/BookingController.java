@@ -25,4 +25,9 @@ public class BookingController implements BookingAPI {
         return new ValueResponse<BookingResponse>(bookingModelMapper.toModel(booking));
     }
 
+    @Override
+    public void endBooking(Long bookingId) {
+        bookingUseCaseService.endBooking(bookingId);
+    }
+
 }

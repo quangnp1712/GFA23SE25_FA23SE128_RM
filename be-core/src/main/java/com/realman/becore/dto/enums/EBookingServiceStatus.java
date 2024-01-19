@@ -13,7 +13,8 @@ public enum EBookingServiceStatus {
     FINISHED(4),
     PENDING(5),
     LOCKED(6),
-    CANCLED(7);
+    CANCLED(7),
+    PAID(8);
 
     private final Integer value;
 }

@@ -177,4 +177,14 @@ public class BookingServiceCommandService {
         });
         bookingServiceRepository.saveAll(updatedBookingServices);
     }
+
+    public void endBookingService(Long bookingId) {
+        List<BookingServiceEntity> bookingServices = bookingServiceRepository.findAllByBookingId(bookingId);
+        List<BookingServiceEntity> saveBookingServices = bookingServices.stream()
+                .map(bs -> {
+                    bs.setBookingServiceStatus(EBookingServiceStatus.PAID);
+                    return bs;
+                }).toList();
+        bookingServiceRepository.saveAll(saveBookingServices);
+    }
 }

@@ -9,6 +9,7 @@ import com.realman.becore.dto.booking.BookingMapper;
 import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
 import com.realman.becore.dto.enums.EBookingStatus;
+import com.realman.becore.error_handlers.exceptions.ResourceInvalidException;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.booking.BookingEntity;
 import com.realman.becore.repository.database.booking.BookingRepository;
@@ -32,13 +33,13 @@ public class BookingCommandService {
     private final BookingServiceCommandService bookingServiceCommandService;
     @NonNull
     private final BookingServiceQueryService bookingServiceQueryService;
-    @Autowired
-    @Lazy
-    private AccountCommandService accountCommandService;
     @NonNull
     private final BookingMapper bookingMapper;
     @NonNull
     private final RequestContext requestContext;
+    @Lazy
+    @Autowired
+    private AccountCommandService accountCommandService;
 
     public void save(Booking booking) {
         BookingEntity bookingEntity = bookingMapper.toEntity(booking, generateBookingCode(), EBookingStatus.ONGOING,
@@ -63,6 +64,16 @@ public class BookingCommandService {
             bookingEntity.setBookingStatus(EBookingStatus.FINISHED);
             bookingRepository.save(bookingEntity);
         }
+    }
+
+    public void endBooking(Long bookingId) {
+        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(ResourceNotFoundException::new);
+        if (!booking.getBookingStatus().equals(EBookingStatus.FINISHED)) {
+            throw new ResourceInvalidException();
+        }
+        booking.setBookingStatus(EBookingStatus.PAID);
+        bookingRepository.save(booking);
+        bookingServiceCommandService.endBookingService(bookingId);
     }
 
     private String generateBookingCode() {

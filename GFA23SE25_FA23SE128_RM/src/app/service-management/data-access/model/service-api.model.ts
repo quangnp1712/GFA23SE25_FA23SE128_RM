@@ -1,4 +1,5 @@
 import { FormControl, FormGroup } from '@angular/forms';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 export namespace CategoryAddApi {
   export interface Request {
@@ -44,6 +45,7 @@ export namespace ServiceAddApi {
 
   export type serviceDisplayList = {
     serviceDisplayUrl: string;
+    branchDisplayBase64Url: string;
   }[];
 
   export type RequestFormGroup = {
@@ -54,6 +56,7 @@ export namespace ServiceAddApi {
     price: FormControl<number>;
     durationValue: FormControl<number>;
     durationTime: FormControl<string>;
+    fileList: FormControl<NzUploadFile[]>;
   };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
@@ -65,7 +68,7 @@ export namespace ServiceAddApi {
       name: formValue.name,
       serviceDisplayList: formValue.serviceDisplayList,
       durationValue: formValue.durationValue,
-      price: formValue.price
+      price: formValue.price,
     };
   }
 }
@@ -101,7 +104,7 @@ export namespace ServiceDataApi {
     values: {
       name: string;
       serviceId: number;
-      price:number
+      price: number;
     }[];
   }
 }
@@ -119,6 +122,7 @@ export namespace ServiceUpdateApi {
 
   export type serviceDisplayList = {
     serviceDisplayUrl: string;
+    branchDisplayBase64Url: string;
   }[];
 
   export type RequestFormGroup = {
@@ -129,6 +133,7 @@ export namespace ServiceUpdateApi {
     price: FormControl<number>;
     durationValue: FormControl<number>;
     durationTime: FormControl<string>;
+    fileList: FormControl<NzUploadFile[]>;
   };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
@@ -140,17 +145,26 @@ export namespace ServiceUpdateApi {
       name: formValue.name,
       serviceDisplayList: formValue.serviceDisplayList,
       durationValue: formValue.durationValue,
-      price: formValue.price
+      price: formValue.price,
     };
   }
 }
 
 export namespace ServiceGetApi {
   export interface Response {
-    value: {
-      name: string;
-      description: string;
-      serviceId: 0;
-    };
+    value: {name: string;
+    description: string;
+    price: number;
+    serviceId: string;
+    categoryId: number;
+    categoryName: string;
+    durationValue: number;
+    durationTime: string;
+    durationText: string;
+    serviceDisplayList: serviceDisplayList}
   }
+  export type serviceDisplayList = {
+    serviceDisplayUrl: string;
+    branchDisplayBase64Url: string;
+  }[];
 }

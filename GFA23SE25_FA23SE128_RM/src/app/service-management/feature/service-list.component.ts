@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl, NonNullableFormBuilder } from '@angular/forms';
+import { FormsModule, NonNullableFormBuilder } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -11,14 +11,12 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
-import { CategoryAddComponent } from '../ui/category-add-modal.component';
-import { CategoryAddApi } from '../data-access/model/service-api.model';
 import { ServiceStore } from '../data-access/store/service.store';
-import { tap } from 'rxjs';
 import { provideComponentStore } from '@ngrx/component-store';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { RxLet } from '@rx-angular/template/let';
+import { NzTableDefaultSettingDirective } from 'src/app/share/ui/directive/nz-table-default-setting.directive';
+import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
 
 @Component({
   selector: 'app-service-list',
@@ -33,8 +31,11 @@ import { RxLet } from '@rx-angular/template/let';
     NzButtonModule,
     NzTableModule,
     RouterLink,
-    NzSelectModule,
+    NzTableDefaultSettingDirective,
     RxLet,
+    FormsModule,
+    NzSelectModule,
+    NzSelectChangeDirective,
   ],
   providers: [
     NzModalService,
@@ -137,7 +138,6 @@ export class ServiceListComponent {
     this.sStore.pagingRequest.sorter = currentSort?.key ?? '';
     this.sStore.pagingRequest.orderDescending = currentSort?.value !== 'ascend';
     this.sStore.getServicePaging();
-    console.log();
   }
 
   // onAddCategory() {

@@ -20,10 +20,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { trimRequired } from 'src/app/share/form-validator/trim-required.validator';
 import { ServiceDataApi } from 'src/app/service-management/data-access/model/service-api.model';
 import {
-  getDownloadURL,
   getStorage,
   ref,
-  StorageReference,
   uploadString,
 } from 'firebase/storage';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -161,6 +159,7 @@ export class BranchStore
                 });
               });
               this.form.reset();
+              this.fileList = []
               this._nzMessageService.success('Đăng ký chi nhánh thành công');
             },
             error: () =>

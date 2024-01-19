@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,12 +13,14 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzUploadModule, NzUploadXHRArgs } from 'ng-zorro-antd/upload';
 import { ServiceStore } from '../data-access/store/service.store';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { ServiceAddApi } from '../data-access/model/service-api.model';
 import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number-input.directive';
+import { Observable } from 'rxjs';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 @Component({
   selector: 'app-service',
@@ -37,7 +39,8 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
     NzSelectModule,
     NzUploadModule,
     RxLet,
-    OnlyNumberInputDirective
+    OnlyNumberInputDirective,
+    NzImageModule
   ],
   providers: [NzMessageService, provideComponentStore(ServiceStore)],
   template: `
@@ -147,10 +150,12 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
               >Ảnh dịch vụ</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[70%]">
-              <nz-upload
+            <nz-upload
                 nzType="drag"
                 [nzMultiple]="true"
-                nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                [nzCustomRequest]="handleUpload"
+                [nzFileList]="form.controls.fileList.getRawValue()"
+                [nzShowUploadList]="false"
               >
                 <p class="ant-upload-drag-icon">
                   <span nz-icon nzType="inbox"></span>
@@ -158,7 +163,27 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
                 <p class="ant-upload-text">
                   Click or drag file to this area to upload
                 </p>
+                <p class="ant-upload-hint">
+                  Support for a single or bulk upload. Strictly prohibit from
+                  uploading company data or other band files
+                </p>
               </nz-upload>
+              <div *ngFor="let file of form.controls.fileList.getRawValue(), index as index" class="tw-relative tw-text-center tw-mt-3">
+              <img
+                nz-image
+                nzSrc="{{ file.thumbUrl }}"
+                width="30%"
+                height="30%"
+                alt="preview-image"
+                class="tw-object-contain tw-cursor-pointer" />
+              <i
+                nz-icon
+                nzType="close-circle"
+                nzTheme="twotone"
+                nzTwotoneColor="#e10027"
+                (click)="handleRemove(index)"
+                class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"></i>
+            </div>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -184,12 +209,49 @@ import { OnlyNumberInputDirective } from 'src/app/share/ui/directive/only-number
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceComponent {
-  constructor(public sStore: ServiceStore) {}
+  constructor(public sStore: ServiceStore, private _cdr: ChangeDetectorRef) {}
 
   vm$ = this.sStore.state$;
   form = this.sStore.form;
 
   addService() {
     this.sStore.addService({ model: ServiceAddApi.mapModel(this.form) });
+  }
+
+  handleUpload = (item: NzUploadXHRArgs) => {
+    return new Observable(
+      (subscriber: { next: (arg0: string | ArrayBuffer | null) => void }) => {
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+          subscriber.next(reader.result);
+        };
+        reader.readAsDataURL(item.file as unknown as File);
+      }
+    ).subscribe({
+      next: (result) => {
+        this.sStore.fileListTmp.push({
+          uid: item.file.uid,
+          name: item.file.name ?? '',
+          status: 'done',
+          thumbUrl: result!.toString(),
+          url: result!.toString().split(';base64,')[1]
+        });
+        this.form.controls.fileList.patchValue(this.sStore.fileListTmp)
+        this.form.controls.serviceDisplayList.value.push({
+          serviceDisplayUrl: 'service/' + item.file.name,
+          branchDisplayBase64Url: '',
+        });
+        this._cdr.markForCheck();
+      },
+      error: (err) => {
+        this._cdr.markForCheck();
+      },
+    });
+  };
+
+  handleRemove(index: number) {
+    this.sStore.fileListTmp.splice(index,1)
+    this.form.controls.fileList.patchValue(this.sStore.fileListTmp)
+    this.form.controls.serviceDisplayList.value.splice(index,1)
   }
 }

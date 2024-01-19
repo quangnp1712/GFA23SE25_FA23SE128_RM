@@ -17,12 +17,13 @@ import {
 } from '../model/service-api.model';
 import { ServiceApiService } from '../api/service-api.service';
 import { ActivatedRoute } from '@angular/router';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 
 export interface BranchState {
   servicePaging: Paging<ServicePagingApi.Response>;
   loadingCount: number;
   categoryData: CategoryDataGet.Response;
-  ServiceData: ServiceGetApi.Response;
 }
 
 const initialState: BranchState = {
@@ -35,7 +36,6 @@ const initialState: BranchState = {
   },
   loadingCount: 0,
   categoryData: { values: [] },
-  ServiceData: { value: { description: '', name: '', serviceId: 0 } },
 };
 
 @Injectable()
@@ -58,6 +58,12 @@ export class ServiceStore
   id = Number(this._activatedRoute.snapshot.paramMap.get('serviceId'));
   addressData!: AutocompleteApi.Response;
   options: string[] = [];
+  fileListTmp: NzUploadFile[] = [];
+  storage = getStorage();
+  storageRef = ref(this.storage, '/service');
+  metadata = {
+    contentType: 'image/jpeg',
+  };
 
   pagingRequest: ServicePagingApi.Request = {
     current: 1,
@@ -76,7 +82,8 @@ export class ServiceStore
     serviceDisplayList: this._fb.control([]),
     durationTime: this._fb.control('MINUTE'),
     durationValue: this._fb.control(0, trimRequired),
-    price: this._fb.control(0, trimRequired)
+    price: this._fb.control(0, trimRequired),
+    fileList: this._fb.control([])
   });
 
   readonly getServicePaging = this.effect<never>(
@@ -87,6 +94,8 @@ export class ServiceStore
           tap({
             next: (resp) => {
               if (resp.content) this.patchState({ servicePaging: resp });
+              console.log(resp);
+
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -144,6 +153,17 @@ export class ServiceStore
           this._sApiSvc.addService(model).pipe(
             tap({
               next: (resp) => {
+                this.form.controls.fileList.value.forEach((file) => {
+                  this.storageRef = ref(this.storage, 'service/' + file.name);
+                  uploadString(
+                    this.storageRef,
+                    file.url!,
+                    'base64',
+                    this.metadata
+                  ).then((snapshot) => {
+                    console.log('Uploaded a ' + file.name + ' string!');
+                  });
+                });
                 this.form.reset();
                 this._nzMessageService.success('Tạo dịch vụ thành công');
               },
@@ -164,7 +184,20 @@ export class ServiceStore
           tap({
             next: (resp) => {
               this.form.patchValue(resp.value)
-
+              resp.value.serviceDisplayList.forEach((file) => {
+                getDownloadURL(ref(this.storage, file.serviceDisplayUrl))
+                  .then((url) => {
+                    this.fileListTmp.push({
+                      uid: file.serviceDisplayUrl.split('service/', 2)[1],
+                      name: file.serviceDisplayUrl.split('service/', 2)[1],
+                      status: 'done',
+                      thumbUrl: url,
+                      url: url,
+                    });
+                    this.form.controls.fileList.patchValue(this.fileListTmp)
+                  })
+                  .catch((error) => {});
+              });
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -181,6 +214,25 @@ export class ServiceStore
         this._sApiSvc.updateService(id, model).pipe(
           tap({
             next: resp => {
+              this.form.controls.fileList.getRawValue().forEach((file) => {
+                console.log(file.thumbUrl!.toString().split('/png;base64,')[0]);
+                if (
+                  file
+                    .thumbUrl!.toString()
+                    .split(';base64,')[0]
+                    .includes('data:image')
+                ) {
+                  this.storageRef = ref(this.storage, 'service/' + file.name);
+                  uploadString(
+                    this.storageRef,
+                    file.url!,
+                    'base64',
+                    this.metadata
+                  ).then((snapshot) => {
+                    console.log('Uploaded a ' + file.name + ' string!');
+                  });
+                }
+              });
               this._nzMessageService.success('Cập nhật dịch vụ thành công');
             },
             error: () => this._nzMessageService.error('Cập nhật dịch vụ thất bại.'),

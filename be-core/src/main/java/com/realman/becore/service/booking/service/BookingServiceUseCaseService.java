@@ -35,9 +35,9 @@ public class BookingServiceUseCaseService {
     }
 
     @Transactional
-    public void endService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequest,
+    public BookingService endService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequest,
             AccountId accountId) {
-        bookingServiceCommandService.finishService(bookingServiceId, bookingResultRequest);
+        return bookingServiceCommandService.finishService(bookingServiceId, bookingResultRequest);
     }
 
     @Transactional

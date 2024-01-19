@@ -86,7 +86,7 @@ public class BookingServiceCommandService {
         }
     }
 
-    public void finishService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequests) {
+    public BookingService finishService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequests) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
                 .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
@@ -94,7 +94,7 @@ public class BookingServiceCommandService {
             BookingServiceEntity foundBookingServiceEntity = bookingServiceMapper.toEntity(bookingInfo);
             foundBookingServiceEntity.setBookingServiceStatus(EBookingServiceStatus.FINISHED);
             foundBookingServiceEntity.setActualEndAppointment(LocalTime.now());
-            bookingServiceRepository.save(foundBookingServiceEntity);
+            BookingServiceEntity savedBookingService = bookingServiceRepository.save(foundBookingServiceEntity);
             unlockBookingService(foundBookingServiceEntity.getBookingId(),
                     foundBookingServiceEntity.getBookingServiceId());
             List<BookingResult> bookingResults = bookingResultRequests.bookingResultImgs().stream().map(
@@ -104,7 +104,9 @@ public class BookingServiceCommandService {
                             .build())
                     .toList();
             bookingResultCommandService.saveAll(bookingResults);
+            return bookingServiceMapper.toDto(savedBookingService);
         }
+        return null;
     }
 
     public void confirmService(BookingServiceId bookingServiceId) {

@@ -33,6 +33,11 @@ public class BookingUseCaseService {
         bookingCommandService.receptSave(receptBookingRequest);
     }
 
+    @Transactional
+    public void finishBooking(Long bookingId) {
+        bookingCommandService.finishBooking(bookingId);
+    }
+
     public Booking findById(BookingId bookingId) {
         return bookingQueryService.findById(bookingId);
     }

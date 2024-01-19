@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.realman.becore.dto.booking.service.BookingServiceInfo;
 import com.realman.becore.dto.booking.service.BookingServiceSearchCriteria;
+import com.realman.becore.dto.enums.EBookingServiceStatus;
 
 @Repository
 public interface BookingServiceRepository extends JpaRepository<BookingServiceEntity, Long> {
@@ -57,6 +58,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                             bs.bookingId AS bookingId,
                             ss.serviceId AS serviceId,
                             s.staffId AS staffId,
+                            b.bookingCode AS bookingCode,
                             s.professional AS professional,
                             c.categoryId AS categoryId,
                             c.categoryName AS categoryName,
@@ -65,6 +67,8 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                             ss.serviceName AS serviceName,
                             CONCAT(a.firstName, ' ', a.lastName) AS staffName,
                             a.phone AS staffPhone,
+                            CONCAT(ac.firstName, ' ', ac.lastName) AS customerName,
+                            ac.phone AS customerPhone,
                             bs.startAppointment AS startAppointment,
                             bs.endAppointment AS endAppointment,
                             bs.actualStartAppointment AS actualStartAppointment,
@@ -78,6 +82,7 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
                         LEFT JOIN StaffEntity s ON s.staffId = bs.staffId
                         LEFT JOIN AccountEntity a ON a.accountId = s.accountId
                         INNER JOIN CustomerEntity cu ON b.customerId = cu.customerId
+                        INNER JOIN AccountEntity ac ON cu.accountId = ac.accountId
                         INNER JOIN ShopServiceEntity ss ON ss.serviceId = bs.serviceId
                         INNER JOIN CategoryEntity c ON c.categoryId = ss.categoryId
                         INNER JOIN BranchServiceEntity brs ON ss.serviceId = brs.serviceId
@@ -207,4 +212,6 @@ public interface BookingServiceRepository extends JpaRepository<BookingServiceEn
         Page<BookingServiceInfo> findAll(BookingServiceSearchCriteria searchCriteria, Pageable pageable);
 
         List<BookingServiceEntity> findAllByBookingId(Long bookingId);
+
+        Boolean existsByBookingServiceStatus(EBookingServiceStatus bookingServiceStatus);
 }

@@ -19,5 +19,7 @@ public interface BookingServiceMapper {
 
     BookingService toDto(BookingServiceInfo info, List<BookingResult> bookingResults);
 
+    BookingService toDto(BookingServiceEntity entity);
+
     BookingServiceEntity toEntity(BookingServiceInfo info);
 }

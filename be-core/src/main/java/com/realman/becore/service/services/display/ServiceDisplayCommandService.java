@@ -25,4 +25,12 @@ public class ServiceDisplayCommandService {
                 .map(serviceDisplay -> serviceDisplayMapper.toEntity(serviceDisplay, serviceId)).toList();
         serviceDisplayRepository.saveAll(serviceDisplayList);
     }
+
+    public void update(Long serviceId, List<ServiceDisplay> newServiceDisplays) {
+        List<ServiceDisplayEntity> serviceDisplays = serviceDisplayRepository.findAllByServiceId(serviceId);
+        serviceDisplayRepository.deleteAll(serviceDisplays);
+        List<ServiceDisplayEntity> saveServiceDisplays = newServiceDisplays.stream()
+                .map(serviceDisplay -> serviceDisplayMapper.toEntity(serviceDisplay, serviceId)).toList();
+        serviceDisplayRepository.saveAll(saveServiceDisplays);
+    }
 }

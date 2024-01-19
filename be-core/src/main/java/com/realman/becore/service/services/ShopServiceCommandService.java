@@ -30,6 +30,7 @@ public class ShopServiceCommandService {
     public void update(Long serviceId, ShopService shopService) {
         ShopServiceEntity foundService = shopServiceRepository.findById(serviceId)
                 .orElseThrow(ResourceNotFoundException::new);
+        serviceDisplayCommandService.update(serviceId, shopService.serviceDisplayList());
         shopServiceMapper.updateService(foundService, shopService);
 
     }

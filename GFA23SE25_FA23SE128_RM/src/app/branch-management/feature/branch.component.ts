@@ -309,11 +309,10 @@ export class BranchComponent {
     this.bStore.fileList.forEach(url => {
       this.branchDisplayList.push({url: 'branch/'+url.name})
     })
-    this.bStore.form.controls.branchDisplayList.patchValue(this.branchDisplayList)
     this.addModel = this.bStore.form.getRawValue();
-    console.log(this.bStore.fileList);
+    console.log(this.bStore.form.getRawValue());
 
-    // this.bStore.addBranch({ model: this.addModel });
+    this.bStore.addBranch({ model: this.addModel });
   }
 
   getAddress(event: Event) {
@@ -342,6 +341,10 @@ export class BranchComponent {
           url: result!.toString().split(';base64,')[1]
         });
         this.bStore.fileList = this.bStore.fileListTmp
+        this.bStore.form.controls.branchDisplayList.value.push({
+          url: 'branch/' + item.file.name,
+          branchDisplayBase64Url: '',
+        });
         this._cdr.markForCheck();
       },
       error: (err) => {
@@ -353,5 +356,6 @@ export class BranchComponent {
   handleRemove(index: number) {
     this.bStore.fileListTmp.splice(index,1)
     this.bStore.fileList = this.bStore.fileListTmp
+    this.bStore.form.controls.branchDisplayList.value.splice(index,1)
   }
 }

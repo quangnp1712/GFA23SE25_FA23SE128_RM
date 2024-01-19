@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -47,7 +52,7 @@ import { NzImageModule } from 'ng-zorro-antd/image';
     RxLet,
     OnlyNumberInputDirective,
     RouterLink,
-    NzImageModule
+    NzImageModule,
   ],
   providers: [provideComponentStore(BranchUpdateStore), NzMessageService],
   template: `
@@ -172,26 +177,24 @@ import { NzImageModule } from 'ng-zorro-antd/image';
                 [formControl]="buStore.form.controls.numberStaffs"
               />
               <ng-template #numberStaffErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('trimRequired')">
-                Vui lòng nhập số lượng nhân viên
-              </ng-container>
-              <ng-container
-                *ngIf="
-                  control.hasError('min') &&
-                  !control.hasError('trimRequired')
-                "
-              >
-                số lượng nhân viên > 0
-              </ng-container>
-              <ng-container
-                *ngIf="
-                  control.hasError('max') &&
-                  !control.hasError('minlength')
-                "
-              >
-              số lượng nhân viên < 101
-              </ng-container>
-            </ng-template>
+                <ng-container *ngIf="control.hasError('trimRequired')">
+                  Vui lòng nhập số lượng nhân viên
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('min') && !control.hasError('trimRequired')
+                  "
+                >
+                  số lượng nhân viên > 0
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    control.hasError('max') && !control.hasError('minlength')
+                  "
+                >
+                  số lượng nhân viên < 101
+                </ng-container>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
 
@@ -217,7 +220,7 @@ import { NzImageModule } from 'ng-zorro-antd/image';
               >Ảnh chi nhánh</nz-form-label
             >
             <nz-form-control nzErrorTip="Vui lòng nhập tên" class="tw-w-[85%]">
-            <nz-upload
+              <nz-upload
                 nzType="drag"
                 [nzMultiple]="true"
                 [nzCustomRequest]="handleUpload"
@@ -235,22 +238,29 @@ import { NzImageModule } from 'ng-zorro-antd/image';
                   uploading company data or other band files
                 </p>
               </nz-upload>
-              <div *ngFor="let file of buStore.fileList, index as index" class="tw-relative tw-text-center tw-mt-3">
-              <img
-                nz-image
-                nzSrc="{{ file.thumbUrl }}"
-                width="30%"
-                height="30%"
-                alt="preview-image"
-                class="tw-object-contain tw-cursor-pointer" />
-              <i
-                nz-icon
-                nzType="close-circle"
-                nzTheme="twotone"
-                nzTwotoneColor="#e10027"
-                (click)="handleRemove(index)"
-                class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"></i>
-            </div>
+              <ng-container *ngIf="buStore.fileList.length">
+                <div
+                  *ngFor="let file of buStore.fileList; index as index"
+                  class="tw-relative tw-text-center tw-mt-3"
+                >
+                  <img
+                    nz-image
+                    nzSrc="{{ file.thumbUrl }}"
+                    width="30%"
+                    height="30%"
+                    alt="preview-image"
+                    class="tw-object-contain tw-cursor-pointer"
+                  />
+                  <i
+                    nz-icon
+                    nzType="close-circle"
+                    nzTheme="twotone"
+                    nzTwotoneColor="#e10027"
+                    (click)="handleRemove(index)"
+                    class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"
+                  ></i>
+                </div>
+              </ng-container>
             </nz-form-control>
           </nz-form-item>
 
@@ -282,14 +292,15 @@ import { NzImageModule } from 'ng-zorro-antd/image';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BranchUpdateComponent implements OnInit {
-  constructor(public buStore: BranchUpdateStore, private _cdr: ChangeDetectorRef) {}
+  constructor(
+    public buStore: BranchUpdateStore,
+    private _cdr: ChangeDetectorRef
+  ) {}
   ngOnInit(): void {
-    this.buStore.getBranchData();
   }
 
   vm$ = this.buStore.state$;
   addModel!: BranchApi.Request;
-  branchDisplayList = [{url: ''}]
 
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
@@ -297,21 +308,19 @@ export class BranchUpdateComponent implements OnInit {
   }
 
   updateBranch() {
-    this.buStore.form.controls.branchServiceList.reset();
+    this.buStore.form.controls.branchServiceList.setValue([]);
     this.buStore.form.controls.serviceArray.value.forEach((value) =>
       this.buStore.form.controls.branchServiceList.value.push({
         serviceId: value,
         price: 0,
       })
     );
-    this.buStore.fileList.forEach(url => {
-      this.branchDisplayList.push({url: 'branch/'+url.name})
-    })
-    this.buStore.form.controls.branchDisplayList.patchValue(this.branchDisplayList)
     this.buStore.updateBranch({
       id: this.buStore.form.controls.branchId.getRawValue(),
       model: this.buStore.form.getRawValue(),
     });
+    console.log(this.buStore.fileList);
+
   }
 
   handleUpload = (item: NzUploadXHRArgs) => {
@@ -330,9 +339,15 @@ export class BranchUpdateComponent implements OnInit {
           name: item.file.name ?? '',
           status: 'done',
           thumbUrl: result!.toString(),
-          url: result!.toString().split(';base64,')[1]
+          url: result!.toString().split(';base64,')[1],
         });
-        this.buStore.fileList = this.buStore.fileListTmp
+        this.buStore.fileList = this.buStore.fileListTmp;
+        this.buStore.form.controls.branchDisplayList.value.push({
+          url: 'branch/' + item.file.name,
+          branchDisplayBase64Url: '',
+        });
+        console.log(result!.toString().split(';base64,')[0]);
+
         this._cdr.markForCheck();
       },
       error: (err) => {
@@ -342,7 +357,8 @@ export class BranchUpdateComponent implements OnInit {
   };
 
   handleRemove(index: number) {
-    this.buStore.fileListTmp.splice(index,1)
-    this.buStore.fileList = this.buStore.fileListTmp
+    this.buStore.fileListTmp.splice(index, 1);
+    this.buStore.fileList = this.buStore.fileListTmp;
+    this.buStore.form.controls.branchDisplayList.value.splice(index, 1);
   }
 }

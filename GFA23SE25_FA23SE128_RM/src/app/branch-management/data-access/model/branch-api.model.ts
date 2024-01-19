@@ -17,6 +17,7 @@ export namespace BranchApi {
 
   export type branchDisplayList = {
     url: string;
+    branchDisplayBase64Url: string;
   }[];
 
   export type branchServiceList = {
@@ -59,15 +60,14 @@ export namespace BranchPagingApi {
     address: string;
     status: string;
     numberStaffs: 0;
-    open: string
-    close: string
+    open: string;
+    close: string;
     displayUrlList: string[];
     serviceIdList: string[];
   }
 }
 
 export namespace BranchUpdateApi {
-
   export interface Request {
     thumbnailUrl: string;
     shopOwnerId: string;
@@ -82,12 +82,11 @@ export namespace BranchUpdateApi {
     branchServiceList: branchServiceList;
   }
 
-
   export type RequestFormGroup = {
     branchId: FormControl<number>;
     shopOwnerId: FormControl<string>;
     branchName: FormControl<string>;
-    thumbnailUrl: FormControl<string>
+    thumbnailUrl: FormControl<string>;
     phone: FormControl<string>;
     address: FormControl<string>;
     status: FormControl<string>;
@@ -96,11 +95,12 @@ export namespace BranchUpdateApi {
     close: FormControl<string | null>;
     branchDisplayList: FormControl<branchDisplayList>;
     branchServiceList: FormControl<branchServiceList>;
-    serviceArray: FormControl<string[]>
+    serviceArray: FormControl<string[]>;
   };
 
   export type branchDisplayList = {
     url: string;
+    branchDisplayBase64Url: string;
   }[];
 
   export type branchServiceList = {

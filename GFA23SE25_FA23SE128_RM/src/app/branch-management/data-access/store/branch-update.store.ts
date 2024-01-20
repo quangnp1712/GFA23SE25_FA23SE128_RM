@@ -112,8 +112,8 @@ export class BranchUpdateStore
               );
               this.form.controls.phone.setValue(resp.value.phone);
               this.form.controls.status.setValue(resp.value.status);
-              this.form.controls.open.setValue(resp.value.open + 'Z');
-              this.form.controls.close.setValue(resp.value.close + 'Z');
+              this.form.controls.open.setValue(resp.value.open);
+              this.form.controls.close.setValue(resp.value.close);
               this.form.controls.branchId.setValue(resp.value.branchId);
               resp.value.branchServiceList.forEach((data) => {
                 this.form.controls.serviceArray.value.push(data.serviceId);

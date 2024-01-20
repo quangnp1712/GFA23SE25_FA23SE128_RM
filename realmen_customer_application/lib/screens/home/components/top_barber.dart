@@ -253,7 +253,7 @@ class _barberTopState extends State<barberTop> {
           AccountService accountService = AccountService();
 
           final result =
-              await accountService.getStaff(5, current, null, callBack);
+              await accountService.getStaff(5, current, null, callBack, false);
           if (result['statusCode'] == 200) {
             staffList.addAll(result['data'] as List<AccountInfoModel>);
             current = result['current'];
@@ -276,7 +276,6 @@ class _barberTopState extends State<barberTop> {
             });
             current++;
           } else {
-            _errorMessage(result['message']);
             print(result);
             break;
           }

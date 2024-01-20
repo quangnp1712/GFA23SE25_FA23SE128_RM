@@ -76,7 +76,7 @@ class _RegisterWorkScheduleScreenState
                         ),
                         Container(
                           // width: 80.w,
-                          height: 68.h,
+                          height: 65.h,
                           key: _globalKey,
                           child: SfCalendar(
                             controller: calendarController,
@@ -325,6 +325,7 @@ class _RegisterWorkScheduleScreenState
           var result =
               await scheduleService.postSchedule(staffId, schedulesModel);
           if (result['statusCode'] == 200) {
+            widget.callback(1);
             _successMessage("Đăng ký thành công");
           } else {
             _errorMessage("Đăng ký thất bại");

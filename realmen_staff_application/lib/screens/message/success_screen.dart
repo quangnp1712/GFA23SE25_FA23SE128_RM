@@ -77,7 +77,7 @@ class ShowSnackBar {
               width: 10,
             ),
             SizedBox(
-              width: 72.w,
+              width: 70.w,
               child: Text(
                 message,
                 maxLines: 2,

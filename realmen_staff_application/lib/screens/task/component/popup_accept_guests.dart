@@ -297,6 +297,7 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
         _errorMessage('Nhận khách thất bại');
       }
       if (checkSuccess) {
+        // Get.back();
         _successMessage('Nhận khách thành công');
         Get.to(() => const MainScreen());
       } else {

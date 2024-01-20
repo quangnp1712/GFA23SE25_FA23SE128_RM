@@ -683,14 +683,14 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 30),
-                                height: 40,
+                                height: 34,
                                 child: Row(
                                   children: [
                                     Text(
                                       "Lặp lại mỗi:".toUpperCase(),
                                       style: const TextStyle(
                                           color: Colors.black,
-                                          fontSize: 21,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.w500),
                                     ),
                                     const SizedBox(
@@ -713,7 +713,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                 color: Colors.grey
                                                     .withOpacity(0.1),
                                               ),
-                                              width: 15.w,
+                                              width: 12.w,
                                               child: TextField(
                                                 controller:
                                                     repeatEveryController,
@@ -815,7 +815,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 0,
-                                                        horizontal: 10.0),
+                                                        horizontal: 8.0),
                                                 iconSize: 32.0,
                                                 color: Theme.of(context)
                                                     .primaryColor,
@@ -888,8 +888,8 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 0,
-                                                        horizontal: 10.0),
-                                                iconSize: 32.0,
+                                                        horizontal: 7.0),
+                                                iconSize: 29.0,
                                                 color: Theme.of(context)
                                                     .primaryColor,
                                                 onPressed: () {
@@ -927,7 +927,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                               ? "Tuần"
                                               : "Tháng",
                                       style: const TextStyle(
-                                          color: Colors.black, fontSize: 18),
+                                          color: Colors.black, fontSize: 17),
                                     ),
                                   ],
                                 ),
@@ -964,7 +964,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                       .toUpperCase(),
                                   style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 21,
+                                      fontSize: 19,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -1031,7 +1031,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                       ),
                                       child: Text(
                                         _weekDay[index]['key'],
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(fontSize: 15),
                                       ),
                                     );
                                   },
@@ -1068,7 +1068,7 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                   "kết thúc:".toUpperCase(),
                                   style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 21,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -1291,7 +1291,12 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                           Container(
                                             width: 10,
                                           ),
-                                          const Text('lần'),
+                                          const Text(
+                                            'lần',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18),
+                                          ),
                                         ],
                                       ),
                                       value: _EndRule.count,

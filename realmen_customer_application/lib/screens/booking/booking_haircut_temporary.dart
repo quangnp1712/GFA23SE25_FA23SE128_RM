@@ -572,7 +572,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           AccountService accountService = AccountService();
           final int branchId = widget.branch!.branchId!;
           final result =
-              await accountService.getStaff(10, current, branchId, true);
+              await accountService.getStaff(10, current, branchId, true, null);
           if (result['statusCode'] == 200) {
             accounts.addAll(result['data'] as List<AccountInfoModel>);
             current = result['current'];

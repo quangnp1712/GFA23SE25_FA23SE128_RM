@@ -164,7 +164,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                            horizontal: 11),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -225,7 +225,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                       MainAxisAlignment.start,
                                                   children: [
                                                     Container(
-                                                      width: 120,
+                                                      width: 90,
                                                       child: const Text(
                                                         "Số điện thoại: ",
                                                         style: TextStyle(
@@ -234,7 +234,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                       ),
                                                     ),
                                                     Container(
-                                                      width: 200,
+                                                      width: 180,
                                                       child: Text(
                                                         phone,
                                                         textAlign:
@@ -260,7 +260,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                       MainAxisAlignment.start,
                                                   children: [
                                                     Container(
-                                                      width: 120,
+                                                      width: 90,
                                                       child: const Text(
                                                         "Đơn booking: ",
                                                         style: TextStyle(
@@ -269,7 +269,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                       ),
                                                     ),
                                                     Container(
-                                                      width: 200,
+                                                      width: 180,
                                                       child: Text(
                                                         bookingsPending[index]
                                                             .bookings![i]
@@ -301,7 +301,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                                     .start,
                                                             children: [
                                                               Container(
-                                                                width: 120,
+                                                                width: 100,
                                                                 child:
                                                                     const Text(
                                                                   "Trạng thái: ",
@@ -313,7 +313,7 @@ class _BookingWaitingTabState extends State<BookingWaitingTab>
                                                                 ),
                                                               ),
                                                               Container(
-                                                                width: 200,
+                                                                width: 170,
                                                                 child: Text(
                                                                   bookingServiceStatus,
                                                                   textAlign:

@@ -82,7 +82,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 120,
+                            width: 100,
                             child: const Text(
                               "Khách hàng: ",
                               style: TextStyle(
@@ -94,7 +94,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                             width: 10,
                           ),
                           Container(
-                            width: 200,
+                            width: 180,
                             child: Text(
                               utf8.decode(widget.booking.bookingOwnerName
                                   .toString()
@@ -119,7 +119,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            width: 120,
+                            width: 100,
                             child: const Text(
                               "Số điện thoại: ",
                               style: TextStyle(
@@ -131,7 +131,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                             width: 10,
                           ),
                           Container(
-                            width: 200,
+                            width: 180,
                             child: Text(
                               phone,
                               textAlign: TextAlign.left,
@@ -224,228 +224,6 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                           thickness: 1,
                         ),
                       ),
-                      masseurServices.isNotEmpty
-                          ? Column(
-                              children: [
-                                Container(
-                                  constraints:
-                                      const BoxConstraints(minHeight: 40),
-                                  color: Colors.grey.shade300,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        constraints:
-                                            const BoxConstraints(maxWidth: 245),
-                                        child: Text(
-                                          "Massuer:  ${utf8.decode(masseurServices.first.staffName!.toString().runes.toList())} ",
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 1),
-                                        ),
-                                      ),
-
-                                      // status tổng dành cho massa
-                                      Center(
-                                        child: Container(
-                                          width: 100,
-                                          height: 30,
-                                          margin:
-                                              const EdgeInsets.only(right: 5),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 5),
-                                          decoration: BoxDecoration(
-                                            // color: Color(0xff207A20),
-                                            color: isMasseurServicesDone ==
-                                                    "CHƯA LÀM"
-                                                ? Colors.white
-                                                : (isMasseurServicesDone ==
-                                                        "ĐANG LÀM"
-                                                    ? Colors.amberAccent
-                                                    : const Color(0xff207A20)),
-                                            border: Border.all(
-                                                color: Colors.black54,
-                                                style: BorderStyle.solid),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              isMasseurServicesDone!,
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w700,
-                                                // color: Colors.white,
-                                                color: isMasseurServicesDone ==
-                                                        "HOÀN THÀNH"
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: masseurServices.length,
-                                  itemBuilder: (context, index) {
-                                    return TimelineTile(
-                                      // false la hien thanh
-
-                                      isLast: false,
-                                      beforeLineStyle: LineStyle(
-                                          color: index + 1 !=
-                                                  masseurServices.length
-                                              ? Colors.black
-                                              : Colors.transparent,
-                                          thickness: 2),
-
-                                      // icon
-                                      indicatorStyle: IndicatorStyle(
-                                        width: 35,
-                                        height: 40,
-                                        padding: const EdgeInsets.only(
-                                            top: 4, bottom: 4, right: 5),
-                                        indicator: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: masseurServices[index].bookingServiceStatus ==
-                                                        "ONGOING" ||
-                                                    masseurServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "LOCKED" ||
-                                                    masseurServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "CONFIRM"
-                                                ? Colors.grey.shade300
-                                                : (masseurServices[index]
-                                                            .bookingServiceStatus ==
-                                                        "PROCESSING"
-                                                    ? Colors.amberAccent
-                                                    : const Color(0xff207A20)),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              "${index + 1}",
-                                              style: TextStyle(
-                                                  color: masseurServices[index]
-                                                              .bookingServiceStatus ==
-                                                          "FINISHED"
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ),
-                                        indicatorXY: 0.0,
-                                      ),
-
-                                      // content
-                                      endChild: Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, right: 0, left: 10),
-                                        constraints:
-                                            const BoxConstraints(minHeight: 80),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              constraints: const BoxConstraints(
-                                                  maxWidth: 194),
-                                              child: Text(
-                                                utf8.decode(
-                                                    masseurServices[index]
-                                                        .serviceName
-                                                        .toString()
-                                                        .runes
-                                                        .toList()),
-                                                style: const TextStyle(
-                                                    fontSize: 20),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 106,
-                                              height: 40,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 5,
-                                                      vertical: 5),
-                                              decoration: BoxDecoration(
-                                                // color: Color(0xff207A20),
-                                                color: masseurServices[index].bookingServiceStatus ==
-                                                            "ONGOING" ||
-                                                        masseurServices[index]
-                                                                .bookingServiceStatus ==
-                                                            "LOCKED" ||
-                                                        masseurServices[index]
-                                                                .bookingServiceStatus ==
-                                                            "CONFIRM"
-                                                    ? Colors.white
-                                                    : (masseurServices[index]
-                                                                .bookingServiceStatus ==
-                                                            "PROCESSING"
-                                                        ? Colors.amberAccent
-                                                        : const Color(
-                                                            0xff207A20)),
-                                                border: Border.all(
-                                                    color: Colors.black54,
-                                                    style: BorderStyle.solid),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  masseurServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "ONGOING" ||
-                                                          masseurServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "LOCKED" ||
-                                                          masseurServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "CONFIRM"
-                                                      ? "CHƯA LÀM"
-                                                      : (masseurServices[index]
-                                                                  .bookingServiceStatus ==
-                                                              "PROCESSING"
-                                                          ? "ĐANG LÀM"
-                                                          : "HOÀN THÀNH"),
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w700,
-                                                    // color: Colors.white,
-                                                    color: masseurServices[
-                                                                    index]
-                                                                .bookingServiceStatus ==
-                                                            "FINISHED"
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      const SizedBox(
-                        height: 15,
-                      ),
                       stylistServiceMuitl.isNotEmpty
                           ? ListView.builder(
                               shrinkWrap: true,
@@ -464,7 +242,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                         children: [
                                           Container(
                                             constraints: const BoxConstraints(
-                                                maxWidth: 245),
+                                                maxWidth: 200),
                                             child: Text(
                                               "Stylist: ${utf8.decode(stylistServiceMuitl[index].name!.toString().runes.toList())}",
                                               style: const TextStyle(
@@ -476,7 +254,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                           ),
                                           Center(
                                             child: Container(
-                                              width: 100,
+                                              width: 89,
                                               height: 30,
                                               margin: const EdgeInsets.only(
                                                   right: 5),
@@ -503,21 +281,45 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                     style: BorderStyle.solid),
                                               ),
                                               child: Center(
-                                                child: Text(
-                                                  stylistServiceMuitl[index]
-                                                      .isStylistServicesDone!,
-                                                  style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700,
-                                                    // color: Colors.white,
-                                                    color: stylistServiceMuitl[
-                                                                    index]
-                                                                .isStylistServicesDone ==
-                                                            "HOÀN THÀNH"
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                ),
+                                                child: stylistServiceMuitl[
+                                                                index]
+                                                            .isStylistServicesDone ==
+                                                        "HOÀN THÀNH"
+                                                    ? Text(
+                                                        stylistServiceMuitl[
+                                                                index]
+                                                            .isStylistServicesDone!,
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          // color: Colors.white,
+                                                          color: stylistServiceMuitl[
+                                                                          index]
+                                                                      .isStylistServicesDone ==
+                                                                  "HOÀN THÀNH"
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        stylistServiceMuitl[
+                                                                index]
+                                                            .isStylistServicesDone!,
+                                                        style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          // color: Colors.white,
+                                                          color: stylistServiceMuitl[
+                                                                          index]
+                                                                      .isStylistServicesDone ==
+                                                                  "HOÀN THÀNH"
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                      ),
                                               ),
                                             ),
                                           )
@@ -638,8 +440,10 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                   ),
                                                 ),
                                                 Container(
-                                                  width: 106,
-                                                  height: 40,
+                                                  width: 89,
+                                                  height: 30,
+                                                  margin:
+                                                      EdgeInsets.only(right: 5),
                                                   padding: const EdgeInsets
                                                       .symmetric(
                                                       horizontal: 5,
@@ -734,7 +538,231 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                               })
                           : Container(),
                       const SizedBox(
-                        height: 20,
+                        height: 15,
+                      ),
+
+                      masseurServices.isNotEmpty
+                          ? Column(
+                              children: [
+                                Container(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 40),
+                                  color: Colors.grey.shade300,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 200),
+                                        child: Text(
+                                          "Massuer:  ${utf8.decode(masseurServices.first.staffName!.toString().runes.toList())} ",
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1),
+                                        ),
+                                      ),
+
+                                      // status tổng dành cho massa
+                                      Center(
+                                        child: Container(
+                                          width: 89,
+                                          height: 30,
+                                          margin:
+                                              const EdgeInsets.only(right: 5),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            // color: Color(0xff207A20),
+                                            color: isMasseurServicesDone ==
+                                                    "CHƯA LÀM"
+                                                ? Colors.white
+                                                : (isMasseurServicesDone ==
+                                                        "ĐANG LÀM"
+                                                    ? Colors.amberAccent
+                                                    : const Color(0xff207A20)),
+                                            border: Border.all(
+                                                color: Colors.black54,
+                                                style: BorderStyle.solid),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              isMasseurServicesDone!,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                // color: Colors.white,
+                                                color: isMasseurServicesDone ==
+                                                        "HOÀN THÀNH"
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: masseurServices.length,
+                                  itemBuilder: (context, index) {
+                                    return TimelineTile(
+                                      // false la hien thanh
+
+                                      isLast: false,
+                                      beforeLineStyle: LineStyle(
+                                          color: index + 1 !=
+                                                  masseurServices.length
+                                              ? Colors.black
+                                              : Colors.transparent,
+                                          thickness: 2),
+
+                                      // icon
+                                      indicatorStyle: IndicatorStyle(
+                                        width: 35,
+                                        height: 40,
+                                        padding: const EdgeInsets.only(
+                                            top: 4, bottom: 4, right: 5),
+                                        indicator: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: masseurServices[index].bookingServiceStatus ==
+                                                        "ONGOING" ||
+                                                    masseurServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "LOCKED" ||
+                                                    masseurServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "CONFIRM"
+                                                ? Colors.grey.shade300
+                                                : (masseurServices[index]
+                                                            .bookingServiceStatus ==
+                                                        "PROCESSING"
+                                                    ? Colors.amberAccent
+                                                    : const Color(0xff207A20)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "${index + 1}",
+                                              style: TextStyle(
+                                                  color: masseurServices[index]
+                                                              .bookingServiceStatus ==
+                                                          "FINISHED"
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                        indicatorXY: 0.0,
+                                      ),
+
+                                      // content
+                                      endChild: Container(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, right: 0, left: 10),
+                                        constraints:
+                                            const BoxConstraints(minHeight: 80),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 194),
+                                              child: Text(
+                                                utf8.decode(
+                                                    masseurServices[index]
+                                                        .serviceName
+                                                        .toString()
+                                                        .runes
+                                                        .toList()),
+                                                style: const TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 89,
+                                              height: 40,
+                                              margin: EdgeInsets.only(right: 5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5,
+                                                      vertical: 5),
+                                              decoration: BoxDecoration(
+                                                // color: Color(0xff207A20),
+                                                color: masseurServices[index].bookingServiceStatus ==
+                                                            "ONGOING" ||
+                                                        masseurServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "LOCKED" ||
+                                                        masseurServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "CONFIRM"
+                                                    ? Colors.white
+                                                    : (masseurServices[index]
+                                                                .bookingServiceStatus ==
+                                                            "PROCESSING"
+                                                        ? Colors.amberAccent
+                                                        : const Color(
+                                                            0xff207A20)),
+                                                border: Border.all(
+                                                    color: Colors.black54,
+                                                    style: BorderStyle.solid),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  masseurServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "ONGOING" ||
+                                                          masseurServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "LOCKED" ||
+                                                          masseurServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "CONFIRM"
+                                                      ? "CHƯA LÀM"
+                                                      : (masseurServices[index]
+                                                                  .bookingServiceStatus ==
+                                                              "PROCESSING"
+                                                          ? "ĐANG LÀM"
+                                                          : "HOÀN THÀNH"),
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w700,
+                                                    // color: Colors.white,
+                                                    color: masseurServices[
+                                                                    index]
+                                                                .bookingServiceStatus ==
+                                                            "FINISHED"
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: checkAllowUpdate ? 20 : 55,
                       ),
                     ],
                   ),
@@ -812,8 +840,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       bottom: 0,
                       left: 0,
                       right: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Container(
+                        padding: const EdgeInsets.only(
+                            left: 5, right: 5, bottom: 25),
+                        margin: EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
                         child: Row(
                           children: [
                             Expanded(
@@ -1030,7 +1064,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
         setDataStylist();
         // one to all
         if (stylistServiceMuitl.isNotEmpty) {
-          stylistServiceMuitl.map((mutil) {
+          for (var mutil in stylistServiceMuitl) {
             if (mutil.staffId == staffId) {
               for (var service in mutil.bookingServiceList!) {
                 if (service.bookingServiceStatus == "ONGOING" ||
@@ -1044,7 +1078,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                 }
               }
             }
-          });
+          }
         }
 
         // checkBookingIsDone
@@ -1088,7 +1122,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
           }
         } else if (professional == "STYLIST") {
           if (stylistServiceMuitl.isNotEmpty) {
-            stylistServiceMuitl.map((mutil) {
+            for (var mutil in stylistServiceMuitl) {
               if (mutil.staffId == staffId) {
                 for (var service in mutil.bookingServiceList!) {
                   if (service.allowUpdate != null) {
@@ -1096,11 +1130,12 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                   }
                 }
               }
-            });
+            }
           }
         }
         if (!_isDisposed && mounted) {
           setState(() {
+            checkAllowUpdate;
             isLoading = false;
             professional;
           });
@@ -1118,11 +1153,14 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
     staffId;
     stylistServiceMuitl = [];
     List<BookingServiceModel> newBookingServcie = [];
+    //
     for (var service in stylistServices) {
       if (stylistServiceMuitl.isEmpty) {
         MutilBookingService newMutilBookingService = MutilBookingService(
           name: service.staffName,
           staffId: service.staffId,
+          isStylistServicesDone: '',
+          bookingServiceList: [],
         );
         stylistServiceMuitl.add(newMutilBookingService);
       } else if (stylistServiceMuitl
@@ -1136,6 +1174,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
         stylistServiceMuitl.add(newMutilBookingService);
       }
     }
+
     if (stylistServiceMuitl.isNotEmpty) {
       for (var serviceMutil in stylistServiceMuitl) {
         newBookingServcie = [];

@@ -27,8 +27,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
+      width: 49,
+      height: 49,
       textStyle: const TextStyle(
           fontSize: 20, color: Colors.black, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
@@ -73,7 +73,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                         // padding: const EdgeInsets.only(top: 10),
                         // margin: EdgeInsets.symmetric(horizontal: 68),
                         width: 80.w,
-                        height: 55.h,
+                        height: 60.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -89,7 +89,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                                   ),
                                   Image.asset(
                                     'assets/images/logo.png',
-                                    width: 257,
+                                    width: 250,
                                     // height: 478,
                                   ),
                                   SizedBox(

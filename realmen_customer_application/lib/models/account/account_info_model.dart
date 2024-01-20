@@ -21,7 +21,7 @@ class AccountInfoModel {
 
   String? itimacyLevel;
   String? professional;
-  int? average;
+  double? average;
   String? role;
 
   int? totalElements;

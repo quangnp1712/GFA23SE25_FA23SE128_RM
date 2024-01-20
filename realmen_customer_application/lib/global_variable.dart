@@ -36,3 +36,6 @@ final bookingUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["BOOKING"]}";
 
 // TimeSlot API
 final timeslotUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["TIMESLOT"]}";
+
+// Rating API
+final ratingUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["RATING"]}";

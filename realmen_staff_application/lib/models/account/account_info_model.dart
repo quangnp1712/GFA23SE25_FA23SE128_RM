@@ -98,7 +98,8 @@ class StaffModel {
     return StaffModel(
       accountId: json['accountId'],
       staffId: json['staffId'],
-      averageRating: json['averageRating'] ?? 0,
+      averageRating:
+          json['averageRating'] == "NaN" ? null : json['averageRating'],
       scheduleList: json['scheduleList'] != null && json['scheduleList'] != []
           ? (json['scheduleList'] as List)
               .map((item) => ScheduleModel.fromJson(item))

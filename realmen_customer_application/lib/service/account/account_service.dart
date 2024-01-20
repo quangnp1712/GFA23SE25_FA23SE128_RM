@@ -12,8 +12,8 @@ import 'package:realmen_customer_application/service/share_prreference/share_prr
 
 abstract class IAccountService {
   Future<dynamic> getAccountInfo();
-  Future<dynamic> getStaff(
-      int pageSize, int current, int? branchId, bool callBack);
+  Future<dynamic> getStaff(int pageSize, int current, int? branchId,
+      bool callBack, bool? isShowDistance);
 }
 
 class AccountService extends IAccountService {
@@ -84,19 +84,19 @@ class AccountService extends IAccountService {
   }
 
   @override
-  Future getStaff(
-      int pageSize, int current, int? branchId, bool callBack) async {
+  Future getStaff(int pageSize, int current, int? branchId, bool callBack,
+      bool? isShowDistance) async {
     try {
       List<AccountInfoModel> accountInfoModels = [];
       final String jwtToken = await SharedPreferencesService.getJwt();
       double lat = 0;
       double lng = 0;
-      bool isShowDistance = false;
+
       bool locationPermission =
           await SharedPreferencesService.getLocationPermission();
 
       String sorter = "createdAt";
-      if (locationPermission && callBack == false) {
+      if (locationPermission && callBack == false && isShowDistance == null) {
         final positionLongLat = await SharedPreferencesService.getLongLat();
         lat = positionLongLat['lat'] as double;
         lng = positionLongLat['lng'] as double;

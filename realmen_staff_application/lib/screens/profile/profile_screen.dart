@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -66,25 +67,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 120,
                             child: CircleAvatar(
                               child: ClipOval(
-                                child: Image.network(
-                                  avatarUrl ?? avatarDefault,
-                                  scale: 1.0,
+                                child: CachedNetworkImage(
+                                  imageUrl: avatarUrl ?? avatarDefault,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
                                   fit: BoxFit.cover,
                                   width: 120,
                                   height: 120,
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    "assets/images/default.png",
+                                    fit: BoxFit.cover,
+                                    width: 120,
+                                    height: 120,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           Container(
+                            constraints: BoxConstraints(maxWidth: 70.w),
                             margin: const EdgeInsets.only(top: 10),
                             child: Center(
                               child: Text(
                                 name ?? '',
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.black),
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ),
@@ -352,19 +366,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           accountInfo = result['data'] as AccountInfoModel;
           if (accountInfo!.thumbnailUrl != null &&
               accountInfo!.thumbnailUrl != "") {
-            var reference = storage.ref('avatar/${accountInfo!.thumbnailUrl}');
-            avatarUrl = await reference.getDownloadURL();
+            try {
+              var reference = storage.ref(accountInfo!.thumbnailUrl);
+              avatarUrl = await reference.getDownloadURL();
+            } catch (e) {
+              var reference = storage.ref('avatar/default.png');
+              avatarUrl = await reference.getDownloadURL();
+            }
           } else {
-            var reference = storage.ref('avatar/default-2.png');
+            var reference = storage.ref('avatar/default.png');
             avatarUrl = await reference.getDownloadURL();
           }
-          setState(() {
-            name =
-                "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
-            name = utf8.decode(name!.runes.toList());
-            phone = accountInfo!.phone ?? '';
-            avatarUrl;
-          });
+          if (!_isDisposed && mounted) {
+            setState(() {
+              name =
+                  "${accountInfo!.firstName ?? ''} ${accountInfo!.lastName ?? ''}";
+              name = utf8.decode(name!.runes.toList());
+              phone = accountInfo!.phone ?? '';
+              avatarUrl;
+            });
+          }
         } else {
           _errorMessage(result['message']);
           print(result);

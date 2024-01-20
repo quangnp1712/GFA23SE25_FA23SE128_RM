@@ -68,7 +68,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                         Container(
                           // color: Colors.amber,
                           // width: 400,
-                          height: 65.h,
+                          // height: 45.h,
                           child: TabBarView(
                             controller: _tabController,
                             children: bookingViews,
@@ -113,6 +113,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
   Future<void> getBooking(int current) async {
     if (!_isDisposed && mounted) {
       isLoading = true;
+      tabs = [];
       do {
         try {
           int accountId = await SharedPreferencesService.getAccountId();
@@ -143,7 +144,8 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                       DateTime now = DateTime(
                           nowWithTime.year, nowWithTime.month, nowWithTime.day);
                       if (dateTimeContent.compareTo(now) == 0 &&
-                          content.bookingStatus == "PROCESSING") {
+                          (content.bookingStatus == "PROCESSING" ||
+                              content.bookingStatus == "CONFIRM")) {
                         content.bookingServices!.sort((a, b) =>
                             a.bookingServiceId!.compareTo(b.bookingServiceId!));
                         bookingContent = content;
@@ -154,7 +156,6 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                   }
                 }
 
-                tabs = [];
                 for (var booking in bookingViews) {
                   Widget tab = Container(
                     width: 55.2,

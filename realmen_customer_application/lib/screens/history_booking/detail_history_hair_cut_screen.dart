@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/models/rating/rating_model.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/service/rating/rating_service.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:realmen_customer_application/models/booking/booking_model.dart';
@@ -316,173 +319,11 @@ class _DetailHistoryBookingScreenState
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Dịch Vụ: ",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 10),
-                                      child: Divider(
-                                        color: Colors.black,
-                                        height: 2,
-                                        thickness: 1,
-                                      ),
-                                    ),
-                                    // ListView.builder(
-                                    //     shrinkWrap: true,
-                                    //     physics:
-                                    //         const NeverScrollableScrollPhysics(),
-                                    //     itemCount: widget
-                                    //         .booking!.bookingServices!.length,
-                                    //     itemBuilder: (context, index) {
-                                    //       return widget
-                                    //                   .booking!
-                                    //                   .bookingServices![index]
-                                    //                   .rating ==
-                                    //               null
-                                    //           ? Container()
-                                    //           : Column(
-                                    //               children: [
-                                    //                 Row(
-                                    //                   children: [
-                                    //                     Text(utf8.decode(widget
-                                    //                         .booking!
-                                    //                         .bookingServices![
-                                    //                             index]
-                                    //                         .staffName!
-                                    //                         .toString()
-                                    //                         .runes
-                                    //                         .toList())),
-                                    //                     SizedBox(width: 20),
-                                    //                     RatingBar.builder(
-                                    //                       initialRating: widget
-                                    //                           .booking!
-                                    //                           .bookingServices![
-                                    //                               index]
-                                    //                           .rating,
-                                    //                       minRating: 1,
-                                    //                       direction:
-                                    //                           Axis.horizontal,
-                                    //                       allowHalfRating: true,
-                                    //                       itemCount: 5,
-                                    //                       itemPadding: EdgeInsets
-                                    //                           .symmetric(
-                                    //                               horizontal:
-                                    //                                   4.0),
-                                    //                       itemBuilder:
-                                    //                           (context, _) =>
-                                    //                               Icon(
-                                    //                         Icons.star,
-                                    //                         color: Colors.amber,
-                                    //                       ),
-                                    //                       onRatingUpdate:
-                                    //                           (rating) {
-                                    //                         setState(() {
-                                    //                           widget
-                                    //                               .booking!
-                                    //                               .bookingServices![
-                                    //                                   index]
-                                    //                               .rating = rating;
-                                    //                         });
-                                    //                         print(this.rating);
-                                    //                       },
-                                    //                     ),
-                                    //                   ],
-                                    //                 ),
-                                    //                 Padding(
-                                    //                   padding:
-                                    //                       EdgeInsets.symmetric(
-                                    //                           horizontal: 12,
-                                    //                           vertical: 5),
-                                    //                   child: TextField(
-                                    //                     controller: widget
-                                    //                         .booking!
-                                    //                         .bookingServices![
-                                    //                             index]
-                                    //                         .comment,
-                                    //                     keyboardType:
-                                    //                         TextInputType
-                                    //                             .multiline,
-                                    //                     maxLines: 4,
-                                    //                     style: const TextStyle(
-                                    //                         height: 1.17,
-                                    //                         fontSize: 20,
-                                    //                         color:
-                                    //                             Colors.black),
-                                    //                     decoration:
-                                    //                         InputDecoration(
-                                    //                       enabledBorder:
-                                    //                           OutlineInputBorder(
-                                    //                         borderSide:
-                                    //                             const BorderSide(
-                                    //                                 color: Color(
-                                    //                                     0xffC4C4C4)),
-                                    //                         borderRadius:
-                                    //                             BorderRadius
-                                    //                                 .circular(
-                                    //                                     10),
-                                    //                       ),
-                                    //                       focusedBorder:
-                                    //                           OutlineInputBorder(
-                                    //                         borderSide:
-                                    //                             const BorderSide(
-                                    //                                 color: Color(
-                                    //                                     0xffC4C4C4)),
-                                    //                         borderRadius:
-                                    //                             BorderRadius
-                                    //                                 .circular(
-                                    //                                     10),
-                                    //                       ),
-                                    //                       border:
-                                    //                           OutlineInputBorder(
-                                    //                         borderSide:
-                                    //                             const BorderSide(
-                                    //                                 color: Color(
-                                    //                                     0xffC4C4C4)),
-                                    //                         borderRadius:
-                                    //                             BorderRadius
-                                    //                                 .circular(
-                                    //                                     10),
-                                    //                       ),
-                                    //                       contentPadding:
-                                    //                           const EdgeInsets
-                                    //                               .only(
-                                    //                               // top: 10,
-                                    //                               // bottom: 20,
-                                    //                               left: 15,
-                                    //                               right: 15),
-                                    //                       hintText:
-                                    //                           "Viết đánh giá",
-                                    //                       hintStyle:
-                                    //                           const TextStyle(
-                                    //                               fontSize: 18,
-                                    //                               fontWeight:
-                                    //                                   FontWeight
-                                    //                                       .w400,
-                                    //                               color: Color(
-                                    //                                   0xffC4C4C4)),
-                                    //                     ),
-                                    //                   ),
-                                    //                 ),
-                                    //                 SizedBox(
-                                    //                   height: 20,
-                                    //                 )
-                                    //               ],
-                                    //             );
-                                    //     }),
+                                    _buildRating(),
+                                    _buildButton(),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                         ],
@@ -825,6 +666,195 @@ class _DetailHistoryBookingScreenState
     );
   }
 
+  Widget _buildButton() {
+    return Container(
+      width: 81.w,
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xff302E2E),
+              Color(0xe6444141),
+              Color(0x8c484646),
+              Color(0x26444141),
+            ]),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ElevatedButton(
+        onPressed: submitRating,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+        ),
+        child: Text(
+          "Gửi đánh giá".toUpperCase(),
+          style: TextStyle(
+              fontSize: 24, color: Colors.white, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRating() {
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Đánh giá: ",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Divider(
+            color: Colors.black,
+            height: 2,
+            thickness: 1,
+          ),
+        ),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.booking!.bookingServices!.length,
+            itemBuilder: (context, index) {
+              double rating = 1.0;
+              TextEditingController comment = TextEditingController();
+              return widget.booking!.bookingServices![index].professional ==
+                          "MASSEUR" ||
+                      widget.booking!.bookingServices![index].staffId == null
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 10, left: 10, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                utf8
+                                    .decode(widget.booking!
+                                        .bookingServices![index].serviceName!
+                                        .toString()
+                                        .runes
+                                        .toList())
+                                    .toUpperCase(),
+                                maxLines: 2,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            constraints: const BoxConstraints(maxWidth: 280),
+                            child: Expanded(
+                              child: Text(
+                                'Stylist-${widget.booking!.bookingServices![index].staffName != null ? utf8.decode(widget.booking!.bookingServices![index].staffName!.toString().runes.toList()) : ''} ',
+                                maxLines: 1,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
+                          ),
+                          RatingBar.builder(
+                            initialRating: rating,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (ratingValue) {
+                              rating = ratingValue;
+                              for (var ratingElement in ratings) {
+                                if (ratingElement.bookingServiceId ==
+                                    widget.booking!.bookingServices![index]
+                                        .bookingServiceId) {
+                                  ratingElement.point = rating;
+                                }
+                              }
+                              print(this.rating);
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 5),
+                            child: TextField(
+                              controller: comment,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 4,
+                              style: const TextStyle(
+                                  height: 1.17,
+                                  fontSize: 20,
+                                  color: Colors.black),
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color(0xffC4C4C4)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color(0xffC4C4C4)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color(0xffC4C4C4)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.only(
+                                    top: 5,
+                                    // bottom: 20,
+                                    left: 15,
+                                    right: 15),
+                                hintText: "Viết đánh giá",
+                                hintStyle: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xffC4C4C4)),
+                              ),
+                              onChanged: (commentValue) {
+                                comment.text = commentValue;
+                                for (var ratingElement in ratings) {
+                                  if (ratingElement.bookingServiceId ==
+                                      widget.booking!.bookingServices![index]
+                                          .bookingServiceId) {
+                                    ratingElement.feedback = comment.text;
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
+                      ),
+                    );
+            }),
+      ],
+    );
+  }
+
   bool isLoading = true;
   String stylist = '';
   String massuer = '';
@@ -858,6 +888,7 @@ class _DetailHistoryBookingScreenState
   @override
   void initState() {
     calTotal();
+    setRating();
     if (widget.booking!.bookingServices!.first.bookingResults != null) {
       _images = widget.booking!.bookingServices!.first.bookingResults!;
     }
@@ -881,18 +912,85 @@ class _DetailHistoryBookingScreenState
   List<RatingModel> ratings = [];
 
   TextEditingController textRating = TextEditingController();
-  Future<void> putRating() async {}
-}
+  void setRating() {
+    try {
+      for (var bookingService in widget.booking!.bookingServices!) {
+        // kiểm tra xem thông tin bookingservice có rating chưa
+        if (bookingService.professional != "MASSEUR" &&
+            // bookingService.bookingServiceStatus == "PAID" &&
+            bookingService.staffId != null) {
+          RatingModel newRating = RatingModel(
+            staffId: bookingService.staffId,
+            bookingServiceId: bookingService.bookingServiceId,
+          );
 
-class RatingModel {
-  String? staffName;
-  String? comment;
-  double? rating;
-  RatingModel({
-    this.staffName,
-    this.comment,
-    this.rating,
-  });
+          ratings.add(newRating);
+        }
+      }
+    } catch (e) {}
+  }
+
+  Future<void> submitRating() async {
+    if (mounted) {
+      try {
+        bool isResult = false;
+        if (ratings.isNotEmpty) {
+          for (var ratingElement in ratings) {
+            // thêm điều kiện post hay up
+            bool isPostRating = true;
+
+            try {
+              final result;
+              if (isPostRating) {
+                result = await RatingService().postRatings(ratingElement);
+              } else {
+                // update rating
+                int ratingId = 0;
+                result =
+                    await RatingService().putRatings(ratingId, ratingElement);
+              }
+
+              if (result['statusCode'] == 200) {
+                isResult = true;
+              } else if (result['statusCode'] == 500) {
+                isResult = false;
+                break;
+              } else {
+                isResult = false;
+                break;
+              }
+            } catch (e) {
+              break;
+            }
+          }
+          if (isResult) {
+            _successMessage("Gửi đánh giá thành công.");
+          } else {
+            _errorMessage("Vui lòng thử lại.");
+          }
+        }
+      } catch (e) {
+        print(e.toString());
+        _errorMessage("Vui lòng thử lại.");
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _successMessage(String? message) {
+    try {
+      ShowSnackBar.SuccessSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 class ServiceList {

@@ -1,6 +1,8 @@
 package com.realman.becore.service.customer;
 
 import org.springframework.stereotype.Service;
+
+import com.realman.becore.dto.customer.Customer;
 import com.realman.becore.dto.customer.CustomerMapper;
 import com.realman.becore.dto.itimacy.ItimacyMapper;
 import com.realman.becore.repository.database.customer.CustomerEntity;
@@ -28,6 +30,16 @@ public class CustomerCommandService {
                 .profitProvided(0L).build();
         CustomerEntity savedCustomerEntity = customerRepositoty.save(entity);
         itimacyCommandService.save(savedCustomerEntity.getCustomerId());
+
     }
 
+    public Customer save2(Long accountId) {
+        CustomerEntity entity = CustomerEntity.builder()
+                .accountId(accountId)
+                .serviceCount(0L)
+                .profitProvided(0L).build();
+        CustomerEntity savedCustomerEntity = customerRepositoty.save(entity);
+        itimacyCommandService.save(savedCustomerEntity.getCustomerId());
+        return customerMapper.toDto(savedCustomerEntity);
+    }
 }

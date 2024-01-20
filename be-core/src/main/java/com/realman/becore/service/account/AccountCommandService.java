@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
+import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountMapper;
 import com.realman.becore.dto.branch.BranchId;
+import com.realman.becore.dto.customer.Customer;
 import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.enums.EProfessional;
 import com.realman.becore.error_handlers.exceptions.ResourceDuplicateException;
@@ -58,7 +60,7 @@ public class AccountCommandService {
                 AccountEntity entity = accountMapper.toEntity(account);
                 AccountEntity savedEntity = accountRepository.save(entity);
                 customerCommandService.save(savedEntity.getAccountId());
-                // otpCommandService.save(new AccountPhone(account.phone()));
+                otpCommandService.save(new AccountPhone(account.phone()));
         }
 
         public void save(Account account, BranchId branchId) {
@@ -81,13 +83,14 @@ public class AccountCommandService {
                 accountRepository.save(entity);
         }
 
-        public void saveFromReceptBooking(ReceptBookingRequest receptBookingRequest) {
+        public Customer saveFromReceptBooking(ReceptBookingRequest receptBookingRequest) {
                 if (accountRepository.findByPhone(receptBookingRequest.phone()).isPresent()) {
                         throw new ResourceDuplicateException();
                 }
                 AccountEntity account = accountMapper.fromReceptBooking(receptBookingRequest, EAccountStatus.PENDING);
                 AccountEntity savedAccount = accountRepository.save(account);
-                customerCommandService.save(savedAccount.getAccountId());
+                Customer customer = customerCommandService.save2(savedAccount.getAccountId());
+                return customer;
         }
 
         public void update(String phone, Account account) {

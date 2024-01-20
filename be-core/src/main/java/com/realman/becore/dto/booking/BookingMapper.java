@@ -30,7 +30,7 @@ public interface BookingMapper {
     @Mapping(source = "totalBookingPrice", target = "totalBookingPrice", defaultValue = "0L")
     Booking toDto(BookingInfo info, List<BookingService> bookingServices, Long totalBookingPrice);
 
-    BookingEntity toEntity(ReceptBookingRequest dto, String bookingCode, EBookingStatus bookingStatus);
+    BookingEntity toEntity(ReceptBookingRequest dto, Long customerId, String bookingCode, EBookingStatus bookingStatus);
 
     List<BookingService> toDtos(List<BookingServiceRequest> bookingServices);
 }

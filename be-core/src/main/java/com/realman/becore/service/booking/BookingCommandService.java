@@ -9,6 +9,7 @@ import com.realman.becore.dto.booking.Booking;
 import com.realman.becore.dto.booking.BookingInfo;
 import com.realman.becore.dto.booking.BookingMapper;
 import com.realman.becore.dto.booking.service.BookingService;
+import com.realman.becore.dto.customer.Customer;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
 import com.realman.becore.dto.enums.EBookingStatus;
 import com.realman.becore.error_handlers.exceptions.ResourceInvalidException;
@@ -60,13 +61,14 @@ public class BookingCommandService {
         }
 
         public void receptSave(ReceptBookingRequest receptBookingRequest) {
-                BookingEntity booking = bookingMapper.toEntity(receptBookingRequest, generateBookingCode(),
+                Customer customer = accountCommandService.saveFromReceptBooking(receptBookingRequest);
+                BookingEntity booking = bookingMapper.toEntity(receptBookingRequest, customer.customerId(),
+                                generateBookingCode(),
                                 EBookingStatus.ONGOING);
                 BookingEntity savedBooking = bookingRepository.save(booking);
                 List<BookingService> bookingServices = bookingServiceCommandService.saveAll(savedBooking.getBookingId(),
                                 bookingMapper.toDtos(
                                                 receptBookingRequest.bookingServices()));
-                accountCommandService.saveFromReceptBooking(receptBookingRequest);
                 twilioUseCaseService.informBooking(receptBookingRequest.phone(),
                                 bookingMapper.toDto(savedBooking, bookingServices));
         }

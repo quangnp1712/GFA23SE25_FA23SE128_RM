@@ -11,6 +11,7 @@ import { NotFoundComponent } from './share/ui/not-found.component';
 import { roleGuard } from './share/guard/role-guard';
 import { initializeApp } from 'firebase/app';
 import { environment } from 'src/environments/environment';
+import BOOKING_MANAGEMENT_ROUTES from './booking-management/booking-management.routes';
 
 const app = initializeApp(environment.firebaseConfig);
 
@@ -40,8 +41,12 @@ const routes: Routes = [
         path: 'schedule-management',
         loadChildren: () => SCHEDULE_MANAGEMENT_ROUTES,
       },
+      {
+        path: 'booking-management',
+        loadChildren: () => BOOKING_MANAGEMENT_ROUTES,
+      },
     ],
-    data: { role: ['SHOP_OWNER', 'STAFF', 'BRANCH_MANAGER'] },
+    data: { role: ['SHOP_OWNER', 'RECEPTIONIST', 'BRANCH_MANAGER'] },
     canActivate: [roleGuard],
   },
   { path: 'none', component: NotFoundComponent },

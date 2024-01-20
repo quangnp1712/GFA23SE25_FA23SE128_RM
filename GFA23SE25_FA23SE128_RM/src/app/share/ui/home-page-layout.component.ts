@@ -64,7 +64,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
                 nz-menu-item
                 nzMatchRouter
                 [routerLink]="['/account-management', 'account-list']"
-                *ngIf="role == 'SHOP_OWNER' || role == 'STAFF' || role == 'BRANCH_MANAGER'"
+                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
               >
                 Danh sách nhân viên
               </li>
@@ -131,16 +131,16 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
               <li
                 nz-menu-item
                 nzMatchRouter
-                [routerLink]="['/booking-manager', 'booking-list']"
-                *ngIf="role == 'SHOP_OWNER' || role == 'STAFF' || role == 'BRANCH_MANAGER'"
+                [routerLink]="['/booking-management', 'booking-list']"
+                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
               >
                 Danh sách booking
               </li>
               <li
                 nz-menu-item
-                [routerLink]="['/booking-manager', 'create-booking']"
+                [routerLink]="['/booking-management', 'create-booking']"
                 nzMatchRouter
-                *ngIf="role == 'SHOP_OWNER' || role == 'STAFF' || role == 'BRANCH_MANAGER'"
+                *ngIf="role == 'SHOP_OWNER' || role == 'RECEPTIONIST' || role == 'BRANCH_MANAGER'"
               >
                 Tạo booking
               </li>

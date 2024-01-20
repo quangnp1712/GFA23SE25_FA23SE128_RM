@@ -15,7 +15,7 @@ const ACCOUNT_MANAGEMENT_ROUTES: Route[] = [
       import('./feature/account-list.component').then(
         (m) => m.AccountListComponent
       ),
-      data: { role: ['SHOP_OWNER', 'STAFF', 'BRANCH_MANAGER'] },
+      data: { role: ['SHOP_OWNER', 'RECEPTIONIST', 'BRANCH_MANAGER'] },
       canActivate: [roleGuard]
   },
   {
@@ -29,7 +29,7 @@ const ACCOUNT_MANAGEMENT_ROUTES: Route[] = [
     path: 'detail-account',
     loadComponent: () =>
       import('./feature/account-update.component').then((m) => m.AccountUpdateComponent),
-      data: { role: ['SHOP_OWNER', 'STAFF', 'BRANCH_MANAGER'] },
+      data: { role: ['SHOP_OWNER', 'RECEPTIONIST', 'BRANCH_MANAGER'] },
       canActivate: [roleGuard]
   },
 ];

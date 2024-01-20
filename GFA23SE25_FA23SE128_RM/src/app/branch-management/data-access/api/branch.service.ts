@@ -3,7 +3,6 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
-  HttpParams,
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { BranchApi, BranchPagingApi, BranchUpdateApi } from '../model/branch-api.model';

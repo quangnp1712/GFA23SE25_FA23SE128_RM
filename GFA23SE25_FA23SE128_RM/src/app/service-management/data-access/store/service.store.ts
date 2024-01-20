@@ -20,13 +20,13 @@ import { ActivatedRoute } from '@angular/router';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 
-export interface BranchState {
+export interface ServiceState {
   servicePaging: Paging<ServicePagingApi.Response>;
   loadingCount: number;
   categoryData: CategoryDataGet.Response;
 }
 
-const initialState: BranchState = {
+const initialState: ServiceState = {
   servicePaging: {
     content: [],
     current: 1,
@@ -40,7 +40,7 @@ const initialState: BranchState = {
 
 @Injectable()
 export class ServiceStore
-  extends ComponentStore<BranchState>
+  extends ComponentStore<ServiceState>
   implements OnStoreInit
 {
   constructor(
@@ -184,20 +184,25 @@ export class ServiceStore
           tap({
             next: (resp) => {
               this.form.patchValue(resp.value)
-              resp.value.serviceDisplayList.forEach((file) => {
-                getDownloadURL(ref(this.storage, file.serviceDisplayUrl))
-                  .then((url) => {
-                    this.fileListTmp.push({
-                      uid: file.serviceDisplayUrl.split('service/', 2)[1],
-                      name: file.serviceDisplayUrl.split('service/', 2)[1],
-                      status: 'done',
-                      thumbUrl: url,
-                      url: url,
-                    });
-                    this.form.controls.fileList.patchValue(this.fileListTmp)
-                  })
-                  .catch((error) => {});
-              });
+              if(resp.value.serviceDisplayList !== null){
+                resp.value.serviceDisplayList.forEach((file) => {
+                  getDownloadURL(ref(this.storage, file.serviceDisplayUrl))
+                    .then((url) => {
+                      this.fileListTmp.push({
+                        uid: file.serviceDisplayUrl.split('service/', 2)[1],
+                        name: file.serviceDisplayUrl.split('service/', 2)[1],
+                        status: 'done',
+                        thumbUrl: url,
+                        url: url,
+                      });
+                      this.form.controls.fileList.patchValue(this.fileListTmp)
+                    })
+                    .catch((error) => {});
+                });
+              } else {
+                this.form.controls.serviceDisplayList.setValue([])
+                this.form.controls.fileList.setValue([])
+              }
             },
             finalize: () => this.updateLoading(false),
           }),

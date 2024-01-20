@@ -10,7 +10,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTableDefaultSettingDirective } from 'src/app/share/ui/directive/nz-table-default-setting.directive';
-import { FormsModule, NonNullableFormBuilder } from '@angular/forms';
+import { FormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { provideComponentStore } from '@ngrx/component-store';
 import { RxLet } from '@rx-angular/template/let';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -249,7 +249,7 @@ export class BookingListComponent {
 
     const form = this._fb.group<BookingChosenStylistApi.RequestFormGroup>({
       bookingServiceId: this._fb.control(data.bookingServiceId),
-      staffId: this._fb.control(''),
+      staffId: this._fb.control('', Validators.required),
     });
 
     this.bStore.getstaffFree({

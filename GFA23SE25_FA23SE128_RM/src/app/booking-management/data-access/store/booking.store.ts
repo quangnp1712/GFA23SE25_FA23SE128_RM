@@ -54,7 +54,6 @@ export class BookingStore
     super(initialState);
   }
   ngrxOnStoreInit() {
-    this.#getService()
   }
 
   id = Number(this._activatedRoute.snapshot.paramMap.get('serviceId'));
@@ -103,11 +102,11 @@ export class BookingStore
   readonly getstaffFree = this.effect<{ model: BookingStaffGetApi.Request }>(
     pipe(
       tap(() => this.updateLoading(true)),
-      switchMap((model) =>
-        this._bApiSvc.paging(this.pagingRequest).pipe(
+      switchMap(({model}) =>
+        this._bApiSvc.getStaffFree(model).pipe(
           tap({
             next: (resp) => {
-              if (resp.content) this.patchState({ bookingPaging: resp });
+              if (resp.content) this.patchState({ staffFreeData: resp });
             },
             finalize: () => this.updateLoading(false),
           }),
@@ -137,7 +136,7 @@ export class BookingStore
     )
   );
 
-  readonly #getService = this.effect<never>(
+  readonly getService = this.effect<never>(
     pipe(
       tap(() => this.updateLoading(true)),
       switchMap(() =>

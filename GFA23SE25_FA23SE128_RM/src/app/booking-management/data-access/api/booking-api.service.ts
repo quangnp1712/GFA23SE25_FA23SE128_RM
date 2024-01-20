@@ -26,7 +26,7 @@ export class BookingApiService {
 
 
   public paging(model: BookingPagingApi.Request) {
-    const url = `${this.REST_API_SERVER}/v1/booking-service/all?search=${model.search}&bookingServiceStatus=${model.bookingServiceStatus}&bookingServiceType=${model.bookingServiceType}&sorter=bookingServiceId&current=${model.current}&pageSize=${model.pageSize}`;
+    const url = `${this.REST_API_SERVER}/v1/booking-service/all?search=${model.search}&branchId=${localStorage.getItem('branchId$')}&bookingServiceStatus=${model.bookingServiceStatus}&bookingServiceType=${model.bookingServiceType}&sorter=bookingServiceId&current=${model.current}&pageSize=${model.pageSize}`;
     return this._http
       .get<Paging<BookingPagingApi.Response>>(url, this.httpOptions)
       .pipe(catchError(this.handleError));

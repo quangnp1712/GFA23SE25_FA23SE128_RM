@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnInit,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -199,8 +200,11 @@ import { BookingAddApi } from '../data-access/model/booking-api.model';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookingComponent {
+export class BookingComponent implements OnInit{
   constructor(public bStore: BookingStore, private _cdr: ChangeDetectorRef) {}
+  ngOnInit(): void {
+    this.bStore.getService()
+  }
 
   vm$ = this.bStore.state$;
   form = this.bStore.form;

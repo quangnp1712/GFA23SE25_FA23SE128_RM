@@ -25,27 +25,29 @@ import { provideComponentStore } from '@ngrx/component-store';
   imports: [
     CommonModule,
     NzGridModule,
-    NzInputModule,
     NzButtonModule,
     NzFormModule,
     FormsModule,
     ReactiveFormsModule,
     NzModalModule,
     NzSelectModule,
-    RxLet
+    RxLet,
   ],
   providers: [NzMessageService, provideComponentStore(BookingStore)],
   template: `
     <div *rxLet="vm$ as vm">
       <form nz-form [formGroup]="form">
         <!-- Tên chi nhánh -->
-        <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="22" class="tw-ml-3" nzRequired
+        <nz-form-item class="tw-flex">
+          <nz-form-label [nzSm]="6" [nzXs]="24" class="tw-ml-3" nzRequired
             >Thợ cắt tóc</nz-form-label
           >
-          <nz-form-control nzErrorTip="Vui lòng nhập tên loại dịch vụ">
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Vui lòng nhập tên loại dịch vụ"
+          >
             <nz-select
-              class="tw-w-[150px] tw-mt-5"
               nzPlaceHolder="Chọn thợ cắt tóc"
               [formControl]="form.controls.staffId"
             >
@@ -82,7 +84,7 @@ export class BookingChosenStylistModalComponent {
   @Output() clickSubmit = new EventEmitter<void>();
 
   constructor(private _nzModalRef: NzModalRef, public bstore: BookingStore) {}
-  vm$ = this.bstore.state$
+  vm$ = this.bstore.state$;
 
   onSubmit() {
     this.clickSubmit.emit();

@@ -22,7 +22,7 @@ class StaffModel {
       accountId: json['accountId'],
       staffId: json['staffId'] ?? null,
       averageRating:
-          json['averageRating'] == "NaN" ? null : json['averageRating'],
+          json['averageRating'] == "NaN" ? 0.0 : json['averageRating'],
       scheduleList: json['scheduleList'] != null && json['scheduleList'] != []
           ? (json['scheduleList'] as List)
               .map((item) => ScheduleModel.fromJson(item))

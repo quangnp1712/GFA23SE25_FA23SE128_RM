@@ -235,58 +235,58 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
   final FocusNode _focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
-  // void submitPhone() async {
-  //   String phone = phoneController.text.toString();
-  //   LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
-  //   AuthenticateService authenticateService = AuthenticateService();
-  //   if (phone.isNotEmpty &&
-  //       phone != '' &&
-  //       RegExp(r'^0\d{8,11}$').hasMatch(phone)) {
-  //     try {
-  //       var result = await authenticateService.loginPhone(loginPhoneModel);
-  //       if (result['statusCode'] == 200) {
-  //         LoginPhoneModel loginPhoneModel = result['data'];
-  //         if (loginPhoneModel.isAccountExist!) {
-  //           if (loginPhoneModel.isAccountActivated!) {
-  //             Get.to(() => LoginOTPScreen());
-  //           } else {
-  //             Get.toNamed(RegisterScreen.RegisterScreenRoute, arguments: true);
-  //           }
-  //         } else {
-  //           Get.toNamed(RegisterScreen.RegisterScreenRoute, arguments: false);
-  //         }
-  //       } else if (result['statusCode'] == 500) {
-  //         _errorMessage(result['message']);
-  //       } else {
-  //         _errorMessage("Số điện thoại không đúng");
-  //         // print(result);
-  //       }
-  //     } catch (e) {
-  //       _errorMessage("Số điện thoại không đúng");
-  //       print(e);
-  //     }
-  //   } else if (phone.isEmpty || phone == '') {
-  //     _errorMessage("Xin nhập số điện thoại");
-  //   } else if (phone.length < 8 || phone.length > 11) {
-  //     _errorMessage("Số điện thoại không đúng");
-  //   } else {
-  //     _errorMessage("Số điện thoại không đúng");
-  //   }
-  // }
-
-  // // No API
   void submitPhone() async {
-    _focusNode.unfocus();
-    // String phone = phoneController.text.toString();
-    String phone = "0917901487";
-    Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
-    // Get.toNamed(RegisterScreen.RegisterScreenRoute);
-    try {
-      await SharedPreferencesService.savePhone(phone);
-    } catch (e) {
-      _errorMessage(e.toString());
+    String phone = phoneController.text.toString();
+    LoginPhoneModel loginPhoneModel = LoginPhoneModel(value: phone);
+    AuthenticateService authenticateService = AuthenticateService();
+    if (phone.isNotEmpty &&
+        phone != '' &&
+        RegExp(r'^0\d{8,11}$').hasMatch(phone)) {
+      try {
+        var result = await authenticateService.loginPhone(loginPhoneModel);
+        if (result['statusCode'] == 200) {
+          LoginPhoneModel loginPhoneModel = result['data'];
+          if (loginPhoneModel.isAccountExist!) {
+            if (loginPhoneModel.isAccountActivated!) {
+              Get.to(() => LoginOTPScreen());
+            } else {
+              Get.toNamed(RegisterScreen.RegisterScreenRoute, arguments: true);
+            }
+          } else {
+            Get.toNamed(RegisterScreen.RegisterScreenRoute, arguments: false);
+          }
+        } else if (result['statusCode'] == 500) {
+          _errorMessage(result['message']);
+        } else {
+          _errorMessage("Số điện thoại không đúng");
+          // print(result);
+        }
+      } catch (e) {
+        _errorMessage("Số điện thoại không đúng");
+        print(e);
+      }
+    } else if (phone.isEmpty || phone == '') {
+      _errorMessage("Xin nhập số điện thoại");
+    } else if (phone.length < 8 || phone.length > 11) {
+      _errorMessage("Số điện thoại không đúng");
+    } else {
+      _errorMessage("Số điện thoại không đúng");
     }
   }
+
+  // // No API
+  // void submitPhone() async {
+  //   _focusNode.unfocus();
+  //   // String phone = phoneController.text.toString();
+  //   String phone = "0917901487";
+  //   Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+  //   // Get.toNamed(RegisterScreen.RegisterScreenRoute);
+  //   try {
+  //     await SharedPreferencesService.savePhone(phone);
+  //   } catch (e) {
+  //     _errorMessage(e.toString());
+  //   }
+  // }
 
   void _errorMessage(String? message) {
     try {

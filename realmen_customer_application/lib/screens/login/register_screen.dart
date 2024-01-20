@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:realmen_customer_application/global_variable.dart';
 import 'package:realmen_customer_application/models/autocomplete/autocomplete_model.dart';
 import 'package:realmen_customer_application/models/login_register/register_customer_model.dart';
 import 'package:realmen_customer_application/screens/login/login_otp_screen.dart';
+import 'package:realmen_customer_application/screens/login/login_phone_screen.dart';
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
@@ -642,6 +644,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (result['statusCode'] == 200) {
           _successMessage("Nhập thông tin thành công");
           // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
+          if (widget.isUnauth) {
+            Get.toNamed(LoginPhoneScreen.LoginPhoneScreenRoute);
+          }
           Get.toNamed(LoginOTPScreen.LoginOTPScreenRoute);
         } else if (result['statusCode'] == 500) {
           _errorMessage(result['message']);

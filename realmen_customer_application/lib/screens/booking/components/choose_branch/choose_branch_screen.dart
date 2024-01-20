@@ -744,7 +744,6 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           if (!_isDisposed && mounted) {
             setState(() {
               branchesForCity;
-              isLoading = false;
             });
           }
         } else if (result['statusCode'] == 403) {
@@ -758,17 +757,12 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           print("$result['statusCode'] : $result['error']");
         }
         if (!_isDisposed && mounted) {
-          setState(() {
-            isLoading = false;
-          });
+          setState(() {});
         }
       } on Exception catch (e) {
         print(e.toString());
         print("Error: $e");
       }
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 

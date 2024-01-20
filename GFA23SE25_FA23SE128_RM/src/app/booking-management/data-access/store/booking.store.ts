@@ -200,6 +200,7 @@ export class BookingStore
         this._bApiSvc.chosenStylist(model).pipe(
           tap({
             next: (resp) => {
+              this.getBookingPaging()
               modalRef.destroy();
               this._nzMessageService.success('Cập nhật thợ thành công');
             },

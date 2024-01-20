@@ -13,9 +13,17 @@ import com.realman.becore.dto.branch.BranchForAccount;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BranchModelMapper {
 
-    @Mapping(source = "open", target = "open")
-    @Mapping(source = "close", target = "close")
-    Branch toDto(BranchRequest request, LocalTime open, LocalTime close);
+    @Mapping(target = "open", expression = "java(open(request.open()))")
+    @Mapping(target = "close", expression = "java(close(request.close()))")
+    Branch toDto(BranchRequest request);
+
+    default LocalTime open(LocalDateTime open) {
+        return open.plusHours(7).toLocalTime();
+    }
+
+    default LocalTime close(LocalDateTime close) {
+        return close.plusHours(7).toLocalTime();
+    }
 
     @Mapping(source = "open", target = "open")
     @Mapping(source = "close", target = "close")

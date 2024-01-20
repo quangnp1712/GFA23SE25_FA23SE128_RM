@@ -30,8 +30,7 @@ public class BranchController implements BranchAPI {
 
     @Override
     public void update(Long branchId, @Valid BranchRequest branch) {
-        Branch dto = branchModelMapper.toDto(branch, branch.open().toLocalTime(),
-                branch.close().toLocalTime());
+        Branch dto = branchModelMapper.toDto(branch);
         branchUseCaseService.update(new BranchId(branchId), dto);
     }
 

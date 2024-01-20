@@ -36,7 +36,7 @@ public class BranchesController implements BranchesAPI {
 
         @Override
         public void save(@Valid BranchRequest branch) {
-                Branch dto = branchModelMapper.toDto(branch, branch.open().toLocalTime(), branch.close().toLocalTime());
+                Branch dto = branchModelMapper.toDto(branch);
                 branchUseCaseService.save(dto);
         }
 
@@ -77,7 +77,7 @@ public class BranchesController implements BranchesAPI {
                                 return branchModelMapper.toModel(branch, open, close);
                         }).toList();
                         return BranchGroupByCityResponse.builder().city(branchGroupByCity.city())
-                                .branchList(bResponses).build();
+                                        .branchList(bResponses).build();
                 }).toList();
                 return new ListResponse<>(responses);
         }

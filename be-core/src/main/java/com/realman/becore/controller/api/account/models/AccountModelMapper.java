@@ -1,5 +1,7 @@
 package com.realman.becore.controller.api.account.models;
 
+import java.time.LocalDateTime;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -13,6 +15,7 @@ import com.realman.becore.error_handlers.exceptions.ResourceInvalidException;
 public interface AccountModelMapper {
 
     @Mapping(expression = "java(getRole(professional))", target = "role")
+    @Mapping(expression = "java(dob(model.dob()))", target = "dob")
     Account toDto(AccountRequest model, EProfessional professional);
 
     Account toDto(AccountRequest model, ERole role);
@@ -30,5 +33,9 @@ public interface AccountModelMapper {
             return ERole.STAFF;
         }
         return ERole.RECEPTIONIST;
+    }
+
+    default LocalDateTime dob(LocalDateTime dob) {
+        return dob.plusHours(7);
     }
 }

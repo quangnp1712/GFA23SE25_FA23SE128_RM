@@ -218,7 +218,9 @@ export class BookingComponent {
         staffId: null,
       });
     });
-    this.bStore.addBooking({model: BookingAddApi.mapModel(this.form)})
+    console.log(this.form.controls.startAppointment.value!.getTime());
+
+    // this.bStore.addBooking({model: BookingAddApi.mapModel(this.form)})
 
   }
 

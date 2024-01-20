@@ -78,7 +78,7 @@ public class BookingServiceCommandService {
             List<BookingServiceEntity> otherBookingServices = bookingServiceRepository
                     .findOtherByBookingId(bookingInfo.getBookingId(), bookingInfo.getBookingServiceId());
             if (otherBookingServices.stream()
-                    .filter(b -> !b.getBookingServiceStatus().equals(EBookingServiceStatus.CONFIRM)).findAny()
+                    .filter(b -> !b.getBookingServiceStatus().equals(EBookingServiceStatus.REQUEST_CONFIRM)).findAny()
                     .isPresent()) {
                 throw new ResourceInvalidException("Có dịch vụ chưa được confirm");
             }

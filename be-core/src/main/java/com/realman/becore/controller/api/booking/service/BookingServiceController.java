@@ -20,7 +20,9 @@ public class BookingServiceController implements BookingServiceAPI {
 
     @Override
     public void startService(Long bookingServiceId, Long accountId) {
-        bookingServiceUseCaseService.startService(new BookingServiceId(bookingServiceId), new AccountId(accountId));
+        BookingService bookingService = bookingServiceUseCaseService
+                .startService(new BookingServiceId(bookingServiceId), new AccountId(accountId));
+        bookingUseCaseService.startBooking(bookingService.bookingId());
     }
 
     @Override
@@ -33,7 +35,10 @@ public class BookingServiceController implements BookingServiceAPI {
 
     @Override
     public void confirmService(Long bookingServiceId, Long accountId) {
-        bookingServiceUseCaseService.confirmService(new BookingServiceId(bookingServiceId), new AccountId(accountId));
+        BookingService bookingService = bookingServiceUseCaseService.confirmService(
+                new BookingServiceId(bookingServiceId),
+                new AccountId(accountId));
+        bookingUseCaseService.confirmBooking(bookingService.bookingId());
     }
 
     @Override

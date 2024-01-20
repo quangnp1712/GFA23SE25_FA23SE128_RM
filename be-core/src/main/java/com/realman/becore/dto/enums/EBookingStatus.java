@@ -7,11 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum EBookingStatus {
     ONGOING(0),
-    PROCESSING(1),
-    FINISHED(2),
-    PENDING(3),
-    CANCLED(4),
-    PAID(5);
+    CONFIRM(1),
+    PROCESSING(2),
+    FINISHED(3),
+    PENDING(4),
+    CANCLED(5),
+    PAID(6);
 
     private Integer value;
 }

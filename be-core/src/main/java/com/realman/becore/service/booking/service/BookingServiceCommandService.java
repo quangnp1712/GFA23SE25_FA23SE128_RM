@@ -66,7 +66,7 @@ public class BookingServiceCommandService {
         bookingServiceRepository.save(foundBookingService);
     }
 
-    public void startService(BookingServiceId bookingServiceId) {
+    public BookingService startService(BookingServiceId bookingServiceId) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
                 .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
@@ -81,10 +81,12 @@ public class BookingServiceCommandService {
             BookingServiceEntity foundBookingServiceEntity = bookingServiceMapper.toEntity(bookingInfo);
             foundBookingServiceEntity.setBookingServiceStatus(EBookingServiceStatus.PROCESSING);
             foundBookingServiceEntity.setActualStartAppointment(LocalTime.now());
-            bookingServiceRepository.save(foundBookingServiceEntity);
+            BookingServiceEntity saveBookingService = bookingServiceRepository.save(foundBookingServiceEntity);
             lockBookingService(foundBookingServiceEntity.getBookingId(),
                     foundBookingServiceEntity.getBookingServiceId());
+            return bookingServiceMapper.toDto(saveBookingService);
         }
+        return null;
     }
 
     public BookingService finishService(BookingServiceId bookingServiceId, BookingResultRequest bookingResultRequests) {
@@ -110,7 +112,7 @@ public class BookingServiceCommandService {
         return null;
     }
 
-    public void confirmService(BookingServiceId bookingServiceId) {
+    public BookingService confirmService(BookingServiceId bookingServiceId) {
         BookingServiceInfo bookingInfo = bookingServiceRepository
                 .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
@@ -126,9 +128,11 @@ public class BookingServiceCommandService {
                         }
                         return bs;
                     }).toList();
-            bookingServiceRepository.save(foundBookingService);
+            BookingServiceEntity saveBookingService = bookingServiceRepository.save(foundBookingService);
             bookingServiceRepository.saveAll(updateBookingServices);
+            return bookingServiceMapper.toDto(saveBookingService);
         }
+        return null;
     }
 
     public void cancelBookingService(Long bookingServiceId) {

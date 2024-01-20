@@ -31,7 +31,8 @@ public class BookingServiceQueryService {
 
     public List<BookingService> findByBookingId(Long bookingId) {
         Map<Long, List<BookingResult>> bookingResults = bookingResultUseCaseService.findAll();
-        List<BookingService> bookingServices = bookingServiceRepository.findInfoByBookingId(bookingId).stream()
+        List<BookingService> bookingServices = bookingServiceRepository
+                .findInfoByBookingId(bookingId, requestContext.getAccountId()).stream()
                 .map(r -> bookingServiceMapper.toDto(r, bookingResults.get(r.getBookingServiceId()))).toList();
         return bookingServices;
     }

@@ -25,8 +25,8 @@ public class BookingServiceUseCaseService {
     private final BookingServiceCommandService bookingServiceCommandService;
 
     @Transactional
-    public void startService(BookingServiceId bookingServiceId, AccountId accountId) {
-        bookingServiceCommandService.startService(bookingServiceId);
+    public BookingService startService(BookingServiceId bookingServiceId, AccountId accountId) {
+        return bookingServiceCommandService.startService(bookingServiceId);
     }
 
     @Transactional
@@ -54,8 +54,8 @@ public class BookingServiceUseCaseService {
         return bookingServiceQueryService.findById(bookingServiceId);
     }
 
-    public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
-        bookingServiceCommandService.confirmService(bookingServiceId);
+    public BookingService confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
+        return bookingServiceCommandService.confirmService(bookingServiceId);
     }
 
     public List<BookingService> findByBookingId(Long bookingId) {

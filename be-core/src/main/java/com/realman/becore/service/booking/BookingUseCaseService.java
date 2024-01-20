@@ -43,6 +43,16 @@ public class BookingUseCaseService {
         bookingCommandService.endBooking(bookingId);
     }
 
+    @Transactional
+    public void confirmBooking(Long bookingId) {
+        bookingCommandService.confirmBooking(bookingId);
+    }
+
+    @Transactional
+    public void startBooking(Long bookingId) {
+        bookingCommandService.startBooking(bookingId);
+    }
+
     public Booking findById(BookingId bookingId) {
         return bookingQueryService.findById(bookingId);
     }

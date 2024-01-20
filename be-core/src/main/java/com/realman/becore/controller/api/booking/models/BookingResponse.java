@@ -2,11 +2,8 @@ package com.realman.becore.controller.api.booking.models;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import com.realman.becore.controller.api.booking.service.models.BookingServiceResponse;
 import com.realman.becore.dto.enums.EBookingStatus;
-import com.realman.becore.util.TimeZoneConfig;
-import java.time.ZonedDateTime;
 
 public record BookingResponse(
                 Long bookingId,
@@ -22,7 +19,5 @@ public record BookingResponse(
                 Long totalBookingPrice,
                 EBookingStatus bookingStatus,
                 Boolean allowProcess) {
-        public LocalDate appointmentDate() {
-                return ZonedDateTime.of(appointmentDate.atStartOfDay(), TimeZoneConfig.zoneId()).toLocalDate();
-        }
+
 }

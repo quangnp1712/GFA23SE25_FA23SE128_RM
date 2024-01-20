@@ -5,9 +5,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.realman.becore.controller.api.account.models.AccountResponse;
 import com.realman.becore.dto.enums.EBranchStatus;
-import com.realman.becore.util.TimeZoneConfig;
-
-import java.time.ZonedDateTime;
 
 public record BranchResponse(
                 Long branchId,
@@ -26,10 +23,10 @@ public record BranchResponse(
                 List<AccountResponse> accountStaffList,
                 String distanceKilometer) {
         public LocalDateTime open() {
-                return ZonedDateTime.of(open, TimeZoneConfig.zoneId()).toLocalDateTime();
+                return open.plusHours(7);
         }
 
         public LocalDateTime close() {
-                return ZonedDateTime.of(close, TimeZoneConfig.zoneId()).toLocalDateTime();
+                return close.plusHours(7);
         }
 }

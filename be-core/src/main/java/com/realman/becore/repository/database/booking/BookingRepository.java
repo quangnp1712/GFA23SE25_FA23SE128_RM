@@ -124,7 +124,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             FROM BookingEntity b
             INNER JOIN BookingServiceEntity bs ON b.bookingId = bs.bookingId
             INNER JOIN BranchServiceEntity bsr ON bs.serviceId = bsr.serviceId
-            WHERE b.bookingId = :bookingId
+            WHERE b.bookingId = :bookingId AND bs.bookingServiceStatus != 7
             GROUP BY bsr.branchServicePrice
             """)
     List<Long> findBookingPrice(Long bookingId);

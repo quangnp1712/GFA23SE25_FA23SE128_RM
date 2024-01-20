@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from '@angular/forms';
 
 export namespace BookingPagingApi {
   export interface Request {
@@ -62,15 +62,53 @@ export namespace BookingChosenStylistApi {
   }
 
   export type RequestFormGroup = {
-    staffId: FormControl<string>,
-    bookingServiceId : FormControl<number>
-  }
+    staffId: FormControl<string>;
+    bookingServiceId: FormControl<number>;
+  };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
     const formValue = frm.getRawValue();
     return {
       staffId: frm.controls.staffId.value,
-      bookingServiceId: frm.controls.bookingServiceId.value
+      bookingServiceId: frm.controls.bookingServiceId.value,
     };
   }
+}
+
+export namespace BookingAddApi {
+  export interface Request {
+    phone: string;
+    firstName: string;
+    lastName: string;
+    appointmentDate: Date;
+    bookingServices: bookingServices[]
+  }
+
+  export type bookingServices = {
+    serviceId: number;
+        staffId: number;
+        bookingServiceType: string;
+        startAppointment: Date;
+        endAppointment: Date;
+  }
+
+  export type RequestFormGroup = {
+    phone: FormControl<string>;
+    firstName: FormControl<string>;
+    lastName: FormControl<string>;
+    appointmentDate: FormControl<Date>;
+    bookingServices: FormControl<bookingServices[]>
+  };
+
+  export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
+    const formValue = frm.getRawValue();
+    return {
+      firstName: frm.controls.firstName.value,
+      lastName: frm.controls.firstName.value,
+      phone: frm.controls.firstName.value,
+      appointmentDate: frm.controls.appointmentDate.value,
+      bookingServices: frm.controls.bookingServices.value,
+    };
+  }
+
 }

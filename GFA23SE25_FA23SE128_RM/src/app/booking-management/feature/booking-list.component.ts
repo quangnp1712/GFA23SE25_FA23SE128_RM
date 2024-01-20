@@ -42,7 +42,7 @@ import { tap } from 'rxjs';
     RxLet,
   ],
 
-  providers: [provideComponentStore(BookingStore), NzMessageService],
+  providers: [provideComponentStore(BookingStore), NzMessageService, NzModalService],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item> Quản lý booking</nz-breadcrumb-item>

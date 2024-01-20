@@ -209,7 +209,7 @@ import { NzImageModule } from 'ng-zorro-antd/image';
                 <nz-option
                   *ngFor="let option of vm.serviceData.values"
                   [nzLabel]="option.name + ' - ' + option.price + 'VND'"
-                  [nzValue]="option.serviceId"
+                  [nzValue]="option.serviceId+ '-' + option.price"
                 ></nz-option>
               </nz-select>
             </nz-form-control>
@@ -311,8 +311,8 @@ export class BranchUpdateComponent implements OnInit {
     this.buStore.form.controls.branchServiceList.setValue([]);
     this.buStore.form.controls.serviceArray.value.forEach((value) =>
       this.buStore.form.controls.branchServiceList.value.push({
-        serviceId: value,
-        price: 0,
+        serviceId: value.toString().split('-')[0],
+        price: value.toString().split('-')[1],
       })
     );
     this.buStore.updateBranch({

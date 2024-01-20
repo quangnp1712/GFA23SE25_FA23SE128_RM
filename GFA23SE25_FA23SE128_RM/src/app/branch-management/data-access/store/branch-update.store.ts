@@ -116,7 +116,7 @@ export class BranchUpdateStore
               this.form.controls.close.setValue(resp.value.close);
               this.form.controls.branchId.setValue(resp.value.branchId);
               resp.value.branchServiceList.forEach((data) => {
-                this.form.controls.serviceArray.value.push(data.serviceId);
+                this.form.controls.serviceArray.value.push(data.serviceId+'-'+data.price);
               });
               const storage = getStorage();
               resp.value.branchDisplayList.forEach((file) => {

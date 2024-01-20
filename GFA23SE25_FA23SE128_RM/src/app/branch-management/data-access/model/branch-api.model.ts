@@ -22,7 +22,7 @@ export namespace BranchApi {
 
   export type branchServiceList = {
     serviceId: string;
-    price: number;
+    price: string;
   }[];
 
   export type displayUrlList = [];
@@ -105,7 +105,7 @@ export namespace BranchUpdateApi {
 
   export type branchServiceList = {
     serviceId: string;
-    price: number;
+    price: string;
   }[];
 
   export interface BranchDataResponse {

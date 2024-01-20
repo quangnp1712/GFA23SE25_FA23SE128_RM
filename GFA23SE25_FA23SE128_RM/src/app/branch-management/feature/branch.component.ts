@@ -54,7 +54,7 @@ import { NzImageModule } from 'ng-zorro-antd/image';
     NzAutocompleteModule,
     RxLet,
     OnlyNumberInputDirective,
-    NzImageModule
+    NzImageModule,
   ],
   providers: [provideComponentStore(BranchStore), NzMessageService],
   template: `
@@ -215,7 +215,7 @@ import { NzImageModule } from 'ng-zorro-antd/image';
                 <nz-option
                   *ngFor="let option of vm.serviceData.values"
                   [nzLabel]="option.name + ' - ' + option.price + 'VND'"
-                  [nzValue]="option.serviceId"
+                  [nzValue]="option.serviceId + '-' + option.price"
                 ></nz-option>
               </nz-select>
             </nz-form-control>
@@ -245,22 +245,27 @@ import { NzImageModule } from 'ng-zorro-antd/image';
                   uploading company data or other band files
                 </p>
               </nz-upload>
-              <div *ngFor="let file of bStore.fileList, index as index" class="tw-relative tw-text-center tw-mt-3">
-              <img
-                nz-image
-                nzSrc="{{ file.thumbUrl }}"
-                width="30%"
-                height="30%"
-                alt="preview-image"
-                class="tw-object-contain tw-cursor-pointer" />
-              <i
-                nz-icon
-                nzType="close-circle"
-                nzTheme="twotone"
-                nzTwotoneColor="#e10027"
-                (click)="handleRemove(index)"
-                class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"></i>
-            </div>
+              <div
+                *ngFor="let file of bStore.fileList; index as index"
+                class="tw-relative tw-text-center tw-mt-3"
+              >
+                <img
+                  nz-image
+                  nzSrc="{{ file.thumbUrl }}"
+                  width="30%"
+                  height="30%"
+                  alt="preview-image"
+                  class="tw-object-contain tw-cursor-pointer"
+                />
+                <i
+                  nz-icon
+                  nzType="close-circle"
+                  nzTheme="twotone"
+                  nzTwotoneColor="#e10027"
+                  (click)="handleRemove(index)"
+                  class="tw-absolute tw-right-0 tw-top-0 tw-cursor-pointer icon-remove"
+                ></i>
+              </div>
             </nz-form-control>
           </nz-form-item>
 
@@ -296,31 +301,29 @@ export class BranchComponent {
 
   vm$ = this.bStore.state$;
   addModel!: BranchApi.Request;
-  branchDisplayList = [{url: ''}]
+  branchDisplayList = [{ url: '' }];
 
   addBranch() {
-  this.branchDisplayList = []
+    this.branchDisplayList = [];
     this.bStore.form.controls.serviceArray.value.forEach((value) =>
       this.bStore.form.controls.branchServiceList.value.push({
-        serviceId: value,
-        price: 0,
+        serviceId: value.toString().split('-')[0],
+        price: value.toString().split('-')[1],
       })
     );
-    this.bStore.fileList.forEach(url => {
-      this.branchDisplayList.push({url: 'branch/'+url.name})
-    })
+    this.bStore.fileList.forEach((url) => {
+      this.branchDisplayList.push({ url: 'branch/' + url.name });
+    });
     this.addModel = this.bStore.form.getRawValue();
     console.log(this.bStore.form.getRawValue());
 
-    this.bStore.addBranch({ model: this.addModel });
+    // this.bStore.addBranch({ model: this.addModel });
   }
 
   getAddress(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.bStore.getAddress(value);
   }
-
-
 
   handleUpload = (item: NzUploadXHRArgs) => {
     return new Observable(
@@ -338,9 +341,9 @@ export class BranchComponent {
           name: item.file.name ?? '',
           status: 'done',
           thumbUrl: result!.toString(),
-          url: result!.toString().split(';base64,')[1]
+          url: result!.toString().split(';base64,')[1],
         });
-        this.bStore.fileList = this.bStore.fileListTmp
+        this.bStore.fileList = this.bStore.fileListTmp;
         this.bStore.form.controls.branchDisplayList.value.push({
           url: 'branch/' + item.file.name,
           branchDisplayBase64Url: '',
@@ -354,8 +357,8 @@ export class BranchComponent {
   };
 
   handleRemove(index: number) {
-    this.bStore.fileListTmp.splice(index,1)
-    this.bStore.fileList = this.bStore.fileListTmp
-    this.bStore.form.controls.branchDisplayList.value.splice(index,1)
+    this.bStore.fileListTmp.splice(index, 1);
+    this.bStore.fileList = this.bStore.fileListTmp;
+    this.bStore.form.controls.branchDisplayList.value.splice(index, 1);
   }
 }

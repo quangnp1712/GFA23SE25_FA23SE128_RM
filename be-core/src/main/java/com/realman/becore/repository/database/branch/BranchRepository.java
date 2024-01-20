@@ -95,11 +95,11 @@ public interface BranchRepository extends JpaRepository<BranchEntity, Long> {
                                 a.gender AS gender,
                                 a.status AS status,
                                 s.staffId AS staffId,
-                                s.averageRating AS averageRating,
                                 s.professional AS professional
                         FROM BranchEntity b
                         LEFT JOIN AccountEntity a ON a.branchId = b.branchId
                         LEFT JOIN StaffEntity s ON s.accountId = a.accountId
+                        LEFT JOIN RatingEntity r ON r.staffId = s.staffId
                         WHERE b.branchId = :branchId
                             """)
         List<BranchInfo> findBranchInfoById(Long branchId);

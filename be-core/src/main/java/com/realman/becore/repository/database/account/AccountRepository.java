@@ -32,11 +32,13 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
                 b.branchName AS branchName,
                 b.branchAddress AS branchAddress,
                 s.professional AS professional,
-                s.averageRating AS averageRating
+                CASE WHEN r IS NOT NULL THEN AVG(r.point) ELSE 0.0 END AS averageRating
             FROM AccountEntity a
             INNER JOIN BranchEntity b ON b.branchId = a.branchId
             INNER JOIN StaffEntity s ON a.accountId = s.accountId
+            LEFT JOIN RatingEntity r ON s.staffId = r.staffId
             WHERE a.accountId = :accountId
+            GROUP BY accountId, firstName, lastName, thumbnailUrl, gender, dob, phone, address, status, role, branchName, branchAddress, professional, averageRating
                 """)
     Optional<AccountInfo> findStaffAccount(Long accountId);
 

@@ -50,6 +50,10 @@ public class BookingServiceUseCaseService {
         bookingServiceCommandService.chooseStylistForAll(bookingId, staffId);
     }
 
+    public BookingService findById(Long bookingServiceId) {
+        return bookingServiceQueryService.findById(bookingServiceId);
+    }
+
     public void confirmService(BookingServiceId bookingServiceId, AccountId accountId) {
         bookingServiceCommandService.confirmService(bookingServiceId);
     }

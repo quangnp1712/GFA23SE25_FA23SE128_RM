@@ -1,11 +1,10 @@
 package com.realman.becore.dto.booking.service;
 
 import java.time.LocalTime;
-
+import java.time.LocalDate;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
 import com.realman.becore.dto.enums.EBookingServiceType;
 import com.realman.becore.dto.enums.EProfessional;
-
 import java.time.Duration;
 
 public interface BookingServiceInfo {
@@ -36,6 +35,8 @@ public interface BookingServiceInfo {
     void setCustomerName(String customerName);
 
     void setCustomerPhone(String customerPhone);
+
+    void setAppointmentDate(LocalDate appointmentDate);
 
     void setStartAppointment(LocalTime startAppointment);
 
@@ -78,6 +79,8 @@ public interface BookingServiceInfo {
     String getStaffName();
 
     String getStaffPhone();
+
+    LocalDate getAppointmentDate();
 
     LocalTime getStartAppointment();
 

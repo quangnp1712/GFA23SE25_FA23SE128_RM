@@ -27,5 +27,4 @@ public class StaffEntity implements Serializable {
     private Long staffId;
     private Long accountId;
     private EProfessional professional;
-    private Double averageRating;
 }

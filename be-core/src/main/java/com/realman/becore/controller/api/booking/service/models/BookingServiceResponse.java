@@ -5,6 +5,7 @@ import com.realman.becore.dto.enums.EBookingServiceType;
 import com.realman.becore.dto.enums.EProfessional;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public record BookingServiceResponse(
         String staffPhone,
         String customerName,
         String customerPhone,
+        LocalDate appointmentDate,
         LocalTime startAppointment,
         LocalTime actualStartAppointment,
         LocalTime endAppointment,

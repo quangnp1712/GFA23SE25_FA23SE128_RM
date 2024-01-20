@@ -13,6 +13,7 @@ import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.staff.StaffEntity;
 import com.realman.becore.repository.database.staff.StaffRepository;
 import com.realman.becore.service.booking.BookingUseCaseService;
+import com.realman.becore.service.rating.RatingUseCaseService;
 import com.realman.becore.service.schedule.ScheduleQueryService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ public class StaffQueryService {
     private final StaffMapper staffMapper;
     @NonNull
     private final BookingUseCaseService bookingUseCaseService;
+    @NonNull
+    private final RatingUseCaseService ratingUseCaseService;
 
     public Staff findByAccountId(Long accountId) {
         Optional<StaffEntity> staffEntity = staffRepository.findByAccountId(accountId);
@@ -35,9 +38,10 @@ public class StaffQueryService {
             StaffEntity staff = staffEntity.get();
             List<BookingStaff> bookings = bookingUseCaseService.findByStaffId(staff.getStaffId());
             List<Schedule> schedules = scheduleQueryService.findById(staff.getStaffId());
-            return staffMapper.toDto(staffEntity.get(), schedules, bookings);
+            Double averageRating = ratingUseCaseService.averageRating(staff.getStaffId());
+            return staffMapper.toDto(staffEntity.get(), schedules, bookings, averageRating);
         }
-        return staffMapper.toDto(null, List.<Schedule>of(), List.<BookingStaff>of());
+        return staffMapper.toDto(null, List.<Schedule>of(), List.<BookingStaff>of(), 0.0);
 
     }
 

@@ -28,6 +28,7 @@ public class BookingServiceEntity {
     private Long bookingId;
     private Long serviceId;
     private Long staffId;
+    private Long ratingId;
     @Temporal(TemporalType.TIME)
     private LocalTime startAppointment;
     @Temporal(TemporalType.TIME)

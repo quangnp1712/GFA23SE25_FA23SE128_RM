@@ -23,5 +23,5 @@ public interface StaffMapper {
 
     Staff fromBranchInfo(BranchInfo branchInfo, List<Schedule> scheduleList);
 
-    Staff toDto(StaffEntity entity, List<Schedule> scheduleList, List<BookingStaff> bookingList);
+    Staff toDto(StaffEntity entity, List<Schedule> scheduleList, List<BookingStaff> bookingList, Double averageRating);
 }

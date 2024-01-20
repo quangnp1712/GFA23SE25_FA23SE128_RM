@@ -2,6 +2,7 @@ package com.realman.becore.dto.booking.service;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.LocalDate;
 
 import com.realman.becore.dto.booking.result.BookingResult;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
@@ -12,26 +13,27 @@ import lombok.Builder;
 
 @Builder
 public record BookingService(
-        Long bookingServiceId,
-        Long bookingId,
-        Long serviceId,
-        Long staffId,
-        String bookingCode,
-        String serviceName,
-        Long servicePrice,
-        String staffName,
-        String staffPhone,
-        String customerName,
-        String customerPhone,
-        LocalTime startAppointment,
-        LocalTime actualStartAppointment,
-        LocalTime endAppointment,
-        LocalTime actualEndAppointment,
-        Duration duration,
-        EBookingServiceStatus bookingServiceStatus,
-        EProfessional professional,
-        EBookingServiceType bookingServiceType,
-        List<BookingResult> bookingResults,
-        Boolean allowUpdate) {
+                Long bookingServiceId,
+                Long bookingId,
+                Long serviceId,
+                Long staffId,
+                String bookingCode,
+                String serviceName,
+                Long servicePrice,
+                String staffName,
+                String staffPhone,
+                String customerName,
+                String customerPhone,
+                LocalDate appointmentDate,
+                LocalTime startAppointment,
+                LocalTime actualStartAppointment,
+                LocalTime endAppointment,
+                LocalTime actualEndAppointment,
+                Duration duration,
+                EBookingServiceStatus bookingServiceStatus,
+                EProfessional professional,
+                EBookingServiceType bookingServiceType,
+                List<BookingResult> bookingResults,
+                Boolean allowUpdate) {
 
 }

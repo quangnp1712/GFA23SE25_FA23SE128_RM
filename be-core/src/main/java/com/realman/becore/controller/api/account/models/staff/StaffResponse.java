@@ -8,9 +8,9 @@ import lombok.Builder;
 
 @Builder
 public record StaffResponse(
-        Long staffId,
-        Double averageRating,
-        List<ScheduleResponse> scheduleList,
-        EProfessional professional) {
+                Long staffId,
+                Double averageRating,
+                List<ScheduleResponse> scheduleList,
+                EProfessional professional) {
 
 }

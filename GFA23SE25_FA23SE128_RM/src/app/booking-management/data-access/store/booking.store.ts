@@ -11,17 +11,20 @@ import { trimRequired } from 'src/app/share/form-validator/trim-required.validat
 import { ActivatedRoute } from '@angular/router';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import {
+  BookingAddApi,
   BookingChosenStylistApi,
   BookingPagingApi,
   BookingStaffGetApi,
 } from '../model/booking-api.model';
 import { BookingApiService } from '../api/booking-api.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { ServiceDataApi } from 'src/app/service-management/data-access/model/service-api.model';
 
 export interface BookingState {
   bookingPaging: Paging<BookingPagingApi.Response>;
   staffFreeData: BookingStaffGetApi.Response;
   loadingCount: number;
+  serviceData: ServiceDataApi.Response;
 }
 
 const initialState: BookingState = {
@@ -34,6 +37,7 @@ const initialState: BookingState = {
   },
   loadingCount: 0,
   staffFreeData: { content: [] },
+  serviceData: {values: []}
 };
 
 @Injectable()
@@ -49,12 +53,11 @@ export class BookingStore
   ) {
     super(initialState);
   }
-  ngrxOnStoreInit() {}
+  ngrxOnStoreInit() {
+    this.#getService()
+  }
 
   id = Number(this._activatedRoute.snapshot.paramMap.get('serviceId'));
-  addressData!: AutocompleteApi.Response;
-  options: string[] = [];
-  fileListTmp: NzUploadFile[] = [];
 
   pagingRequest: BookingPagingApi.Request = {
     current: 1,
@@ -66,18 +69,15 @@ export class BookingStore
     orderDescending: false,
   };
 
-  // form = this._fb.group<
-  //   ServiceAddApi.RequestFormGroup | ServiceUpdateApi.RequestFormGroup
-  // >({
-  //   name: this._fb.control('', trimRequired),
-  //   categoryId: this._fb.control(null, Validators.required),
-  //   description: this._fb.control(''),
-  //   serviceDisplayList: this._fb.control([]),
-  //   durationTime: this._fb.control('MINUTE'),
-  //   durationValue: this._fb.control(0, trimRequired),
-  //   price: this._fb.control(0, trimRequired),
-  //   fileList: this._fb.control([])
-  // });
+  form = this._fb.group<BookingAddApi.RequestFormGroup>({
+    firstName: this._fb.control(''),
+    lastName: this._fb.control(''),
+    phone: this._fb.control(''),
+    appointmentDate: this._fb.control(null),
+    bookingServices: this._fb.control([]),
+    serviceArray: this._fb.control([]),
+    startAppointment: this._fb.control(null)
+  });
 
   readonly getBookingPaging = this.effect<never>(
     pipe(
@@ -113,28 +113,42 @@ export class BookingStore
     )
   );
 
-  // readonly addCategory = this.effect<{
-  //   model: CategoryAddApi.Request;
-  //   modalRef: NzModalRef;
-  // }>(($params) =>
-  //   $params.pipe(
-  //     tap(() => this.updateLoading(true)),
-  //     switchMap(({ model, modalRef }) =>
-  //       this.bApiSvc.addCategory(model).pipe(
-  //         tap({
-  //           next: (resp) => {
-  //             modalRef.destroy();
-  //             this._nzMessageService.success('Thêm loại dịch vụ thành công');
-  //           },
-  //           error: () =>
-  //             this._nzMessageService.error('Thêm loại dịch vụ thất bại.'),
-  //           finalize: () => this.updateLoading(false),
-  //         }),
-  //         catchError(() => EMPTY)
-  //       )
-  //     )
-  //   )
-  // );
+  readonly addBooking = this.effect<{
+    model: BookingAddApi.Request;
+  }>(($params) =>
+    $params.pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(({ model }) =>
+        this._bApiSvc.addBooking(model).pipe(
+          tap({
+            next: (resp) => {
+              this._nzMessageService.success('Tạo booking thành công');
+            },
+            error: () => this._nzMessageService.error('Tạo booking thất bại.'),
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  readonly #getService = this.effect<never>(
+    pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(() =>
+        this._bApiSvc.serviceDataGet().pipe(
+          tap({
+            next: (resp) => {
+              this.patchState({ serviceData: resp });
+            },
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
 
   // readonly addService = this.effect<{ model: ServiceAddApi.Request }>(
   //   ($params) =>

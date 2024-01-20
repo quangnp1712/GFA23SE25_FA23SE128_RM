@@ -71,11 +71,11 @@ import { NzImageModule } from 'ng-zorro-antd/image';
             <nz-form-label class="tw-ml-3" nzRequired
               >Tên chi nhánh</nz-form-label
             >
-            <nz-form-control nzErrorTip="Vui lòng nhập họ và tên đệm">
+            <nz-form-control nzErrorTip="Vui lòng nhập tên chi nhánh">
               <input
                 class=" tw-w-[70%]"
                 nz-input
-                placeholder="Nhập tên tài khoản"
+                placeholder="Nhập tên chi nhánh"
                 [formControl]="bStore.form.controls.branchName"
               />
             </nz-form-control>

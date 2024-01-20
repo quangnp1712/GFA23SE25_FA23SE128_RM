@@ -17,5 +17,14 @@ const BOOKING_MANAGEMENT_ROUTES: Route[] = [
       data: { role: ['RECEPTIONIST'] },
       canActivate: [roleGuard]
   },
+  {
+    path: 'create-booking',
+    loadComponent: () =>
+      import('./feature/booking.component').then(
+        (m) => m.BookingComponent
+      ),
+      data: { role: ['RECEPTIONIST'] },
+      canActivate: [roleGuard]
+  },
 ];
 export default BOOKING_MANAGEMENT_ROUTES;

@@ -105,6 +105,8 @@ export namespace ServiceDataApi {
       name: string;
       serviceId: number;
       price: number;
+      durationValue: number;
+      durationText: string;
     }[];
   }
 }
@@ -152,16 +154,18 @@ export namespace ServiceUpdateApi {
 
 export namespace ServiceGetApi {
   export interface Response {
-    value: {name: string;
-    description: string;
-    price: number;
-    serviceId: string;
-    categoryId: number;
-    categoryName: string;
-    durationValue: number;
-    durationTime: string;
-    durationText: string;
-    serviceDisplayList: serviceDisplayList}
+    value: {
+      name: string;
+      description: string;
+      price: number;
+      serviceId: string;
+      categoryId: number;
+      categoryName: string;
+      durationValue: number;
+      durationTime: string;
+      durationText: string;
+      serviceDisplayList: serviceDisplayList;
+    };
   }
   export type serviceDisplayList = {
     serviceDisplayUrl: string;

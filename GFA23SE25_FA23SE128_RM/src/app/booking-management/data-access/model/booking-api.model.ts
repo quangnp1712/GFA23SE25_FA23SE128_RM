@@ -85,8 +85,8 @@ export namespace BookingAddApi {
   }
 
   export type bookingServices = {
-    serviceId: number;
-        staffId: number;
+    serviceId: string;
+        staffId: number | null;
         bookingServiceType: string;
         startAppointment: Date;
         endAppointment: Date;
@@ -96,8 +96,10 @@ export namespace BookingAddApi {
     phone: FormControl<string>;
     firstName: FormControl<string>;
     lastName: FormControl<string>;
-    appointmentDate: FormControl<Date>;
+    appointmentDate: FormControl<Date | null>;
     bookingServices: FormControl<bookingServices[]>
+    serviceArray: FormControl<string[]>;
+    startAppointment: FormControl<Date | null>;
   };
 
   export function mapModel(frm: FormGroup<RequestFormGroup>): Request {
@@ -106,7 +108,7 @@ export namespace BookingAddApi {
       firstName: frm.controls.firstName.value,
       lastName: frm.controls.firstName.value,
       phone: frm.controls.firstName.value,
-      appointmentDate: frm.controls.appointmentDate.value,
+      appointmentDate: frm.controls.appointmentDate.value!,
       bookingServices: frm.controls.bookingServices.value,
     };
   }

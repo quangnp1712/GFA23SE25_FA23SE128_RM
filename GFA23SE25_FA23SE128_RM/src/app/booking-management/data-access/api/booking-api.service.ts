@@ -7,7 +7,7 @@ import {
 import { catchError, throwError } from 'rxjs';
 import { Paging } from 'src/app/share/data-access/model/paging.type';
 import { ServiceDataApi } from 'src/app/service-management/data-access/model/service-api.model';
-import { BookingChosenStylistApi, BookingPagingApi, BookingStaffGetApi } from '../model/booking-api.model';
+import { BookingAddApi, BookingChosenStylistApi, BookingPagingApi, BookingStaffGetApi } from '../model/booking-api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,12 +23,7 @@ export class BookingApiService {
 
   private REST_API_SERVER = 'http://localhost:8080';
 
-  // public addBranch(model: BranchApi.Request) {
-  //   const url = `${this.REST_API_SERVER}/v1/branches`;
-  //   return this._http
-  //     .post<any>(url, model, this.httpOptions)
-  //     .pipe(catchError(this.handleError));
-  // }
+
 
   public paging(model: BookingPagingApi.Request) {
     const url = `${this.REST_API_SERVER}/v1/booking-service/all?search=${model.search}&bookingServiceStatus=${model.bookingServiceStatus}&bookingServiceType=${model.bookingServiceType}&sorter=bookingServiceId&current=${model.current}&pageSize=${model.pageSize}`;
@@ -55,6 +50,20 @@ export class BookingApiService {
     const url = `${this.REST_API_SERVER}/v1/booking-service/${model.bookingServiceId}/choose-stylist?staffId=${model.staffId}`;
     return this._http
       .put<any>(url, model, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+   public addBooking(model: BookingAddApi.Request) {
+    const url = `${this.REST_API_SERVER}/v1/booking/receptionist`;
+    return this._http
+      .post<any>(url, model, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  public serviceDataGet() {
+    const url = `${this.REST_API_SERVER}/v1/services/field`;
+    return this._http
+      .get<ServiceDataApi.Response>(url, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 

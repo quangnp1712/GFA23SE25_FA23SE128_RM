@@ -38,12 +38,11 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzButtonModule,
     NzTableModule,
     RouterLink,
-    NzSelectModule,
-    FormsModule,
     NzTableDefaultSettingDirective,
     RxLet,
+    FormsModule,
+    NzSelectModule,
     NzSelectChangeDirective,
-    NzPopconfirmModule,
   ],
 
   providers: [
@@ -127,7 +126,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
               <ng-template #totalText let-total let-range="range">
                 <span
                   >{{ range[0] }} - {{ range[1] }} of {{ total }}
-                  {{ 'Branches' }}</span
+                  {{ 'Bookings' }}</span
                 >
               </ng-template>
               <tr>
@@ -180,7 +179,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
                     nz-button
                     nzType="primary"
                     nzSize="small"
-                    [disabled]="data.bookingServiceStatus !== 'FINISHED'"]
+                    class="tw-ml-3"
+                    [disabled]="data.bookingServiceStatus !== 'FINISHED'"
                     nz-popconfirm
                     nzPopconfirmTitle="Bạn có chắc chắn đã thanh toán rồi?"
                     nzOkText="Xác nhận"
@@ -191,6 +191,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
                   </button>
                   <button
                     nz-button
+                    class="tw-ml-3"
                     nzType="primary"
                     nzDanger
                     nzSize="small"

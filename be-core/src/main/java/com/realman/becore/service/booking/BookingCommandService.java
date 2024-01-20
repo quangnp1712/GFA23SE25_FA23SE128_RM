@@ -67,8 +67,8 @@ public class BookingCommandService {
                                 bookingMapper.toDtos(
                                                 receptBookingRequest.bookingServices()));
                 accountCommandService.saveFromReceptBooking(receptBookingRequest);
-                // twilioUseCaseService.informBooking(receptBookingRequest.phone(),
-                // bookingMapper.toDto(savedBooking, bookingServices));
+                twilioUseCaseService.informBooking(receptBookingRequest.phone(),
+                                bookingMapper.toDto(savedBooking, bookingServices));
         }
 
         public void finishBooking(Long bookingId) {

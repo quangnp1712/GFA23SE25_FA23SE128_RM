@@ -317,7 +317,7 @@ export class BranchComponent {
     this.addModel = this.bStore.form.getRawValue();
     console.log(this.bStore.form.getRawValue());
 
-    // this.bStore.addBranch({ model: this.addModel });
+    this.bStore.addBranch({ model: this.addModel });
   }
 
   getAddress(event: Event) {

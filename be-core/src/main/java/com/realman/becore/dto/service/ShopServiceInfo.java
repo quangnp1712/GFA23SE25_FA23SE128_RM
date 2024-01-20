@@ -43,6 +43,8 @@ public interface ShopServiceInfo {
 
     Long getBranchId();
 
+    String getBranchName();
+
     Long getBranchServicePrice();
 
     Long getServicePrice();

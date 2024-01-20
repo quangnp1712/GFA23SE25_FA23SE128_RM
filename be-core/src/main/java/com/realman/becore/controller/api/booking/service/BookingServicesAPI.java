@@ -28,6 +28,7 @@ public interface BookingServicesAPI {
         @GetMapping("/all")
         PageImplResponse<BookingServiceResponse> findAll(
                         @RequestParam(required = false, value = "search", defaultValue = "") String search,
+                        @RequestParam(required = false, value = "branchId", defaultValue = "") Long branchId,
                         @RequestParam(required = false, value = "bookingServiceStatus", defaultValue = "") EBookingServiceStatus bookingServiceStatus,
                         @RequestParam(required = false, value = "bookingServiceType", defaultValue = "") EBookingServiceType bookingServiceType,
                         @RequestParam(required = false, value = "sorter", defaultValue = "bookingServiceId") String sorter,

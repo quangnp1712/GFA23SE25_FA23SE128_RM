@@ -10,17 +10,18 @@ import lombok.Builder;
 
 @Builder
 public record ShopService(
-        Long serviceId,
-        Long categoryId,
-        String categoryName,
-        String serviceName,
-        String serviceDescription,
-        Integer durationValue,
-        EDurationTime durationTime,
-        String durationText,
-        Long servicePrice,
-        EServiceStatus status,
-        List<ServiceDisplay> serviceDisplayList,
-        List<BranchService> branchServiceList) {
+                Long serviceId,
+                Long categoryId,
+                String categoryName,
+                String branchName,
+                String serviceName,
+                String serviceDescription,
+                Integer durationValue,
+                EDurationTime durationTime,
+                String durationText,
+                Long servicePrice,
+                EServiceStatus status,
+                List<ServiceDisplay> serviceDisplayList,
+                List<BranchService> branchServiceList) {
 
 }

@@ -3,6 +3,7 @@ package com.realman.becore.service.booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
 import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.dto.booking.Booking;
 import com.realman.becore.dto.booking.BookingInfo;
@@ -66,8 +67,8 @@ public class BookingCommandService {
                                 bookingMapper.toDtos(
                                                 receptBookingRequest.bookingServices()));
                 accountCommandService.saveFromReceptBooking(receptBookingRequest);
-                twilioUseCaseService.informBooking(receptBookingRequest.phone(),
-                                bookingMapper.toDto(savedBooking, bookingServices));
+                // twilioUseCaseService.informBooking(receptBookingRequest.phone(),
+                // bookingMapper.toDto(savedBooking, bookingServices));
         }
 
         public void finishBooking(Long bookingId) {

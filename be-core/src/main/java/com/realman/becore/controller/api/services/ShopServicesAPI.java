@@ -33,5 +33,6 @@ public interface ShopServicesAPI {
             @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize);
 
     @GetMapping("/field")
-    ListResponse<ShopServiceFieldResponse> findAllServiceField();
+    ListResponse<ShopServiceFieldResponse> findAllServiceField(
+            @RequestParam(required = false, defaultValue = "") Long branchId);
 }

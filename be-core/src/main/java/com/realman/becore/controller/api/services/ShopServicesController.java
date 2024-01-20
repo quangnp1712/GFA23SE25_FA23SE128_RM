@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.realman.becore.controller.api.services.models.BranchId;
 import com.realman.becore.controller.api.services.models.ShopServiceFieldResponse;
 import com.realman.becore.controller.api.services.models.ShopServiceModelMapper;
 import com.realman.becore.controller.api.services.models.ShopServiceRequest;
@@ -47,8 +48,9 @@ public class ShopServicesController implements ShopServicesAPI {
     }
 
     @Override
-    public ListResponse<ShopServiceFieldResponse> findAllServiceField() {
-        List<ShopServiceFieldResponse> responses = shopServiceUseCaseService.findAllServiceField().stream()
+    public ListResponse<ShopServiceFieldResponse> findAllServiceField(Long branchId) {
+        List<ShopServiceFieldResponse> responses = shopServiceUseCaseService.findAllServiceField(new BranchId(branchId))
+                .stream()
                 .map(shopServiceModelMapper::toFieldModel).toList();
         return new ListResponse<>(responses);
     }

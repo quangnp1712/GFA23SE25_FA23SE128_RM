@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import com.realman.becore.controller.api.services.models.BranchId;
 import com.realman.becore.controller.api.services.models.ServiceId;
 import com.realman.becore.dto.branch.service.BranchService;
 import com.realman.becore.dto.service.ShopService;
@@ -80,8 +82,8 @@ public class ShopServiceQueryService {
                 return categoryList;
         }
 
-        public List<ShopService> findAllServiceField() {
-                List<ShopService> serviceList = shopServiceRepository.findAllServiceField()
+        public List<ShopService> findAllServiceField(BranchId branchId) {
+                List<ShopService> serviceList = shopServiceRepository.findAllServiceField(branchId)
                                 .stream().map(shopServiceMapper::toDto)
                                 .toList();
                 return serviceList;

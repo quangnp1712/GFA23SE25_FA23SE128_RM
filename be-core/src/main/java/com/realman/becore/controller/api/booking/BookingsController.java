@@ -1,18 +1,14 @@
 package com.realman.becore.controller.api.booking;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.realman.becore.controller.api.booking.models.BookingModelMapper;
 import com.realman.becore.controller.api.booking.models.BookingRequest;
 import com.realman.becore.controller.api.booking.models.BookingResponse;
-import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.controller.api.booking.service.models.BookingServiceModelMapper;
 import com.realman.becore.dto.booking.Booking;
 import com.realman.becore.dto.booking.BookingSearchCriteria;
-import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.service.booking.BookingUseCaseService;
 import com.realman.becore.util.response.PageImplResponse;
 import com.realman.becore.util.response.PageRequestCustom;
@@ -57,18 +53,6 @@ public class BookingsController implements BookingsAPI {
         public ValueResponse<BookingResponse> findByBookingServiceId(Long bookingServiceId) {
                 Booking booking = bookingUseCaseService.findByBookingServiceId(bookingServiceId);
                 return new ValueResponse<BookingResponse>(bookingModelMapper.toModel(booking));
-        }
-
-        @Override
-        public void receptBooking(@Valid ReceptBookingRequest receptBookingRequest) {
-                List<BookingService> bookingServices = receptBookingRequest.bookingServices()
-                                .stream().map(bs -> bookingServiceModelMapper.updateType(bs))
-                                .map(bookingServiceModelMapper::toDto)
-                                .toList();
-                ReceptBookingRequest updateReceptBooking = bookingModelMapper.updateBookingServices(
-                                receptBookingRequest,
-                                bookingServices);
-                bookingUseCaseService.receptSave(updateReceptBooking);
         }
 
 }

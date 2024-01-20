@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+
+import com.realman.becore.controller.api.services.models.BranchId;
 import com.realman.becore.dto.service.ShopServiceInfo;
 import com.realman.becore.dto.service.ShopServiceSearchCriteria;
 
@@ -89,8 +91,12 @@ public interface ShopServiceRepository extends JpaRepository<ShopServiceEntity, 
             SELECT
                 s.serviceId AS serviceId,
                 s.serviceName AS serviceName,
-                s.servicePrice AS servicePrice
+                s.servicePrice AS servicePrice,
+                s.durationValue AS durationValue,
+                s.durationText AS durationText
             FROM ShopServiceEntity s
+            LEFT JOIN BranchServiceEntity brs ON s.serviceId = brs.serviceId
+            WHERE :#{#branchId.hasValueEmpty()} = TRUE OR brs.branchId = :#{#branchId.value()}
             """)
-    List<ShopServiceInfo> findAllServiceField();
+    List<ShopServiceInfo> findAllServiceField(BranchId branchId);
 }

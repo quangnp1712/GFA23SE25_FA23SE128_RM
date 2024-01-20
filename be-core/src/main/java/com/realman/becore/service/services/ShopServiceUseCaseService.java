@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.realman.becore.controller.api.services.models.BranchId;
 import com.realman.becore.controller.api.services.models.ServiceId;
 import com.realman.becore.dto.service.ShopService;
 import com.realman.becore.dto.service.ShopServiceSearchCriteria;
@@ -36,8 +37,8 @@ public class ShopServiceUseCaseService {
         return shopServiceQueryService.findAll(searchCriteria, pageRequestCustom);
     }
 
-    public List<ShopService> findAllServiceField() {
-        return shopServiceQueryService.findAllServiceField();
+    public List<ShopService> findAllServiceField(BranchId branchId) {
+        return shopServiceQueryService.findAllServiceField(branchId);
     }
 
     public ShopService findByServiceId(ServiceId serviceId) {

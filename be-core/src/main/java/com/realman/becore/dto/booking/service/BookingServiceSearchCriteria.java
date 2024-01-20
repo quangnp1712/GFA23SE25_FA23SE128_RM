@@ -7,7 +7,7 @@ import com.realman.becore.dto.enums.EBookingServiceType;
 import lombok.Builder;
 
 @Builder
-public record BookingServiceSearchCriteria(String search, EBookingServiceType bookingServiceType,
+public record BookingServiceSearchCriteria(String search, Long branchId, EBookingServiceType bookingServiceType,
         EBookingServiceStatus bookingServiceStatus) {
 
     public Boolean hasSearchEmpty() {
@@ -22,9 +22,14 @@ public record BookingServiceSearchCriteria(String search, EBookingServiceType bo
         return Objects.isNull(bookingServiceStatus);
     }
 
+    public Boolean hasBranchIdEmpty() {
+        return Objects.isNull(branchId);
+    }
+
     public BookingServiceSearchCriteria toLowerCase() {
         return BookingServiceSearchCriteria.builder()
                 .search(search.toLowerCase())
+                .branchId(branchId)
                 .bookingServiceStatus(bookingServiceStatus)
                 .bookingServiceType(bookingServiceType)
                 .build();

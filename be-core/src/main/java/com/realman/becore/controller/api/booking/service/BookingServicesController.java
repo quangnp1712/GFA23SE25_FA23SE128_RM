@@ -41,13 +41,14 @@ public class BookingServicesController implements BookingServicesAPI {
         }
 
         @Override
-        public PageImplResponse<BookingServiceResponse> findAll(String search,
+        public PageImplResponse<BookingServiceResponse> findAll(String search, Long branchId,
                         EBookingServiceStatus bookingServiceStatus,
                         EBookingServiceType bookingServiceType, String sorter, @Min(1) Integer current,
                         Integer pageSize) {
                 PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current, sorter);
                 BookingServiceSearchCriteria searchCriteria = BookingServiceSearchCriteria.builder()
                                 .search(search)
+                                .branchId(branchId)
                                 .bookingServiceType(bookingServiceType)
                                 .bookingServiceStatus(bookingServiceStatus)
                                 .build();

@@ -247,13 +247,13 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
         if (result['statusCode'] == 200) {
           LoginPhoneModel loginPhoneModel = result['data'];
           if (loginPhoneModel.isAccountExist!) {
-            if (!loginPhoneModel.isAccountActivated!) {
+            if (loginPhoneModel.isAccountActivated!) {
               Get.to(() => LoginOTPScreen());
             } else {
               Get.toNamed(RegisterScreen.RegisterScreenRoute, arguments: true);
             }
           } else {
-            Get.toNamed(RegisterScreen.RegisterScreenRoute);
+            Get.toNamed(RegisterScreen.RegisterScreenRoute, arguments: false);
           }
         } else if (result['statusCode'] == 500) {
           _errorMessage(result['message']);

@@ -640,7 +640,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
   DateFormat format = DateFormat.Hm();
   String bookingServiceType = "CHOSEN_STYLIST";
   int massuerId = 0;
-
+  List<Map<String, dynamic>> noti = [];
   Future setInforBooking() async {
     if (!_isDisposed && mounted) {
       CategoryServices categoryServices = CategoryServices();
@@ -783,6 +783,20 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                 }
               }
             }
+          }
+          List<BookingServiceModel> bookingServicesCopy =
+              List<BookingServiceModel>.from(bookingServices);
+          bookingServicesCopy.removeWhere((element) => element.staffId == 0);
+          TimeSlotService timeSlotService = TimeSlotService();
+          for (var bookingService in bookingServices) {
+            try {
+              final result = await timeSlotService.getTimeSlot(
+                  appointmentDate, bookingService.staffId!);
+              if (result['statusCode'] == 200) {
+                List<TimeSlotModel> timeSlotModel = result['data'];
+                for (var timeslot in timeSlotModel) {}
+              }
+            } catch (e) {}
           }
         } else {
           print("${result['statusCode']}  ${result['error']}");

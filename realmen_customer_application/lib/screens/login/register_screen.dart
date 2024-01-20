@@ -117,22 +117,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     inputFormatters: [
                                       FilteringTextInputFormatter
                                           .singleLineFormatter, // Đảm bảo chỉ nhập trên một dòng
-                                      FilteringTextInputFormatter.allow(RegExp(
-                                          r'[a-zA-Z\s]')), // Chỉ cho phép nhập chữ và khoảng trắng
-                                      TextInputFormatter.withFunction(
-                                          (oldValue, newValue) {
-                                        if (newValue.text.isEmpty) {
-                                          return newValue;
-                                        }
-                                        return TextEditingValue(
-                                          text: newValue.text.replaceAllMapped(
-                                              RegExp(r'\b\w'),
-                                              (match) => match
-                                                  .group(0)!
-                                                  .toUpperCase()), // In hoa chữ cái đầu của từng từ
-                                          selection: newValue.selection,
-                                        );
-                                      }),
+                                      // FilteringTextInputFormatter.allow(RegExp(
+                                      //     r'[a-zA-Z\s]')), // Chỉ cho phép nhập chữ và khoảng trắng
+                                      // TextInputFormatter.withFunction(
+                                      //     (oldValue, newValue) {
+                                      //   if (newValue.text.isEmpty) {
+                                      //     return newValue;
+                                      //   }
+                                      //   return TextEditingValue(
+                                      //     text: newValue.text.replaceAllMapped(
+                                      //         RegExp(r'\b\w'),
+                                      //         (match) => match
+                                      //             .group(0)!
+                                      //             .toUpperCase()), // In hoa chữ cái đầu của từng từ
+                                      //     selection: newValue.selection,
+                                      //   );
+                                      // }),
                                     ],
                                     keyboardType: TextInputType.text,
                                     style: const TextStyle(
@@ -195,24 +195,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     inputFormatters: [
                                       FilteringTextInputFormatter
                                           .singleLineFormatter, // Đảm bảo chỉ nhập trên một dòng
-                                      TextInputFormatter.withFunction(
-                                          (oldValue, newValue) {
-                                        if (newValue.text.isEmpty) {
-                                          return newValue;
-                                        }
-                                        return TextEditingValue(
-                                          text: newValue.text.replaceAllMapped(
-                                              RegExp(r'\b\w'),
-                                              (match) => match
-                                                  .group(0)!
-                                                  .toUpperCase()), // In hoa chữ cái đầu của từng từ
-                                          selection: newValue.selection,
-                                        );
-                                      }),
+                                      // TextInputFormatter.withFunction(
+                                      //     (oldValue, newValue) {
+                                      //   if (newValue.text.isEmpty) {
+                                      //     return newValue;
+                                      //   }
+                                      //   return TextEditingValue(
+                                      //     text: newValue.text.replaceAllMapped(
+                                      //         RegExp(r'\b\w'),
+                                      //         (match) => match
+                                      //             .group(0)!
+                                      //             .toUpperCase()), // In hoa chữ cái đầu của từng từ
+                                      //     selection: newValue.selection,
+                                      //   );
+                                      // }),
                                       FilteringTextInputFormatter.deny(RegExp(
                                           r'[\s]')), // Không cho phép khoảng trắng
-                                      FilteringTextInputFormatter.allow(RegExp(
-                                          r'[a-zA-Z]')), // Chỉ cho phép nhập chữ
+                                      // FilteringTextInputFormatter.allow(RegExp(
+                                      //     r'[a-zA-Z]')), // Chỉ cho phép nhập chữ
                                     ],
                                     keyboardType: TextInputType
                                         .text, // Hiển thị bàn phím là chữ
@@ -618,7 +618,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String gender = genderController.toString();
     String thumbnailUrl = "";
     String status = "ACTIVATED";
-
+    String phone = await SharedPreferencesService.getPhone();
     RegisterCustomerModel registerCustomerModel = RegisterCustomerModel(
         thumbnailUrl: thumbnailUrl,
         firstName: firstName,
@@ -626,12 +626,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         address: address,
         gender: gender,
         status: status,
-        dob: dob);
+        dob: dob,
+        phone: phone);
     AuthenticateService authenticateService = AuthenticateService();
     if (!_isDisposed && mounted) {
       try {
-        var result =
-            await authenticateService.registerCustomer(registerCustomerModel);
+        var result;
+        if (widget.isUnauth == null || !widget.isUnauth) {
+          result =
+              await authenticateService.registerCustomer(registerCustomerModel);
+        } else {
+          result = await authenticateService.putAccountUnauth(
+              registerCustomerModel, phone);
+        }
         if (result['statusCode'] == 200) {
           _successMessage("Nhập thông tin thành công");
           // Navigator.pushNamed(context, LoginOTPScreen.LoginOTPScreenRoute);
@@ -677,6 +684,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
+    if (widget.isUnauth != null && widget.isUnauth) {
+      getUnauth();
+    }
     super.initState();
   }
 
@@ -688,13 +698,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         var result = await authenticateService.getAccountUnauth(phone);
         if (result['statusCode'] == 200) {
           RegisterCustomerModel registerCustomerModel = result['data'];
-          setState(() {
-            firstNameController.text = registerCustomerModel.firstName!;
-            lastNameController.text = registerCustomerModel.lastName!;
-            addressController.text = registerCustomerModel.address!;
-            dobSubmit = DateTime.parse(registerCustomerModel.dob!);
-            genderController = registerCustomerModel.gender;
-          });
+          firstNameController.text = registerCustomerModel.firstName!;
+          lastNameController.text = registerCustomerModel.lastName!;
+          addressController.text = registerCustomerModel.address!;
+          dobSubmit = DateTime.parse(registerCustomerModel.dob!);
+          genderController = registerCustomerModel.gender;
         } else if (result['statusCode'] == 500) {
           _errorMessage(result['message']);
         } else {

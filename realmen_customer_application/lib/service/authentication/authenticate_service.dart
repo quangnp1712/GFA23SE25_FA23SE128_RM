@@ -284,7 +284,7 @@ class AuthenticateService extends IAuthenticateService {
       final responseBody = response.body;
       if (statusCode == 200) {
         accountInfor =
-            RegisterCustomerModel.fromJson(json.decode(responseBody));
+            RegisterCustomerModel.fromJson(json.decode(responseBody)['value']);
         return {
           'statusCode': statusCode,
           'data': accountInfor,

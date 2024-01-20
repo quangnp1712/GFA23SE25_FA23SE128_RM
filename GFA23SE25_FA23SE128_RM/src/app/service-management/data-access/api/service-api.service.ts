@@ -45,7 +45,7 @@ export class ServiceApiService {
   }
 
   public paging(model: ServicePagingApi.Request) {
-    const url = `${this.REST_API_SERVER}/v1/services?current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
+    const url = `${this.REST_API_SERVER}/v1/services?branchId=${localStorage.getItem('branchId$')}current=${model.current}&sorter=${model.sorter}&pageSize=${model.pageSize}`;
     return this._http
       .get<Paging<ServicePagingApi.Response>>(url, this.httpOptions)
       .pipe(catchError(this.handleError));

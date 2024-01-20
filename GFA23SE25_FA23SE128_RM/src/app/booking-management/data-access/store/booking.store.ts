@@ -70,13 +70,17 @@ export class BookingStore
   };
 
   form = this._fb.group<BookingAddApi.RequestFormGroup>({
-    firstName: this._fb.control(''),
-    lastName: this._fb.control(''),
-    phone: this._fb.control(''),
-    appointmentDate: this._fb.control(null),
+    firstName: this._fb.control('', trimRequired),
+    lastName: this._fb.control('', trimRequired),
+    phone: this._fb.control('', [
+      trimRequired,
+      Validators.minLength(10),
+      Validators.maxLength(10),
+    ]),
+    appointmentDate: this._fb.control(null, Validators.required),
     bookingServices: this._fb.control([]),
-    serviceArray: this._fb.control([]),
-    startAppointment: this._fb.control(null)
+    serviceArray: this._fb.control([], Validators.required),
+    startAppointment: this._fb.control(null, Validators.required)
   });
 
   readonly getBookingPaging = this.effect<never>(

@@ -70,9 +70,9 @@ import { tap } from 'rxjs';
         <button
           nz-button
           nzType="primary"
-          [routerLink]="['/branch-management', 'create-branch']"
+          [routerLink]="['/booking-management', 'create-booking']"
         >
-          Tạo chi nhánh
+          Tạo booking
         </button>
       </div>
       <div nz-col nzSpan="24" class="tw-mt-5">

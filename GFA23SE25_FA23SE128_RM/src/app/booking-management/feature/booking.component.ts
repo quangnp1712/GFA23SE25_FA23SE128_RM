@@ -189,6 +189,7 @@ import { BookingAddApi } from '../data-access/model/booking-api.model';
           nzType="primary"
           class="tw-ml-4"
           (click)="addBranch()"
+          [disabled]="form.invalid"
         >
           Tạo booking
         </button>

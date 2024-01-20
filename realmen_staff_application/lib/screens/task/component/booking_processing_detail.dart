@@ -780,7 +780,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                             )
                           : Container(),
                       SizedBox(
-                        height: checkAllowUpdate ? 30 : 55,
+                        height: 55,
                       ),
                     ],
                   ),
@@ -791,66 +791,47 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       bottom: 0,
                       left: 0,
                       right: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Row(
-                          children: [
-                            // btn.key == 0
-                            //     ? Container(
-                            //         margin: const EdgeInsets.symmetric(horizontal: 5),
-                            //         decoration: BoxDecoration(
-                            //             color: Colors.black45,
-                            //             border: Border.all(
-                            //               color: Colors.black54,
-                            //               width: 1,
-                            //               style: BorderStyle.solid,
-                            //             ),
-                            //             borderRadius: BorderRadius.circular(10)),
-                            //         child: TextButton(
-                            //           onPressed: () {
-                            //             _btnLeft();
-                            //           },
-                            //           child: Center(
-                            //             child: Text(
-                            //               "đổi $professional".toUpperCase(),
-                            //               style: const TextStyle(
-                            //                   color: Colors.white, fontSize: 20),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       )
-                            //     : const SizedBox(
-                            //         height: 0,
-                            //         width: 0,
-                            //       ),
-                            Expanded(
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    border: Border.all(
-                                      color: Colors.black54,
-                                      width: 1,
-                                      style: BorderStyle.solid,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10)),
-                                // margin: const EdgeInsets.all(10),
-                                child: TextButton(
-                                  onPressed: () {
-                                    _btnRight();
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      btn.value!,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 5, right: 5, bottom: 5),
+                          margin:
+                              EdgeInsets.only(right: 1, left: 1, bottom: 23),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      border: Border.all(
+                                        color: Colors.black54,
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  // margin: const EdgeInsets.all(10),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      _btnRight();
+                                    },
+                                    child: Center(
+                                      child: Text(
+                                        btn.value!,
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -858,43 +839,46 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                       bottom: 0,
                       left: 0,
                       right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 5, right: 5, bottom: 25),
-                        margin: EdgeInsets.all(1),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.black54,
-                                      width: 1,
-                                      style: BorderStyle.solid,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10)),
-                                // margin: const EdgeInsets.all(10),
-                                child: TextButton(
-                                  onPressed: () {},
-                                  child: Center(
-                                    child: Text(
-                                      "Vui lòng chờ nhân viên khác \nxong việc!",
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 5, right: 5, bottom: 25),
+                          margin: EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.black54,
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  // margin: const EdgeInsets.all(10),
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: Center(
+                                      child: Text(
+                                        "Vui lòng chờ nhân viên khác \nxong việc!",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

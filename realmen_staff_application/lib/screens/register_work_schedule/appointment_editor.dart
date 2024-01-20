@@ -888,8 +888,8 @@ class _AppointmentEditorRWSState extends State<AppointmentEditorRWS> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 0,
-                                                        horizontal: 7.0),
-                                                iconSize: 29.0,
+                                                        horizontal: 4.0),
+                                                iconSize: 28.0,
                                                 color: Theme.of(context)
                                                     .primaryColor,
                                                 onPressed: () {

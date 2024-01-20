@@ -36,7 +36,7 @@ class RouteGenerator {
       ),
       GetPage(
         name: RegisterScreen.RegisterScreenRoute,
-        page: () => const RegisterScreen(),
+        page: () => RegisterScreen(),
       ),
       GetPage(
           name: MainScreen.MainScreenRoute,

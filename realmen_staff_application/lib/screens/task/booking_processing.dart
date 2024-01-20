@@ -145,6 +145,7 @@ class _BookingProcessingTabState extends State<BookingProcessingTab>
                           nowWithTime.year, nowWithTime.month, nowWithTime.day);
                       if (dateTimeContent.compareTo(now) == 0 &&
                           (content.bookingStatus == "PROCESSING" ||
+                              content.bookingStatus == "FINISHED" ||
                               content.bookingStatus == "CONFIRM")) {
                         content.bookingServices!.sort((a, b) =>
                             a.bookingServiceId!.compareTo(b.bookingServiceId!));

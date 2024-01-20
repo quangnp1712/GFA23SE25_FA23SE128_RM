@@ -12,13 +12,14 @@ import 'package:realmen_customer_application/screens/login/login_otp_screen.dart
 import 'package:realmen_customer_application/screens/message/success_screen.dart';
 import 'package:realmen_customer_application/service/authentication/authenticate_service.dart';
 import 'package:realmen_customer_application/service/autocomplete/autocomplete_service.dart';
+import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:core';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
   static const String RegisterScreenRoute = "/register-screen";
-
+  final bool isUnauth = Get.arguments as bool;
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -677,5 +678,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> getUnauth() async {
+    if (!_isDisposed && mounted) {
+      try {
+        AuthenticateService authenticateService = AuthenticateService();
+        String phone = await SharedPreferencesService.getPhone();
+        var result = await authenticateService.getAccountUnauth(phone);
+        if (result['statusCode'] == 200) {
+          RegisterCustomerModel registerCustomerModel = result['data'];
+          setState(() {
+            firstNameController.text = registerCustomerModel.firstName!;
+            lastNameController.text = registerCustomerModel.lastName!;
+            addressController.text = registerCustomerModel.address!;
+            dobSubmit = DateTime.parse(registerCustomerModel.dob!);
+            genderController = registerCustomerModel.gender;
+          });
+        } else if (result['statusCode'] == 500) {
+          _errorMessage(result['message']);
+        } else {
+          print("$result");
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
   }
 }

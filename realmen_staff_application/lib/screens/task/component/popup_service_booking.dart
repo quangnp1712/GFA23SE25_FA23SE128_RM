@@ -154,7 +154,7 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
                         ),
                       )
                     : Container(
-                        width: 200,
+                        width: 140,
                       ),
               ],
             ),

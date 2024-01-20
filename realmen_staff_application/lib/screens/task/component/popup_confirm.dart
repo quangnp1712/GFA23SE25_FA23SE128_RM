@@ -131,7 +131,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                   ),
                 ),
                 Container(
-                  width: 200,
+                  width: 140,
                   decoration: BoxDecoration(
                       color: Colors.black,
                       border: Border.all(

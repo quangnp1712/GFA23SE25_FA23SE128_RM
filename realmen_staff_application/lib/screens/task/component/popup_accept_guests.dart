@@ -271,7 +271,7 @@ class _PopUpAcceptGuestState extends State<PopUpAcceptGuest> {
         DateTime startTime20 = startTime.subtract(Duration(minutes: 20));
 
         if (allowUpdate &&
-            (now.isAtSameMomentAs(startTime20) || now.isAfter(startTime20))) {
+            (now.isAtSameMomentAs(startTime20) && now.isAfter(startTime20))) {
           int accountId = await SharedPreferencesService.getAccountId();
           if (widget.booking.bookingServices != null) {
             if (widget.booking.bookingServices!.isNotEmpty) {

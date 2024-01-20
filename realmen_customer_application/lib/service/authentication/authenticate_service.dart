@@ -21,6 +21,9 @@ abstract class IAuthenticateService {
   Future<dynamic> registerCustomer(RegisterCustomerModel registerCustomerModel);
   Future<dynamic> isLogin();
   Future<void> logout();
+  Future<dynamic> getAccountUnauth(String phone);
+  Future<dynamic> putAccountUnauth(
+      RegisterCustomerModel registerCustomerModel, String phone);
 }
 
 class AuthenticateService extends IAuthenticateService {
@@ -46,12 +49,12 @@ class AuthenticateService extends IAuthenticateService {
 
       if (statusCode == 200) {
         final _loginPhoneModel =
-            LoginPhoneModel.fromJson(json.decode(responseBody));
+            LoginPhoneModel.fromJson(json.decode(responseBody)['value']);
         await SharedPreferencesService.savePhone(loginPhoneModel.value!);
 
         return {
           'statusCode': statusCode,
-          'data': _loginPhoneModel.value,
+          'data': _loginPhoneModel,
         };
       } else {
         try {
@@ -259,5 +262,130 @@ class AuthenticateService extends IAuthenticateService {
         await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     Get.to(() => const LoginPhoneScreen());
+  }
+
+  @override
+  Future<dynamic> getAccountUnauth(String phone) async {
+    try {
+      RegisterCustomerModel accountInfor = RegisterCustomerModel();
+
+      Uri uri = Uri.parse("$unauthUrl/$phone");
+      final client = http.Client();
+      final response = await client.get(
+        uri,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Authorization': '*/*',
+        },
+      ).timeout(Duration(seconds: connectionTimeOut));
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+      if (statusCode == 200) {
+        accountInfor =
+            RegisterCustomerModel.fromJson(json.decode(responseBody));
+        return {
+          'statusCode': statusCode,
+          'data': accountInfor,
+        };
+      } else {
+        try {
+          final ServerExceptionModel exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+            'message': "Vui lòng thử lại",
+          };
+        } catch (e) {
+          return {
+            'statusCode': 400,
+            'error': e,
+            'message': "Vui lòng thử lại",
+          };
+        }
+      }
+    } on TimeoutException catch (e) {
+      return {
+        'statusCode': 408,
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
+      };
+    } on SocketException catch (e) {
+      return {
+        'statusCode': 500,
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
+      };
+    } catch (e) {
+      return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
+      };
+    }
+  }
+
+  @override
+  Future putAccountUnauth(
+      RegisterCustomerModel registerCustomerModel, String phone) async {
+    try {
+      Uri uri = Uri.parse("$unauthUrl/$phone");
+      final client = http.Client();
+      final response = await client
+          .put(uri,
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+                'Authorization': '*/*',
+              },
+              body: json.encode(registerCustomerModel.toJson()))
+          .timeout(Duration(seconds: connectionTimeOut));
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
+      if (statusCode == 200) {
+        return {
+          'statusCode': statusCode,
+        };
+      } else {
+        try {
+          final ServerExceptionModel exceptionModel =
+              ServerExceptionModel.fromJson(json.decode(responseBody));
+          return {
+            'statusCode': statusCode,
+            'error': exceptionModel,
+            'message': "Vui lòng thử lại",
+          };
+        } catch (e) {
+          return {
+            'statusCode': 400,
+            'error': e,
+            'message': "Vui lòng thử lại",
+          };
+        }
+      }
+    } on TimeoutException catch (e) {
+      return {
+        'statusCode': 408,
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
+      };
+    } on SocketException catch (e) {
+      return {
+        'statusCode': 500,
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
+      };
+    } catch (e) {
+      return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
+      };
+    }
   }
 }

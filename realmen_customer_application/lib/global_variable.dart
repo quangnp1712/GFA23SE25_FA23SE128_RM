@@ -39,3 +39,6 @@ final timeslotUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["TIMESLOT"]}";
 
 // Rating API
 final ratingUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["RATING"]}";
+
+// Account Unauth API
+final unauthUrl = "${dotenv.env["DOMAIN"]}/${dotenv.env["UNAUTH_ACCOUNT"]}";

@@ -20,15 +20,17 @@ class RegisterCustomerModel {
   String? status;
   String? dob;
 
-  // factory RegisterCustomerModel.fromJson(Map<String, dynamic> json) =>
-  //     RegisterCustomerModel(
-  //       firstName: json["firstName"],
-  //       lastName: json["lastName"],
-  //       phone: json["phone"],
-  //       address: json["address"],
-  //       gender: json["gender"],
-  //       dob: json["dob"],
-  //     );
+  factory RegisterCustomerModel.fromJson(Map<String, dynamic> json) =>
+      RegisterCustomerModel(
+        thumbnailUrl: json["thumbnailUrl"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        phone: json["phone"],
+        address: json["address"],
+        gender: json["gender"],
+        dob: json["dob"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
         "thumbnailUrl": thumbnailUrl,

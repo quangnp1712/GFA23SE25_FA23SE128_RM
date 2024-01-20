@@ -189,19 +189,6 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
                   >
                     Xác nhận
                   </button>
-                  <button
-                    nz-button
-                    class="tw-ml-3"
-                    nzType="primary"
-                    nzDanger
-                    nzSize="small"
-                    nz-popconfirm
-                    nzPopconfirmTitle="Bạn có chắc chắn hủy đơn này?"
-                    nzOkText="Xác nhận"
-                    nzCancelText="Trở lại"
-                  >
-                    Hủy
-                  </button>
                 </td>
               </tr>
             </tbody>

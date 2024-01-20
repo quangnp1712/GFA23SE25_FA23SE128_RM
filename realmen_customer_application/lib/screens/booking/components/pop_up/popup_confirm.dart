@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:realmen_customer_application/screens/main_bottom_bar/main_screen.dart';
+import 'package:realmen_customer_application/screens/message/success_screen.dart';
+import 'package:realmen_customer_application/service/booking/booking_service.dart';
 
 class PopUpConfirm extends StatefulWidget {
-  const PopUpConfirm({
+  int? bookingId;
+  PopUpConfirm({
     super.key,
+    this.bookingId,
   });
 
   @override
@@ -78,7 +83,7 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
                       borderRadius: BorderRadius.circular(10)),
                   margin: const EdgeInsets.all(10),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: cancelBooking,
                     child: const Center(
                       child: Text(
                         "Chắc chắn hủy lịch",
@@ -93,5 +98,43 @@ class _PopUpConfirmState extends State<PopUpConfirm> {
         ),
       ),
     );
+  }
+
+  Future<void> cancelBooking() async {
+    if (mounted) {
+      try {
+        final result = await BookingService().cancelBooking(widget.bookingId!);
+        if (result['statusCode'] == 200) {
+          _successMessage("Huỷ lịch thành công");
+          Get.toNamed(MainScreen.MainScreenRoute);
+        } else if (result['statusCode'] == 500) {
+          Get.back();
+          _errorMessage(result['error']);
+        } else {
+          Get.back();
+          _errorMessage("Hủy lịch thất bại");
+          print(result);
+        }
+      } catch (e) {
+        Get.back();
+        _errorMessage("Hủy lịch thất bại");
+      }
+    }
+  }
+
+  void _errorMessage(String? message) {
+    try {
+      ShowSnackBar.ErrorSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _successMessage(String? message) {
+    try {
+      ShowSnackBar.SuccessSnackBar(context, message!);
+    } catch (e) {
+      print(e);
+    }
   }
 }

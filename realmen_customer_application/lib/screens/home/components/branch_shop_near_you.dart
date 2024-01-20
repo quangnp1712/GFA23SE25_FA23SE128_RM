@@ -7,6 +7,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:realmen_customer_application/models/branch/branch_model.dart';
 import 'package:realmen_customer_application/service/branch/branch_service.dart';
 import 'package:realmen_customer_application/service/location/location_service.dart';
@@ -54,6 +55,14 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                   itemCount:
                       branchesForCity!.length > 5 ? 5 : branchesForCity!.length,
                   itemBuilder: (context, index) {
+                    final openBranchWidget =
+                        DateTime.parse("${branchesForCity![index].open}");
+                    final closeBranchWidget =
+                        DateTime.parse('${branchesForCity![index].close}');
+
+                    String openBranch = DateFormat.H().format(openBranchWidget);
+                    String closeBranch =
+                        DateFormat.H().format(closeBranchWidget);
                     return InkWell(
                       onTap: () {},
                       child: Container(
@@ -193,11 +202,11 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                                                 BorderRadius.circular(10),
                                             color: const Color(0xff444444),
                                           ),
-                                          child: const Center(
+                                          child: Center(
                                             child: Text(
-                                              "Mở cừa: 7h - 23h",
+                                              "Mở cừa: ${openBranch}h - ${closeBranch}h",
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.white,
                                               ),

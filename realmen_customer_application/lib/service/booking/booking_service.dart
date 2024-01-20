@@ -212,10 +212,10 @@ class BookingService implements IBookingService {
   @override
   Future<Map<String, dynamic>> cancelBooking(int bookingId) async {
     try {
-      Uri uri = Uri.parse(bookingUrl);
+      Uri uri = Uri.parse("$bookingUrl/$bookingId/cancel");
       final client = http.Client();
       final String jwtToken = await SharedPreferencesService.getJwt();
-      final response = await client.post(uri, headers: {
+      final response = await client.put(uri, headers: {
         "Access-Control-Allow-Origin": "*",
         'Content-Type': 'application/json',
         'Accept': '*/*',

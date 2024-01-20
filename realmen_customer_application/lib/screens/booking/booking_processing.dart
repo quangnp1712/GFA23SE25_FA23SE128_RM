@@ -677,7 +677,9 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
           ),
         ),
         builder: (context) {
-          return const PopUpConfirm();
+          return PopUpConfirm(
+            bookingId: booking.bookingId,
+          );
         },
       );
     }

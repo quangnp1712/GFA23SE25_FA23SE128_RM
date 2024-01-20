@@ -22,11 +22,5 @@ public record BranchResponse(
                 List<BranchServiceResponse> branchServiceList,
                 List<AccountResponse> accountStaffList,
                 String distanceKilometer) {
-        public LocalDateTime open() {
-                return open.plusHours(7);
-        }
 
-        public LocalDateTime close() {
-                return close.plusHours(7);
-        }
 }

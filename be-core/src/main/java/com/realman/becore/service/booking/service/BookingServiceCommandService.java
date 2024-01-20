@@ -2,6 +2,7 @@ package com.realman.becore.service.booking.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import com.realman.becore.controller.api.booking.service.models.BookingResultRequest;
@@ -71,6 +72,9 @@ public class BookingServiceCommandService {
                 .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
+            if (!bookingInfo.getBookingServiceStatus().equals(EBookingServiceStatus.CONFIRM)) {
+                throw new ResourceInvalidException();
+            }
             List<BookingServiceEntity> otherBookingServices = bookingServiceRepository
                     .findOtherByBookingId(bookingInfo.getBookingId(), bookingInfo.getBookingServiceId());
             if (otherBookingServices.stream()
@@ -94,6 +98,9 @@ public class BookingServiceCommandService {
                 .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
+            if (!bookingInfo.getBookingServiceStatus().equals(EBookingServiceStatus.PROCESSING)) {
+                throw new ResourceInvalidException();
+            }
             BookingServiceEntity foundBookingServiceEntity = bookingServiceMapper.toEntity(bookingInfo);
             foundBookingServiceEntity.setBookingServiceStatus(EBookingServiceStatus.FINISHED);
             foundBookingServiceEntity.setActualEndAppointment(LocalTime.now());
@@ -117,6 +124,10 @@ public class BookingServiceCommandService {
                 .findInfoById(bookingServiceId.value(), requestContext.getAccountId())
                 .orElseThrow(ResourceNotFoundException::new);
         if (bookingInfo.getAllowUpdate()) {
+            if (!bookingInfo.getBookingServiceStatus().equals(EBookingServiceStatus.ONGOING)
+                    && !bookingInfo.getBookingServiceStatus().equals(EBookingServiceStatus.REQUEST_CONFIRM)) {
+                throw new ResourceInvalidException();
+            }
             BookingServiceEntity foundBookingService = bookingServiceMapper.toEntity(bookingInfo);
             foundBookingService.setBookingServiceStatus(EBookingServiceStatus.CONFIRM);
             List<BookingServiceEntity> otherBookingServices = bookingServiceRepository
@@ -135,24 +146,37 @@ public class BookingServiceCommandService {
         return null;
     }
 
+    public void cancelAllBookingService(Long bookingId) {
+        List<BookingServiceEntity> bookingServices = bookingServiceRepository.findAllByBookingId(bookingId);
+        List<BookingServiceEntity> updateBookingServices = bookingServices.stream().map(bs -> {
+            if (canBookingServiceCancel(bs)) {
+                bs.setBookingServiceStatus(EBookingServiceStatus.CANCLED);
+            }
+            return bs;
+        }).toList();
+        bookingServiceRepository.saveAll(updateBookingServices);
+    }
+
     public void cancelBookingService(Long bookingServiceId) {
         BookingServiceEntity bookingService = bookingServiceRepository.findById(bookingServiceId)
                 .orElseThrow(ResourceNotFoundException::new);
-        if (!bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.ONGOING) &&
-                !bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.CONFIRM) &&
-                !bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.REQUEST_CONFIRM)) {
-            throw new ResourceInvalidException();
+        boolean canBookingServiceCancel = canBookingServiceCancel(bookingService);
+        if (canBookingServiceCancel) {
+            bookingService.setBookingServiceStatus(EBookingServiceStatus.CANCLED);
+            bookingServiceRepository.save(bookingService);
+        } else {
+            throw new ResourceNotFoundException();
         }
-        bookingService.setBookingServiceStatus(EBookingServiceStatus.CANCLED);
-        bookingServiceRepository.save(bookingService);
     }
 
     private void lockBookingService(Long bookingId, Long bookingServiceId) {
         List<BookingServiceEntity> foundBookingServices = bookingServiceRepository.findAllNotEqualId(bookingId,
                 bookingServiceId);
-        List<BookingServiceEntity> updatedBookingServices = foundBookingServices.stream().map(bookingService -> {
-            bookingService.setBookingServiceStatus(EBookingServiceStatus.LOCKED);
-            return bookingService;
+        List<BookingServiceEntity> updatedBookingServices = foundBookingServices.stream().map(bs -> {
+            if (bs.getBookingServiceStatus().equals(EBookingServiceStatus.CONFIRM)) {
+                bs.setBookingServiceStatus(EBookingServiceStatus.LOCKED);
+            }
+            return bs;
         }).toList();
         bookingServiceRepository.saveAll(updatedBookingServices);
     }
@@ -161,8 +185,8 @@ public class BookingServiceCommandService {
         List<BookingServiceEntity> foundBookingServices = bookingServiceRepository.findAllNotEqualId(bookingId,
                 bookingServiceId);
         List<BookingServiceEntity> updatedBookingServices = foundBookingServices.stream().map(bookingService -> {
-            if (!bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.FINISHED)) {
-                bookingService.setBookingServiceStatus(EBookingServiceStatus.PROCESSING);
+            if (bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.LOCKED)) {
+                bookingService.setBookingServiceStatus(EBookingServiceStatus.CONFIRM);
             }
             return bookingService;
         }).toList();
@@ -198,5 +222,13 @@ public class BookingServiceCommandService {
                 .orElseThrow(ResourceNotFoundException::new);
         bookingService.setRatingId(ratingId);
         bookingServiceRepository.save(bookingService);
+    }
+
+    private boolean canBookingServiceCancel(BookingServiceEntity bookingService) {
+        return bookingService.getBookingServiceStatus().equals(EBookingServiceStatus.ONGOING)
+                || bookingService.getBookingServiceStatus()
+                        .equals(EBookingServiceStatus.CONFIRM)
+                || bookingService.getBookingServiceStatus()
+                        .equals(EBookingServiceStatus.REQUEST_CONFIRM);
     }
 }

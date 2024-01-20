@@ -119,6 +119,16 @@ public class BookingCommandService {
                                 bookingMapper.toDto(bookingInfo, bookingServices));
         }
 
+        public void cancelBooking(Long bookingId) {
+                BookingEntity booking = bookingRepository.findById(bookingId)
+                                .orElseThrow(ResourceNotFoundException::new);
+                if (!booking.getBookingStatus().equals(EBookingStatus.ONGOING)) {
+                        throw new ResourceInvalidException();
+                }
+                booking.setBookingStatus(EBookingStatus.CANCLED);
+                bookingServiceCommandService.cancelAllBookingService(bookingId);
+        }
+
         private String generateBookingCode() {
                 StringBuilder bookingCode = new StringBuilder();
                 bookingCode.append("BOOK")

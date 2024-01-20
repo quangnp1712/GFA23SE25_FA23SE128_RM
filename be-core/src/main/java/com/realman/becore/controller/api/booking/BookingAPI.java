@@ -19,4 +19,8 @@ public interface BookingAPI {
     @PutMapping("/end")
     @PreAuthorize("hasRole('ROLE_RECEPTIONIST')")
     void endBooking(@PathVariable Long bookingId);
+
+    @PutMapping("/cancel")
+    @PreAuthorize("hasAnyRole({'ROLE_CUSTOMER', 'ROLE_RECEPTIONIST'})")
+    void cancelBooking(@PathVariable Long bookingId);
 }

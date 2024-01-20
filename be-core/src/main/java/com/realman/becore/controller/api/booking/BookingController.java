@@ -30,4 +30,9 @@ public class BookingController implements BookingAPI {
         bookingUseCaseService.endBooking(bookingId);
     }
 
+    @Override
+    public void cancelBooking(Long bookingId) {
+        bookingUseCaseService.cancelBooking(bookingId);
+    }
+
 }

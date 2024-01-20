@@ -28,7 +28,7 @@ public interface BookingServiceAPI {
                         @RequestParam(required = false) Long accountId);
 
         @PutMapping("/cancel-service")
-        @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+        @PreAuthorize("hasRole('ROLE_RECEPTIONIST')")
         void cancelBookingService(@PathVariable Long bookingServiceId);
 
         @PutMapping("/choose-stylist")

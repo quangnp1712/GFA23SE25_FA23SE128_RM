@@ -53,6 +53,11 @@ public class BookingUseCaseService {
         bookingCommandService.startBooking(bookingId);
     }
 
+    @Transactional
+    public void cancelBooking(Long bookingId) {
+        bookingCommandService.cancelBooking(bookingId);
+    }
+
     public Booking findById(BookingId bookingId) {
         return bookingQueryService.findById(bookingId);
     }

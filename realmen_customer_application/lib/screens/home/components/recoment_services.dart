@@ -169,6 +169,16 @@ class _RecomendServicesState extends State<RecomendServices> {
               var reference = storage.ref('service/${urlList[randomUrl]}');
               service.serviceDisplayList![0].serviceDisplayUrl =
                   await reference.getDownloadURL();
+              if (service.serviceDisplayList != null) {
+                service.serviceDisplayList![0].serviceDisplayUrl =
+                    await reference.getDownloadURL();
+              } else {
+                service.serviceDisplayList = [];
+                ServiceDisplay branchDisplayListUrl = ServiceDisplay();
+                branchDisplayListUrl.serviceDisplayUrl =
+                    await reference.getDownloadURL();
+                service.serviceDisplayList!.add(branchDisplayListUrl);
+              }
             }
           }
           setState(() {

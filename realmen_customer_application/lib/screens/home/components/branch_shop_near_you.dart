@@ -333,8 +333,16 @@ class _branchShopNearYouState extends State<branchShopNearYou> {
                 final random = Random();
                 var randomUrl = random.nextInt(urlList.length);
                 var reference = storage.ref('branch/${urlList[randomUrl]}');
-                branch.branchDisplayList![0].url =
-                    await reference.getDownloadURL();
+                if (branch.branchDisplayList != null) {
+                  branch.branchDisplayList![0].url =
+                      await reference.getDownloadURL();
+                } else {
+                  branch.branchDisplayList = [];
+                  BranchDisplayListUrl branchDisplayListUrl =
+                      BranchDisplayListUrl();
+                  branchDisplayListUrl.url = await reference.getDownloadURL();
+                  branch.branchDisplayList!.add(branchDisplayListUrl);
+                }
               }
             }
 

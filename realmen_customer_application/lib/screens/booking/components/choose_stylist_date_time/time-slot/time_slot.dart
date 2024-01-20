@@ -1198,8 +1198,8 @@ class _TimeSlotGridState extends State<TimeSlotGrid> {
 
     // kiểm tra chi nhánh
 
-    final openBranchWidget = DateTime.parse("${widget.openBranch}Z");
-    final closeBranchWidget = DateTime.parse('${widget.closeBranch}Z');
+    final openBranchWidget = DateTime.parse("${widget.openBranch}");
+    final closeBranchWidget = DateTime.parse('${widget.closeBranch}');
 
     String openBranch = DateFormat.Hm().format(openBranchWidget);
     String closeBranch = DateFormat.Hm().format(closeBranchWidget);

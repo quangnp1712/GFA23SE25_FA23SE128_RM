@@ -794,7 +794,19 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                   appointmentDate, bookingService.staffId!);
               if (result['statusCode'] == 200) {
                 List<TimeSlotModel> timeSlotModel = result['data'];
-                for (var timeslot in timeSlotModel) {}
+                for (var timeslot in timeSlotModel) {
+                  if (timeslot.time!
+                              .compareTo(bookingService.startAppointment!) >=
+                          0 &&
+                      timeslot.time!.compareTo(bookingService.endAppointment!) <
+                          0) {
+                    // không thay đổi
+                    ;
+                  } else {
+                    // buộc false
+                    bool isSelectable = false;
+                  }
+                }
               }
             } catch (e) {}
           }

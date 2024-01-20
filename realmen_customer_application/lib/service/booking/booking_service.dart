@@ -15,6 +15,7 @@ abstract class IBookingService {
   Future<dynamic> getBooking(
       int accountId, int customer, int current, int pageRequest);
   Future<dynamic> getBookingById(int bookingId);
+  Future<dynamic> cancelBooking(int bookingId);
 }
 
 class BookingService implements IBookingService {
@@ -167,6 +168,59 @@ class BookingService implements IBookingService {
               },
               body: json.encode(booking.toJson()))
           .timeout(Duration(seconds: connectionTimeOut));
+      final statusCode = response.statusCode;
+      if (statusCode == 200) {
+        return {
+          'statusCode': statusCode,
+        };
+      } else {
+        try {
+          return {
+            'statusCode': statusCode,
+            'message': "Vui lòng thử lại",
+          };
+        } catch (e) {
+          return {
+            'statusCode': 400,
+            'error': e,
+            'message': "Vui lòng thử lại",
+          };
+        }
+      }
+    } on TimeoutException catch (e) {
+      return {
+        'statusCode': 408,
+        'error': e,
+        'message':
+            "Yêu cầu của bạn mất quá nhiều thời gian để phản hồi. Vui lòng thử lại sau.",
+      };
+    } on SocketException catch (e) {
+      return {
+        'statusCode': 500,
+        'error': e,
+        'message': 'Kiểm tra lại kết nối Internet',
+      };
+    } catch (e) {
+      return {
+        'statusCode': 400,
+        'error': e,
+        'message': 'Vui lòng thử lại',
+      };
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> cancelBooking(int bookingId) async {
+    try {
+      Uri uri = Uri.parse(bookingUrl);
+      final client = http.Client();
+      final String jwtToken = await SharedPreferencesService.getJwt();
+      final response = await client.post(uri, headers: {
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+        'Authorization': 'Bearer $jwtToken'
+      }).timeout(Duration(seconds: connectionTimeOut));
       final statusCode = response.statusCode;
       if (statusCode == 200) {
         return {

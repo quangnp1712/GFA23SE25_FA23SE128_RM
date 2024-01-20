@@ -391,7 +391,8 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                     )
                                   ],
                                 )
-                              : branchesForCity != null
+                              : branchesForCity != null &&
+                                      branchesForCity!.isNotEmpty
                                   ? ListView.builder(
                                       shrinkWrap: true,
                                       physics:
@@ -571,7 +572,17 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
                                         );
                                       },
                                     )
-                                  : Container(),
+                                  : Container(
+                                      child: Center(
+                                        child: Text(
+                                          "Không tìm thấy Barber.\nVui lòng thử lại.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
                         ],
                       ),
                     ),
@@ -718,8 +729,16 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
               final random = Random();
               var randomUrl = random.nextInt(urlList.length);
               var reference = storage.ref('branch/${urlList[randomUrl]}');
-              branch.branchDisplayList![0].url =
-                  await reference.getDownloadURL();
+              if (branch.branchDisplayList != null) {
+                branch.branchDisplayList![0].url =
+                    await reference.getDownloadURL();
+              } else {
+                branch.branchDisplayList = [];
+                BranchDisplayListUrl branchDisplayListUrl =
+                    BranchDisplayListUrl();
+                branchDisplayListUrl.url = await reference.getDownloadURL();
+                branch.branchDisplayList!.add(branchDisplayListUrl);
+              }
             }
           }
           if (!_isDisposed && mounted) {
@@ -747,6 +766,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         print(e.toString());
         print("Error: $e");
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -921,6 +943,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         isFindBranchNear = false;
         isCheckLoadMore = false;
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

@@ -67,6 +67,13 @@ export class BookingApiService {
       .pipe(catchError(this.handleError));
   }
 
+  public confirmCompleteBooking(bookingId: number) {
+    const url = `${this.REST_API_SERVER}/v1/booking/${bookingId}/end`;
+    return this._http
+      .put<any>(url, this.httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
   // public serviceDataGet() {
   //   const url = `${this.REST_API_SERVER}/v1/services/field`;
   //   return this._http

@@ -153,7 +153,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
                     ]"
                     nzSize="small"
                   >
-                    Edit
+                    Chi Tiết
                   </button>
                 </td>
               </tr>

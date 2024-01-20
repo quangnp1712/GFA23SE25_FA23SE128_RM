@@ -22,6 +22,8 @@ import {
   BookingPagingApi,
 } from '../data-access/model/booking-api.model';
 import { tap } from 'rxjs';
+import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-change.directive';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-booking-list',
@@ -40,9 +42,15 @@ import { tap } from 'rxjs';
     FormsModule,
     NzTableDefaultSettingDirective,
     RxLet,
+    NzSelectChangeDirective,
+    NzPopconfirmModule,
   ],
 
-  providers: [provideComponentStore(BookingStore), NzMessageService, NzModalService],
+  providers: [
+    provideComponentStore(BookingStore),
+    NzMessageService,
+    NzModalService,
+  ],
   template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item> Quản lý booking</nz-breadcrumb-item>
@@ -55,7 +63,7 @@ import { tap } from 'rxjs';
           <input
             type="text"
             nz-input
-            placeholder="Tìm theo tên"
+            placeholder="Tìm theo tên, số điện thoại"
             [(ngModel)]="bStore.pagingRequest.search"
             (keyup.enter)="onSearch()"
           />
@@ -75,6 +83,32 @@ import { tap } from 'rxjs';
           Tạo booking
         </button>
       </div>
+      <div>
+        <span>Loại đơn:</span>
+        <nz-select
+          class="tw-w-[150px] tw-mt-5 tw-ml-3"
+          nzPlaceHolder="Chọn chức vụ"
+          (nzSelectChange)="onChangeLicense()"
+          [(ngModel)]="bStore.pagingRequest.bookingServiceType"
+        >
+          <nz-option nzValue="" nzLabel="Tất cả"> </nz-option>
+          <nz-option nzValue="PICKUP_STYLIST" nzLabel="Chọn hộ"> </nz-option>
+        </nz-select>
+        <span class="tw-ml-10">Trạng thái đơn:</span>
+        <nz-select
+          class="tw-w-[190px] tw-mt-5 tw-ml-3"
+          nzPlaceHolder="Chọn chức vụ"
+          (nzSelectChange)="onChangeLicense()"
+          [(ngModel)]="bStore.pagingRequest.bookingServiceStatus"
+        >
+          <nz-option nzValue="" nzLabel="Tất cả"> </nz-option>
+          <nz-option nzValue="FINISHED" nzLabel="Cần xác nhận hoành thành">
+          </nz-option>
+          <nz-option nzValue="PAID" nzLabel="Đã thanh toán"> </nz-option>
+          <nz-option nzValue="CANCLED" nzLabel="Hủy"> </nz-option>
+        </nz-select>
+      </div>
+
       <div nz-col nzSpan="24" class="tw-mt-5">
         <ng-container *rxLet="vm$ as vm">
           <nz-table
@@ -142,8 +176,30 @@ import { tap } from 'rxjs';
                   >
                     Chọn hộ
                   </button>
-                  <button nz-button nzType="primary" nzSize="small">
-                    Edit
+                  <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="small"
+                    [disabled]="data.bookingServiceStatus !== 'FINISHED'"]
+                    nz-popconfirm
+                    nzPopconfirmTitle="Bạn có chắc chắn đã thanh toán rồi?"
+                    nzOkText="Xác nhận"
+                    nzCancelText="Trở lại"
+                    (nzOnConfirm)="confirmBooking(data.bookingId)"
+                  >
+                    Xác nhận
+                  </button>
+                  <button
+                    nz-button
+                    nzType="primary"
+                    nzDanger
+                    nzSize="small"
+                    nz-popconfirm
+                    nzPopconfirmTitle="Bạn có chắc chắn hủy đơn này?"
+                    nzOkText="Xác nhận"
+                    nzCancelText="Trở lại"
+                  >
+                    Hủy
                   </button>
                 </td>
               </tr>
@@ -215,5 +271,17 @@ export class BookingListComponent {
         })
       )
       .subscribe();
+  }
+
+  onChangeLicense() {
+    if (this.bStore.pagingRequest.current !== 1) {
+      this.bStore.pagingRequest.current = 1;
+    } else {
+      this.bStore.getBookingPaging();
+    }
+  }
+
+  confirmBooking(bookingId: number) {
+    this.bStore.confirmCompleteBooking({ bookingId: bookingId });
   }
 }

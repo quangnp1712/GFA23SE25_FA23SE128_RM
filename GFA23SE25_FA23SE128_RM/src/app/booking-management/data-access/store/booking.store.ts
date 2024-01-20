@@ -213,6 +213,26 @@ export class BookingStore
     )
   );
 
+  readonly confirmCompleteBooking = this.effect<{
+    bookingId: number
+  }>(($params) =>
+    $params.pipe(
+      tap(() => this.updateLoading(true)),
+      switchMap(({ bookingId }) =>
+        this._bApiSvc.confirmCompleteBooking(bookingId).pipe(
+          tap({
+            next: (resp) => {
+              this._nzMessageService.success('Xác nhận thanh toán thành công');
+            },
+            error: () => this._nzMessageService.error('Xác nhận thanh toán thất bại.'),
+            finalize: () => this.updateLoading(false),
+          }),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
   readonly updateLoading = this.updater((s, isAdd: boolean) => ({
     ...s,
     loadingCount: s.loadingCount + (isAdd ? 1 : -1),

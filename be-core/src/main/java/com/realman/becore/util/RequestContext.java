@@ -45,6 +45,10 @@ public class RequestContext {
         return getUserFromRequest().accountId();
     }
 
+    public String getAccountPhone() {
+        return getUserFromRequest().phone();
+    }
+
     public Long getStaffId() {
         if (Objects.isNull(getUserFromRequest().staff())) {
             throw new ResourceInvalidException("Yêu cầu không hợp lệ");

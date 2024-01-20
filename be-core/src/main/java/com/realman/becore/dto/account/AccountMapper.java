@@ -43,5 +43,6 @@ public interface AccountMapper {
 
     @Mapping(target = "accountId", ignore = true)
     @Mapping(target = "role", ignore = true)
-    void update(@MappingTarget AccountEntity foundEntity, Account dto);
+    @Mapping(target = "status", source = "status")
+    void update(@MappingTarget AccountEntity foundEntity, Account dto, EAccountStatus status);
 }

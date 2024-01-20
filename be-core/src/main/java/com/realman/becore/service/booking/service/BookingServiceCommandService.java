@@ -37,7 +37,7 @@ public class BookingServiceCommandService {
     @NonNull
     private final RequestContext requestContext;
 
-    public void saveAll(Long bookingId, List<BookingService> bookingServiceList) {
+    public List<BookingService> saveAll(Long bookingId, List<BookingService> bookingServiceList) {
         List<BookingServiceEntity> bookingServiceEntities = bookingServiceList.stream()
                 .map(booking -> {
                     BookingServiceEntity entity = new BookingServiceEntity();
@@ -50,7 +50,8 @@ public class BookingServiceCommandService {
                     }
                     return entity;
                 }).toList();
-        bookingServiceRepository.saveAll(bookingServiceEntities);
+        return bookingServiceRepository.saveAll(bookingServiceEntities).stream().map(bookingServiceMapper::toDto)
+                .toList();
     }
 
     public void chooseStylist(Long staffId, Long bookingServiceId) {
@@ -186,5 +187,12 @@ public class BookingServiceCommandService {
                     return bs;
                 }).toList();
         bookingServiceRepository.saveAll(saveBookingServices);
+    }
+
+    public void updateRating(Long bookingServiceId, Long ratingId) {
+        BookingServiceEntity bookingService = bookingServiceRepository.findById(bookingServiceId)
+                .orElseThrow(ResourceNotFoundException::new);
+        bookingService.setRatingId(ratingId);
+        bookingServiceRepository.save(bookingService);
     }
 }

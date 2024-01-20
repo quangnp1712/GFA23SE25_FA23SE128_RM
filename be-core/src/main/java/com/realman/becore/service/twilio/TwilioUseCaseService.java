@@ -2,6 +2,8 @@ package com.realman.becore.service.twilio;
 
 import org.springframework.stereotype.Service;
 
+import com.realman.becore.dto.booking.Booking;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -15,8 +17,12 @@ public class TwilioUseCaseService {
         twilioRequestService.sendOTP(phone, otp);
     }
 
-    public void acceptBooking(String phone, String bookingCode) {
-        twilioRequestService.acceptBooking(phone, bookingCode);
+    public void informBooking(String phone, Booking booking) {
+        twilioRequestService.informBooking(phone, booking);
+    }
+
+    public void informEndBooking(String phone, Booking booking) {
+        twilioRequestService.informEndBooking(phone, booking);
     }
 
     public void denyBooking(String phone, String bookingCode) {

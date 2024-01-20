@@ -14,6 +14,7 @@ public record BookingServiceResponse(
         Long bookingId,
         Long serviceId,
         Long staffId,
+        Long ratingId,
         String bookingCode,
         String serviceName,
         Long servicePrice,

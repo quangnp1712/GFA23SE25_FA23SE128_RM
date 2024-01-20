@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
+import com.realman.becore.controller.api.otp.models.ValidAccount;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.otp.OTPMapper;
@@ -61,11 +62,11 @@ public class OTPCommandService {
         twilioUseCaseService.sendOTP(accountPhone.value(), passCodeBuilder.toString());
     }
 
-    public Boolean accountRegister(AccountPhone accountPhone) {
+    public ValidAccount accountRegister(AccountPhone accountPhone) {
 
-        Boolean isExist = accountQueryService
+        ValidAccount validAccount = accountQueryService
                 .isAccountExist(accountPhone.value());
-        if (isExist) {
+        if (validAccount.isAccountActivated() && validAccount.isAccountExist()) {
             Optional<OTPEntity> otpExisted = otpRepository.findByPhoneAttemp(accountPhone.value());
             if (otpExisted.isPresent()) {
                 otpRepository.delete(otpExisted.get());
@@ -86,7 +87,7 @@ public class OTPCommandService {
             twilioUseCaseService.sendOTP(accountPhone.value(), passCodeBuilder.toString());
         }
 
-        return isExist;
+        return validAccount;
     }
 
     public LoginResponse login(LoginRequest loginRequest) {

@@ -6,7 +6,8 @@ import com.realman.becore.dto.rating.RatingMapper;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
 import com.realman.becore.repository.database.rating.RatingEntity;
 import com.realman.becore.repository.database.rating.RatingRepository;
-import com.realman.becore.service.booking.service.BookingServiceUseCaseService;
+import com.realman.becore.service.booking.service.BookingServiceCommandService;
+import com.realman.becore.service.booking.service.BookingServiceQueryService;
 import com.realman.becore.util.RequestContext;
 
 import lombok.NonNull;
@@ -20,14 +21,17 @@ public class RatingCommandService {
     @NonNull
     private final RequestContext requestContext;
     @NonNull
-    private final BookingServiceUseCaseService bookingServiceUseCaseService;
+    private final BookingServiceQueryService bookingServiceQueryService;
+    @NonNull
+    private final BookingServiceCommandService bookingServiceCommandService;
     @NonNull
     private final RatingMapper ratingMapper;
 
     public void save(Rating rating) {
-        bookingServiceUseCaseService.findById(rating.bookingServiceId());
+        bookingServiceQueryService.findById(rating.bookingServiceId());
         RatingEntity saveRating = ratingMapper.toEntity(rating, requestContext.getCustomerId());
-        ratingRepository.save(saveRating);
+        RatingEntity savedRating = ratingRepository.save(saveRating);
+        bookingServiceCommandService.updateRating(savedRating.getBookingServiceId(), savedRating.getRatingId());
     }
 
     public void update(Long ratingId, Rating rating) {

@@ -6,6 +6,7 @@ import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
 import com.realman.becore.controller.api.otp.models.OTPModelMapper;
+import com.realman.becore.controller.api.otp.models.ValidAccount;
 import com.realman.becore.service.otp.OTPUseCaseService;
 import com.realman.becore.util.response.ValueResponse;
 
@@ -34,9 +35,9 @@ public class OTPsController implements OTPsAPI {
     }
 
     @Override
-    public ValueResponse<Boolean> sendOtp(AccountPhone accountPhone) {
-        Boolean accountExist = otpUseCaseService.accountRegister(accountPhone);
-        return new ValueResponse<Boolean>(accountExist);
+    public ValueResponse<ValidAccount> sendOtp(AccountPhone accountPhone) {
+        ValidAccount accountExist = otpUseCaseService.accountRegister(accountPhone);
+        return new ValueResponse<ValidAccount>(accountExist);
     }
 
 }

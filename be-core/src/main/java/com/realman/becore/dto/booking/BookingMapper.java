@@ -19,9 +19,13 @@ public interface BookingMapper {
     @Mapping(source = "customerId", target = "customerId")
     BookingEntity toEntity(Booking dto, String bookingCode, EBookingStatus bookingStatus, Long customerId);
 
+    BookingEntity toEntity(BookingInfo info);
+
     Booking toDto(BookingInfo info, List<BookingService> bookingServices);
 
     Booking toDto(BookingInfo info, List<BookingService> bookingServices, Boolean allowProcess);
+
+    Booking toDto(BookingEntity entity, List<BookingService> bookingServices);
 
     @Mapping(source = "totalBookingPrice", target = "totalBookingPrice", defaultValue = "0L")
     Booking toDto(BookingInfo info, List<BookingService> bookingServices, Long totalBookingPrice);

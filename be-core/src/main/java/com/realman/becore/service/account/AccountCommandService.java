@@ -93,7 +93,7 @@ public class AccountCommandService {
         public void update(String phone, Account account) {
                 AccountEntity foundAccount = accountRepository.findByPhone(phone)
                                 .orElseThrow(ResourceNotFoundException::new);
-                accountMapper.update(foundAccount, account);
+                accountMapper.update(foundAccount, account, EAccountStatus.ACTIVATED);
                 accountRepository.save(foundAccount);
         }
 }

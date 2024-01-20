@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.realman.becore.controller.api.otp.models.ValidAccount;
 import com.realman.becore.dto.account.Account;
 import com.realman.becore.dto.account.AccountId;
 import com.realman.becore.dto.account.AccountInfo;
@@ -15,6 +16,7 @@ import com.realman.becore.dto.account.AccountSearchCriteria;
 import com.realman.becore.dto.branch.Branch;
 import com.realman.becore.dto.branch.BranchId;
 import com.realman.becore.dto.customer.Customer;
+import com.realman.becore.dto.enums.EAccountStatus;
 import com.realman.becore.dto.enums.ERole;
 import com.realman.becore.dto.staff.Staff;
 import com.realman.becore.error_handlers.exceptions.ResourceNotFoundException;
@@ -58,9 +60,13 @@ public class AccountQueryService {
                 return account;
         }
 
-        public Boolean isAccountExist(String phone) {
+        public ValidAccount isAccountExist(String phone) {
                 Optional<AccountEntity> entity = accountRepository.findByPhone(phone);
-                return entity.isPresent();
+                Boolean isAccountExist = entity.isPresent();
+                Boolean isAccountActivated = entity.isPresent()
+                                ? entity.get().getStatus().equals(EAccountStatus.ACTIVATED)
+                                : false;
+                return new ValidAccount(isAccountExist, isAccountActivated);
         }
 
         public Account findStaffAccount(AccountId accountId, Boolean isShowDistance, Double lat, Double lng) {

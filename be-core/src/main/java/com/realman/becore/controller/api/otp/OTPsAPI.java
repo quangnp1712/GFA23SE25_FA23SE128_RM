@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
+import com.realman.becore.controller.api.otp.models.ValidAccount;
 import com.realman.becore.util.response.ValueResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +19,7 @@ public interface OTPsAPI {
     void save(@RequestBody AccountPhone accountPhone);
 
     @PostMapping("/mobile")
-    ValueResponse<Boolean> sendOtp(@RequestBody AccountPhone accountPhone);
+    ValueResponse<ValidAccount> sendOtp(@RequestBody AccountPhone accountPhone);
 
     @PostMapping("/login")
     ValueResponse<LoginResponse> login(@RequestBody LoginRequest loginRequest);

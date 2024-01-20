@@ -16,6 +16,8 @@ public interface BookingServiceInfo {
 
     void setStaffId(Long staffId);
 
+    void setRatingId(Long ratingId);
+
     void setCategoryId(Long categoryId);
 
     void setBookingCode(String bookingCode);
@@ -67,6 +69,8 @@ public interface BookingServiceInfo {
     Long getStaffId();
 
     Long getCategoryId();
+
+    Long getRatingId();
 
     String getCategoryName();
 

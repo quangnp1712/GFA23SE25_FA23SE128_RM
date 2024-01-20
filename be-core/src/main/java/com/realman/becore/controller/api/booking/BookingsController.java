@@ -25,46 +25,50 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class BookingsController implements BookingsAPI {
-    @NonNull
-    private final BookingUseCaseService bookingUseCaseService;
-    @NonNull
-    private final BookingModelMapper bookingModelMapper;
-    @NonNull
-    private final BookingServiceModelMapper bookingServiceModelMapper;
+        @NonNull
+        private final BookingUseCaseService bookingUseCaseService;
+        @NonNull
+        private final BookingModelMapper bookingModelMapper;
+        @NonNull
+        private final BookingServiceModelMapper bookingServiceModelMapper;
 
-    @Override
-    public void save(@Valid BookingRequest booking) {
-        Booking bookingDto = bookingModelMapper.toDto(booking);
-        bookingUseCaseService.save(bookingDto);
-    }
+        @Override
+        public void save(@Valid BookingRequest booking) {
+                Booking bookingDto = bookingModelMapper.toDto(booking);
+                bookingUseCaseService.save(bookingDto);
+        }
 
-    @Override
-    public PageImplResponse<BookingResponse> findAll(Long accountId, Long branchId, Long customerId, Integer current,
-            Integer pageSize) {
-        PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
-        BookingSearchCriteria searchCriteria = BookingSearchCriteria.builder().branchId(branchId)
-                .customerId(customerId).build();
-        Page<BookingResponse> bookingResponses = bookingUseCaseService
-                .findAll(searchCriteria, accountId, pageRequestCustom)
-                .map(bookingModelMapper::toModel);
-        return new PageImplResponse<>(bookingResponses.getContent(), bookingResponses.getTotalElements(),
-                bookingResponses.getTotalPages(), bookingResponses.getSize(), pageRequestCustom.current());
-    }
+        @Override
+        public PageImplResponse<BookingResponse> findAll(Long accountId, Long branchId, Long customerId,
+                        Integer current,
+                        Integer pageSize) {
+                PageRequestCustom pageRequestCustom = PageRequestCustom.of(pageSize, current);
+                BookingSearchCriteria searchCriteria = BookingSearchCriteria.builder().branchId(branchId)
+                                .customerId(customerId).build();
+                Page<BookingResponse> bookingResponses = bookingUseCaseService
+                                .findAll(searchCriteria, accountId, pageRequestCustom)
+                                .map(bookingModelMapper::toModel);
+                return new PageImplResponse<>(bookingResponses.getContent(), bookingResponses.getTotalElements(),
+                                bookingResponses.getTotalPages(), bookingResponses.getSize(),
+                                pageRequestCustom.current());
+        }
 
-    @Override
-    public ValueResponse<BookingResponse> findByBookingServiceId(Long bookingServiceId) {
-        Booking booking = bookingUseCaseService.findByBookingServiceId(bookingServiceId);
-        return new ValueResponse<BookingResponse>(bookingModelMapper.toModel(booking));
-    }
+        @Override
+        public ValueResponse<BookingResponse> findByBookingServiceId(Long bookingServiceId) {
+                Booking booking = bookingUseCaseService.findByBookingServiceId(bookingServiceId);
+                return new ValueResponse<BookingResponse>(bookingModelMapper.toModel(booking));
+        }
 
-    @Override
-    public void receptBooking(@Valid ReceptBookingRequest receptBookingRequest) {
-        List<BookingService> bookingServices = receptBookingRequest.bookingServices()
-                .stream().map(bs -> bookingServiceModelMapper.updateType(bs)).map(bookingServiceModelMapper::toDto)
-                .toList();
-        ReceptBookingRequest updateReceptBooking = bookingModelMapper.updateBookingServices(receptBookingRequest,
-                bookingServices);
-        bookingUseCaseService.receptSave(updateReceptBooking);
-    }
+        @Override
+        public void receptBooking(@Valid ReceptBookingRequest receptBookingRequest) {
+                List<BookingService> bookingServices = receptBookingRequest.bookingServices()
+                                .stream().map(bs -> bookingServiceModelMapper.updateType(bs))
+                                .map(bookingServiceModelMapper::toDto)
+                                .toList();
+                ReceptBookingRequest updateReceptBooking = bookingModelMapper.updateBookingServices(
+                                receptBookingRequest,
+                                bookingServices);
+                bookingUseCaseService.receptSave(updateReceptBooking);
+        }
 
 }

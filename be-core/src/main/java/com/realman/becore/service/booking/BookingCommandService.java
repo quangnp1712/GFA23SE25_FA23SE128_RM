@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import com.realman.becore.controller.api.booking.models.ReceptBookingRequest;
 import com.realman.becore.dto.booking.Booking;
+import com.realman.becore.dto.booking.BookingInfo;
 import com.realman.becore.dto.booking.BookingMapper;
 import com.realman.becore.dto.booking.service.BookingService;
 import com.realman.becore.dto.enums.EBookingServiceStatus;
@@ -16,6 +17,7 @@ import com.realman.becore.repository.database.booking.BookingRepository;
 import com.realman.becore.service.account.AccountCommandService;
 import com.realman.becore.service.booking.service.BookingServiceCommandService;
 import com.realman.becore.service.booking.service.BookingServiceQueryService;
+import com.realman.becore.service.twilio.TwilioUseCaseService;
 import com.realman.becore.util.RequestContext;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,6 +39,8 @@ public class BookingCommandService {
     private final BookingMapper bookingMapper;
     @NonNull
     private final RequestContext requestContext;
+    @NonNull
+    private final TwilioUseCaseService twilioUseCaseService;
     @Lazy
     @Autowired
     private AccountCommandService accountCommandService;
@@ -45,16 +49,24 @@ public class BookingCommandService {
         BookingEntity bookingEntity = bookingMapper.toEntity(booking, generateBookingCode(), EBookingStatus.ONGOING,
                 requestContext.getCustomerId());
         BookingEntity savedBooking = bookingRepository.save(bookingEntity);
-        bookingServiceCommandService.saveAll(savedBooking.getBookingId(), booking.bookingServices());
+        List<BookingService> bookingServices = bookingServiceCommandService.saveAll(savedBooking.getBookingId(),
+                booking.bookingServices());
+        BookingInfo saveBookingInfo = bookingRepository.findInfoById(savedBooking.getBookingId())
+                .orElseThrow(ResourceNotFoundException::new);
+        twilioUseCaseService.informBooking(requestContext.getAccountPhone(),
+                bookingMapper.toDto(saveBookingInfo, bookingServices));
     }
 
     public void receptSave(ReceptBookingRequest receptBookingRequest) {
         BookingEntity booking = bookingMapper.toEntity(receptBookingRequest, generateBookingCode(),
                 EBookingStatus.ONGOING);
         BookingEntity savedBooking = bookingRepository.save(booking);
-        bookingServiceCommandService.saveAll(savedBooking.getBookingId(), bookingMapper.toDtos(
-                receptBookingRequest.bookingServices()));
+        List<BookingService> bookingServices = bookingServiceCommandService.saveAll(savedBooking.getBookingId(),
+                bookingMapper.toDtos(
+                        receptBookingRequest.bookingServices()));
         accountCommandService.saveFromReceptBooking(receptBookingRequest);
+        twilioUseCaseService.informBooking(receptBookingRequest.phone(),
+                bookingMapper.toDto(savedBooking, bookingServices));
     }
 
     public void finishBooking(Long bookingId) {
@@ -67,13 +79,18 @@ public class BookingCommandService {
     }
 
     public void endBooking(Long bookingId) {
-        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(ResourceNotFoundException::new);
-        if (!booking.getBookingStatus().equals(EBookingStatus.FINISHED)) {
+        BookingInfo bookingInfo = bookingRepository.findInfoById(bookingId).orElseThrow(ResourceNotFoundException::new);
+        BookingEntity foundBooking = bookingMapper.toEntity(bookingInfo);
+        List<BookingService> bookingServices = bookingServiceQueryService.findByBookingId(bookingId);
+        if (!foundBooking.getBookingStatus().equals(EBookingStatus.FINISHED)) {
             throw new ResourceInvalidException();
         }
-        booking.setBookingStatus(EBookingStatus.PAID);
-        bookingRepository.save(booking);
+        foundBooking.setBookingStatus(EBookingStatus.PAID);
+        bookingRepository.save(foundBooking);
         bookingServiceCommandService.endBookingService(bookingId);
+
+        twilioUseCaseService.informEndBooking(bookingInfo.getBookingOwnerPhone(),
+                bookingMapper.toDto(bookingInfo, bookingServices));
     }
 
     private String generateBookingCode() {

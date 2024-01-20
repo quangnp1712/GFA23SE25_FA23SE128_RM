@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.realman.becore.controller.api.account.models.LoginRequest;
 import com.realman.becore.controller.api.account.models.LoginResponse;
 import com.realman.becore.controller.api.otp.models.AccountPhone;
+import com.realman.becore.controller.api.otp.models.ValidAccount;
 import com.realman.becore.dto.otp.OTP;
 
 import jakarta.transaction.Transactional;
@@ -21,10 +22,10 @@ public class OTPUseCaseService {
 
     @Transactional
     public void save(AccountPhone accountPhone) {
-         otpCommandService.save(accountPhone);
+        otpCommandService.save(accountPhone);
     }
 
-    public Boolean accountRegister(AccountPhone accountPhone) {
+    public ValidAccount accountRegister(AccountPhone accountPhone) {
         return otpCommandService.accountRegister(accountPhone);
     }
 

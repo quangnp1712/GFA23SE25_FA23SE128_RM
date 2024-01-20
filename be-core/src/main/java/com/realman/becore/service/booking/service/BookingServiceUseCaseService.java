@@ -74,5 +74,4 @@ public class BookingServiceUseCaseService {
             PageRequestCustom pageRequestCustom) {
         return bookingServiceQueryService.findAll(searchCriteria, pageRequestCustom);
     }
-
 }

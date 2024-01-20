@@ -52,7 +52,7 @@ public interface AccountsAuthAPI {
         @GetMapping("/suitable")
         PageImplResponse<AccountResponse> findSuitableForBooking(
                         @RequestParam(value = "branchId") Long branchId,
-                        @RequestParam(value = "appointmentDate") @DateTimeFormat(iso = ISO.DATE) LocalDateTime appointmentDate,
+                        @RequestParam(value = "appointmentDate") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime appointmentDate,
                         @RequestParam(value = "startAppointment") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime startAppointment,
                         @RequestParam(value = "endAppointment") @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime endAppointment,
                         @RequestParam(required = false, value = "current", defaultValue = "1") @Min(1) Integer current,

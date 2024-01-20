@@ -112,6 +112,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
               <tr>
                 <th>STT</th>
                 <th>Họ và tên</th>
+                <th>Chi nhánh làm việc</th>
                 <th>Địa chỉ</th>
                 <th>Số điện thoại</th>
                 <th>Giới tính</th>
@@ -126,6 +127,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
               <tr *ngFor="let data of vm.acountPaging.content; index as i">
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.firstName + ' ' + data.lastName }}</td>
+                <td>{{ data.branch.branchName }}</td>
                 <td>{{ data.address }}</td>
                 <td>{{ data.phone }}</td>
                 <td>{{ data.gender }}</td>

@@ -51,11 +51,12 @@ export namespace AccountPagingApi {
     dob: string;
     gender: string;
     status: string;
-    branchName: string;
-    branchAddress: string;
     itimacyLevel: string;
     professional: string;
     average: number;
+    branch: {
+      branchName: string;
+    };
     staff: {
       staffId: number;
       averageRating: number;

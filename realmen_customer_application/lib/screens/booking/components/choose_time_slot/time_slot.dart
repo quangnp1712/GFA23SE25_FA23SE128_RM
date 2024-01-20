@@ -9,12 +9,16 @@ class ChooseTimeSlot extends StatefulWidget {
   final void Function(dynamic time) onTimeSelected;
   final AccountInfoModel? selectedStylist;
   final bool? isChangeStylist;
+  final String openBranch;
+  final String closeBranch;
   const ChooseTimeSlot({
     super.key,
     required this.onDateSelected,
     required this.onTimeSelected,
     this.selectedStylist,
     this.isChangeStylist,
+    required this.openBranch,
+    required this.closeBranch,
   });
 
   @override
@@ -44,6 +48,10 @@ class _ChooseTimeSlotState extends State<ChooseTimeSlot> {
             stylistSelected: widget.selectedStylist,
             isChangeStylist: widget.isChangeStylist,
             oneToOne: false,
+            // open branch
+            openBranch: widget.openBranch,
+            //close branch
+            closeBranch: widget.closeBranch,
           ),
           const SizedBox(
             height: 20,

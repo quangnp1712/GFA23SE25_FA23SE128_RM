@@ -381,7 +381,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                                 child: Text(
                                   service[index].thumbnailUrl == ''
                                       ? ''
-                                      : 'Stylist- ${utf8.decode(service[index].thumbnailUrl!.toString().runes.toList())}',
+                                      : 'Stylist- ${service[index].thumbnailUrl!.toString()}',
                                   maxLines: 2,
                                   style: const TextStyle(fontSize: 16),
                                 ),
@@ -572,7 +572,7 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           AccountService accountService = AccountService();
           final int branchId = widget.branch!.branchId!;
           final result =
-              await accountService.getStaff(10, current, branchId, false);
+              await accountService.getStaff(10, current, branchId, true);
           if (result['statusCode'] == 200) {
             accounts.addAll(result['data'] as List<AccountInfoModel>);
             current = result['current'];
@@ -690,10 +690,11 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
           }
 
           widget.service = List<BranchServiceModel>.from(copyServiceList);
-          for (var caterogy in categoryList) {
-            if (caterogy.serviceList != null) {
-              // lấy widget.service so sánh vs service trong category
-              for (var service in widget.service!) {
+          for (var service in widget.service!) {
+            for (var caterogy in categoryList) {
+              if (caterogy.serviceList != null) {
+                // lấy widget.service so sánh vs service trong category
+
                 if (caterogy.serviceList!.any((cateService) =>
                         cateService.serviceId! == service.serviceId) ==
                     true) {
@@ -716,12 +717,12 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                     }
                     // newBookingService
                     BookingServiceModel newBookingService = BookingServiceModel(
-                      serviceId: service.serviceId,
-                      staffId: staffId,
-                      startAppointment: startTime,
-                      endAppointment: endTime,
-                      bookingServiceType: bookingServiceType,
-                    );
+                        serviceId: service.serviceId,
+                        staffId: staffId,
+                        startAppointment: startTime,
+                        endAppointment: endTime,
+                        bookingServiceType: bookingServiceType,
+                        serviceName: service.serviceName);
 
                     // List BookingService add newBookingService
                     bookingServices.add(newBookingService);
@@ -741,12 +742,12 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                       // newBookingService
                       BookingServiceModel newBookingService =
                           BookingServiceModel(
-                        serviceId: service.serviceId,
-                        staffId: staffId,
-                        startAppointment: startTime,
-                        endAppointment: endTime,
-                        bookingServiceType: bookingServiceType,
-                      );
+                              serviceId: service.serviceId,
+                              staffId: staffId,
+                              startAppointment: startTime,
+                              endAppointment: endTime,
+                              bookingServiceType: bookingServiceType,
+                              serviceName: service.serviceName);
 
                       // List BookingService add newBookingService
                       bookingServices.add(newBookingService);
@@ -761,12 +762,13 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
                       // newBookingService
                       BookingServiceModel newBookingService =
                           BookingServiceModel(
-                        serviceId: postBooking.serviceId,
-                        staffId: postBooking.staffId,
-                        startAppointment: startTime,
-                        endAppointment: endTime,
-                        bookingServiceType: postBooking.bookingServiceType,
-                      );
+                              serviceId: postBooking.serviceId,
+                              staffId: postBooking.staffId,
+                              startAppointment: startTime,
+                              endAppointment: endTime,
+                              bookingServiceType:
+                                  postBooking.bookingServiceType,
+                              serviceName: postBooking.serviceName);
 
                       // List BookingService add newBookingService
                       bookingServices.add(newBookingService);
@@ -809,7 +811,6 @@ class BookingHaircutTemporaryState extends State<BookingHaircutTemporary> {
               branchId: branchId,
               customerId: customerId,
               bookingServices: bookingServices);
-
           try {
             final result = await BookingService().postBooking(postBooking);
             if (result['statusCode'] == 200) {

@@ -5,10 +5,12 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:realmen_customer_application/models/booking/booking_model.dart';
 import 'package:sizer/sizer.dart';
+
+import 'package:realmen_customer_application/models/booking/booking_model.dart';
 
 class DetailHistoryBookingScreen extends StatefulWidget {
   BookingContent? booking;
@@ -311,6 +313,176 @@ class _DetailHistoryBookingScreenState
                                       ),
                                     ),
                                     _buildTotalMoney(),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Dịch Vụ: ",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 10),
+                                      child: Divider(
+                                        color: Colors.black,
+                                        height: 2,
+                                        thickness: 1,
+                                      ),
+                                    ),
+                                    // ListView.builder(
+                                    //     shrinkWrap: true,
+                                    //     physics:
+                                    //         const NeverScrollableScrollPhysics(),
+                                    //     itemCount: widget
+                                    //         .booking!.bookingServices!.length,
+                                    //     itemBuilder: (context, index) {
+                                    //       return widget
+                                    //                   .booking!
+                                    //                   .bookingServices![index]
+                                    //                   .rating ==
+                                    //               null
+                                    //           ? Container()
+                                    //           : Column(
+                                    //               children: [
+                                    //                 Row(
+                                    //                   children: [
+                                    //                     Text(utf8.decode(widget
+                                    //                         .booking!
+                                    //                         .bookingServices![
+                                    //                             index]
+                                    //                         .staffName!
+                                    //                         .toString()
+                                    //                         .runes
+                                    //                         .toList())),
+                                    //                     SizedBox(width: 20),
+                                    //                     RatingBar.builder(
+                                    //                       initialRating: widget
+                                    //                           .booking!
+                                    //                           .bookingServices![
+                                    //                               index]
+                                    //                           .rating,
+                                    //                       minRating: 1,
+                                    //                       direction:
+                                    //                           Axis.horizontal,
+                                    //                       allowHalfRating: true,
+                                    //                       itemCount: 5,
+                                    //                       itemPadding: EdgeInsets
+                                    //                           .symmetric(
+                                    //                               horizontal:
+                                    //                                   4.0),
+                                    //                       itemBuilder:
+                                    //                           (context, _) =>
+                                    //                               Icon(
+                                    //                         Icons.star,
+                                    //                         color: Colors.amber,
+                                    //                       ),
+                                    //                       onRatingUpdate:
+                                    //                           (rating) {
+                                    //                         setState(() {
+                                    //                           widget
+                                    //                               .booking!
+                                    //                               .bookingServices![
+                                    //                                   index]
+                                    //                               .rating = rating;
+                                    //                         });
+                                    //                         print(this.rating);
+                                    //                       },
+                                    //                     ),
+                                    //                   ],
+                                    //                 ),
+                                    //                 Padding(
+                                    //                   padding:
+                                    //                       EdgeInsets.symmetric(
+                                    //                           horizontal: 12,
+                                    //                           vertical: 5),
+                                    //                   child: TextField(
+                                    //                     controller: widget
+                                    //                         .booking!
+                                    //                         .bookingServices![
+                                    //                             index]
+                                    //                         .comment,
+                                    //                     keyboardType:
+                                    //                         TextInputType
+                                    //                             .multiline,
+                                    //                     maxLines: 4,
+                                    //                     style: const TextStyle(
+                                    //                         height: 1.17,
+                                    //                         fontSize: 20,
+                                    //                         color:
+                                    //                             Colors.black),
+                                    //                     decoration:
+                                    //                         InputDecoration(
+                                    //                       enabledBorder:
+                                    //                           OutlineInputBorder(
+                                    //                         borderSide:
+                                    //                             const BorderSide(
+                                    //                                 color: Color(
+                                    //                                     0xffC4C4C4)),
+                                    //                         borderRadius:
+                                    //                             BorderRadius
+                                    //                                 .circular(
+                                    //                                     10),
+                                    //                       ),
+                                    //                       focusedBorder:
+                                    //                           OutlineInputBorder(
+                                    //                         borderSide:
+                                    //                             const BorderSide(
+                                    //                                 color: Color(
+                                    //                                     0xffC4C4C4)),
+                                    //                         borderRadius:
+                                    //                             BorderRadius
+                                    //                                 .circular(
+                                    //                                     10),
+                                    //                       ),
+                                    //                       border:
+                                    //                           OutlineInputBorder(
+                                    //                         borderSide:
+                                    //                             const BorderSide(
+                                    //                                 color: Color(
+                                    //                                     0xffC4C4C4)),
+                                    //                         borderRadius:
+                                    //                             BorderRadius
+                                    //                                 .circular(
+                                    //                                     10),
+                                    //                       ),
+                                    //                       contentPadding:
+                                    //                           const EdgeInsets
+                                    //                               .only(
+                                    //                               // top: 10,
+                                    //                               // bottom: 20,
+                                    //                               left: 15,
+                                    //                               right: 15),
+                                    //                       hintText:
+                                    //                           "Viết đánh giá",
+                                    //                       hintStyle:
+                                    //                           const TextStyle(
+                                    //                               fontSize: 18,
+                                    //                               fontWeight:
+                                    //                                   FontWeight
+                                    //                                       .w400,
+                                    //                               color: Color(
+                                    //                                   0xffC4C4C4)),
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 SizedBox(
+                                    //                   height: 20,
+                                    //                 )
+                                    //               ],
+                                    //             );
+                                    //     }),
                                   ],
                                 ),
                         ],
@@ -704,6 +876,23 @@ class _DetailHistoryBookingScreenState
       ),
     );
   }
+
+  double rating = 1;
+  List<RatingModel> ratings = [];
+
+  TextEditingController textRating = TextEditingController();
+  Future<void> putRating() async {}
+}
+
+class RatingModel {
+  String? staffName;
+  String? comment;
+  double? rating;
+  RatingModel({
+    this.staffName,
+    this.comment,
+    this.rating,
+  });
 }
 
 class ServiceList {

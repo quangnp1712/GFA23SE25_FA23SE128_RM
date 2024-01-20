@@ -120,6 +120,8 @@ class _StylistOptionBookingState extends State<StylistOptionBooking>
                   onDateSelected: updateSelectedDate,
                   onTimeSelected: updateSelectedTime,
                   selectedStylist: selectedStylist,
+                  openBranch: selectedBranch.open!,
+                  closeBranch: selectedBranch.close!,
                 )
               : Container(
                   height: 150,

@@ -16,6 +16,7 @@ import 'package:realmen_customer_application/service/authentication/authenticate
 import 'package:realmen_customer_application/service/booking/booking_service.dart';
 import 'package:realmen_customer_application/service/share_prreference/share_prreference.dart';
 import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HistoryBookingScreen extends StatefulWidget {
   const HistoryBookingScreen({super.key});
@@ -153,127 +154,153 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                                                               12.0),
                                                       child: Column(
                                                         children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              const Icon(
-                                                                Icons.home,
-                                                                color:
-                                                                    Colors.red,
-                                                                size: 26,
-                                                              ),
-                                                              Expanded(
-                                                                child:
-                                                                    Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          10),
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        utf8.decode(bookings[index]
-                                                                            .branchName
-                                                                            .toString()
-                                                                            .runes
-                                                                            .toList()),
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              17,
-                                                                          fontWeight:
-                                                                              FontWeight.w600,
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                          height:
-                                                                              2),
-                                                                      Row(
-                                                                        children: [
-                                                                          Text(
-                                                                            bookings[index].appointmentDate ??
-                                                                                "",
-                                                                            style:
-                                                                                const TextStyle(fontSize: 16, color: Colors.black54),
+                                                          badges.Badge(
+                                                            badgeStyle: badges
+                                                                .BadgeStyle(
+                                                              shape: badges
+                                                                  .BadgeShape
+                                                                  .circle,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2),
+                                                              badgeColor:
+                                                                  Colors.red,
+                                                            ),
+                                                            position: badges
+                                                                    .BadgePosition
+                                                                .topEnd(
+                                                                    top: -12,
+                                                                    end: -20),
+                                                            badgeContent: Icon(
+                                                              Icons
+                                                                  .priority_high,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 13,
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.home,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  size: 26,
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            10),
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Text(
+                                                                          utf8.decode(bookings[index]
+                                                                              .branchName
+                                                                              .toString()
+                                                                              .runes
+                                                                              .toList()),
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            fontSize:
+                                                                                17,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
                                                                           ),
-                                                                          const SizedBox(
-                                                                              width: 10),
-                                                                          bookings[index].bookingServices != null
-                                                                              ? Text(
-                                                                                  bookings[index].bookingServices!.first.startAppointment.toString(),
-                                                                                  style: const TextStyle(fontSize: 16, color: Colors.black54),
-                                                                                )
-                                                                              : Container(),
-                                                                        ],
-                                                                      ),
-                                                                    ],
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                2),
+                                                                        Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              bookings[index].appointmentDate ?? "",
+                                                                              style: const TextStyle(fontSize: 16, color: Colors.black54),
+                                                                            ),
+                                                                            const SizedBox(width: 10),
+                                                                            bookings[index].bookingServices != null
+                                                                                ? Text(
+                                                                                    bookings[index].bookingServices!.first.startAppointment.toString(),
+                                                                                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                                                                                  )
+                                                                                : Container(),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                           Row(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              bookings[index]
-                                                                          .bookingServices!
-                                                                          .first
-                                                                          .bookingResults !=
-                                                                      null
-                                                                  ? CachedNetworkImage(
-                                                                      imageUrl: bookings[
-                                                                              index]
-                                                                          .bookingServices!
-                                                                          .first
-                                                                          .bookingResults!
-                                                                          .first
-                                                                          .bookingResultImg!,
-                                                                      height:
-                                                                          170,
-                                                                      width:
-                                                                          120,
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                      progressIndicatorBuilder: (context,
-                                                                              url,
-                                                                              progress) =>
-                                                                          Center(
-                                                                        child:
-                                                                            CircularProgressIndicator(
-                                                                          value:
-                                                                              progress.progress,
-                                                                        ),
-                                                                      ),
-                                                                      errorWidget: (context,
-                                                                              url,
-                                                                              error) =>
-                                                                          Image
-                                                                              .asset(
-                                                                        "assets/images/default.png",
-                                                                        height:
-                                                                            170,
-                                                                        width:
-                                                                            120,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                    )
-                                                                  : Image.asset(
-                                                                      "assets/images/default.png",
-                                                                      height:
-                                                                          170,
-                                                                      width:
-                                                                          120,
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    ),
+                                                              // bookings[index]
+                                                              //             .bookingServices!
+                                                              //             .first
+                                                              //             .bookingResults !=
+                                                              //         null
+                                                              //     ? CachedNetworkImage(
+                                                              //         imageUrl: bookings[
+                                                              //                 index]
+                                                              //             .bookingServices!
+                                                              //             .first
+                                                              //             .bookingResults!
+                                                              //             .first
+                                                              //             .bookingResultImg!,
+                                                              //         height:
+                                                              //             170,
+                                                              //         width:
+                                                              //             120,
+                                                              //         fit: BoxFit
+                                                              //             .cover,
+                                                              //         progressIndicatorBuilder: (context,
+                                                              //                 url,
+                                                              //                 progress) =>
+                                                              //             Center(
+                                                              //           child:
+                                                              //               CircularProgressIndicator(
+                                                              //             value:
+                                                              //                 progress.progress,
+                                                              //           ),
+                                                              //         ),
+                                                              //         errorWidget: (context,
+                                                              //                 url,
+                                                              //                 error) =>
+                                                              //             Image
+                                                              //                 .asset(
+                                                              //           "assets/images/default.png",
+                                                              //           height:
+                                                              //               170,
+                                                              //           width:
+                                                              //               120,
+                                                              //           fit: BoxFit
+                                                              //               .cover,
+                                                              //         ),
+                                                              //       )
+                                                              //     :
+                                                              Image.asset(
+                                                                "assets/images/default.png",
+                                                                height: 170,
+                                                                width: 120,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                               Column(
                                                                 children: [
                                                                   Padding(
@@ -506,11 +533,16 @@ class _HistoryBookingScreenState extends State<HistoryBookingScreen> {
                     totals
                         .add({'bookingId': booking.bookingId, 'total': total});
                   }
+
                   // ignore: unused_catch_clause
                 } on Exception catch (e) {
                   totals.add({'bookingId': 0, 'total': 0});
                 }
               }
+              // if (bookings.isNotEmpty) {
+              //   bookings
+              //       .removeWhere((booking) => booking.bookingServices == null);
+              // }
 
               if (!_isDisposed && mounted) {
                 setState(() {

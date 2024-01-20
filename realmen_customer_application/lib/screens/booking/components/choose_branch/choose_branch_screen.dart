@@ -656,7 +656,7 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
           if (!_isDisposed && mounted) {
             setState(() {
               cities;
-              isLoading = false;
+
               count;
               city1;
               city2;
@@ -670,6 +670,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         print("Error: $e");
       }
       searchBranches('', null, false);
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -755,6 +758,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
   Future<void> searchBranches(
       String query, FocusNode? focusNode, bool callBack) async {
     if (!_isDisposed) {
+      setState(() {
+        isLoading = true;
+      });
       try {
         BranchService branchService = BranchService();
         final result = await branchService.getSearchBranches(query, 5, current);
@@ -810,6 +816,9 @@ class _ChooseBranchesScreenState extends State<ChooseBranchesScreen> {
         print(e.toString());
         print("Error: $e");
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

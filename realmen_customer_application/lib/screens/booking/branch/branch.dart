@@ -120,6 +120,9 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
                   selectedService: selectedService,
                   onUpdatePostBooking: updatePostBooking,
                   onUpdateOption: updateOption,
+                  openBranch: selectedBranch.open!,
+                  closeBranch: selectedBranch.close!,
+                  massuerList: massuerList,
                 )
               : Container(
                   height: 150,
@@ -196,12 +199,16 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
   dynamic selectedDate;
   dynamic selectedTime;
   bool isUpdateBranch = false;
-
+  List<AccountInfoModel>? massuerList;
 // BranchModel branch
   void updateSelectedBranch(dynamic branch) {
     if (!_isDisposed) {
       selectedBranch = branch;
       if (selectedBranch.accountStaffList != null) {
+        massuerList =
+            List<AccountInfoModel>.from(selectedBranch.accountStaffList!);
+        massuerList!
+            .removeWhere((account) => account.staff!.professional == "STYLIST");
         selectedBranch.accountStaffList!
             .removeWhere((account) => account.staff!.professional == "MASSEUR");
       }
@@ -213,6 +220,7 @@ class _BranchOptionBookingState extends State<BranchOptionBooking>
         }
         selectedService = [];
         isUpdateBranch = true;
+        massuerList;
       });
     }
   }

@@ -26,9 +26,13 @@ class ChooseStylistAndDateTimeBooking extends StatefulWidget {
   final List<BranchServiceModel> selectedService;
 
   List<AccountInfoModel>? accountStaffList;
+  List<AccountInfoModel>? massuerList;
   final void Function(List<BookingServiceModel> postBooking)
       onUpdatePostBooking;
   final void Function(bool oneToOne) onUpdateOption;
+
+  final String openBranch;
+  final String closeBranch;
 
   ChooseStylistAndDateTimeBooking({
     super.key,
@@ -38,6 +42,9 @@ class ChooseStylistAndDateTimeBooking extends StatefulWidget {
     required this.selectedService,
     required this.onUpdatePostBooking,
     required this.onUpdateOption,
+    required this.openBranch,
+    required this.closeBranch,
+    required this.massuerList,
     this.accountStaffList,
   });
 
@@ -272,6 +279,11 @@ class _ChooseStylistAndDateTimeBookingState
                           choseDateUpdateStylist: choseDateUpdateStylist,
                           isChangeDate: isChangeDate,
                           changeDateDone: changeDateDone,
+
+                          // open branch
+                          openBranch: widget.openBranch,
+                          //close branch
+                          closeBranch: widget.closeBranch,
                         ),
                         const SizedBox(height: 20),
                       ],
@@ -279,17 +291,25 @@ class _ChooseStylistAndDateTimeBookingState
                   : // giữ nguyên cái cũ 1 - N
                   Column(
                       children: [
-                        ChooseStylist(
-                            onStylistSelected: widget.onStylistSelected,
-                            accountStaffList: widget.accountStaffList,
-                            updateSelectedStylist: updateSelectedStylist),
+                        stylistService.isEmpty
+                            ? Container()
+                            : ChooseStylist(
+                                onStylistSelected: widget.onStylistSelected,
+                                accountStaffList: widget.accountStaffList,
+                                updateSelectedStylist: updateSelectedStylist),
                         ChooseDateAndTimeSlot(
                           onDateSelected: widget.onDateSelected,
                           onTimeSelected: widget.onTimeSelected,
                           stylistSelected: stylistSelected,
                           isChangeStylist: isChangeStylist,
-                          accountStaffList: widget.accountStaffList,
+                          accountStaffList: stylistService.isEmpty
+                              ? widget.massuerList
+                              : widget.accountStaffList,
                           oneToOne: false,
+                          // open branch
+                          openBranch: widget.openBranch,
+                          //close branch
+                          closeBranch: widget.closeBranch,
                         ),
                         const SizedBox(height: 20),
                       ],
@@ -602,16 +622,18 @@ class _ChooseStylistAndDateTimeBookingState
   List<BranchServiceModel> stylistService = [];
   List<BranchServiceModel> haircutService = [];
   List<BranchServiceModel> otherService = [];
+  List<BranchServiceModel> massurService = [];
   List<AccountInfoModel> accountStaffBranchList = [];
   // lấy data service cho optione ONE TO ONE
   // set data post booking cho random - chưa chọn stylist
   Future<void> setData() async {
-    if (!_isDisposed && mounted && widget.selectedService.length > 1) {
+    if (!_isDisposed && mounted) {
       CategoryServices categoryServices = CategoryServices();
       stylistService = [];
       haircutService = [];
       otherService = [];
       serviceOTOList = [];
+      massurService = [];
       isLoading = true;
       // optionController = options.first;
       try {
@@ -643,26 +665,36 @@ class _ChooseStylistAndDateTimeBookingState
                     otherService.add(service);
                   }
                 }
+              } else {
+                if (category.serviceList != null) {
+                  if (category.serviceList!.any((cateService) =>
+                      cateService.serviceId == service.serviceId)) {
+                    massurService.add(service);
+                  }
+                }
               }
             }
           }
           stylistService.addAll(haircutService);
           stylistService.addAll(otherService);
 
+          if (optionController == options.last)
           // lấy service của staff ra add vào post booking (serviceOTOList)
-          for (var stylistServiceElement in stylistService) {
-            BookingServiceModel newBookingServiceModel = BookingServiceModel(
-              serviceId: stylistServiceElement.serviceId,
-              staffId: 0,
-              serviceName: stylistServiceElement.serviceName,
-              servicePrice: stylistServiceElement.price ??
-                  stylistServiceElement.branchServicePrice,
-              staffName: "REALMEN sẽ chọn hộ bạn",
-              bookingServiceType: "PICKUP_STYLIST",
-            );
-            serviceOTOList.add(newBookingServiceModel);
+          {
+            for (var stylistServiceElement in stylistService) {
+              BookingServiceModel newBookingServiceModel = BookingServiceModel(
+                serviceId: stylistServiceElement.serviceId,
+                staffId: 0,
+                serviceName: stylistServiceElement.serviceName,
+                servicePrice: stylistServiceElement.price ??
+                    stylistServiceElement.branchServicePrice,
+                staffName: "REALMEN sẽ chọn hộ bạn",
+                bookingServiceType: "PICKUP_STYLIST",
+              );
+              serviceOTOList.add(newBookingServiceModel);
+            }
+            widget.onUpdatePostBooking(serviceOTOList);
           }
-          widget.onUpdatePostBooking(serviceOTOList);
         } else {
           // _errorMessage(result['message']);
           print(result);

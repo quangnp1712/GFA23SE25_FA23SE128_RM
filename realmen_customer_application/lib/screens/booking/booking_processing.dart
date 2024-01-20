@@ -230,7 +230,9 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
                 ),
               ),
               Text(
-                booking.bookingServices!.first.startAppointment ?? "",
+                booking.bookingServices != null
+                    ? booking.bookingServices!.first.startAppointment ?? ""
+                    : '',
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Colors.black,
@@ -361,8 +363,9 @@ class _BookingProcessingScreenState extends State<BookingProcessingScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: booking
-              .bookingServices!.length, // The number of items in the list
+          itemCount: booking.bookingServices != null
+              ? booking.bookingServices!.length
+              : 0, // The number of items in the list
           itemBuilder: (context, index) {
             // Return a Card widget for each item in the list
             return Padding(

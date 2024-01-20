@@ -109,10 +109,10 @@ class AccountService extends IAccountService {
       Uri uri;
       if (branchId != null) {
         uri = Uri.parse(
-            "$getStaffUrl?branchId=$branchId&role=STAFF&iShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
+            "$getStaffUrl?branchId=$branchId&role=STAFF&isShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
       } else {
         uri = Uri.parse(
-            "$getStaffUrl?role=STAFF&iShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
+            "$getStaffUrl?role=STAFF&isShowDistance=$isShowDistance&lat=$lat&lng=$lng&current=$current&pageSize=$pageSize&sorter=$sorter");
       }
       final client = http.Client();
       final response = await client.get(

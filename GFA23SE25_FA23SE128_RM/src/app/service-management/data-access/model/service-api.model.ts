@@ -87,6 +87,7 @@ export namespace ServicePagingApi {
     name: string;
     branchServiceList: branchServiceList;
     serviceId: number;
+    branchName: string
   }
 
   export type branchServiceList = {

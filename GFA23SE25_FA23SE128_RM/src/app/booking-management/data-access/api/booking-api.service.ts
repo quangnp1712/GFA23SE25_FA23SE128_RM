@@ -54,14 +54,14 @@ export class BookingApiService {
   }
 
    public addBooking(model: BookingAddApi.Request) {
-    const url = `${this.REST_API_SERVER}/v1/booking/receptionist`;
+    const url = `${this.REST_API_SERVER}/v2/booking/receptionist`;
     return this._http
       .post<any>(url, model, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
   public serviceDataGet() {
-    const url = `${this.REST_API_SERVER}/v1/services/field`;
+    const url = `${this.REST_API_SERVER}/v1/services/field?branchId=${localStorage.getItem('branchId$')}`;
     return this._http
       .get<ServiceDataApi.Response>(url, this.httpOptions)
       .pipe(catchError(this.handleError));

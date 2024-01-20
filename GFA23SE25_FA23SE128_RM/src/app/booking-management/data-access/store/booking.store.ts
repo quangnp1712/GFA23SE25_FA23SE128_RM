@@ -77,7 +77,7 @@ export class BookingStore
       Validators.minLength(10),
       Validators.maxLength(10),
     ]),
-    appointmentDate: this._fb.control(null, Validators.required),
+    appointmentDateV2: this._fb.control(null, Validators.required),
     bookingServices: this._fb.control([]),
     serviceArray: this._fb.control([], Validators.required),
     startAppointment: this._fb.control(null, Validators.required)

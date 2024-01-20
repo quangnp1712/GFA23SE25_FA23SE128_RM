@@ -94,6 +94,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
               <tr>
                 <th>STT</th>
                 <th>Tên dịch vụ</th>
+                <th>Chi nhánh sử dụng</th>
                 <th>Mô tả</th>
                 <th></th>
               </tr>
@@ -102,6 +103,7 @@ import { NzSelectChangeDirective } from 'src/app/share/ui/directive/nz-select-ch
               <tr *ngFor="let data of vm.servicePaging.content; index as i">
                 <td>{{ i + 1 }}</td>
                 <td>{{ data.name }}</td>
+                <td>{{ data.branchName }}</td>
                 <td>{{ data.description }}</td>
                 <td class="tw-text-center">
                   <button

@@ -154,7 +154,7 @@ import { BookingAddApi } from '../data-access/model/booking-api.model';
               <nz-date-picker
                 [nzDisabledDate]="disabledDate"
                 class="tw-w-[70%]"
-                [formControl]="form.controls.appointmentDate"
+                [formControl]="form.controls.appointmentDateV2"
               ></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -211,13 +211,14 @@ export class BookingComponent {
     this.form.controls.serviceArray.value.forEach((data) => {
       this.form.controls.bookingServices.value.push({
         bookingServiceType: 'PICKUP_STYLIST',
-        startAppointment: new Date(this.form.controls.startAppointment.value!),
-        endAppointment:
+        startAppointmentV2: new Date(this.form.controls.startAppointment.value!),
+        endAppointmentV2:
          new Date(this.form.controls.startAppointment.value!.setMinutes(this.form.controls.startAppointment.value!.getMinutes()+20)),
         serviceId: data,
         staffId: null,
       });
     });
+    console.log(this.form.getRawValue());
 
     this.bStore.addBooking({model: BookingAddApi.mapModel(this.form)})
 

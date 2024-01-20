@@ -80,7 +80,7 @@ export namespace BookingAddApi {
     phone: string;
     firstName: string;
     lastName: string;
-    appointmentDate: Date;
+    appointmentDateV2: Date;
     bookingServices: bookingServices[]
   }
 
@@ -88,15 +88,15 @@ export namespace BookingAddApi {
     serviceId: string;
         staffId: number | null;
         bookingServiceType: string;
-        startAppointment: Date;
-        endAppointment: Date;
+        startAppointmentV2: Date;
+        endAppointmentV2: Date;
   }
 
   export type RequestFormGroup = {
     phone: FormControl<string>;
     firstName: FormControl<string>;
     lastName: FormControl<string>;
-    appointmentDate: FormControl<Date | null>;
+    appointmentDateV2: FormControl<Date | null>;
     bookingServices: FormControl<bookingServices[]>
     serviceArray: FormControl<string[]>;
     startAppointment: FormControl<Date | null>;
@@ -106,9 +106,9 @@ export namespace BookingAddApi {
     const formValue = frm.getRawValue();
     return {
       firstName: frm.controls.firstName.value,
-      lastName: frm.controls.firstName.value,
-      phone: frm.controls.firstName.value,
-      appointmentDate: frm.controls.appointmentDate.value!,
+      lastName: frm.controls.lastName.value,
+      phone: frm.controls.phone.value,
+      appointmentDateV2: frm.controls.appointmentDateV2.value!,
       bookingServices: frm.controls.bookingServices.value,
     };
   }

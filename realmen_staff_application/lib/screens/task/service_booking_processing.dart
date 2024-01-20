@@ -165,7 +165,7 @@ class _ServiceBookingProcessingScreenState
                                             CrossAxisAlignment.start,
                                         children: [
                                           Container(
-                                            width: 120,
+                                            width: 100,
                                             child: const Text(
                                               "Khách hàng: ",
                                               style: TextStyle(
@@ -177,7 +177,7 @@ class _ServiceBookingProcessingScreenState
                                             width: 10,
                                           ),
                                           Container(
-                                            width: 200,
+                                            width: 180,
                                             child: Text(
                                               booking.bookingOwnerName!,
                                               maxLines: 2,
@@ -200,7 +200,7 @@ class _ServiceBookingProcessingScreenState
                                             MainAxisAlignment.start,
                                         children: [
                                           Container(
-                                            width: 120,
+                                            width: 100,
                                             child: const Text(
                                               "Số điện thoại: ",
                                               style: TextStyle(
@@ -212,7 +212,7 @@ class _ServiceBookingProcessingScreenState
                                             width: 10,
                                           ),
                                           Container(
-                                            width: 200,
+                                            width: 180,
                                             child: Text(
                                               booking.bookingOwnerPhone!,
                                               textAlign: TextAlign.left,

@@ -132,7 +132,7 @@ class _PopupServiceBookingState extends State<PopupServiceBooking> {
                 ),
                 widget.images!.isEmpty
                     ? Container(
-                        width: 200,
+                        width: 140,
                         decoration: BoxDecoration(
                             color: Colors.black,
                             border: Border.all(

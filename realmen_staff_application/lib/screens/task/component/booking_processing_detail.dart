@@ -290,7 +290,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                                 index]
                                                             .isStylistServicesDone!,
                                                         style: TextStyle(
-                                                          fontSize: 10,
+                                                          fontSize: 11,
 
                                                           fontWeight:
                                                               FontWeight.w700,
@@ -511,7 +511,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                               ? "ĐANG LÀM"
                                                               : "HOÀN THÀNH"),
                                                       style: TextStyle(
-                                                        fontSize: 14,
+                                                        fontSize: 11,
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         // color: Colors.white,
@@ -588,18 +588,36 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                 style: BorderStyle.solid),
                                           ),
                                           child: Center(
-                                            child: Text(
-                                              isMasseurServicesDone!,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700,
-                                                // color: Colors.white,
-                                                color: isMasseurServicesDone ==
-                                                        "HOÀN THÀNH"
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
+                                            child: isMasseurServicesDone ==
+                                                    "HOÀN THÀNH"
+                                                ? Text(
+                                                    isMasseurServicesDone!,
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      // color: Colors.white,
+                                                      color:
+                                                          isMasseurServicesDone ==
+                                                                  "HOÀN THÀNH"
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    isMasseurServicesDone!,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      // color: Colors.white,
+                                                      color:
+                                                          isMasseurServicesDone ==
+                                                                  "HOÀN THÀNH"
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                    ),
+                                                  ),
                                           ),
                                         ),
                                       )
@@ -739,7 +757,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                                                           ? "ĐANG LÀM"
                                                           : "HOÀN THÀNH"),
                                                   style: TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 11,
                                                     fontWeight: FontWeight.w700,
                                                     // color: Colors.white,
                                                     color: masseurServices[
@@ -762,7 +780,7 @@ class _BookingProcessingDetailState extends State<BookingProcessingDetail>
                             )
                           : Container(),
                       SizedBox(
-                        height: checkAllowUpdate ? 20 : 55,
+                        height: checkAllowUpdate ? 30 : 55,
                       ),
                     ],
                   ),
